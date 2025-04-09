@@ -15,3 +15,6 @@ node_modules
 
 #!.yarn/cache
 .pnp.*
+
+# turbo
+.turbo

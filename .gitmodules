@@ -1,0 +1,3 @@
+[submodule "external/metro"]
+	path = external/metro
+	url = git@github.com:facebook/metro.git
