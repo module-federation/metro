@@ -6489,9 +6489,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"metro-babel-transformer@portal:/Users/kacperwiszczuk/projects/callstack/metro-mf/external/metro/packages/metro-babel-transformer::locator=metro-mf%40workspace%3A.":
+"metro-babel-transformer@portal:./external/metro/packages/metro-babel-transformer::locator=metro-mf%40workspace%3A.":
   version: 0.0.0-use.local
-  resolution: "metro-babel-transformer@portal:/Users/kacperwiszczuk/projects/callstack/metro-mf/external/metro/packages/metro-babel-transformer::locator=metro-mf%40workspace%3A."
+  resolution: "metro-babel-transformer@portal:./external/metro/packages/metro-babel-transformer::locator=metro-mf%40workspace%3A."
   dependencies:
     "@babel/core": "npm:^7.25.2"
     flow-enums-runtime: "npm:^0.0.6"
@@ -6500,17 +6500,17 @@ __metadata:
   languageName: node
   linkType: soft
 
-"metro-cache-key@portal:/Users/kacperwiszczuk/projects/callstack/metro-mf/external/metro/packages/metro-cache-key::locator=metro-mf%40workspace%3A.":
+"metro-cache-key@portal:./external/metro/packages/metro-cache-key::locator=metro-mf%40workspace%3A.":
   version: 0.0.0-use.local
-  resolution: "metro-cache-key@portal:/Users/kacperwiszczuk/projects/callstack/metro-mf/external/metro/packages/metro-cache-key::locator=metro-mf%40workspace%3A."
+  resolution: "metro-cache-key@portal:./external/metro/packages/metro-cache-key::locator=metro-mf%40workspace%3A."
   dependencies:
     flow-enums-runtime: "npm:^0.0.6"
   languageName: node
   linkType: soft
 
-"metro-cache@portal:/Users/kacperwiszczuk/projects/callstack/metro-mf/external/metro/packages/metro-cache::locator=metro-mf%40workspace%3A.":
+"metro-cache@portal:./external/metro/packages/metro-cache::locator=metro-mf%40workspace%3A.":
   version: 0.0.0-use.local
-  resolution: "metro-cache@portal:/Users/kacperwiszczuk/projects/callstack/metro-mf/external/metro/packages/metro-cache::locator=metro-mf%40workspace%3A."
+  resolution: "metro-cache@portal:./external/metro/packages/metro-cache::locator=metro-mf%40workspace%3A."
   dependencies:
     exponential-backoff: "npm:^3.1.1"
     flow-enums-runtime: "npm:^0.0.6"
@@ -6518,9 +6518,9 @@ __metadata:
   languageName: node
   linkType: soft
 
-"metro-config@portal:/Users/kacperwiszczuk/projects/callstack/metro-mf/external/metro/packages/metro-config::locator=metro-mf%40workspace%3A.":
+"metro-config@portal:./external/metro/packages/metro-config::locator=metro-mf%40workspace%3A.":
   version: 0.0.0-use.local
-  resolution: "metro-config@portal:/Users/kacperwiszczuk/projects/callstack/metro-mf/external/metro/packages/metro-config::locator=metro-mf%40workspace%3A."
+  resolution: "metro-config@portal:./external/metro/packages/metro-config::locator=metro-mf%40workspace%3A."
   dependencies:
     connect: "npm:^3.6.5"
     cosmiconfig: "npm:^5.0.5"
@@ -6533,9 +6533,9 @@ __metadata:
   languageName: node
   linkType: soft
 
-"metro-core@portal:/Users/kacperwiszczuk/projects/callstack/metro-mf/external/metro/packages/metro-core::locator=metro-mf%40workspace%3A.":
+"metro-core@portal:./external/metro/packages/metro-core::locator=metro-mf%40workspace%3A.":
   version: 0.0.0-use.local
-  resolution: "metro-core@portal:/Users/kacperwiszczuk/projects/callstack/metro-mf/external/metro/packages/metro-core::locator=metro-mf%40workspace%3A."
+  resolution: "metro-core@portal:./external/metro/packages/metro-core::locator=metro-mf%40workspace%3A."
   dependencies:
     flow-enums-runtime: "npm:^0.0.6"
     lodash.throttle: "npm:^4.1.1"
@@ -6543,9 +6543,9 @@ __metadata:
   languageName: node
   linkType: soft
 
-"metro-file-map@portal:/Users/kacperwiszczuk/projects/callstack/metro-mf/external/metro/packages/metro-file-map::locator=metro-mf%40workspace%3A.":
+"metro-file-map@portal:./external/metro/packages/metro-file-map::locator=metro-mf%40workspace%3A.":
   version: 0.0.0-use.local
-  resolution: "metro-file-map@portal:/Users/kacperwiszczuk/projects/callstack/metro-mf/external/metro/packages/metro-file-map::locator=metro-mf%40workspace%3A."
+  resolution: "metro-file-map@portal:./external/metro/packages/metro-file-map::locator=metro-mf%40workspace%3A."
   dependencies:
     debug: "npm:^4.4.0"
     fb-watchman: "npm:^2.0.0"
@@ -6567,35 +6567,35 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"metro-minify-terser@portal:/Users/kacperwiszczuk/projects/callstack/metro-mf/external/metro/packages/metro-minify-terser::locator=metro-mf%40workspace%3A.":
+"metro-minify-terser@portal:./external/metro/packages/metro-minify-terser::locator=metro-mf%40workspace%3A.":
   version: 0.0.0-use.local
-  resolution: "metro-minify-terser@portal:/Users/kacperwiszczuk/projects/callstack/metro-mf/external/metro/packages/metro-minify-terser::locator=metro-mf%40workspace%3A."
+  resolution: "metro-minify-terser@portal:./external/metro/packages/metro-minify-terser::locator=metro-mf%40workspace%3A."
   dependencies:
     flow-enums-runtime: "npm:^0.0.6"
     terser: "npm:^5.15.0"
   languageName: node
   linkType: soft
 
-"metro-resolver@portal:/Users/kacperwiszczuk/projects/callstack/metro-mf/external/metro/packages/metro-resolver::locator=metro-mf%40workspace%3A.":
+"metro-resolver@portal:./external/metro/packages/metro-resolver::locator=metro-mf%40workspace%3A.":
   version: 0.0.0-use.local
-  resolution: "metro-resolver@portal:/Users/kacperwiszczuk/projects/callstack/metro-mf/external/metro/packages/metro-resolver::locator=metro-mf%40workspace%3A."
+  resolution: "metro-resolver@portal:./external/metro/packages/metro-resolver::locator=metro-mf%40workspace%3A."
   dependencies:
     flow-enums-runtime: "npm:^0.0.6"
   languageName: node
   linkType: soft
 
-"metro-runtime@portal:/Users/kacperwiszczuk/projects/callstack/metro-mf/external/metro/packages/metro-runtime::locator=metro-mf%40workspace%3A.":
+"metro-runtime@portal:./external/metro/packages/metro-runtime::locator=metro-mf%40workspace%3A.":
   version: 0.0.0-use.local
-  resolution: "metro-runtime@portal:/Users/kacperwiszczuk/projects/callstack/metro-mf/external/metro/packages/metro-runtime::locator=metro-mf%40workspace%3A."
+  resolution: "metro-runtime@portal:./external/metro/packages/metro-runtime::locator=metro-mf%40workspace%3A."
   dependencies:
     "@babel/runtime": "npm:^7.25.0"
     flow-enums-runtime: "npm:^0.0.6"
   languageName: node
   linkType: soft
 
-"metro-source-map@portal:/Users/kacperwiszczuk/projects/callstack/metro-mf/external/metro/packages/metro-source-map::locator=metro-mf%40workspace%3A.":
+"metro-source-map@portal:./external/metro/packages/metro-source-map::locator=metro-mf%40workspace%3A.":
   version: 0.0.0-use.local
-  resolution: "metro-source-map@portal:/Users/kacperwiszczuk/projects/callstack/metro-mf/external/metro/packages/metro-source-map::locator=metro-mf%40workspace%3A."
+  resolution: "metro-source-map@portal:./external/metro/packages/metro-source-map::locator=metro-mf%40workspace%3A."
   dependencies:
     "@babel/traverse": "npm:^7.25.3"
     "@babel/traverse--for-generate-function-map": "npm:@babel/traverse@^7.25.3"
@@ -6610,9 +6610,9 @@ __metadata:
   languageName: node
   linkType: soft
 
-"metro-symbolicate@portal:/Users/kacperwiszczuk/projects/callstack/metro-mf/external/metro/packages/metro-symbolicate::locator=metro-mf%40workspace%3A.":
+"metro-symbolicate@portal:./external/metro/packages/metro-symbolicate::locator=metro-mf%40workspace%3A.":
   version: 0.0.0-use.local
-  resolution: "metro-symbolicate@portal:/Users/kacperwiszczuk/projects/callstack/metro-mf/external/metro/packages/metro-symbolicate::locator=metro-mf%40workspace%3A."
+  resolution: "metro-symbolicate@portal:./external/metro/packages/metro-symbolicate::locator=metro-mf%40workspace%3A."
   dependencies:
     flow-enums-runtime: "npm:^0.0.6"
     invariant: "npm:^2.2.4"
@@ -6625,9 +6625,9 @@ __metadata:
   languageName: node
   linkType: soft
 
-"metro-transform-plugins@portal:/Users/kacperwiszczuk/projects/callstack/metro-mf/external/metro/packages/metro-transform-plugins::locator=metro-mf%40workspace%3A.":
+"metro-transform-plugins@portal:./external/metro/packages/metro-transform-plugins::locator=metro-mf%40workspace%3A.":
   version: 0.0.0-use.local
-  resolution: "metro-transform-plugins@portal:/Users/kacperwiszczuk/projects/callstack/metro-mf/external/metro/packages/metro-transform-plugins::locator=metro-mf%40workspace%3A."
+  resolution: "metro-transform-plugins@portal:./external/metro/packages/metro-transform-plugins::locator=metro-mf%40workspace%3A."
   dependencies:
     "@babel/core": "npm:^7.25.2"
     "@babel/generator": "npm:^7.25.0"
@@ -6638,9 +6638,9 @@ __metadata:
   languageName: node
   linkType: soft
 
-"metro-transform-worker@portal:/Users/kacperwiszczuk/projects/callstack/metro-mf/external/metro/packages/metro-transform-worker::locator=metro-mf%40workspace%3A.":
+"metro-transform-worker@portal:./external/metro/packages/metro-transform-worker::locator=metro-mf%40workspace%3A.":
   version: 0.0.0-use.local
-  resolution: "metro-transform-worker@portal:/Users/kacperwiszczuk/projects/callstack/metro-mf/external/metro/packages/metro-transform-worker::locator=metro-mf%40workspace%3A."
+  resolution: "metro-transform-worker@portal:./external/metro/packages/metro-transform-worker::locator=metro-mf%40workspace%3A."
   dependencies:
     "@babel/core": "npm:^7.25.2"
     "@babel/generator": "npm:^7.25.0"
@@ -6658,9 +6658,9 @@ __metadata:
   languageName: node
   linkType: soft
 
-"metro@portal:/Users/kacperwiszczuk/projects/callstack/metro-mf/external/metro/packages/metro::locator=metro-mf%40workspace%3A.":
+"metro@portal:./external/metro/packages/metro::locator=metro-mf%40workspace%3A.":
   version: 0.0.0-use.local
-  resolution: "metro@portal:/Users/kacperwiszczuk/projects/callstack/metro-mf/external/metro/packages/metro::locator=metro-mf%40workspace%3A."
+  resolution: "metro@portal:./external/metro/packages/metro::locator=metro-mf%40workspace%3A."
   dependencies:
     "@babel/code-frame": "npm:^7.24.7"
     "@babel/core": "npm:^7.25.2"
@@ -7001,9 +7001,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ob1@portal:/Users/kacperwiszczuk/projects/callstack/metro-mf/external/metro/packages/ob1::locator=metro-mf%40workspace%3A.":
+"ob1@portal:./external/metro/packages/ob1::locator=metro-mf%40workspace%3A.":
   version: 0.0.0-use.local
-  resolution: "ob1@portal:/Users/kacperwiszczuk/projects/callstack/metro-mf/external/metro/packages/ob1::locator=metro-mf%40workspace%3A."
+  resolution: "ob1@portal:./external/metro/packages/ob1::locator=metro-mf%40workspace%3A."
   dependencies:
     flow-enums-runtime: "npm:^0.0.6"
   languageName: node
