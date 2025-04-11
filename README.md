@@ -5,7 +5,13 @@
 ### Prerequisites
 
 - Node.js version 22 (as specified in `.nvmrc`)
-- Corepack (included in Node.js 16.10+)
+- Corepack
+
+In case Corepack is not available, you can install it manually:
+
+```bash
+npm install -g corepack
+```
 
 ### Setup Steps
 
@@ -24,7 +30,7 @@ cd metro-mf
 3. Enable Corepack and install dependencies in the monorepo:
 
 ```bash
-corepack enable && yarn install
+corepack enable && corepack install && yarn install
 ```
 
 4. Navigate to the Metro submodule:
