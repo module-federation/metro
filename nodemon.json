@@ -1,8 +1,8 @@
 {
   "$schema": "https://json.schemastore.org/nodemon.json",
   "verbose": true,
-  "watch": ["../../external/metro"],
-  "ext": "js,json,flow",
+  "watch": ["../../external/metro", "../../packages/module-federation-metro"],
+  "ext": "ts,js,json,flow",
   "events": {
     "restart": "clear && echo '[nodemon] change detected, restarting...'"
   }
