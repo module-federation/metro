@@ -3,8 +3,11 @@
   "version": "0.0.1",
   "description": "Module Federation for Metro bundler",
   "author": "",
+  "main": "./index.js",
+  "types": "./types/index.d.ts",
   "devDependencies": {
     "@types/node": "^20.0.0",
+    "metro-config": "^0.82.1",
     "ts-node": "^10.9.2",
     "typescript": "5.0.4"
   }

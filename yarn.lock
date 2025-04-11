@@ -7055,6 +7055,7 @@ __metadata:
   resolution: "module-federation-metro@workspace:packages/module-federation-metro"
   dependencies:
     "@types/node": "npm:^20.0.0"
+    metro-config: "npm:^0.82.1"
     ts-node: "npm:^10.9.2"
     typescript: "npm:5.0.4"
   languageName: unknown

@@ -1,9 +1,8 @@
 try {
+  const path = require("path");
   require("ts-node").register({
-    compilerOptions: {
-      module: "commonjs",
-    },
+    project: path.resolve(__dirname, "tsconfig.json"),
   });
 } catch {}
 
-require("./src/index");
+module.exports = require("./src/index");

@@ -1,7 +1,7 @@
 const path = require('path');
 const {getDefaultConfig, mergeConfig} = require('@react-native/metro-config');
 
-require('module-federation-metro');
+const {withModuleFederation} = require('module-federation-metro');
 
 /**
  * Metro configuration
@@ -16,4 +16,6 @@ const config = {
   ],
 };
 
-module.exports = mergeConfig(getDefaultConfig(__dirname), config);
+module.exports = withModuleFederation(
+  mergeConfig(getDefaultConfig(__dirname), config),
+);

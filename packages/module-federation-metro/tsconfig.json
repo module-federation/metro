@@ -1,0 +1,8 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "paths": {
+      "metro-config": ["../../external/metro/packages/metro-config/types"]
+    }
+  }
+}

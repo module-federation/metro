@@ -1,3 +1,1 @@
-import printHello from "./a";
-
-printHello();
+export { withModuleFederation } from "./plugin";
