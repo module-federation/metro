@@ -1,0 +1,11 @@
+{
+  "name": "module-federation-metro",
+  "version": "0.0.1",
+  "description": "Module Federation for Metro bundler",
+  "author": "",
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "ts-node": "^10.9.2",
+    "typescript": "5.0.4"
+  }
+}

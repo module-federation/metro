@@ -1,6 +1,8 @@
 const path = require('path');
 const {getDefaultConfig, mergeConfig} = require('@react-native/metro-config');
 
+require('module-federation-metro');
+
 /**
  * Metro configuration
  * https://reactnative.dev/docs/metro
