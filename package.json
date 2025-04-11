@@ -9,6 +9,9 @@
   "devDependencies": {
     "turbo": "^2.5.0"
   },
+  "scripts": {
+    "dev": "turbo dev"
+  },
   "resolutions": {
     "buck-worker-tool": "portal:./external/metro/packages/buck-worker-tool",
     "metro": "portal:./external/metro/packages/metro",

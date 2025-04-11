@@ -6,6 +6,7 @@
     "android": "react-native run-android",
     "ios": "react-native run-ios",
     "lint": "eslint .",
+    "dev": "nodemon --config ../../nodemon.json --exec yarn start",
     "start": "react-native start --port 8082",
     "test": "jest"
   },
@@ -29,6 +30,7 @@
     "@types/react-test-renderer": "^19.0.0",
     "eslint": "^8.19.0",
     "jest": "^29.6.3",
+    "nodemon": "^3.1.9",
     "prettier": "2.8.8",
     "react-test-renderer": "19.0.0",
     "typescript": "5.0.4"
