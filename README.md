@@ -1,6 +1,6 @@
 # metro-mf
 
-## Installation Guide
+## Getting Started
 
 ### Prerequisites
 
@@ -44,3 +44,13 @@ cd external/metro
 ```bash
 yarn set version 1.22.22 && yarn install
 ```
+
+## Development
+
+Run the development servers for both apps:
+
+```bash
+yarn dev
+```
+
+> **Note:** You can freely make changes to both the `module-federation-metro` package (`packages/module-federation-metro`) and the `metro` packages (`external/metro`). The dev server will automatically restart when changes are detected - there's no need to manually build either package.
