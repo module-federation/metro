@@ -1,8 +1,16 @@
 {
   "compilerOptions": {
+    "target": "ES2022",
     "module": "commonjs",
+    "esModuleInterop": true,
+    "strict": true,
+    "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
     "paths": {
-      "metro-config": ["../../external/metro/packages/metro-config/types"]
+      "metro": ["../../external/metro/packages/metro/types"],
+      "metro/src/*": ["../../external/metro/packages/metro/types/*"],
+      "metro-*": ["../../external/metro/packages/metro-*/types"]
     }
   }
 }
