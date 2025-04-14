@@ -18,4 +18,21 @@ const config = {
 
 module.exports = withModuleFederation(
   mergeConfig(getDefaultConfig(__dirname), config),
+  {
+    name: 'host',
+    shared: {
+      react: {
+        singleton: true,
+        eager: true,
+        requiredVersion: '19.0.0',
+        version: '19.0.0',
+      },
+      'react-native': {
+        singleton: true,
+        eager: true,
+        requiredVersion: '0.79.0',
+        version: '0.79.0',
+      },
+    },
+  },
 );
