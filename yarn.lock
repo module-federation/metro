@@ -1905,6 +1905,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@module-federation/runtime-core@patch:@module-federation/runtime-core@npm%3A0.11.4#~/.yarn/patches/@module-federation-runtime-core-npm-0.11.4-46a703d27e.patch":
+  version: 0.11.4
+  resolution: "@module-federation/runtime-core@patch:@module-federation/runtime-core@npm%3A0.11.4#~/.yarn/patches/@module-federation-runtime-core-npm-0.11.4-46a703d27e.patch::version=0.11.4&hash=8f5d21"
+  dependencies:
+    "@module-federation/error-codes": "npm:0.11.4"
+    "@module-federation/sdk": "npm:0.11.4"
+  checksum: 10c0/f6dd3f9df9de4bb5678f7ff5e2ca4fd1ee82e6db9edaa626fa075214fb88fccb67998dfdf8f33b061be03d4fbcede69dfb2fcf876face5a0a5cef802bbac15f9
+  languageName: node
+  linkType: hard
+
 "@module-federation/runtime@npm:^0.11.4":
   version: 0.11.4
   resolution: "@module-federation/runtime@npm:0.11.4"
@@ -2271,6 +2281,27 @@ __metadata:
     "@react-native-community/cli":
       optional: true
   checksum: 10c0/983dd13eab702b109ee1d7db37c62fffa9d97f6b4ab5048322784831a6914f75256e2ca0264e537d0ca516fa1510ea0a452f76d174bc65110da51d80800f42a9
+  languageName: node
+  linkType: hard
+
+"@react-native/community-cli-plugin@patch:@react-native/community-cli-plugin@npm%3A0.79.0#~/.yarn/patches/@react-native-community-cli-plugin-npm-0.79.0-d467a2c1a8.patch":
+  version: 0.79.0
+  resolution: "@react-native/community-cli-plugin@patch:@react-native/community-cli-plugin@npm%3A0.79.0#~/.yarn/patches/@react-native-community-cli-plugin-npm-0.79.0-d467a2c1a8.patch::version=0.79.0&hash=6d9b53"
+  dependencies:
+    "@react-native/dev-middleware": "npm:0.79.0"
+    chalk: "npm:^4.0.0"
+    debug: "npm:^2.2.0"
+    invariant: "npm:^2.2.4"
+    metro: "npm:^0.82.0"
+    metro-config: "npm:^0.82.0"
+    metro-core: "npm:^0.82.0"
+    semver: "npm:^7.1.3"
+  peerDependencies:
+    "@react-native-community/cli": "*"
+  peerDependenciesMeta:
+    "@react-native-community/cli":
+      optional: true
+  checksum: 10c0/04b8c9eb5d6a88414c3ed414ba9234378dbed9c3ac0a4b32723f9b5716802303dc9da7bd607bb91c0678bb0154f68f5a609468b009d0c5de0846d72e74467d8a
   languageName: node
   linkType: hard
 
