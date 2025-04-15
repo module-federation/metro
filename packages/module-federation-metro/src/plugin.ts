@@ -14,6 +14,7 @@ interface ModuleFederationConfiguration {
     }
   >;
   plugins: string[];
+  remotes: Record<string, string>;
 }
 
 function getInitHostModule(options: ModuleFederationConfiguration) {
@@ -36,6 +37,7 @@ function getInitHostModule(options: ModuleFederationConfiguration) {
   // Replace placeholders with actual values
   initHostContent = initHostContent
     .replace("__NAME__", JSON.stringify(options.name))
+    .replace("__REMOTES__", generateRemotes(options.remotes))
     .replace("__SHARED__", sharedString)
     .replace("__PLUGINS__", generateRuntimePlugins(options.plugins));
 
@@ -118,6 +120,22 @@ function generateRuntimePlugins(runtimePlugins: string[]) {
   const plugins = `const plugins = [${pluginNames.join(", ")}];`;
 
   return `${imports}\n${plugins}`;
+}
+
+function generateRemotes(remotes: Record<string, string> = {}) {
+  const remotesEntries: string[] = [];
+  Object.entries(remotes).forEach(([remoteName, remoteEntry]) => {
+    remotesEntries.push(
+      `{ 
+          alias: "${remoteName}", 
+          name: "${remoteName}", 
+          entry: "${remoteEntry}", 
+          entryGlobalName: "${remoteName}", 
+          type: "var" }`
+    );
+  });
+
+  return `[${remotesEntries.join(",\n")}]`;
 }
 
 function withModuleFederation(
