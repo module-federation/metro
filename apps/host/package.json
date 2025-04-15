@@ -10,7 +10,7 @@
     "ios": "react-native run-ios",
     "lint": "eslint .",
     "dev": "nodemon --config ../../nodemon.json --exec yarn start",
-    "start": "react-native start",
+    "start": "react-native start --reset-cache --client-logs",
     "test": "jest"
   },
   "dependencies": {
