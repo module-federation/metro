@@ -31,6 +31,7 @@
     "metro-transform-plugins": "portal:./external/metro/packages/metro-transform-plugins",
     "metro-transform-worker": "portal:./external/metro/packages/metro-transform-worker",
     "ob1": "portal:./external/metro/packages/ob1",
-    "@module-federation/runtime-core@npm:0.11.4": "patch:@module-federation/runtime-core@npm%3A0.11.4#~/.yarn/patches/@module-federation-runtime-core-npm-0.11.4-46a703d27e.patch"
+    "@module-federation/runtime-core@npm:0.11.4": "patch:@module-federation/runtime-core@npm%3A0.11.4#~/.yarn/patches/@module-federation-runtime-core-npm-0.11.4-46a703d27e.patch",
+    "@react-native/community-cli-plugin@npm:0.79.0": "patch:@react-native/community-cli-plugin@npm%3A0.79.0#~/.yarn/patches/@react-native-community-cli-plugin-npm-0.79.0-d467a2c1a8.patch"
   }
 }
