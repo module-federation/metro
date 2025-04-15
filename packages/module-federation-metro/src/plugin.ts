@@ -13,6 +13,7 @@ interface ModuleFederationConfiguration {
       requiredVersion: string;
     }
   >;
+  plugins: string[];
 }
 
 function getInitHostModule(options: ModuleFederationConfiguration) {
@@ -35,7 +36,8 @@ function getInitHostModule(options: ModuleFederationConfiguration) {
   // Replace placeholders with actual values
   initHostContent = initHostContent
     .replace("__NAME__", JSON.stringify(options.name))
-    .replace("__SHARED__", sharedString);
+    .replace("__SHARED__", sharedString)
+    .replace("__PLUGINS__", generateRuntimePlugins(options.plugins));
 
   return initHostContent;
 }
@@ -100,6 +102,22 @@ function createMFRuntimeNodeModules(projectNodeModulesPath: string) {
   }
 
   return mfMetroPath;
+}
+
+function generateRuntimePlugins(runtimePlugins: string[]) {
+  const pluginNames: string[] = [];
+  const pluginImports: string[] = [];
+
+  runtimePlugins.forEach((plugin, index) => {
+    const pluginName = `plugin${index}`;
+    pluginNames.push(`${pluginName}()`);
+    pluginImports.push(`import ${pluginName} from "${plugin}";`);
+  });
+
+  const imports = pluginImports.join("\n");
+  const plugins = `const plugins = [${pluginNames.join(", ")}];`;
+
+  return `${imports}\n${plugins}`;
 }
 
 function withModuleFederation(

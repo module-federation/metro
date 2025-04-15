@@ -36,5 +36,6 @@ module.exports = withModuleFederation(
         version: '0.79.0',
       },
     },
+    plugins: [path.resolve(__dirname, './runtime-plugin.ts')],
   },
 );
