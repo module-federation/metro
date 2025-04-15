@@ -148,15 +148,17 @@ function withModuleFederation(
             filePath: initHostFilePath,
           };
         }
+
         // shared modules
-        // if (context.originModulePath !== initHostFilePath) {
-        if (moduleName === "react" || moduleName === "react-native") {
-          return {
-            type: "sourceFile",
-            filePath: sharedModulesPaths[moduleName],
-          };
+        if (![initHostFilePath].includes(context.originModulePath)) {
+          if (Object.keys(options.shared).includes(moduleName)) {
+            return {
+              type: "sourceFile",
+              filePath: sharedModulesPaths[moduleName],
+            };
+          }
         }
-        // }
+
         return context.resolveRequest(context, moduleName, platform);
       },
     },

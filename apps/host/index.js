@@ -1,7 +1,8 @@
 import 'mf:init-host';
 
-import {AppRegistry} from 'react-native';
 import App from './App';
 import {name as appName} from './app.json';
+import {loadShareSync} from '@module-federation/runtime';
 
-AppRegistry.registerComponent(appName, () => App);
+const reactNative = loadShareSync('react-native')();
+reactNative.AppRegistry.registerComponent(appName, () => App);
