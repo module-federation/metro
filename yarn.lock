@@ -1888,6 +1888,41 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@module-federation/error-codes@npm:0.11.4":
+  version: 0.11.4
+  resolution: "@module-federation/error-codes@npm:0.11.4"
+  checksum: 10c0/10cb48234d359b91672d2193bbecafa0612f6e48dc4e3e07e421c7fc0eeebf7b00124ae9afb9a79670be77dce270ba35b58fac5a8755bbb53fb5d5ab21e8fbce
+  languageName: node
+  linkType: hard
+
+"@module-federation/runtime-core@npm:0.11.4":
+  version: 0.11.4
+  resolution: "@module-federation/runtime-core@npm:0.11.4"
+  dependencies:
+    "@module-federation/error-codes": "npm:0.11.4"
+    "@module-federation/sdk": "npm:0.11.4"
+  checksum: 10c0/7b5ab94c0cca805c3cfc3471716f7028a57d7a0049435a8dfdb9e18dc4a49958f5fe7d88483fdc20aab132795a0ffde21fcede7d16d6533283d9d0e2744da900
+  languageName: node
+  linkType: hard
+
+"@module-federation/runtime@npm:^0.11.4":
+  version: 0.11.4
+  resolution: "@module-federation/runtime@npm:0.11.4"
+  dependencies:
+    "@module-federation/error-codes": "npm:0.11.4"
+    "@module-federation/runtime-core": "npm:0.11.4"
+    "@module-federation/sdk": "npm:0.11.4"
+  checksum: 10c0/367d1b9013fe74971a5f6c88611f09980f13572ec2d8836a4eba71564abdbf84b8a4e9f26184beea982276b101965af766fa2c3bd82cabef5915a811438c2ffb
+  languageName: node
+  linkType: hard
+
+"@module-federation/sdk@npm:0.11.4":
+  version: 0.11.4
+  resolution: "@module-federation/sdk@npm:0.11.4"
+  checksum: 10c0/039f2f36e0cfa777e4cabf14d1c9c3eea7e40cb3e19f54f5848f3b4166e60e5c4df4fcd1dff3ca91d714df7b1028e42871719890b6f28e57a5d26aa93418555b
+  languageName: node
+  linkType: hard
+
 "@nicolo-ribaudo/eslint-scope-5-internals@npm:5.1.1-v1":
   version: 5.1.1-v1
   resolution: "@nicolo-ribaudo/eslint-scope-5-internals@npm:5.1.1-v1"
@@ -5162,6 +5197,7 @@ __metadata:
     "@babel/core": "npm:^7.25.2"
     "@babel/preset-env": "npm:^7.25.3"
     "@babel/runtime": "npm:^7.25.0"
+    "@module-federation/runtime": "npm:^0.11.4"
     "@react-native-community/cli": "npm:18.0.0"
     "@react-native-community/cli-platform-android": "npm:18.0.0"
     "@react-native-community/cli-platform-ios": "npm:18.0.0"
