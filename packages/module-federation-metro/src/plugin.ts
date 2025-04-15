@@ -141,7 +141,7 @@ function withModuleFederation(
     resolver: {
       ...config.resolver,
       resolveRequest: (context, moduleName, platform) => {
-        // special case: init-host
+        // virtual module: init-host
         if (moduleName === "mf:init-host") {
           return {
             type: "sourceFile",
@@ -150,6 +150,8 @@ function withModuleFederation(
         }
 
         // shared modules
+        // init-host contains definition of shared modules so we need to prevent
+        // circular import of shared module, by allowing import shared dependencies directly
         if (![initHostFilePath].includes(context.originModulePath)) {
           if (Object.keys(options.shared).includes(moduleName)) {
             return {
