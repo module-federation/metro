@@ -7121,6 +7121,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "module-federation-metro@workspace:packages/module-federation-metro"
   dependencies:
+    "@module-federation/runtime": "npm:^0.11.4"
     "@types/node": "npm:^20.0.0"
     metro-config: "npm:^0.82.1"
     react-native: "npm:0.79.0"
