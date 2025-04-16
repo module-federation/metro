@@ -1,4 +1,5 @@
 import path from "node:path";
+import fs from "node:fs";
 import type { ConfigT } from "metro-config";
 
 interface ModuleFederationConfiguration {
@@ -15,6 +16,7 @@ interface ModuleFederationConfiguration {
   >;
   plugins: string[];
   remotes: Record<string, string>;
+  exposes?: Record<string, string>;
 }
 
 function getInitHostModule(options: ModuleFederationConfiguration) {
@@ -138,17 +140,25 @@ function generateRemotes(remotes: Record<string, string> = {}) {
   return `[${remotesEntries.join(",\n")}]`;
 }
 
+function getInitContainerModule(options: ModuleFederationConfiguration) {
+  const initContainerPath = require.resolve("./templates/remote-entry.js");
+  let initContainerCode = fs.readFileSync(initContainerPath, "utf-8");
+
+  return initContainerCode
+    .replace("__PLUGINS__", "[]")
+    .replace("__SHARED__", "[]")
+    .replace("__EXPOSES_MAP__", JSON.stringify(options.exposes || {}))
+    .replace("__NAME__", `"${options.name}"`);
+}
+
 function withModuleFederation(
   config: ConfigT,
   options: ModuleFederationConfiguration
 ): ConfigT {
-  console.log("withModuleFederation plugin");
-
   const projectNodeModulesPath = path.resolve(
     config.projectRoot,
     "node_modules"
   );
-
   const mfMetroPath = createMFRuntimeNodeModules(projectNodeModulesPath);
 
   const initHostModule = getInitHostModule(options);
@@ -165,6 +175,11 @@ function withModuleFederation(
     writeSharedModule(sharedFilePath, sharedModule);
     sharedModulesPaths[name] = sharedFilePath;
   });
+
+  const initContainerCode = getInitContainerModule(options);
+  const initContainerPath = path.join(mfMetroPath, "init-container.js");
+
+  fs.writeFileSync(initContainerPath, initContainerCode);
 
   return {
     ...config,
@@ -185,6 +200,13 @@ function withModuleFederation(
           };
         }
 
+        if (moduleName.includes("mf:init-container")) {
+          return {
+            type: "sourceFile",
+            filePath: initContainerPath,
+          };
+        }
+
         // shared modules
         // init-host contains definition of shared modules so we need to prevent
         // circular import of shared module, by allowing import shared dependencies directly
@@ -198,9 +220,7 @@ function withModuleFederation(
         }
 
         return context.resolveRequest(context, moduleName, platform);
-      },
-    },
-  };
+      }
+    }
+  }
 }
-
-export { withModuleFederation };

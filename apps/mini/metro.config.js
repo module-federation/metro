@@ -18,4 +18,10 @@ const config = {
 
 module.exports = withModuleFederation(
   mergeConfig(getDefaultConfig(__dirname), config),
+  {
+    name: 'mini',
+    exposes: {
+      './math': './src/math.ts',
+    },
+  },
 );
