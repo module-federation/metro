@@ -5,7 +5,7 @@ export function add(a: number, b: number): number {
   return a + b;
 }
 
-export function Add() {
+export default function Add() {
   return (
     <View>
       <Text>Add</Text>

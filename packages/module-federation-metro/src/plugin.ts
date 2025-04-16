@@ -19,31 +19,6 @@ interface ModuleFederationConfiguration {
   exposes?: Record<string, string>;
 }
 
-const PACKAGE_REGEX = /node_modules\/((?:@[^\/]+\/)?[^\/]+)/;
-
-const EXTERNALS = [
-  "react",
-  "metro",
-  "@babel/runtime",
-  "@react-native/js-polyfills",
-  "react-native",
-  "ansi-regex",
-  "@react-native/virtualized-lists",
-  "promise",
-  "invariant",
-  "nullthrows",
-  "@react-native/assets-registry",
-  "stacktrace-parser",
-  "@react-native/normalize-colors",
-  "whatwg-fetch",
-  "base64-js",
-  "event-target-shim",
-  "memoize-one",
-  "scheduler",
-  "metro-runtime",
-  "abort-controller",
-];
-
 function getSharedString(options: ModuleFederationConfiguration) {
   const shared = Object.keys(options.shared).reduce((acc, name) => {
     acc[name] = `__SHARED_${name}__`;
@@ -160,7 +135,7 @@ function getInitContainerModule(
   options: ModuleFederationConfiguration,
   mfMetroPath: string
 ) {
-  const initContainerPath = require.resolve("./templates/remote-entry.js");
+  const initContainerPath = require.resolve("./runtime/init-container.js");
   let initContainerCode = fs.readFileSync(initContainerPath, "utf-8");
 
   const sharedString = getSharedString(options);
@@ -228,23 +203,23 @@ function withModuleFederation(
     ...config,
     serializer: {
       ...config.serializer,
-      getModulesRunBeforeMainModule: (entryFilePath) => {
-        return [initHostFilePath, asyncRequirePath];
+      createModuleIdFactory: () => {
+        // identical to metro's default module id factory
+        // but we offset the ids for container modules by 10000
+        // reference: https://github.com/facebook/metro/blob/cc7316b1f40ed5e4202a997673b26d55ff1b4ca5/packages/metro/src/lib/createModuleIdFactory.js
+        const fileToIdMap: Map<string, number> = new Map();
+        let nextId = isContainer ? 10000 : 0;
+        return (modulePath: string) => {
+          let id = fileToIdMap.get(modulePath);
+          if (typeof id !== "number") {
+            id = nextId++;
+            fileToIdMap.set(modulePath, id);
+          }
+          return id;
+        };
       },
-      processModuleFilter: (module) => {
-        if (!isContainer) return true;
-
-        const moduleName = PACKAGE_REGEX.exec(module.path)?.[1];
-
-        if (!moduleName) {
-          return true;
-        }
-
-        if (EXTERNALS.includes(moduleName)) {
-          return false;
-        }
-
-        return true;
+      getModulesRunBeforeMainModule: (entryFilePath) => {
+        return [initHostFilePath];
       },
     },
     resolver: {
