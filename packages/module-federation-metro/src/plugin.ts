@@ -221,3 +221,5 @@ function withModuleFederation(
     },
   };
 }
+
+export { withModuleFederation };
