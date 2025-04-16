@@ -166,12 +166,14 @@ function withModuleFederation(
     sharedModulesPaths[name] = sharedFilePath;
   });
 
+  const asyncRequirePath = path.resolve(__dirname, "../async-require.js");
+
   return {
     ...config,
     serializer: {
       ...config.serializer,
       getModulesRunBeforeMainModule: (entryFilePath) => {
-        return [initHostFilePath];
+        return [initHostFilePath, asyncRequirePath];
       },
     },
     resolver: {
@@ -182,6 +184,14 @@ function withModuleFederation(
           return {
             type: "sourceFile",
             filePath: initHostFilePath,
+          };
+        }
+
+        // virtual module: async-require
+        if (moduleName === "mf:async-require") {
+          return {
+            type: "sourceFile",
+            filePath: asyncRequirePath,
           };
         }
 
