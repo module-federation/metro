@@ -35,10 +35,7 @@ function getInitHostModule(options: ModuleFederationConfiguration) {
   });
 
   // auto-inject 'metro-core-plugin' MF runtime plugin
-  const plugins = [
-    require.resolve("module-federation-metro/runtime-plugin"),
-    ...options.plugins,
-  ];
+  const plugins = [require.resolve("../runtime-plugin.js"), ...options.plugins];
 
   // Replace placeholders with actual values
   initHostContent = initHostContent
