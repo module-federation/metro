@@ -19,6 +19,31 @@ interface ModuleFederationConfiguration {
   exposes?: Record<string, string>;
 }
 
+const PACKAGE_REGEX = /node_modules\/((?:@[^\/]+\/)?[^\/]+)/;
+
+const EXTERNALS = [
+  "react",
+  "metro",
+  "@babel/runtime",
+  "@react-native/js-polyfills",
+  "react-native",
+  "ansi-regex",
+  "@react-native/virtualized-lists",
+  "promise",
+  "invariant",
+  "nullthrows",
+  "@react-native/assets-registry",
+  "stacktrace-parser",
+  "@react-native/normalize-colors",
+  "whatwg-fetch",
+  "base64-js",
+  "event-target-shim",
+  "memoize-one",
+  "scheduler",
+  "metro-runtime",
+  "abort-controller",
+];
+
 function getSharedString(options: ModuleFederationConfiguration) {
   const shared = Object.keys(options.shared).reduce((acc, name) => {
     acc[name] = `__SHARED_${name}__`;
@@ -169,6 +194,7 @@ function withModuleFederation(
   config: ConfigT,
   options: ModuleFederationConfiguration
 ): ConfigT {
+  const isContainer = !!options.exposes;
   const projectNodeModulesPath = path.resolve(
     config.projectRoot,
     "node_modules"
@@ -204,6 +230,21 @@ function withModuleFederation(
       ...config.serializer,
       getModulesRunBeforeMainModule: (entryFilePath) => {
         return [initHostFilePath, asyncRequirePath];
+      },
+      processModuleFilter: (module) => {
+        if (!isContainer) return true;
+
+        const moduleName = PACKAGE_REGEX.exec(module.path)?.[1];
+
+        if (!moduleName) {
+          return true;
+        }
+
+        if (EXTERNALS.includes(moduleName)) {
+          return false;
+        }
+
+        return true;
       },
     },
     resolver: {
