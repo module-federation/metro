@@ -21,7 +21,6 @@ interface ModuleFederationConfiguration {
 
 function getInitHostModule(options: ModuleFederationConfiguration) {
   const initHostPath = require.resolve("./runtime/init-host.js");
-  const fs = require("fs");
   let initHostContent = fs.readFileSync(initHostPath, "utf-8");
 
   const shared = Object.keys(options.shared).reduce((acc, name) => {
@@ -68,32 +67,15 @@ function createSharedModuleEntry(
   );
 }
 
-function writeInitHostModule(filePath: string, content: string) {
-  const fs = require("fs");
-
-  fs.writeFileSync(filePath, content, "utf-8");
-  return filePath;
-}
-
 function getSharedModule(name: string) {
   const sharedTemplatePath = require.resolve("./runtime/shared.js");
-  const fs = require("fs");
-  let sharedTemplate = fs.readFileSync(sharedTemplatePath, "utf-8");
 
-  return sharedTemplate.replace("__SHARED_MODULE_NAME__", `"${name}"`);
-}
-
-function writeSharedModule(filePath: string, content: string) {
-  const fs = require("fs");
-
-  fs.writeFileSync(filePath, content, "utf-8");
-  return filePath;
+  return fs
+    .readFileSync(sharedTemplatePath, "utf-8")
+    .replace("__SHARED_MODULE_NAME__", `"${name}"`);
 }
 
 function createMFRuntimeNodeModules(projectNodeModulesPath: string) {
-  const fs = require("fs");
-  const path = require("path");
-
   const mfMetroPath = path.join(projectNodeModulesPath, ".mf-metro");
 
   if (!fs.existsSync(mfMetroPath)) {
@@ -162,17 +144,18 @@ function withModuleFederation(
   const mfMetroPath = createMFRuntimeNodeModules(projectNodeModulesPath);
 
   const initHostModule = getInitHostModule(options);
-  const initHostFilePath = writeInitHostModule(
-    path.join(mfMetroPath, "init-host.js"),
-    initHostModule
-  );
+  const initHostFilePath = path.join(mfMetroPath, "init-host.js");
+
+  fs.writeFileSync(initHostFilePath, initHostModule, "utf-8");
 
   const sharedModulesPaths: Record<string, string> = {};
 
   Object.keys(options.shared).forEach((name) => {
     const sharedModule = getSharedModule(name);
     const sharedFilePath = path.join(mfMetroPath, "shared", `${name}.js`);
-    writeSharedModule(sharedFilePath, sharedModule);
+
+    fs.writeFileSync(sharedFilePath, sharedModule, "utf-8");
+
     sharedModulesPaths[name] = sharedFilePath;
   });
 
@@ -220,7 +203,7 @@ function withModuleFederation(
         }
 
         return context.resolveRequest(context, moduleName, platform);
-      }
-    }
-  }
+      },
+    },
+  };
 }
