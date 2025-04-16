@@ -19,10 +19,7 @@ interface ModuleFederationConfiguration {
   exposes?: Record<string, string>;
 }
 
-function getInitHostModule(options: ModuleFederationConfiguration) {
-  const initHostPath = require.resolve("./runtime/init-host.js");
-  let initHostContent = fs.readFileSync(initHostPath, "utf-8");
-
+function getSharedString(options: ModuleFederationConfiguration) {
   const shared = Object.keys(options.shared).reduce((acc, name) => {
     acc[name] = `__SHARED_${name}__`;
     return acc;
@@ -34,6 +31,15 @@ function getInitHostModule(options: ModuleFederationConfiguration) {
     const entry = createSharedModuleEntry(name, options.shared[name]);
     sharedString = sharedString.replace(`"__SHARED_${name}__"`, entry);
   });
+
+  return sharedString;
+}
+
+function getInitHostModule(options: ModuleFederationConfiguration) {
+  const initHostPath = require.resolve("./runtime/init-host.js");
+  let initHostContent = fs.readFileSync(initHostPath, "utf-8");
+
+  const sharedString = getSharedString(options);
 
   // auto-inject 'metro-core-plugin' MF runtime plugin
   const plugins = [require.resolve("../runtime-plugin.js"), ...options.plugins];
@@ -125,14 +131,37 @@ function generateRemotes(remotes: Record<string, string> = {}) {
   return `[${remotesEntries.join(",\n")}]`;
 }
 
-function getInitContainerModule(options: ModuleFederationConfiguration) {
+function getInitContainerModule(
+  options: ModuleFederationConfiguration,
+  mfMetroPath: string
+) {
   const initContainerPath = require.resolve("./templates/remote-entry.js");
   let initContainerCode = fs.readFileSync(initContainerPath, "utf-8");
 
+  const sharedString = getSharedString(options);
+
+  const exposes = options.exposes || {};
+
+  const exposesString = Object.keys(exposes)
+    .map(
+      (key) =>
+        `"${key}": async () => {
+      const module = await import("../../${exposes[key]}");
+
+      const target = { ...module };
+
+      Object.defineProperty(target, "__esModule", { value: true, enumerable: false });
+
+      return target;
+    }
+    `
+    )
+    .join(",");
+
   return initContainerCode
     .replace("__PLUGINS__", "[]")
-    .replace("__SHARED__", "[]")
-    .replace("__EXPOSES_MAP__", JSON.stringify(options.exposes || {}))
+    .replace("__SHARED__", sharedString)
+    .replace("__EXPOSES_MAP__", `{${exposesString}}`)
     .replace("__NAME__", `"${options.name}"`);
 }
 
@@ -162,7 +191,7 @@ function withModuleFederation(
     sharedModulesPaths[name] = sharedFilePath;
   });
 
-  const initContainerCode = getInitContainerModule(options);
+  const initContainerCode = getInitContainerModule(options, mfMetroPath);
   const initContainerPath = path.join(mfMetroPath, "init-container.js");
 
   fs.writeFileSync(initContainerPath, initContainerCode);
