@@ -35,12 +35,15 @@ function getInitHostModule(options: ModuleFederationConfiguration) {
     sharedString = sharedString.replace(`"__SHARED_${name}__"`, entry);
   });
 
+  // auto-inject 'metro-core-plugin' MF runtime plugin
+  const plugins = [require.resolve("../runtime-plugin.js"), ...options.plugins];
+
   // Replace placeholders with actual values
   initHostContent = initHostContent
     .replace("__NAME__", JSON.stringify(options.name))
     .replace("__REMOTES__", generateRemotes(options.remotes))
     .replace("__SHARED__", sharedString)
-    .replace("__PLUGINS__", generateRuntimePlugins(options.plugins));
+    .replace("__PLUGINS__", generateRuntimePlugins(plugins));
 
   return initHostContent;
 }
@@ -164,12 +167,14 @@ function withModuleFederation(
 
   fs.writeFileSync(initContainerPath, initContainerCode);
 
+  const asyncRequirePath = path.resolve(__dirname, "../async-require.js");
+
   return {
     ...config,
     serializer: {
       ...config.serializer,
       getModulesRunBeforeMainModule: (entryFilePath) => {
-        return [initHostFilePath];
+        return [initHostFilePath, asyncRequirePath];
       },
     },
     resolver: {
@@ -183,7 +188,16 @@ function withModuleFederation(
           };
         }
 
-        if (moduleName.includes("mf:init-container")) {
+        // virtual module: async-require
+        if (moduleName === "mf:async-require") {
+          return {
+            type: "sourceFile",
+            filePath: asyncRequirePath,
+          };
+        }
+
+        // virtual module: init-container
+        if (moduleName === "mf:init-container") {
           return {
             type: "sourceFile",
             filePath: initContainerPath,
