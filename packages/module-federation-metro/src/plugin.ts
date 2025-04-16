@@ -34,12 +34,18 @@ function getInitHostModule(options: ModuleFederationConfiguration) {
     sharedString = sharedString.replace(`"__SHARED_${name}__"`, entry);
   });
 
+  // auto-inject 'metro-core-plugin' MF runtime plugin
+  const plugins = [
+    require.resolve("module-federation-metro/runtime-plugin"),
+    ...options.plugins,
+  ];
+
   // Replace placeholders with actual values
   initHostContent = initHostContent
     .replace("__NAME__", JSON.stringify(options.name))
     .replace("__REMOTES__", generateRemotes(options.remotes))
     .replace("__SHARED__", sharedString)
-    .replace("__PLUGINS__", generateRuntimePlugins(options.plugins));
+    .replace("__PLUGINS__", generateRuntimePlugins(plugins));
 
   return initHostContent;
 }
