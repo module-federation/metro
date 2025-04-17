@@ -25,6 +25,11 @@ function App(): React.JSX.Element {
 
   return (
     <View style={styles.backgroundStyle}>
+      {shouldLoadRemote ? (
+        <React.Suspense>
+          <Confetti ref={animationRef} />
+        </React.Suspense>
+      ) : undefined}
       <Image
         source={gradientBg}
         style={styles.backgroundImage}
@@ -62,7 +67,6 @@ function App(): React.JSX.Element {
                       <ActivityIndicator size="large" color="#8b5cf6" />
                     </View>
                   }>
-                  <Confetti ref={animationRef} />
                   <Button
                     onPress={() =>
                       setTimeout(() => animationRef.current?.play(), 1000)
