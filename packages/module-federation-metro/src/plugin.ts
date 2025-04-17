@@ -29,7 +29,7 @@ function getSharedString(options: ModuleFederationConfiguration) {
   Object.keys(options.shared).forEach((name) => {
     // @ts-ignore
     const entry = createSharedModuleEntry(name, options.shared[name]);
-    sharedString = sharedString.replace(`"__SHARED_${name}__"`, entry);
+    sharedString = sharedString.replaceAll(`"__SHARED_${name}__"`, entry);
   });
 
   return sharedString;
@@ -43,10 +43,10 @@ function getInitHostModule(options: ModuleFederationConfiguration) {
 
   // Replace placeholders with actual values
   initHostContent = initHostContent
-    .replace("__NAME__", JSON.stringify(options.name))
-    .replace("__REMOTES__", generateRemotes(options.remotes))
-    .replace("__SHARED__", sharedString)
-    .replace("__PLUGINS__", generateRuntimePlugins(options.plugins));
+    .replaceAll("__NAME__", JSON.stringify(options.name))
+    .replaceAll("__REMOTES__", generateRemotes(options.remotes))
+    .replaceAll("__SHARED__", sharedString)
+    .replaceAll("__PLUGINS__", generateRuntimePlugins(options.plugins));
 
   return initHostContent;
 }
@@ -67,7 +67,7 @@ function createSharedModuleEntry(
   };
 
   const templateString = JSON.stringify(template);
-  return templateString.replace(
+  return templateString.replaceAll(
     '"__LIB_PLACEHOLDER__"',
     `() => require("${name}")`
   );
@@ -78,7 +78,7 @@ function getSharedModule(name: string) {
 
   return fs
     .readFileSync(sharedTemplatePath, "utf-8")
-    .replace("__SHARED_MODULE_NAME__", `"${name}"`);
+    .replaceAll("__SHARED_MODULE_NAME__", `"${name}"`);
 }
 
 function createMFRuntimeNodeModules(projectNodeModulesPath: string) {
@@ -153,9 +153,9 @@ function getInitContainerModule(options: ModuleFederationConfiguration) {
     .join(",");
 
   return initContainerCode
-    .replace("__PLUGINS__", generateRuntimePlugins(options.plugins))
-    .replace("__SHARED__", sharedString)
-    .replace("__EXPOSES_MAP__", `{${exposesString}}`)
+    .replaceAll("__PLUGINS__", generateRuntimePlugins(options.plugins))
+    .replaceAll("__SHARED__", sharedString)
+    .replaceAll("__EXPOSES_MAP__", `{${exposesString}}`)
     .replaceAll("__NAME__", `"${options.name}"`);
 }
 
