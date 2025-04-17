@@ -244,7 +244,7 @@ function withModuleFederation(
         }
 
         // virtual entrypoint to create MF containers
-        if (isContainer && moduleName.includes(options.filename)) {
+        if (moduleName.includes(options.filename)) {
           return {
             type: "sourceFile",
             filePath: initContainerPath,
