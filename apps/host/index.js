@@ -4,7 +4,7 @@
 import 'mf:init-host';
 import 'mf:async-require';
 
-import App from './App';
+import App from './src/App';
 import {name as appName} from './app.json';
 import {loadShareSync} from '@module-federation/runtime';
 
