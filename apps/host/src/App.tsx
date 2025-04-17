@@ -8,10 +8,10 @@ import {
   Pressable,
 } from 'react-native';
 import {loadRemote} from '@module-federation/runtime';
+import type LottieView from 'lottie-react-native';
 
 // @ts-ignore
 import gradientBg from './aura.png';
-import LottieView from 'lottie-react-native';
 
 // @ts-ignore
 const Button = React.lazy(() => loadRemote('mini/button'));
@@ -25,7 +25,6 @@ function App(): React.JSX.Element {
 
   return (
     <View style={styles.backgroundStyle}>
-      <Confetti ref={animationRef} />
       <Image
         source={gradientBg}
         style={styles.backgroundImage}
@@ -63,6 +62,7 @@ function App(): React.JSX.Element {
                       <ActivityIndicator size="large" color="#8b5cf6" />
                     </View>
                   }>
+                  <Confetti ref={animationRef} />
                   <Button
                     onPress={() =>
                       setTimeout(() => animationRef.current?.play(), 1000)
