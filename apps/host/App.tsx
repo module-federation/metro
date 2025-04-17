@@ -1,9 +1,9 @@
 import React from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet, Alert} from 'react-native';
 import {loadRemote} from '@module-federation/runtime';
 
 // @ts-ignore
-const Miniapp = React.lazy(() => loadRemote('mini/math'));
+const Button = React.lazy(() => loadRemote('mini/button'));
 
 function App(): React.JSX.Element {
   return (
@@ -30,7 +30,7 @@ function App(): React.JSX.Element {
                   <Text style={styles.loadingText}>Loading Mini App...</Text>
                 </View>
               }>
-              <Miniapp />
+              <Button onPress={() => Alert.alert('Klik', 'Federated Button clicked!')} />
             </React.Suspense>
           </View>
         </View>

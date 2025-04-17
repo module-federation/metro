@@ -1,6 +1,6 @@
 import { init as runtimeInit } from "@module-federation/runtime";
 
-// __PLUGINS__;
+__PLUGINS__;
 
 const usedRemotes = [];
 const usedShared = __SHARED__;
@@ -23,7 +23,7 @@ export async function init(shared = {}, initScope = []) {
     name,
     remotes: usedRemotes,
     shared: usedShared,
-    // plugins,
+    plugins,
     shareStrategy: "loaded-first",
   });
   // handling circular init calls
@@ -47,3 +47,5 @@ export async function init(shared = {}, initScope = []) {
   );
   return initRes;
 }
+
+global[__NAME__] = { get, init };
