@@ -128,9 +128,9 @@ function generateRemotes(remotes: Record<string, string> = {}) {
   return `[${remotesEntries.join(",\n")}]`;
 }
 
-function getInitContainerModule(options: ModuleFederationConfiguration) {
-  const initContainerPath = require.resolve("./runtime/init-container.js");
-  let initContainerCode = fs.readFileSync(initContainerPath, "utf-8");
+function getRemoteEntryModule(options: ModuleFederationConfiguration) {
+  const remoteEntryTemplatePath = require.resolve("./runtime/remote-entry.js");
+  let remoteEntryModule = fs.readFileSync(remoteEntryTemplatePath, "utf-8");
 
   const sharedString = getSharedString(options);
 
@@ -152,7 +152,7 @@ function getInitContainerModule(options: ModuleFederationConfiguration) {
     )
     .join(",");
 
-  return initContainerCode
+  return remoteEntryModule
     .replaceAll("__PLUGINS__", generateRuntimePlugins(options.plugins))
     .replaceAll("__SHARED__", sharedString)
     .replaceAll("__EXPOSES_MAP__", `{${exposesString}}`)
@@ -194,10 +194,12 @@ function withModuleFederation(
     sharedModulesPaths[name] = sharedFilePath;
   });
 
-  const initContainerCode = getInitContainerModule(options);
-  const initContainerPath = path.join(mfMetroPath, "init-container.js");
-
-  fs.writeFileSync(initContainerPath, initContainerCode);
+  let remoteEntryPath: string | undefined;
+  if (isContainer) {
+    const filename = options.filename ?? "remoteEntry.js";
+    remoteEntryPath = path.join(mfMetroPath, filename);
+    fs.writeFileSync(remoteEntryPath, getRemoteEntryModule(options));
+  }
 
   const asyncRequirePath = path.resolve(__dirname, "../async-require.js");
 
@@ -244,10 +246,12 @@ function withModuleFederation(
         }
 
         // virtual entrypoint to create MF containers
-        if (moduleName.includes(options.filename)) {
+        // MF options.filename is provided as a name only and will be requested from the root of project
+        // so the filename mini.js becomes ./mini.js and we need to match exactly that
+        if (moduleName === `./${options.filename}`) {
           return {
             type: "sourceFile",
-            filePath: initContainerPath,
+            filePath: remoteEntryPath as string,
           };
         }
 
