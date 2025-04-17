@@ -131,10 +131,7 @@ function generateRemotes(remotes: Record<string, string> = {}) {
   return `[${remotesEntries.join(",\n")}]`;
 }
 
-function getInitContainerModule(
-  options: ModuleFederationConfiguration,
-  mfMetroPath: string
-) {
+function getInitContainerModule(options: ModuleFederationConfiguration) {
   const initContainerPath = require.resolve("./runtime/init-container.js");
   let initContainerCode = fs.readFileSync(initContainerPath, "utf-8");
 
@@ -158,11 +155,14 @@ function getInitContainerModule(
     )
     .join(",");
 
+  // auto-inject 'metro-core-plugin' MF runtime plugin
+  const plugins = [require.resolve("../runtime-plugin.js"), ...options.plugins];
+
   return initContainerCode
-    .replace("__PLUGINS__", "[]")
+    .replace("__PLUGINS__", generateRuntimePlugins(plugins))
     .replace("__SHARED__", sharedString)
     .replace("__EXPOSES_MAP__", `{${exposesString}}`)
-    .replace("__NAME__", `"${options.name}"`);
+    .replaceAll("__NAME__", `"${options.name}"`);
 }
 
 function withModuleFederation(
@@ -192,7 +192,7 @@ function withModuleFederation(
     sharedModulesPaths[name] = sharedFilePath;
   });
 
-  const initContainerCode = getInitContainerModule(options, mfMetroPath);
+  const initContainerCode = getInitContainerModule(options);
   const initContainerPath = path.join(mfMetroPath, "init-container.js");
 
   fs.writeFileSync(initContainerPath, initContainerCode);
@@ -241,8 +241,8 @@ function withModuleFederation(
           };
         }
 
-        // virtual module: init-container
-        if (moduleName === "mf:init-container") {
+        // virtual entrypoint to create MF containers
+        if (isContainer && moduleName.includes(options.filename)) {
           return {
             type: "sourceFile",
             filePath: initContainerPath,

@@ -21,6 +21,7 @@ module.exports = withModuleFederation(
   mergeConfig(getDefaultConfig(__dirname), config),
   {
     name: 'mini',
+    filename: 'mini.js',
     shared: {
       react: {
         singleton: true,
@@ -37,7 +38,7 @@ module.exports = withModuleFederation(
     },
     plugins: [],
     exposes: {
-      './math': './src/math',
+      './button': './src/button.tsx',
     },
   },
 );
