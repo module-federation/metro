@@ -24,54 +24,52 @@ function App(): React.JSX.Element {
   const [shouldLoadRemote, setShouldLoadRemote] = useState(false);
 
   return (
-    <View style={styles.container}>
+    <View style={styles.backgroundStyle}>
       <Confetti ref={animationRef} />
-      <View style={styles.backgroundStyle}>
-        <Image
-          source={gradientBg}
-          style={styles.backgroundImage}
-          resizeMode="cover"
-        />
-        <View style={styles.darkOverlay} />
-        <View style={styles.contentContainer}>
-          <View style={styles.headerContainer}>
-            <Text style={styles.headerText}>Module Federation in Metro</Text>
-            <Text style={styles.subheaderText}>
-              Host providing shared dependencies
-            </Text>
-          </View>
-          <View style={styles.mainContainer}>
-            <View style={styles.miniappSection}>
-              <View style={styles.miniappCaption}>
-                <Text style={styles.miniappTitle}>Federated Remote</Text>
-                <Text style={styles.miniappDescription}>
-                  Dynamically loaded module
-                </Text>
-              </View>
-              <View style={styles.miniappHighlight}>
-                {!shouldLoadRemote ? (
-                  <Pressable
-                    style={styles.defaultButton}
-                    onPress={() => setShouldLoadRemote(true)}>
-                    <Text style={styles.defaultButtonText}>
-                      Load Remote Component
-                    </Text>
-                  </Pressable>
-                ) : (
-                  <React.Suspense
-                    fallback={
-                      <View style={styles.loadingContainer}>
-                        <ActivityIndicator size="large" color="#8b5cf6" />
-                      </View>
-                    }>
-                    <Button
-                      onPress={() =>
-                        setTimeout(() => animationRef.current?.play(), 1000)
-                      }
-                    />
-                  </React.Suspense>
-                )}
-              </View>
+      <Image
+        source={gradientBg}
+        style={styles.backgroundImage}
+        resizeMode="cover"
+      />
+      <View style={styles.darkOverlay} />
+      <View style={styles.contentContainer}>
+        <View style={styles.headerContainer}>
+          <Text style={styles.headerText}>Module Federation in Metro</Text>
+          <Text style={styles.subheaderText}>
+            Host providing shared dependencies
+          </Text>
+        </View>
+        <View style={styles.mainContainer}>
+          <View style={styles.miniappSection}>
+            <View style={styles.miniappCaption}>
+              <Text style={styles.miniappTitle}>Federated Remote</Text>
+              <Text style={styles.miniappDescription}>
+                Dynamically loaded module
+              </Text>
+            </View>
+            <View style={styles.miniappHighlight}>
+              {!shouldLoadRemote ? (
+                <Pressable
+                  style={styles.defaultButton}
+                  onPress={() => setShouldLoadRemote(true)}>
+                  <Text style={styles.defaultButtonText}>
+                    Load Remote Component
+                  </Text>
+                </Pressable>
+              ) : (
+                <React.Suspense
+                  fallback={
+                    <View style={styles.loadingContainer}>
+                      <ActivityIndicator size="large" color="#8b5cf6" />
+                    </View>
+                  }>
+                  <Button
+                    onPress={() =>
+                      setTimeout(() => animationRef.current?.play(), 1000)
+                    }
+                  />
+                </React.Suspense>
+              )}
             </View>
           </View>
         </View>
@@ -81,9 +79,6 @@ function App(): React.JSX.Element {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
   backgroundStyle: {
     flex: 1,
   },
