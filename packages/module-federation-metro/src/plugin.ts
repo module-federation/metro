@@ -41,15 +41,12 @@ function getInitHostModule(options: ModuleFederationConfiguration) {
 
   const sharedString = getSharedString(options);
 
-  // auto-inject 'metro-core-plugin' MF runtime plugin
-  const plugins = [require.resolve("../runtime-plugin.js"), ...options.plugins];
-
   // Replace placeholders with actual values
   initHostContent = initHostContent
     .replace("__NAME__", JSON.stringify(options.name))
     .replace("__REMOTES__", generateRemotes(options.remotes))
     .replace("__SHARED__", sharedString)
-    .replace("__PLUGINS__", generateRuntimePlugins(plugins));
+    .replace("__PLUGINS__", generateRuntimePlugins(options.plugins));
 
   return initHostContent;
 }
@@ -155,11 +152,8 @@ function getInitContainerModule(options: ModuleFederationConfiguration) {
     )
     .join(",");
 
-  // auto-inject 'metro-core-plugin' MF runtime plugin
-  const plugins = [require.resolve("../runtime-plugin.js"), ...options.plugins];
-
   return initContainerCode
-    .replace("__PLUGINS__", generateRuntimePlugins(plugins))
+    .replace("__PLUGINS__", generateRuntimePlugins(options.plugins))
     .replace("__SHARED__", sharedString)
     .replace("__EXPOSES_MAP__", `{${exposesString}}`)
     .replaceAll("__NAME__", `"${options.name}"`);
@@ -167,14 +161,22 @@ function getInitContainerModule(options: ModuleFederationConfiguration) {
 
 function withModuleFederation(
   config: ConfigT,
-  options: ModuleFederationConfiguration
+  federationOptions: ModuleFederationConfiguration
 ): ConfigT {
+  const options = { ...federationOptions };
+
   const isContainer = !!options.exposes;
   const projectNodeModulesPath = path.resolve(
     config.projectRoot,
     "node_modules"
   );
   const mfMetroPath = createMFRuntimeNodeModules(projectNodeModulesPath);
+
+  // auto-inject 'metro-core-plugin' MF runtime plugin
+  options.plugins = [
+    require.resolve("../runtime-plugin.js"),
+    ...options.plugins,
+  ].map((plugin) => path.relative(mfMetroPath, plugin));
 
   const initHostModule = getInitHostModule(options);
   const initHostFilePath = path.join(mfMetroPath, "init-host.js");
