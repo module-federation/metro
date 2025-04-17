@@ -24,7 +24,7 @@ export async function init(shared = {}, initScope = []) {
     remotes: usedRemotes,
     shared: usedShared,
     // plugins,
-    shareStrategy: "version-first",
+    shareStrategy: "loaded-first",
   });
   // handling circular init calls
   var initToken = initTokens[shareScopeName];
@@ -40,7 +40,7 @@ export async function init(shared = {}, initScope = []) {
   initRes.initShareScopeMap("default", shared);
   await Promise.all(
     initRes.initializeSharing("default", {
-      strategy: "version-first",
+      strategy: "loaded-first",
       from: "build",
       initScope,
     })
