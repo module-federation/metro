@@ -243,6 +243,17 @@ function withModuleFederation(
           };
         }
 
+        if (
+          !isContainer &&
+          Object.keys(options.remotes).some((remoteName) =>
+            moduleName.includes(remoteName)
+          )
+        ) {
+          return {
+            type: "empty",
+          };
+        }
+
         // virtual entrypoint to create MF containers
         if (isContainer && moduleName.includes(options.filename)) {
           return {

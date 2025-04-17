@@ -9,7 +9,6 @@ const MetroCorePlugin: () => FederationRuntimePlugin = () => ({
   name: "metro-core-plugin",
   loadEntry: async ({ remoteInfo }) => {
     const { entry, entryGlobalName } = remoteInfo;
-    console.log(remoteInfo);
     const loadBundleAsyncGlobalKey = `${
       globalThis.__METRO_GLOBAL_PREFIX__ ?? ""
     }__loadBundleAsync`;
@@ -29,7 +28,7 @@ const MetroCorePlugin: () => FederationRuntimePlugin = () => ({
       await loadBundleAsync(entry.split("@")[1]);
 
       // @ts-ignore
-      if (globalThis[entryGlobalName]) {
+      if (!globalThis[entryGlobalName]) {
         throw new Error();
       }
 
