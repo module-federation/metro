@@ -19,9 +19,9 @@ export async function loadBundleAsync(bundlePath: string): Promise<void> {
     return fetchThenEvalAsync(requestUrl);
   } else {
     return fetchThenEvalAsync(requestUrl).then(() => {
-      const HMRClient = require("../HMRClient")
-        .default as typeof import("../HMRClient").default;
-      HMRClient.registerBundle(requestUrl);
+      // const HMRClient = require("../HMRClient")
+      //   .default as typeof import("../HMRClient").default;
+      // HMRClient.registerBundle(requestUrl);
     });
   }
 }

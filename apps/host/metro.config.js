@@ -22,6 +22,9 @@ module.exports = withModuleFederation(
   mergeConfig(getDefaultConfig(__dirname), config),
   {
     name: 'host',
+    remotes: {
+      mini: 'mini@http://localhost:8082/mf.js.bundle',
+    },
     shared: {
       react: {
         singleton: true,

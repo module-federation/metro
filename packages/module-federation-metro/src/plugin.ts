@@ -1,4 +1,5 @@
 import path from "node:path";
+import fs from "node:fs";
 import type { ConfigT } from "metro-config";
 
 interface ModuleFederationConfiguration {
@@ -15,13 +16,10 @@ interface ModuleFederationConfiguration {
   >;
   plugins: string[];
   remotes: Record<string, string>;
+  exposes?: Record<string, string>;
 }
 
-function getInitHostModule(options: ModuleFederationConfiguration) {
-  const initHostPath = require.resolve("./runtime/init-host.js");
-  const fs = require("fs");
-  let initHostContent = fs.readFileSync(initHostPath, "utf-8");
-
+function getSharedString(options: ModuleFederationConfiguration) {
   const shared = Object.keys(options.shared).reduce((acc, name) => {
     acc[name] = `__SHARED_${name}__`;
     return acc;
@@ -33,6 +31,15 @@ function getInitHostModule(options: ModuleFederationConfiguration) {
     const entry = createSharedModuleEntry(name, options.shared[name]);
     sharedString = sharedString.replace(`"__SHARED_${name}__"`, entry);
   });
+
+  return sharedString;
+}
+
+function getInitHostModule(options: ModuleFederationConfiguration) {
+  const initHostPath = require.resolve("./runtime/init-host.js");
+  let initHostContent = fs.readFileSync(initHostPath, "utf-8");
+
+  const sharedString = getSharedString(options);
 
   // auto-inject 'metro-core-plugin' MF runtime plugin
   const plugins = [require.resolve("../runtime-plugin.js"), ...options.plugins];
@@ -69,32 +76,15 @@ function createSharedModuleEntry(
   );
 }
 
-function writeInitHostModule(filePath: string, content: string) {
-  const fs = require("fs");
-
-  fs.writeFileSync(filePath, content, "utf-8");
-  return filePath;
-}
-
 function getSharedModule(name: string) {
   const sharedTemplatePath = require.resolve("./runtime/shared.js");
-  const fs = require("fs");
-  let sharedTemplate = fs.readFileSync(sharedTemplatePath, "utf-8");
 
-  return sharedTemplate.replace("__SHARED_MODULE_NAME__", `"${name}"`);
-}
-
-function writeSharedModule(filePath: string, content: string) {
-  const fs = require("fs");
-
-  fs.writeFileSync(filePath, content, "utf-8");
-  return filePath;
+  return fs
+    .readFileSync(sharedTemplatePath, "utf-8")
+    .replace("__SHARED_MODULE_NAME__", `"${name}"`);
 }
 
 function createMFRuntimeNodeModules(projectNodeModulesPath: string) {
-  const fs = require("fs");
-  const path = require("path");
-
   const mfMetroPath = path.join(projectNodeModulesPath, ".mf-metro");
 
   if (!fs.existsSync(mfMetroPath)) {
@@ -141,33 +131,71 @@ function generateRemotes(remotes: Record<string, string> = {}) {
   return `[${remotesEntries.join(",\n")}]`;
 }
 
+function getInitContainerModule(
+  options: ModuleFederationConfiguration,
+  mfMetroPath: string
+) {
+  const initContainerPath = require.resolve("./runtime/init-container.js");
+  let initContainerCode = fs.readFileSync(initContainerPath, "utf-8");
+
+  const sharedString = getSharedString(options);
+
+  const exposes = options.exposes || {};
+
+  const exposesString = Object.keys(exposes)
+    .map(
+      (key) =>
+        `"${key}": async () => {
+      const module = await import("../../${exposes[key]}");
+
+      const target = { ...module };
+
+      Object.defineProperty(target, "__esModule", { value: true, enumerable: false });
+
+      return target;
+    }
+    `
+    )
+    .join(",");
+
+  return initContainerCode
+    .replace("__PLUGINS__", "[]")
+    .replace("__SHARED__", sharedString)
+    .replace("__EXPOSES_MAP__", `{${exposesString}}`)
+    .replace("__NAME__", `"${options.name}"`);
+}
+
 function withModuleFederation(
   config: ConfigT,
   options: ModuleFederationConfiguration
 ): ConfigT {
-  console.log("withModuleFederation plugin");
-
+  const isContainer = !!options.exposes;
   const projectNodeModulesPath = path.resolve(
     config.projectRoot,
     "node_modules"
   );
-
   const mfMetroPath = createMFRuntimeNodeModules(projectNodeModulesPath);
 
   const initHostModule = getInitHostModule(options);
-  const initHostFilePath = writeInitHostModule(
-    path.join(mfMetroPath, "init-host.js"),
-    initHostModule
-  );
+  const initHostFilePath = path.join(mfMetroPath, "init-host.js");
+
+  fs.writeFileSync(initHostFilePath, initHostModule, "utf-8");
 
   const sharedModulesPaths: Record<string, string> = {};
 
   Object.keys(options.shared).forEach((name) => {
     const sharedModule = getSharedModule(name);
     const sharedFilePath = path.join(mfMetroPath, "shared", `${name}.js`);
-    writeSharedModule(sharedFilePath, sharedModule);
+
+    fs.writeFileSync(sharedFilePath, sharedModule, "utf-8");
+
     sharedModulesPaths[name] = sharedFilePath;
   });
+
+  const initContainerCode = getInitContainerModule(options, mfMetroPath);
+  const initContainerPath = path.join(mfMetroPath, "init-container.js");
+
+  fs.writeFileSync(initContainerPath, initContainerCode);
 
   const asyncRequirePath = path.resolve(__dirname, "../async-require.js");
 
@@ -175,8 +203,23 @@ function withModuleFederation(
     ...config,
     serializer: {
       ...config.serializer,
+      createModuleIdFactory: () => {
+        // identical to metro's default module id factory
+        // but we offset the ids for container modules by 10000
+        // reference: https://github.com/facebook/metro/blob/cc7316b1f40ed5e4202a997673b26d55ff1b4ca5/packages/metro/src/lib/createModuleIdFactory.js
+        const fileToIdMap: Map<string, number> = new Map();
+        let nextId = isContainer ? 10000 : 0;
+        return (modulePath: string) => {
+          let id = fileToIdMap.get(modulePath);
+          if (typeof id !== "number") {
+            id = nextId++;
+            fileToIdMap.set(modulePath, id);
+          }
+          return id;
+        };
+      },
       getModulesRunBeforeMainModule: (entryFilePath) => {
-        return [initHostFilePath, asyncRequirePath];
+        return [initHostFilePath];
       },
     },
     resolver: {
@@ -195,6 +238,14 @@ function withModuleFederation(
           return {
             type: "sourceFile",
             filePath: asyncRequirePath,
+          };
+        }
+
+        // virtual module: init-container
+        if (moduleName === "mf:init-container") {
+          return {
+            type: "sourceFile",
+            filePath: initContainerPath,
           };
         }
 

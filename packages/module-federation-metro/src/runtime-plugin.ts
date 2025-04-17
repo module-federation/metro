@@ -9,7 +9,7 @@ const MetroCorePlugin: () => FederationRuntimePlugin = () => ({
   name: "metro-core-plugin",
   loadEntry: async ({ remoteInfo }) => {
     const { entry, entryGlobalName } = remoteInfo;
-
+    console.log(remoteInfo);
     const loadBundleAsyncGlobalKey = `${
       globalThis.__METRO_GLOBAL_PREFIX__ ?? ""
     }__loadBundleAsync`;
@@ -25,7 +25,8 @@ const MetroCorePlugin: () => FederationRuntimePlugin = () => ({
     }
 
     try {
-      await loadBundleAsync(entry);
+      // this should be already split, and should contain only URL
+      await loadBundleAsync(entry.split("@")[1]);
 
       // @ts-ignore
       if (globalThis[entryGlobalName]) {
@@ -34,8 +35,10 @@ const MetroCorePlugin: () => FederationRuntimePlugin = () => ({
 
       // @ts-ignore
       return globalThis[entryGlobalName];
-    } catch {
-      console.error(`Failed to load remote entry: ${entryGlobalName}`);
+    } catch (error) {
+      console.error(
+        `Failed to load remote entry: ${entryGlobalName}. Reason: ${error}`
+      );
     }
   },
   generatePreloadAssets: async () => {
