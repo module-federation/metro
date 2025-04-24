@@ -10,6 +10,7 @@ import {withAsyncStartup} from 'module-federation-metro/bootstrap';
 
 // create async bounday through withAsyncStartup helper
 // and pass the getter function for the app component
+// and optionally a getter function for the fallback component
 AppRegistry.registerComponent(
   appName,
   withAsyncStartup(
