@@ -1,4 +1,4 @@
-import { useRef, lazy, createElement, Suspense } from "react";
+import React from "react";
 
 declare global {
   var __METRO_FEDERATION_INIT__: Promise<any>;
@@ -8,33 +8,28 @@ declare global {
 type LazyComponent = { default: React.ComponentType };
 
 function getFallbackComponent(lazyFallbackFn?: () => LazyComponent) {
-  if (!lazyFallbackFn) return undefined;
-  const FallbackComponent = lazyFallbackFn();
-  return createElement(FallbackComponent.default);
-}
-
-function getAppComponent(ref: React.RefObject<React.ComponentType>) {
-  const AppComponent = ref.current;
-  return createElement(AppComponent);
+  if (!lazyFallbackFn) return () => null;
+  const fallback = lazyFallbackFn();
+  return fallback.default;
 }
 
 export function withAsyncStartup(
   lazyAppFn: () => LazyComponent,
   lazyFallbackFn?: () => LazyComponent
 ): () => () => React.JSX.Element {
-  return () => () => {
-    const AppRef = useRef(
-      lazy(async () => {
-        await global.__METRO_FEDERATION_INIT__;
-        await Promise.all(Object.values(global.__METRO_FEDERATION_LOADING__));
-        return lazyAppFn();
-      })
-    );
+  const AppComponent = React.lazy(async () => {
+    await global.__METRO_FEDERATION_INIT__;
+    await Promise.all(Object.values(global.__METRO_FEDERATION_LOADING__));
+    return lazyAppFn();
+  });
 
-    return createElement(
-      Suspense,
-      { fallback: getFallbackComponent(lazyFallbackFn) },
-      getAppComponent(AppRef)
+  const FallbackComponent = getFallbackComponent(lazyFallbackFn);
+
+  return () => () => {
+    return React.createElement(
+      React.Suspense,
+      { fallback: React.createElement(FallbackComponent) },
+      React.createElement(AppComponent)
     );
   };
 }
