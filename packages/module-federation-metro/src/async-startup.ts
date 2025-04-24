@@ -1,4 +1,4 @@
-import React from 'react';
+import { useRef, lazy, createElement, Suspense } from "react";
 
 declare global {
   var __METRO_FEDERATION_INIT__: Promise<any>;
@@ -6,23 +6,17 @@ declare global {
 }
 
 export function withAsyncStartup(
-  AppRequireFn: () => {default: React.ComponentType<any>},
+  lazyAppFn: () => { default: React.ComponentType }
 ): () => () => React.JSX.Element {
   return () => () => {
-    const AppRef = React.useRef(
-      React.lazy(async () => {
+    const AppRef = useRef(
+      lazy(async () => {
         await global.__METRO_FEDERATION_INIT__;
         await Promise.all(Object.values(global.__METRO_FEDERATION_LOADING__));
-        return {default: AppRequireFn().default};
-      }),
+        return lazyAppFn();
+      })
     );
-
     const AppComponent = AppRef.current;
-
-    return (
-      <React.Suspense>
-        <AppComponent />
-      </React.Suspense>
-    );
+    return createElement(Suspense, null, createElement(AppComponent));
   };
 }

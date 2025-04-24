@@ -6,7 +6,7 @@ import 'mf:async-require';
 
 import {name as appName} from './app.json';
 import {AppRegistry} from 'react-native';
-import {withAsyncStartup} from './bootstrap';
+import {withAsyncStartup} from 'module-federation-metro/bootstrap';
 
 AppRegistry.registerComponent(
   appName,
