@@ -1,12 +1,22 @@
 import { loadShare, loadShareSync } from "@module-federation/runtime";
 
-const registry = (global.__METRO_FEDERATION_REGISTRY__ =
-  global.__METRO_FEDERATION_REGISTRY__ || {});
-const loading = (global.__METRO_FEDERATION_LOADING__ =
-  global.__METRO_FEDERATION_LOADING__ || {});
+global.__METRO_FEDERATION__ = global.__METRO_FEDERATION__ || {};
+global.__METRO_FEDERATION__[__NAME__] =
+  global.__METRO_FEDERATION__[__NAME__] || {};
 
-export async function loadSharedToRegistry(id) {
-  await global.__METRO_FEDERATION_INIT__;
+const registry = (global.__METRO_FEDERATION__[__NAME__]["registry"] = {});
+const loading = (global.__METRO_FEDERATION__[__NAME__]["loading"] = {});
+
+export function loadSharedToRegistry(id) {
+  if (id === "react" || id === "react-native") {
+    return loadSharedToRegistrySync(id);
+  } else {
+    return loadSharedToRegistryAsync(id);
+  }
+}
+
+export async function loadSharedToRegistryAsync(id) {
+  await global.__METRO_FEDERATION__[__NAME__]["init"];
   const promise = loading[id];
   if (promise) {
     await promise;
@@ -21,7 +31,7 @@ export async function loadSharedToRegistry(id) {
   }
 }
 
-export function loadSharedSyncToRegistry(id) {
+export function loadSharedToRegistrySync(id) {
   loading[id] = loadShareSync(id);
   registry[id] = loading[id]();
 }

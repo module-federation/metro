@@ -39,7 +39,12 @@ export async function init(shared = {}, initScope = []) {
   }
   initScope.push(initToken);
   initRes.initShareScopeMap("default", shared);
-  await Promise.all(
+
+  global.__METRO_FEDERATION__ = global.__METRO_FEDERATION__ || {};
+  global.__METRO_FEDERATION__[__NAME__] =
+    global.__METRO_FEDERATION__[__NAME__] || {};
+
+  global.__METRO_FEDERATION__[__NAME__]["init"] = Promise.all(
     initRes.initializeSharing("default", {
       strategy: "version-first",
       from: "build",
@@ -48,7 +53,10 @@ export async function init(shared = {}, initScope = []) {
   );
 
   Object.keys(usedShared).forEach(loadSharedToRegistry);
-  await Promise.all(Object.values(global.__METRO_FEDERATION_LOADING__));
+
+  await Promise.all(
+    Object.values(global.__METRO_FEDERATION__[__NAME__]["loading"])
+  );
 
   return initRes;
 }

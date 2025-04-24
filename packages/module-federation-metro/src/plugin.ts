@@ -54,6 +54,7 @@ function createSharedModuleEntry(name: string, options: SharedConfig) {
   const template = {
     version: options.version,
     scope: "default",
+    get: "__GET_PLACEHOLDER__",
     lib: "__LIB_PLACEHOLDER__",
     shareConfig: {
       singleton: options.singleton,
@@ -61,12 +62,11 @@ function createSharedModuleEntry(name: string, options: SharedConfig) {
       requiredVersion: options.requiredVersion,
     },
   };
-
   const templateString = JSON.stringify(template);
-  return templateString.replaceAll(
-    '"__LIB_PLACEHOLDER__"',
-    `() => require("${name}")`
-  );
+
+  return templateString
+    .replaceAll('"__GET_PLACEHOLDER__"', `async () => () => require("${name}")`)
+    .replaceAll('"__LIB_PLACEHOLDER__"', `() => require("${name}")`);
 }
 
 function getSharedModule(name: string) {
@@ -184,10 +184,10 @@ function withModuleFederation(
   const sharedRegistryModulePath = require.resolve(
     "./runtime/shared-registry.js"
   );
-  const sharedRegistryModule = fs.readFileSync(
-    sharedRegistryModulePath,
-    "utf-8"
-  );
+  const sharedRegistryModule = fs
+    .readFileSync(sharedRegistryModulePath, "utf-8")
+    .replaceAll("__NAME__", JSON.stringify(options.name));
+
   const sharedRegistryPath = path.join(mfMetroPath, "shared-registry.js");
 
   fs.writeFileSync(sharedRegistryPath, sharedRegistryModule, "utf-8");
@@ -241,48 +241,49 @@ function withModuleFederation(
       resolveRequest: (context, moduleName, platform) => {
         // virtual module: init-host
         if (moduleName === "mf:init-host") {
-          return {
-            type: "sourceFile",
-            filePath: initHostFilePath,
-          };
+          return { type: "sourceFile", filePath: initHostFilePath };
         }
 
         // virtual module: async-require
         if (moduleName === "mf:async-require") {
-          return {
-            type: "sourceFile",
-            filePath: asyncRequirePath,
-          };
+          return { type: "sourceFile", filePath: asyncRequirePath };
         }
 
         // virtual module: shared-registry
         if (moduleName === "mf:shared-registry") {
-          return {
-            type: "sourceFile",
-            filePath: sharedRegistryPath,
-          };
+          return { type: "sourceFile", filePath: sharedRegistryPath };
         }
 
         // virtual entrypoint to create MF containers
         // MF options.filename is provided as a name only and will be requested from the root of project
         // so the filename mini.js becomes ./mini.js and we need to match exactly that
         if (moduleName === `./${options.filename}`) {
-          return {
-            type: "sourceFile",
-            filePath: remoteEntryPath as string,
-          };
+          return { type: "sourceFile", filePath: remoteEntryPath as string };
+        }
+
+        // shared modules handling in init-host.js
+        if ([initHostFilePath].includes(context.originModulePath)) {
+          // init-host contains definition of shared modules so we need to prevent
+          // circular import of shared module, by allowing import shared dependencies directly
+          return context.resolveRequest(context, moduleName, platform);
+        }
+
+        // shared modules handling in remote-entry.js
+        if ([remoteEntryPath].includes(context.originModulePath)) {
+          // TODO: bind this to import: false
+          // react and react-native get special treatment
+          if (moduleName === "react" || moduleName === "react-native") {
+            const sharedPath = sharedModulesPaths[moduleName];
+            return { type: "sourceFile", filePath: sharedPath };
+          } else {
+            return context.resolveRequest(context, moduleName, platform);
+          }
         }
 
         // shared modules
-        // init-host contains definition of shared modules so we need to prevent
-        // circular import of shared module, by allowing import shared dependencies directly
-        if (![initHostFilePath].includes(context.originModulePath)) {
-          if (Object.keys(options.shared).includes(moduleName)) {
-            return {
-              type: "sourceFile",
-              filePath: sharedModulesPaths[moduleName],
-            };
-          }
+        if (Object.keys(options.shared).includes(moduleName)) {
+          const sharedPath = sharedModulesPaths[moduleName];
+          return { type: "sourceFile", filePath: sharedPath };
         }
 
         return context.resolveRequest(context, moduleName, platform);

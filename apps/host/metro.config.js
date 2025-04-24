@@ -39,10 +39,10 @@ module.exports = withModuleFederation(
         version: '0.79.0',
       },
       lodash: {
-        singleton: true,
+        singleton: false,
         eager: false,
-        requiredVersion: '^4.17.21',
-        version: '4.17.21',
+        requiredVersion: '4.16.6',
+        version: '4.16.6',
       },
     },
     plugins: [path.resolve(__dirname, './runtime-plugin.ts')],
