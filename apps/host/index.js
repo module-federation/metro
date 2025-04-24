@@ -8,6 +8,8 @@ import {name as appName} from './app.json';
 import {AppRegistry} from 'react-native';
 import {withAsyncStartup} from 'module-federation-metro/bootstrap';
 
+// create async bounday through withAsyncStartup helper
+// and pass the getter function for the app component
 AppRegistry.registerComponent(
   appName,
   withAsyncStartup(() => require('./src/App')),
