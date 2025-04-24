@@ -17,6 +17,7 @@ const initRes = init({
 global.__METRO_FEDERATION__ = global.__METRO_FEDERATION__ || {};
 global.__METRO_FEDERATION__[__NAME__] =
   global.__METRO_FEDERATION__[__NAME__] || {};
+
 global.__METRO_FEDERATION__.__HOST__ = global.__METRO_FEDERATION__[__NAME__];
 
 global.__METRO_FEDERATION__[__NAME__]["init"] = Promise.all(

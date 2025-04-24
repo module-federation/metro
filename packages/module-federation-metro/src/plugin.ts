@@ -55,7 +55,6 @@ function createSharedModuleEntry(name: string, options: SharedConfig) {
     version: options.version,
     scope: "default",
     get: "__GET_PLACEHOLDER__",
-    lib: "__LIB_PLACEHOLDER__",
     shareConfig: {
       singleton: options.singleton,
       eager: options.eager,
@@ -64,9 +63,10 @@ function createSharedModuleEntry(name: string, options: SharedConfig) {
   };
   const templateString = JSON.stringify(template);
 
-  return templateString
-    .replaceAll('"__GET_PLACEHOLDER__"', `async () => () => require("${name}")`)
-    .replaceAll('"__LIB_PLACEHOLDER__"', `() => require("${name}")`);
+  return templateString.replaceAll(
+    '"__GET_PLACEHOLDER__"',
+    `() => () => require("${name}")`
+  );
 }
 
 function getSharedModule(name: string) {
