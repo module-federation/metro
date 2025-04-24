@@ -26,10 +26,10 @@ export function withAsyncStartup(
   const FallbackComponent = getFallbackComponent(lazyFallbackFn);
 
   return () => () => {
-    return React.createElement(
-      React.Suspense,
-      { fallback: React.createElement(FallbackComponent) },
-      React.createElement(AppComponent)
+    return (
+      <React.Suspense fallback={<FallbackComponent />}>
+        <AppComponent />
+      </React.Suspense>
     );
   };
 }
