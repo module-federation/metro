@@ -2,18 +2,17 @@ import path from "node:path";
 import fs from "node:fs";
 import type { ConfigT } from "metro-config";
 
+interface SharedConfig {
+  singleton: boolean;
+  eager: boolean;
+  version: string;
+  requiredVersion: string;
+}
+
 interface ModuleFederationConfiguration {
   name: string;
   filename: string;
-  shared: Record<
-    string,
-    {
-      singleton: boolean;
-      eager: boolean;
-      version: string;
-      requiredVersion: string;
-    }
-  >;
+  shared: Record<string, SharedConfig>;
   plugins: string[];
   remotes: Record<string, string>;
   exposes?: Record<string, string>;
@@ -51,18 +50,15 @@ function getInitHostModule(options: ModuleFederationConfiguration) {
   return initHostContent;
 }
 
-function createSharedModuleEntry(
-  name: string,
-  options: { version: string; config: Record<any, any> }
-) {
+function createSharedModuleEntry(name: string, options: SharedConfig) {
   const template = {
     version: options.version,
     scope: "default",
     lib: "__LIB_PLACEHOLDER__",
     shareConfig: {
-      singleton: true,
-      eager: true,
-      requiredVersion: options.version,
+      singleton: options.singleton,
+      eager: options.eager,
+      requiredVersion: options.requiredVersion,
     },
   };
 
@@ -78,7 +74,7 @@ function getSharedModule(name: string) {
 
   return fs
     .readFileSync(sharedTemplatePath, "utf-8")
-    .replaceAll("__SHARED_MODULE_NAME__", `"${name}"`);
+    .replaceAll("__MODULE_ID__", `"${name}"`);
 }
 
 function createMFRuntimeNodeModules(projectNodeModulesPath: string) {
@@ -165,7 +161,9 @@ function withModuleFederation(
 ): ConfigT {
   const options = { ...federationOptions };
 
-  const isContainer = !!options.exposes;
+  const isHost = !options.exposes;
+  const isContainer = !isHost;
+
   const projectNodeModulesPath = path.resolve(
     config.projectRoot,
     "node_modules"
@@ -183,16 +181,28 @@ function withModuleFederation(
 
   fs.writeFileSync(initHostFilePath, initHostModule, "utf-8");
 
+  const sharedRegistryModulePath = require.resolve(
+    "./runtime/shared-registry.js"
+  );
+  const sharedRegistryModule = fs.readFileSync(
+    sharedRegistryModulePath,
+    "utf-8"
+  );
+  const sharedRegistryPath = path.join(mfMetroPath, "shared-registry.js");
+
+  fs.writeFileSync(sharedRegistryPath, sharedRegistryModule, "utf-8");
+
   const sharedModulesPaths: Record<string, string> = {};
 
-  Object.keys(options.shared).forEach((name) => {
-    const sharedModule = getSharedModule(name);
-    const sharedFilePath = path.join(mfMetroPath, "shared", `${name}.js`);
+  if (options.shared) {
+    Object.keys(options.shared).forEach((name) => {
+      const sharedModule = getSharedModule(name);
+      const sharedFilePath = path.join(mfMetroPath, "shared", `${name}.js`);
 
-    fs.writeFileSync(sharedFilePath, sharedModule, "utf-8");
-
-    sharedModulesPaths[name] = sharedFilePath;
-  });
+      fs.writeFileSync(sharedFilePath, sharedModule, "utf-8");
+      sharedModulesPaths[name] = sharedFilePath;
+    });
+  }
 
   let remoteEntryPath: string | undefined;
   if (isContainer) {
@@ -242,6 +252,14 @@ function withModuleFederation(
           return {
             type: "sourceFile",
             filePath: asyncRequirePath,
+          };
+        }
+
+        // virtual module: shared-registry
+        if (moduleName === "mf:shared-registry") {
+          return {
+            type: "sourceFile",
+            filePath: sharedRegistryPath,
           };
         }
 

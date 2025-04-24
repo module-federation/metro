@@ -12,6 +12,13 @@ import {loadRemote} from '@module-federation/runtime';
 
 // @ts-ignore
 import gradientBg from './aura.png';
+// lodash import synchronously
+import _ from 'lodash';
+
+// used as a side-effect to ensure that the lodash module is loaded
+// before we eval the App module
+const test = _.capitalize('capitalized');
+console.log('side-effect lodash test', test);
 
 // @ts-ignore
 const Button = React.lazy(() => loadRemote('mini/button'));

@@ -4,9 +4,11 @@
 import 'mf:init-host';
 import 'mf:async-require';
 
-import App from './src/App';
 import {name as appName} from './app.json';
-import {loadShareSync} from '@module-federation/runtime';
+import {AppRegistry} from 'react-native';
+import {withAsyncStartup} from './bootstrap';
 
-const reactNative = loadShareSync('react-native')();
-reactNative.AppRegistry.registerComponent(appName, () => App);
+AppRegistry.registerComponent(
+  appName,
+  withAsyncStartup(() => require('./src/App')),
+);

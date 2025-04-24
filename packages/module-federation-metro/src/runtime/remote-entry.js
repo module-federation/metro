@@ -1,3 +1,4 @@
+import { loadSharedToRegistry } from "mf:shared-registry";
 import { init as runtimeInit } from "@module-federation/runtime";
 
 __PLUGINS__;
@@ -24,7 +25,7 @@ export async function init(shared = {}, initScope = []) {
     remotes: usedRemotes,
     shared: usedShared,
     plugins,
-    shareStrategy: "loaded-first",
+    shareStrategy: "version-first",
   });
   // handling circular init calls
   var initToken = initTokens[shareScopeName];
@@ -40,11 +41,15 @@ export async function init(shared = {}, initScope = []) {
   initRes.initShareScopeMap("default", shared);
   await Promise.all(
     initRes.initializeSharing("default", {
-      strategy: "loaded-first",
+      strategy: "version-first",
       from: "build",
       initScope,
     })
   );
+
+  Object.keys(usedShared).forEach(loadSharedToRegistry);
+  await Promise.all(Object.values(global.__METRO_FEDERATION_LOADING__));
+
   return initRes;
 }
 

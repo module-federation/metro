@@ -1,3 +1,7 @@
+import {
+  loadSharedToRegistry,
+  loadSharedSyncToRegistry,
+} from "mf:shared-registry";
 import { init } from "@module-federation/runtime";
 
 __PLUGINS__;
@@ -10,11 +14,18 @@ const initRes = init({
   remotes: usedRemotes,
   plugins,
   shared: usedShared,
-  shareStrategy: "loaded-first",
+  shareStrategy: "version-first",
 });
 
-initRes.initializeSharing("default", {
-  strategy: "loaded-first",
-  from: "build",
-  initScope: [],
-});
+global.__METRO_FEDERATION_INIT__ = Promise.all(
+  initRes.initializeSharing("default", {
+    strategy: "version-first",
+    from: "build",
+    initScope: [],
+  })
+);
+
+loadSharedSyncToRegistry("react");
+loadSharedSyncToRegistry("react-native");
+
+Object.keys(usedShared).forEach(loadSharedToRegistry);
