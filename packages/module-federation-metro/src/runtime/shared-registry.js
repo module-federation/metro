@@ -4,8 +4,8 @@ global.__METRO_FEDERATION__ = global.__METRO_FEDERATION__ || {};
 global.__METRO_FEDERATION__[__NAME__] =
   global.__METRO_FEDERATION__[__NAME__] || {};
 
-const registry = (global.__METRO_FEDERATION__[__NAME__]["registry"] = {});
-const loading = (global.__METRO_FEDERATION__[__NAME__]["loading"] = {});
+const registry = (global.__METRO_FEDERATION__[__NAME__].__shareRegistry = {});
+const loading = (global.__METRO_FEDERATION__[__NAME__].__shareLoading = {});
 
 export function loadSharedToRegistry(id) {
   if (id === "react" || id === "react-native") {
@@ -16,7 +16,7 @@ export function loadSharedToRegistry(id) {
 }
 
 export async function loadSharedToRegistryAsync(id) {
-  await global.__METRO_FEDERATION__[__NAME__]["init"];
+  await global.__METRO_FEDERATION__[__NAME__].__shareInit;
   const promise = loading[id];
   if (promise) {
     await promise;

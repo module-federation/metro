@@ -1,10 +1,10 @@
 import React from "react";
 
 declare global {
-  var __METRO_FEDERATION__: {
+  var __METRO_FEDERATION__: Record<string, any> & {
     __HOST__: {
-      init: Promise<any>;
-      loading: Record<string, Promise<any>>;
+      __shareInit: Promise<any>;
+      __shareLoading: Record<string, Promise<any>>;
     };
   };
 }
@@ -22,9 +22,9 @@ export function withAsyncStartup(
   lazyFallbackFn?: () => LazyComponent
 ): () => () => React.JSX.Element {
   const AppComponent = React.lazy(async () => {
-    await global.__METRO_FEDERATION__.__HOST__.init;
+    await global.__METRO_FEDERATION__.__HOST__.__shareInit;
     await Promise.all(
-      Object.values(global.__METRO_FEDERATION__.__HOST__.loading)
+      Object.values(global.__METRO_FEDERATION__.__HOST__.__shareLoading)
     );
     return lazyAppFn();
   });

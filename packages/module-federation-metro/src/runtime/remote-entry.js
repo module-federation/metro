@@ -8,7 +8,7 @@ const usedShared = __SHARED__;
 
 const exposesMap = __EXPOSES_MAP__;
 
-export function get(moduleName) {
+function get(moduleName) {
   if (!(moduleName in exposesMap)) {
     throw new Error(`Module ${moduleName} does not exist in container.`);
   }
@@ -19,7 +19,7 @@ const initTokens = {};
 const shareScopeName = "default";
 const name = __NAME__;
 
-export async function init(shared = {}, initScope = []) {
+async function init(shared = {}, initScope = []) {
   const initRes = runtimeInit({
     name,
     remotes: usedRemotes,
@@ -40,11 +40,7 @@ export async function init(shared = {}, initScope = []) {
   initScope.push(initToken);
   initRes.initShareScopeMap("default", shared);
 
-  global.__METRO_FEDERATION__ = global.__METRO_FEDERATION__ || {};
-  global.__METRO_FEDERATION__[__NAME__] =
-    global.__METRO_FEDERATION__[__NAME__] || {};
-
-  global.__METRO_FEDERATION__[__NAME__]["init"] = Promise.all(
+  global.__METRO_FEDERATION__[__NAME__].__shareInit = Promise.all(
     initRes.initializeSharing("default", {
       strategy: "version-first",
       from: "build",
@@ -55,10 +51,14 @@ export async function init(shared = {}, initScope = []) {
   Object.keys(usedShared).forEach(loadSharedToRegistry);
 
   await Promise.all(
-    Object.values(global.__METRO_FEDERATION__[__NAME__]["loading"])
+    Object.values(global.__METRO_FEDERATION__[__NAME__].__shareLoading)
   );
 
   return initRes;
 }
 
-global[__NAME__] = { get, init };
+global.__METRO_FEDERATION__[__NAME__] =
+  global.__METRO_FEDERATION__[__NAME__] || {};
+
+global.__METRO_FEDERATION__[__NAME__].get = get;
+global.__METRO_FEDERATION__[__NAME__].init = init;

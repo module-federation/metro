@@ -20,7 +20,7 @@ global.__METRO_FEDERATION__[__NAME__] =
 
 global.__METRO_FEDERATION__.__HOST__ = global.__METRO_FEDERATION__[__NAME__];
 
-global.__METRO_FEDERATION__[__NAME__]["init"] = Promise.all(
+global.__METRO_FEDERATION__[__NAME__].__shareInit = Promise.all(
   initRes.initializeSharing("default", {
     strategy: "version-first",
     from: "build",
