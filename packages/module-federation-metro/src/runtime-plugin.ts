@@ -3,8 +3,8 @@ import type { FederationRuntimePlugin } from "@module-federation/runtime";
 declare global {
   var __METRO_FEDERATION__: Record<string, any> & {
     __HOST__: {
-      __shareInit: Promise<any>;
-      __shareLoading: Record<string, Promise<any>>;
+      __shareInit: Promise<void>;
+      __shareLoading: Promise<void>;
     };
   };
   var __METRO_GLOBAL_PREFIX__: string;

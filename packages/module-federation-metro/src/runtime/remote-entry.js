@@ -25,7 +25,7 @@ async function init(shared = {}, initScope = []) {
     remotes: usedRemotes,
     shared: usedShared,
     plugins,
-    shareStrategy: "version-first",
+    shareStrategy: "loaded-first",
   });
   // handling circular init calls
   var initToken = initTokens[shareScopeName];
@@ -42,17 +42,13 @@ async function init(shared = {}, initScope = []) {
 
   global.__METRO_FEDERATION__[__NAME__].__shareInit = Promise.all(
     initRes.initializeSharing("default", {
-      strategy: "version-first",
+      strategy: "loaded-first",
       from: "build",
       initScope,
     })
   );
 
-  Object.keys(usedShared).forEach(loadSharedToRegistry);
-
-  await Promise.all(
-    Object.values(global.__METRO_FEDERATION__[__NAME__].__shareLoading)
-  );
+  await Promise.all(Object.keys(usedShared).map(loadSharedToRegistry));
 
   return initRes;
 }

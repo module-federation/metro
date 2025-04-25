@@ -1,11 +1,7 @@
 import { loadShare, loadShareSync } from "@module-federation/runtime";
 
-global.__METRO_FEDERATION__ = global.__METRO_FEDERATION__ || {};
-global.__METRO_FEDERATION__[__NAME__] =
-  global.__METRO_FEDERATION__[__NAME__] || {};
-
-const registry = (global.__METRO_FEDERATION__[__NAME__].__shareRegistry = {});
-const loading = (global.__METRO_FEDERATION__[__NAME__].__shareLoading = {});
+const registry = {};
+const loading = {};
 
 export function loadSharedToRegistry(id) {
   if (id === "react" || id === "react-native") {
