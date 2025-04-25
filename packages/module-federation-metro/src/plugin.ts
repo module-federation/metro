@@ -167,7 +167,8 @@ function getRemoteEntryModule(options: ModuleFederationConfiguration) {
     .replaceAll("__PLUGINS__", generateRuntimePlugins(options.plugins))
     .replaceAll("__SHARED__", sharedString)
     .replaceAll("__EXPOSES_MAP__", `{${exposesString}}`)
-    .replaceAll("__NAME__", `"${options.name}"`);
+    .replaceAll("__NAME__", `"${options.name}"`)
+    .replaceAll("__SHARE_STRATEGY__", JSON.stringify(options.shareStrategy));
 }
 
 function createInitHostVirtualModule(
