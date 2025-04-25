@@ -17,6 +17,7 @@ function get(moduleName) {
 
 const initTokens = {};
 const shareScopeName = "default";
+const shareStrategy = __SHARE_STRATEGY__;
 const name = __NAME__;
 
 async function init(shared = {}, initScope = []) {
@@ -25,7 +26,7 @@ async function init(shared = {}, initScope = []) {
     remotes: usedRemotes,
     shared: usedShared,
     plugins,
-    shareStrategy: "loaded-first",
+    shareStrategy,
   });
   // handling circular init calls
   var initToken = initTokens[shareScopeName];
@@ -38,11 +39,11 @@ async function init(shared = {}, initScope = []) {
     return;
   }
   initScope.push(initToken);
-  initRes.initShareScopeMap("default", shared);
+  initRes.initShareScopeMap(shareScopeName, shared);
 
   global.__METRO_FEDERATION__[__NAME__].__shareInit = Promise.all(
-    initRes.initializeSharing("default", {
-      strategy: "loaded-first",
+    initRes.initializeSharing(shareScopeName, {
+      strategy: shareStrategy,
       from: "build",
       initScope,
     })
