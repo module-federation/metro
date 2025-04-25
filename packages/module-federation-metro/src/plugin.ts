@@ -17,6 +17,7 @@ interface ModuleFederationConfiguration {
   plugins: string[];
   remotes: Record<string, string>;
   exposes?: Record<string, string>;
+  shareStrategy?: "loaded-first" | "version-first";
 }
 
 function getSharedString(options: ModuleFederationConfiguration) {
@@ -46,7 +47,8 @@ function getInitHostModule(options: ModuleFederationConfiguration) {
     .replaceAll("__NAME__", JSON.stringify(options.name))
     .replaceAll("__REMOTES__", generateRemotes(options.remotes))
     .replaceAll("__SHARED__", sharedString)
-    .replaceAll("__PLUGINS__", generateRuntimePlugins(options.plugins));
+    .replaceAll("__PLUGINS__", generateRuntimePlugins(options.plugins))
+    .replaceAll("__SHARE_STRATEGY__", JSON.stringify(options.shareStrategy));
 
   return initHostModule;
 }
@@ -165,7 +167,8 @@ function getRemoteEntryModule(options: ModuleFederationConfiguration) {
     .replaceAll("__PLUGINS__", generateRuntimePlugins(options.plugins))
     .replaceAll("__SHARED__", sharedString)
     .replaceAll("__EXPOSES_MAP__", `{${exposesString}}`)
-    .replaceAll("__NAME__", `"${options.name}"`);
+    .replaceAll("__NAME__", `"${options.name}"`)
+    .replaceAll("__SHARE_STRATEGY__", JSON.stringify(options.shareStrategy));
 }
 
 function createInitHostVirtualModule(
@@ -188,11 +191,22 @@ function createSharedRegistryVirtualModule(
   return sharedRegistryPath;
 }
 
+function normalizeOptions(options: ModuleFederationConfiguration) {
+  const opts = { ...options };
+
+  // this is different from the default share strategy in mf-core
+  // it makes more sense to have loaded-first as default on mobile
+  // in order to avoid longer TTI upon app startup
+  opts.shareStrategy = opts.shareStrategy ?? "loaded-first";
+
+  return opts;
+}
+
 function withModuleFederation(
   config: ConfigT,
   federationOptions: ModuleFederationConfiguration
 ): ConfigT {
-  const options = { ...federationOptions };
+  const options = normalizeOptions(federationOptions);
 
   const isHost = !options.exposes;
   const isRemote = !isHost;

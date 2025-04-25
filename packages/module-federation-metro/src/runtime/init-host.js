@@ -6,12 +6,15 @@ __PLUGINS__;
 const usedRemotes = __REMOTES__;
 const usedShared = __SHARED__;
 
+const shareScopeName = "default";
+const shareStrategy = __SHARE_STRATEGY__;
+
 const initRes = init({
   name: __NAME__,
   remotes: usedRemotes,
   plugins,
   shared: usedShared,
-  shareStrategy: "loaded-first",
+  shareStrategy,
 });
 
 global.__METRO_FEDERATION__ = global.__METRO_FEDERATION__ || {};
@@ -21,8 +24,8 @@ global.__METRO_FEDERATION__[__NAME__] =
 global.__METRO_FEDERATION__.__HOST__ = global.__METRO_FEDERATION__[__NAME__];
 
 global.__METRO_FEDERATION__[__NAME__].__shareInit = Promise.all(
-  initRes.initializeSharing("default", {
-    strategy: "loaded-first",
+  initRes.initializeSharing(shareScopeName, {
+    strategy: shareStrategy,
     from: "build",
     initScope: [],
   })
