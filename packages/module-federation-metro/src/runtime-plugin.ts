@@ -1,6 +1,12 @@
 import type { FederationRuntimePlugin } from "@module-federation/runtime";
 
 declare global {
+  var __METRO_FEDERATION__: Record<string, any> & {
+    __HOST__: {
+      __shareInit: Promise<void>;
+      __shareLoading: Promise<void>;
+    };
+  };
   var __METRO_GLOBAL_PREFIX__: string;
   var __loadBundleAsync: (entry: string) => Promise<void>;
 }
@@ -27,13 +33,11 @@ const MetroCorePlugin: () => FederationRuntimePlugin = () => ({
       // this should be already split, and should contain only URL
       await loadBundleAsync(entry.split("@")[1]);
 
-      // @ts-ignore
-      if (!globalThis[entryGlobalName]) {
+      if (!globalThis.__METRO_FEDERATION__[entryGlobalName]) {
         throw new Error();
       }
 
-      // @ts-ignore
-      return globalThis[entryGlobalName];
+      return globalThis.__METRO_FEDERATION__[entryGlobalName];
     } catch (error) {
       console.error(
         `Failed to load remote entry: ${entryGlobalName}. Reason: ${error}`

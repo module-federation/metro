@@ -1,3 +1,3 @@
-import { loadShareSync } from "@module-federation/runtime";
+import { getModuleFromRegistry } from "mf:shared-registry";
 
-module.exports = loadShareSync(__SHARED_MODULE_NAME__)();
+module.exports = getModuleFromRegistry(__MODULE_ID__);

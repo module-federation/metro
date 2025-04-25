@@ -4,9 +4,17 @@
 import 'mf:init-host';
 import 'mf:async-require';
 
-import App from './src/App';
 import {name as appName} from './app.json';
-import {loadShareSync} from '@module-federation/runtime';
+import {AppRegistry} from 'react-native';
+import {withAsyncStartup} from 'module-federation-metro/bootstrap';
 
-const reactNative = loadShareSync('react-native')();
-reactNative.AppRegistry.registerComponent(appName, () => App);
+// create async boundry through withAsyncStartup helper
+// and pass the getter function for the app component
+// optionally a getter function for the fallback component
+AppRegistry.registerComponent(
+  appName,
+  withAsyncStartup(
+    () => require('./src/App'),
+    () => require('./src/Fallback'),
+  ),
+);

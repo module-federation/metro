@@ -1,13 +1,15 @@
+import React from 'react';
+import {Pressable, StyleSheet} from 'react-native';
+import _ from 'lodash';
 import LottieView from 'lottie-react-native';
-import React, {useRef} from 'react';
-import {Pressable, StyleSheet, View} from 'react-native';
 
 type Props = {
   onPress: () => void;
 };
 
 export default function Button({onPress}: Props) {
-  const animationRef = useRef<LottieView>(null);
+  console.log('lodash version in mini', _.VERSION);
+  const animationRef = React.useRef<LottieView>(null);
 
   function handlePress() {
     animationRef.current?.play();

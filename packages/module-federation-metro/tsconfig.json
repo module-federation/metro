@@ -4,6 +4,7 @@
     "module": "commonjs",
     "esModuleInterop": true,
     "strict": true,
+    "jsx": "react-native",
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,

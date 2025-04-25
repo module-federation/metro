@@ -38,6 +38,12 @@ module.exports = withModuleFederation(
         requiredVersion: '0.79.0',
         version: '0.79.0',
       },
+      lodash: {
+        singleton: false,
+        eager: false,
+        requiredVersion: '4.16.6',
+        version: '4.16.6',
+      },
       'lottie-react-native': {
         singleton: true,
         eager: true,
