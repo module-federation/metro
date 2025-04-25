@@ -36,18 +36,30 @@ function getSharedString(options: ModuleFederationConfiguration) {
 
 function getInitHostModule(options: ModuleFederationConfiguration) {
   const initHostPath = require.resolve("./runtime/init-host.js");
-  let initHostContent = fs.readFileSync(initHostPath, "utf-8");
+  let initHostModule = fs.readFileSync(initHostPath, "utf-8");
 
   const sharedString = getSharedString(options);
 
   // Replace placeholders with actual values
-  initHostContent = initHostContent
+  initHostModule = initHostModule
     .replaceAll("__NAME__", JSON.stringify(options.name))
     .replaceAll("__REMOTES__", generateRemotes(options.remotes))
     .replaceAll("__SHARED__", sharedString)
     .replaceAll("__PLUGINS__", generateRuntimePlugins(options.plugins));
 
-  return initHostContent;
+  return initHostModule;
+}
+
+function getSharedRegistryModule(options: ModuleFederationConfiguration) {
+  const sharedRegistryPath = require.resolve("./runtime/shared-registry.js");
+  let sharedRegistryModule = fs.readFileSync(sharedRegistryPath, "utf-8");
+
+  sharedRegistryModule = sharedRegistryModule.replaceAll(
+    "__NAME__",
+    JSON.stringify(options.name)
+  );
+
+  return sharedRegistryModule;
 }
 
 function createSharedModuleEntry(name: string, options: SharedConfig) {
@@ -155,6 +167,26 @@ function getRemoteEntryModule(options: ModuleFederationConfiguration) {
     .replaceAll("__NAME__", `"${options.name}"`);
 }
 
+function createInitHostVirtualModule(
+  options: ModuleFederationConfiguration,
+  vmDirPath: string
+) {
+  const initHostModule = getInitHostModule(options);
+  const initHostPath = path.join(vmDirPath, "init-host.js");
+  fs.writeFileSync(initHostPath, initHostModule, "utf-8");
+  return initHostPath;
+}
+
+function createSharedRegistryVirtualModule(
+  options: ModuleFederationConfiguration,
+  vmDirPath: string
+) {
+  const sharedRegistryModule = getSharedRegistryModule(options);
+  const sharedRegistryPath = path.join(vmDirPath, "shared-registry.js");
+  fs.writeFileSync(sharedRegistryPath, sharedRegistryModule, "utf-8");
+  return sharedRegistryPath;
+}
+
 function withModuleFederation(
   config: ConfigT,
   federationOptions: ModuleFederationConfiguration
@@ -168,6 +200,7 @@ function withModuleFederation(
     config.projectRoot,
     "node_modules"
   );
+
   const mfMetroPath = createMFRuntimeNodeModules(projectNodeModulesPath);
 
   // auto-inject 'metro-core-plugin' MF runtime plugin
@@ -176,21 +209,14 @@ function withModuleFederation(
     ...options.plugins,
   ].map((plugin) => path.relative(mfMetroPath, plugin));
 
-  const initHostModule = getInitHostModule(options);
-  const initHostFilePath = path.join(mfMetroPath, "init-host.js");
-
-  fs.writeFileSync(initHostFilePath, initHostModule, "utf-8");
-
-  const sharedRegistryModulePath = require.resolve(
-    "./runtime/shared-registry.js"
+  const sharedRegistryPath = createSharedRegistryVirtualModule(
+    options,
+    mfMetroPath
   );
-  const sharedRegistryModule = fs
-    .readFileSync(sharedRegistryModulePath, "utf-8")
-    .replaceAll("__NAME__", JSON.stringify(options.name));
 
-  const sharedRegistryPath = path.join(mfMetroPath, "shared-registry.js");
-
-  fs.writeFileSync(sharedRegistryPath, sharedRegistryModule, "utf-8");
+  const initHostPath = isHost
+    ? createInitHostVirtualModule(options, mfMetroPath)
+    : null;
 
   const sharedModulesPaths: Record<string, string> = {};
 
@@ -233,7 +259,7 @@ function withModuleFederation(
         };
       },
       getModulesRunBeforeMainModule: (entryFilePath) => {
-        return [initHostFilePath];
+        return initHostPath ? [initHostPath] : [];
       },
     },
     resolver: {
@@ -241,7 +267,7 @@ function withModuleFederation(
       resolveRequest: (context, moduleName, platform) => {
         // virtual module: init-host
         if (moduleName === "mf:init-host") {
-          return { type: "sourceFile", filePath: initHostFilePath };
+          return { type: "sourceFile", filePath: initHostPath as string };
         }
 
         // virtual module: async-require
@@ -262,7 +288,7 @@ function withModuleFederation(
         }
 
         // shared modules handling in init-host.js
-        if ([initHostFilePath].includes(context.originModulePath)) {
+        if ([initHostPath].includes(context.originModulePath)) {
           // init-host contains definition of shared modules so we need to prevent
           // circular import of shared module, by allowing import shared dependencies directly
           return context.resolveRequest(context, moduleName, platform);
