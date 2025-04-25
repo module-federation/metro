@@ -195,7 +195,7 @@ function withModuleFederation(
   const options = { ...federationOptions };
 
   const isHost = !options.exposes;
-  const isContainer = !isHost;
+  const isRemote = !isHost;
 
   const projectNodeModulesPath = path.resolve(
     config.projectRoot,
@@ -232,7 +232,7 @@ function withModuleFederation(
   }
 
   let remoteEntryPath: string | undefined;
-  if (isContainer) {
+  if (isRemote) {
     const filename = options.filename ?? "remoteEntry.js";
     remoteEntryPath = path.join(mfMetroPath, filename);
     fs.writeFileSync(remoteEntryPath, getRemoteEntryModule(options));
@@ -249,7 +249,7 @@ function withModuleFederation(
         // but we offset the ids for container modules by 10000
         // reference: https://github.com/facebook/metro/blob/cc7316b1f40ed5e4202a997673b26d55ff1b4ca5/packages/metro/src/lib/createModuleIdFactory.js
         const fileToIdMap: Map<string, number> = new Map();
-        let nextId = isContainer ? 10000 : 0;
+        let nextId = isRemote ? 10000 : 0;
         return (modulePath: string) => {
           let id = fileToIdMap.get(modulePath);
           if (typeof id !== "number") {
