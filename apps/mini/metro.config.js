@@ -22,6 +22,10 @@ module.exports = withModuleFederation(
   {
     name: 'mini',
     filename: 'mini.js',
+    exposes: {
+      './button': './src/button.tsx',
+      './confetti': './src/confetti.tsx',
+    },
     shared: {
       react: {
         singleton: true,
@@ -51,10 +55,6 @@ module.exports = withModuleFederation(
         import: false,
       },
     },
-    plugins: [],
-    exposes: {
-      './button': './src/button.tsx',
-      './confetti': './src/confetti.tsx',
-    },
+    shareStrategy: 'loaded-first',
   },
 );

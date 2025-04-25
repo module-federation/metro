@@ -51,6 +51,7 @@ module.exports = withModuleFederation(
         version: '7.2.2',
       },
     },
+    shareStrategy: 'loaded-first',
     plugins: [path.resolve(__dirname, './runtime-plugin.ts')],
   },
 );
