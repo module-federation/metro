@@ -18,7 +18,7 @@ npm install -g corepack
 1. Clone the repository with submodules:
 
 ```bash
-git clone --recurse-submodules -j8 git@github.com:callstack/metro-mf.git
+git clone --recurse-submodules -j8 git@github.com:module-federation/metro-mf.git
 ```
 
 2. Navigate to the project directory:

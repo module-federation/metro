@@ -41,10 +41,17 @@ module.exports = withModuleFederation(
         requiredVersion: '^4.17.21',
         version: '4.17.21',
       },
+      'lottie-react-native': {
+        singleton: true,
+        eager: false,
+        requiredVersion: '7.2.2',
+        version: '7.2.2',
+      },
     },
     plugins: [],
     exposes: {
       './button': './src/button.tsx',
+      './confetti': './src/confetti.tsx',
     },
   },
 );

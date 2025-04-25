@@ -5250,6 +5250,7 @@ __metadata:
     eslint: "npm:^8.19.0"
     jest: "npm:^29.6.3"
     lodash: "npm:4.16.6"
+    lottie-react-native: "npm:^7.2.2"
     module-federation-metro: "workspace:*"
     nodemon: "npm:^3.1.9"
     prettier: "npm:2.8.8"
@@ -6614,6 +6615,23 @@ __metadata:
   languageName: node
   linkType: hard
 
+"lottie-react-native@npm:^7.2.2":
+  version: 7.2.2
+  resolution: "lottie-react-native@npm:7.2.2"
+  peerDependencies:
+    "@lottiefiles/dotlottie-react": ^0.6.5
+    react: "*"
+    react-native: ">=0.46"
+    react-native-windows: ">=0.63.x"
+  peerDependenciesMeta:
+    "@lottiefiles/dotlottie-react":
+      optional: true
+    react-native-windows:
+      optional: true
+  checksum: 10c0/d0ee7c6ed639ad1b5cfe04dd3b704f3f968806c59a6361986fbb22ebd1b332d9cb13ee7d78ed49848f8d416d468ae2fdc9077815280023dac0b66e841b5ce840
+  languageName: node
+  linkType: hard
+
 "lru-cache@npm:^10.0.1, lru-cache@npm:^10.2.0":
   version: 10.4.3
   resolution: "lru-cache@npm:10.4.3"
@@ -7014,6 +7032,7 @@ __metadata:
     eslint: "npm:^8.19.0"
     jest: "npm:^29.6.3"
     lodash: "npm:^4.17.21"
+    lottie-react-native: "npm:^7.2.2"
     module-federation-metro: "workspace:*"
     nodemon: "npm:^3.1.9"
     prettier: "npm:2.8.8"
