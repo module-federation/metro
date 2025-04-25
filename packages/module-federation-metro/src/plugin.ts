@@ -7,6 +7,7 @@ interface SharedConfig {
   eager: boolean;
   version: string;
   requiredVersion: string;
+  import?: false;
 }
 
 interface ModuleFederationConfiguration {
@@ -296,9 +297,9 @@ function withModuleFederation(
 
         // shared modules handling in remote-entry.js
         if ([remoteEntryPath].includes(context.originModulePath)) {
-          // TODO: bind this to import: false
-          // react and react-native get special treatment
-          if (moduleName === "react" || moduleName === "react-native") {
+          const sharedModule = options.shared[moduleName];
+          // import: false means that the module is marked as external
+          if (sharedModule && sharedModule.import === false) {
             const sharedPath = sharedModulesPaths[moduleName];
             return { type: "sourceFile", filePath: sharedPath };
           } else {

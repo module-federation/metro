@@ -28,12 +28,14 @@ module.exports = withModuleFederation(
         eager: false,
         requiredVersion: '19.0.0',
         version: '19.0.0',
+        import: false,
       },
       'react-native': {
         singleton: true,
         eager: false,
         requiredVersion: '0.79.0',
         version: '0.79.0',
+        import: false,
       },
       lodash: {
         singleton: false,
@@ -46,6 +48,7 @@ module.exports = withModuleFederation(
         eager: false,
         requiredVersion: '7.2.2',
         version: '7.2.2',
+        import: false,
       },
     },
     plugins: [],
