@@ -38,6 +38,12 @@ module.exports = withModuleFederation(
         requiredVersion: '0.79.0',
         version: '0.79.0',
       },
+      'lottie-react-native': {
+        singleton: true,
+        eager: true,
+        requiredVersion: '7.2.2',
+        version: '7.2.2',
+      },
     },
     plugins: [path.resolve(__dirname, './runtime-plugin.ts')],
   },

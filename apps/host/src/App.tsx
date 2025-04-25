@@ -1,14 +1,14 @@
-import React, {useState} from 'react';
+import React, {useRef, useState} from 'react';
 import {
   View,
   Text,
   StyleSheet,
-  Alert,
   Image,
   ActivityIndicator,
   Pressable,
 } from 'react-native';
 import {loadRemote} from '@module-federation/runtime';
+import type LottieView from 'lottie-react-native';
 
 // @ts-ignore
 import gradientBg from './aura.png';
@@ -16,11 +16,20 @@ import gradientBg from './aura.png';
 // @ts-ignore
 const Button = React.lazy(() => loadRemote('mini/button'));
 
+// @ts-ignore
+const Confetti = React.lazy(() => loadRemote('mini/confetti'));
+
 function App(): React.JSX.Element {
+  const animationRef = useRef<LottieView>(null);
   const [shouldLoadRemote, setShouldLoadRemote] = useState(false);
 
   return (
     <View style={styles.backgroundStyle}>
+      {shouldLoadRemote ? (
+        <React.Suspense>
+          <Confetti ref={animationRef} />
+        </React.Suspense>
+      ) : undefined}
       <Image
         source={gradientBg}
         style={styles.backgroundImage}
@@ -60,7 +69,7 @@ function App(): React.JSX.Element {
                   }>
                   <Button
                     onPress={() =>
-                      Alert.alert('Klik', 'Federated Button clicked!')
+                      setTimeout(() => animationRef.current?.play(), 1000)
                     }
                   />
                 </React.Suspense>
