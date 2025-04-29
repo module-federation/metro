@@ -280,10 +280,12 @@ function withModuleFederation(
       enhanceMiddleware: (metroMiddleware) => {
         return (req, res, next) => {
           if (req.url === "/mf-manifest.json") {
-            console.log("Serving MF manifest");
             res.setHeader("Content-Type", "application/json");
             res.writeHead(200);
-            res.end(JSON.stringify(manifest));
+
+            const manifestContent = fs.readFileSync(manifestPath, "utf-8");
+
+            res.end(JSON.stringify(manifestContent));
           } else {
             // @ts-ignore
             metroMiddleware(req, res, next);

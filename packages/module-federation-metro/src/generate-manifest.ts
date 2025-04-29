@@ -17,7 +17,7 @@ export default function generateManifest(
       remoteEntry: {
         name: `${config.filename}.bundle`,
         path: "",
-        type: "module",
+        type: "global",
       },
       types: {
         path: "",
@@ -27,7 +27,7 @@ export default function generateManifest(
       },
       globalName: config.name,
       pluginVersion: "",
-      publicPath: "http://localhost:8082/",
+      publicPath: "auto",
     },
     remotes: Object.keys(config.remotes || {}).map((remote) => ({
       federationContainerName: config.remotes[remote],
