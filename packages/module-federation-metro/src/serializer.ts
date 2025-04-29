@@ -1,11 +1,21 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 
-import { baseJSBundle } from "metro/src/DeltaBundler/Serializers/baseJSBundle";
-import { bundleToString } from "metro/src/lib/bundleToString";
+import type {
+  MixedOutput,
+  Module,
+  ReadOnlyGraph,
+  SerializerOptions,
+} from "metro";
+import type { SerializerConfigT } from "metro-config";
 
-const getLazyModules = (graph) => {
-  const lazyModules = new Set();
+import baseJSBundle from "metro/src/DeltaBundler/Serializers/baseJSBundle";
+import bundleToString from "metro/src/lib/bundleToString";
+
+type CustomSerializer = SerializerConfigT["customSerializer"];
+
+const getLazyModules = (graph: ReadOnlyGraph<MixedOutput>) => {
+  const lazyModules = new Set<string>();
 
   for (const [, module] of graph.dependencies) {
     for (const dependency of module.dependencies.values()) {
@@ -18,14 +28,17 @@ const getLazyModules = (graph) => {
   return lazyModules;
 };
 
-const getMainBundleModules = (entryPoint, graph) => {
-  const mainBundleModules = new Set();
+const getMainBundleModules = (
+  entryPoint: string,
+  graph: ReadOnlyGraph<MixedOutput>
+) => {
+  const mainBundleModules = new Set<string>();
 
   const stack = [entryPoint];
-  const visited = new Set();
+  const visited = new Set<string>();
 
   while (stack.length > 0) {
-    const modulePath = stack.pop();
+    const modulePath = stack.pop() as string;
 
     if (visited.has(modulePath)) {
       continue;
@@ -34,15 +47,19 @@ const getMainBundleModules = (entryPoint, graph) => {
     visited.add(modulePath);
 
     const module = graph.dependencies.get(modulePath);
+
+    if (!module) {
+      continue;
+    }
+
     mainBundleModules.add(module.path);
 
     if (module.dependencies) {
-      stack.push(
-        ...module.dependencies
-          .values()
-          .filter((dependency) => dependency.data.data.asyncType !== "async")
-          .map((dependency) => dependency.absolutePath)
-      );
+      for (const [, dependency] of module.dependencies) {
+        if (dependency.data.data.asyncType === "async") {
+          stack.push(dependency.absolutePath);
+        }
+      }
     }
   }
 
@@ -50,11 +67,11 @@ const getMainBundleModules = (entryPoint, graph) => {
 };
 
 const createMainBundle = (
-  entryPoint,
-  preModules,
-  graph,
-  bundleOptions,
-  lazyModules
+  entryPoint: string,
+  preModules: readonly Module<MixedOutput>[],
+  graph: ReadOnlyGraph<MixedOutput>,
+  bundleOptions: SerializerOptions<MixedOutput>,
+  lazyModules: Set<string>
 ) => {
   const filteredGraph = {
     ...graph,
@@ -67,16 +84,18 @@ const createMainBundle = (
     }
   }
 
-  return bundleToString(
+  const { code: bundle } = bundleToString(
     baseJSBundle(entryPoint, preModules, filteredGraph, bundleOptions)
   );
+
+  return bundle;
 };
 
 const createLazyBundle = (
-  entryPoint,
-  graph,
-  bundleOptions,
-  mainBundleModules
+  entryPoint: string,
+  graph: ReadOnlyGraph<MixedOutput>,
+  bundleOptions: SerializerOptions<MixedOutput>,
+  mainBundleModules: Set<unknown>
 ) => {
   const filteredGraph = {
     ...graph,
@@ -90,7 +109,7 @@ const createLazyBundle = (
     }
   }
 
-  const bundle = bundleToString(
+  const { code: bundle } = bundleToString(
     baseJSBundle(entryPoint, [], filteredGraph, {
       ...bundleOptions,
       modulesOnly: true,
@@ -104,7 +123,7 @@ const createLazyBundle = (
   };
 };
 
-const getBundleSplittingSerializer = () => {
+const getBundleSplittingSerializer: () => CustomSerializer = () => {
   return async (entryPoint, preModules, graph, options) => {
     const lazyModules = getLazyModules(graph);
     const mainBundleModules = getMainBundleModules(entryPoint, graph);
@@ -118,6 +137,8 @@ const getBundleSplittingSerializer = () => {
         `http://localhost:8888/${path.basename(id).split(".")[0]}.bundle`,
       ])
     );
+
+    // @ts-expect-error - preModules is marked as readonly
     preModules.push({
       path: "manifest",
       dependencies: new Map(),
@@ -151,7 +172,7 @@ const getBundleSplittingSerializer = () => {
             "dist",
             `${path.basename(id).split(".")[0]}.bundle`
           ),
-          bundle.code
+          bundle
         );
       })
     );
@@ -160,4 +181,4 @@ const getBundleSplittingSerializer = () => {
   };
 };
 
-module.exports = getBundleSplittingSerializer;
+export { getBundleSplittingSerializer };

@@ -11,7 +11,7 @@ declare module "metro/src/lib/bundleToString" {
     modules: readonly [number, number][];
   }
 
-  export function bundleToString(bundle: Bundle): {
+  export default function bundleToString(bundle: Bundle): {
     code: string;
     metadata: BundleMetadata;
   };

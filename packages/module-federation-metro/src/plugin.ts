@@ -1,6 +1,7 @@
 import path from "node:path";
 import fs from "node:fs";
 import type { ConfigT } from "metro-config";
+import { getBundleSplittingSerializer } from "./serializer";
 
 interface SharedConfig {
   singleton: boolean;
@@ -297,6 +298,7 @@ function withModuleFederation(
       getModulesRunBeforeMainModule: (entryFilePath) => {
         return initHostPath ? [initHostPath] : [];
       },
+      customSerializer: getBundleSplittingSerializer(),
     },
     resolver: {
       ...config.resolver,

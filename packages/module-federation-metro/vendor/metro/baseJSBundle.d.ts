@@ -11,7 +11,7 @@ declare module "metro/src/DeltaBundler/Serializers/baseJSBundle" {
     pre: string;
   }
 
-  export function baseJSBundle(
+  export default function baseJSBundle(
     entryPoint: string,
     preModules: readonly Module[],
     graph: ReadOnlyGraph,
