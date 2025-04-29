@@ -125,14 +125,19 @@ function generateRuntimePlugins(runtimePlugins: string[]) {
 
 function generateRemotes(remotes: Record<string, string> = {}) {
   const remotesEntries: string[] = [];
-  Object.entries(remotes).forEach(([remoteName, remoteEntry]) => {
+  Object.entries(remotes).forEach(([remoteAlias, remoteEntry]) => {
+    const remoteEntryParts = remoteEntry.split("@");
+    const remoteName = remoteEntryParts[0];
+    const remoteEntryUrl = remoteEntryParts.slice(1).join("@");
+
     remotesEntries.push(
       `{ 
-          alias: "${remoteName}", 
+          alias: "${remoteAlias}", 
           name: "${remoteName}", 
-          entry: "${remoteEntry}", 
+          entry: "${remoteEntryUrl}", 
           entryGlobalName: "${remoteName}", 
-          type: "var" }`
+          type: "var" 
+       }`
     );
   });
 

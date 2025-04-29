@@ -30,8 +30,7 @@ const MetroCorePlugin: () => FederationRuntimePlugin = () => ({
     }
 
     try {
-      // this should be already split, and should contain only URL
-      await loadBundleAsync(entry.split("@")[1]);
+      await loadBundleAsync(entry);
 
       if (!globalThis.__METRO_FEDERATION__[entryGlobalName]) {
         throw new Error();
