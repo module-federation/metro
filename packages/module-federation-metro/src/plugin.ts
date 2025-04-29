@@ -1,6 +1,8 @@
 import path from "node:path";
 import fs from "node:fs";
 import type { ConfigT } from "metro-config";
+import generateManifest from "./generate-manifest";
+import createEnhanceMiddleware from "./enhance-middleware";
 
 interface SharedConfig {
   singleton: boolean;
@@ -10,7 +12,7 @@ interface SharedConfig {
   import?: false;
 }
 
-interface ModuleFederationPluginConfiguration {
+export interface ModuleFederationPluginConfiguration {
   name: string;
   filename?: string;
   remotes?: Record<string, string>;
@@ -20,7 +22,7 @@ interface ModuleFederationPluginConfiguration {
   plugins?: string[];
 }
 
-type ModuleFederationConfiguration =
+export type ModuleFederationConfiguration =
   Required<ModuleFederationPluginConfiguration>;
 
 function getSharedString(options: ModuleFederationConfiguration) {
@@ -275,6 +277,10 @@ function withModuleFederation(
 
   const asyncRequirePath = path.resolve(__dirname, "../async-require.js");
 
+  const manifestPath = path.join(mfMetroPath, "mf-manifest.json");
+  const manifest = generateManifest(options);
+  fs.writeFileSync(manifestPath, JSON.stringify(manifest, undefined, 2));
+
   return {
     ...config,
     serializer: {
@@ -350,6 +356,10 @@ function withModuleFederation(
 
         return context.resolveRequest(context, moduleName, platform);
       },
+    },
+    server: {
+      ...config.server,
+      enhanceMiddleware: createEnhanceMiddleware(manifestPath),
     },
   };
 }
