@@ -2,6 +2,7 @@ import path from "node:path";
 import fs from "node:fs";
 import type { ConfigT } from "metro-config";
 import generateManifest from "./generate-manifest";
+import createEnhanceMiddleware from "./enhance-middleware";
 
 interface SharedConfig {
   singleton: boolean;
@@ -358,21 +359,7 @@ function withModuleFederation(
     },
     server: {
       ...config.server,
-      enhanceMiddleware: (metroMiddleware) => {
-        return (req, res, next) => {
-          if (req.url === "/mf-manifest.json") {
-            res.setHeader("Content-Type", "application/json");
-            res.writeHead(200);
-
-            const manifestContent = fs.readFileSync(manifestPath, "utf-8");
-
-            res.end(manifestContent);
-          } else {
-            // @ts-ignore
-            metroMiddleware(req, res, next);
-          }
-        };
-      },
+      enhanceMiddleware: createEnhanceMiddleware(manifestPath),
     },
   };
 }
