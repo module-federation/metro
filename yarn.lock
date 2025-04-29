@@ -7161,6 +7161,7 @@ __metadata:
   dependencies:
     "@module-federation/runtime": "npm:^0.11.4"
     "@types/node": "npm:^20.0.0"
+    metro: "npm:^0.82.1"
     metro-config: "npm:^0.82.1"
     react-native: "npm:0.79.0"
     ts-node: "npm:^10.9.2"

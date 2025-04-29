@@ -11,7 +11,11 @@
     "paths": {
       "metro": ["../../external/metro/packages/metro/types"],
       "metro/src/*": ["../../external/metro/packages/metro/types/*"],
-      "metro-*": ["../../external/metro/packages/metro-*/types"]
+      "metro-*": ["../../external/metro/packages/metro-*/types"],
+      "metro/src/DeltaBundler/Serializers/baseJSBundle": [
+        "./vendor/metro/baseJSBundle"
+      ],
+      "metro/src/lib/bundleToString": ["./vendor/metro/bundleToString"]
     }
   }
 }
