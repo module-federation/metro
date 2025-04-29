@@ -1,8 +1,9 @@
 import path from "node:path";
 import fs from "node:fs";
 import type { ConfigT } from "metro-config";
+import generateManifest from "./generate-manifest";
 
-interface ModuleFederationConfiguration {
+export interface ModuleFederationConfiguration {
   name: string;
   filename: string;
   shared: Record<
@@ -203,6 +204,10 @@ function withModuleFederation(
 
   const asyncRequirePath = path.resolve(__dirname, "../async-require.js");
 
+  const manifestPath = path.join(mfMetroPath, "mf-manifest.json");
+  const manifest = generateManifest(options);
+  fs.writeFileSync(manifestPath, JSON.stringify(manifest, undefined, 2));
+
   return {
     ...config,
     serializer: {
@@ -268,6 +273,22 @@ function withModuleFederation(
         }
 
         return context.resolveRequest(context, moduleName, platform);
+      },
+    },
+    server: {
+      ...config.server,
+      enhanceMiddleware: (metroMiddleware) => {
+        return (req, res, next) => {
+          if (req.url === "/mf-manifest.json") {
+            console.log("Serving MF manifest");
+            res.setHeader("Content-Type", "application/json");
+            res.writeHead(200);
+            res.end(JSON.stringify(manifest));
+          } else {
+            // @ts-ignore
+            metroMiddleware(req, res, next);
+          }
+        };
       },
     },
   };

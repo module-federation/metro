@@ -24,8 +24,9 @@ const MetroCorePlugin: () => FederationRuntimePlugin = () => ({
     }
 
     try {
+      console.log("HEEERE", entry, entryGlobalName);
       // this should be already split, and should contain only URL
-      await loadBundleAsync(entry.split("@")[1]);
+      await loadBundleAsync(entry.includes("@") ? entry.split("@")[1] : entry);
 
       // @ts-ignore
       if (!globalThis[entryGlobalName]) {

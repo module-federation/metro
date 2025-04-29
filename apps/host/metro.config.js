@@ -23,7 +23,7 @@ module.exports = withModuleFederation(
   {
     name: 'host',
     remotes: {
-      mini: 'mini@http://localhost:8082/mini.js.bundle',
+      mini: 'http://localhost:8082/mf-manifest.json',
     },
     shared: {
       react: {
