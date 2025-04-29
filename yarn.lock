@@ -2600,6 +2600,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/lodash@npm:^4":
+  version: 4.17.16
+  resolution: "@types/lodash@npm:4.17.16"
+  checksum: 10c0/cf017901b8ab1d7aabc86d5189d9288f4f99f19a75caf020c0e2c77b8d4cead4db0d0b842d009b029339f92399f49f34377dd7c2721053388f251778b4c23534
+  languageName: node
+  linkType: hard
+
 "@types/node@npm:*":
   version: 22.14.0
   resolution: "@types/node@npm:22.14.0"
@@ -5237,10 +5244,12 @@ __metadata:
     "@react-native/metro-config": "npm:0.79.0"
     "@react-native/typescript-config": "npm:0.79.0"
     "@types/jest": "npm:^29.5.13"
+    "@types/lodash": "npm:^4"
     "@types/react": "npm:^19.0.0"
     "@types/react-test-renderer": "npm:^19.0.0"
     eslint: "npm:^8.19.0"
     jest: "npm:^29.6.3"
+    lodash: "npm:4.16.6"
     lottie-react-native: "npm:^7.2.2"
     module-federation-metro: "workspace:*"
     nodemon: "npm:^3.1.9"
@@ -6558,6 +6567,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"lodash@npm:4.16.6":
+  version: 4.16.6
+  resolution: "lodash@npm:4.16.6"
+  checksum: 10c0/4f24c2ba87217047cedf3298c37d64d96edfe2f88e4baa0ec90e64b53febead24834e828038d0ee2da716eac509c4c1a8c290547336b98fd6cd88e83af565a03
+  languageName: node
+  linkType: hard
+
 "lodash@npm:^4.17.21":
   version: 4.17.21
   resolution: "lodash@npm:4.17.21"
@@ -7010,10 +7026,12 @@ __metadata:
     "@react-native/metro-config": "npm:0.79.0"
     "@react-native/typescript-config": "npm:0.79.0"
     "@types/jest": "npm:^29.5.13"
+    "@types/lodash": "npm:^4"
     "@types/react": "npm:^19.0.0"
     "@types/react-test-renderer": "npm:^19.0.0"
     eslint: "npm:^8.19.0"
     jest: "npm:^29.6.3"
+    lodash: "npm:^4.17.21"
     lottie-react-native: "npm:^7.2.2"
     module-federation-metro: "workspace:*"
     nodemon: "npm:^3.1.9"

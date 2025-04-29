@@ -3,22 +3,26 @@ import fs from "node:fs";
 import type { ConfigT } from "metro-config";
 import generateManifest from "./generate-manifest";
 
-export interface ModuleFederationConfiguration {
-  name: string;
-  filename: string;
-  shared: Record<
-    string,
-    {
-      singleton: boolean;
-      eager: boolean;
-      version: string;
-      requiredVersion: string;
-    }
-  >;
-  plugins: string[];
-  remotes: Record<string, string>;
-  exposes?: Record<string, string>;
+interface SharedConfig {
+  singleton: boolean;
+  eager: boolean;
+  version: string;
+  requiredVersion: string;
+  import?: false;
 }
+
+export interface ModuleFederationPluginConfiguration {
+  name: string;
+  filename?: string;
+  remotes?: Record<string, string>;
+  exposes?: Record<string, string>;
+  shared?: Record<string, SharedConfig>;
+  shareStrategy?: "loaded-first" | "version-first";
+  plugins?: string[];
+}
+
+type ModuleFederationConfiguration =
+  Required<ModuleFederationPluginConfiguration>;
 
 function getSharedString(options: ModuleFederationConfiguration) {
   const shared = Object.keys(options.shared).reduce((acc, name) => {
@@ -38,39 +42,49 @@ function getSharedString(options: ModuleFederationConfiguration) {
 
 function getInitHostModule(options: ModuleFederationConfiguration) {
   const initHostPath = require.resolve("./runtime/init-host.js");
-  let initHostContent = fs.readFileSync(initHostPath, "utf-8");
+  let initHostModule = fs.readFileSync(initHostPath, "utf-8");
 
   const sharedString = getSharedString(options);
 
   // Replace placeholders with actual values
-  initHostContent = initHostContent
+  initHostModule = initHostModule
     .replaceAll("__NAME__", JSON.stringify(options.name))
     .replaceAll("__REMOTES__", generateRemotes(options.remotes))
     .replaceAll("__SHARED__", sharedString)
-    .replaceAll("__PLUGINS__", generateRuntimePlugins(options.plugins));
+    .replaceAll("__PLUGINS__", generateRuntimePlugins(options.plugins))
+    .replaceAll("__SHARE_STRATEGY__", JSON.stringify(options.shareStrategy));
 
-  return initHostContent;
+  return initHostModule;
 }
 
-function createSharedModuleEntry(
-  name: string,
-  options: { version: string; config: Record<any, any> }
-) {
+function getSharedRegistryModule(options: ModuleFederationConfiguration) {
+  const sharedRegistryPath = require.resolve("./runtime/shared-registry.js");
+  let sharedRegistryModule = fs.readFileSync(sharedRegistryPath, "utf-8");
+
+  sharedRegistryModule = sharedRegistryModule.replaceAll(
+    "__NAME__",
+    JSON.stringify(options.name)
+  );
+
+  return sharedRegistryModule;
+}
+
+function createSharedModuleEntry(name: string, options: SharedConfig) {
   const template = {
     version: options.version,
     scope: "default",
-    lib: "__LIB_PLACEHOLDER__",
+    get: "__GET_PLACEHOLDER__",
     shareConfig: {
-      singleton: true,
-      eager: true,
-      requiredVersion: options.version,
+      singleton: options.singleton,
+      eager: options.eager,
+      requiredVersion: options.requiredVersion,
     },
   };
-
   const templateString = JSON.stringify(template);
+
   return templateString.replaceAll(
-    '"__LIB_PLACEHOLDER__"',
-    `() => require("${name}")`
+    '"__GET_PLACEHOLDER__"',
+    `() => () => require("${name}")`
   );
 }
 
@@ -79,7 +93,7 @@ function getSharedModule(name: string) {
 
   return fs
     .readFileSync(sharedTemplatePath, "utf-8")
-    .replaceAll("__SHARED_MODULE_NAME__", `"${name}"`);
+    .replaceAll("__MODULE_ID__", `"${name}"`);
 }
 
 function createMFRuntimeNodeModules(projectNodeModulesPath: string) {
@@ -115,14 +129,19 @@ function generateRuntimePlugins(runtimePlugins: string[]) {
 
 function generateRemotes(remotes: Record<string, string> = {}) {
   const remotesEntries: string[] = [];
-  Object.entries(remotes).forEach(([remoteName, remoteEntry]) => {
+  Object.entries(remotes).forEach(([remoteAlias, remoteEntry]) => {
+    const remoteEntryParts = remoteEntry.split("@");
+    const remoteName = remoteEntryParts[0];
+    const remoteEntryUrl = remoteEntryParts.slice(1).join("@");
+
     remotesEntries.push(
       `{ 
-          alias: "${remoteName}", 
+          alias: "${remoteAlias}", 
           name: "${remoteName}", 
-          entry: "${remoteEntry}", 
+          entry: "${remoteEntryUrl}", 
           entryGlobalName: "${remoteName}", 
-          type: "var" }`
+          type: "var" 
+       }`
     );
   });
 
@@ -157,20 +176,78 @@ function getRemoteEntryModule(options: ModuleFederationConfiguration) {
     .replaceAll("__PLUGINS__", generateRuntimePlugins(options.plugins))
     .replaceAll("__SHARED__", sharedString)
     .replaceAll("__EXPOSES_MAP__", `{${exposesString}}`)
-    .replaceAll("__NAME__", `"${options.name}"`);
+    .replaceAll("__NAME__", `"${options.name}"`)
+    .replaceAll("__SHARE_STRATEGY__", JSON.stringify(options.shareStrategy));
+}
+
+function createInitHostVirtualModule(
+  options: ModuleFederationConfiguration,
+  vmDirPath: string
+) {
+  const initHostModule = getInitHostModule(options);
+  const initHostPath = path.join(vmDirPath, "init-host.js");
+  fs.writeFileSync(initHostPath, initHostModule, "utf-8");
+  return initHostPath;
+}
+
+function createSharedRegistryVirtualModule(
+  options: ModuleFederationConfiguration,
+  vmDirPath: string
+) {
+  const sharedRegistryModule = getSharedRegistryModule(options);
+  const sharedRegistryPath = path.join(vmDirPath, "shared-registry.js");
+  fs.writeFileSync(sharedRegistryPath, sharedRegistryModule, "utf-8");
+  return sharedRegistryPath;
+}
+
+function createSharedVirtualModules(
+  options: ModuleFederationConfiguration,
+  vmDirPath: string
+) {
+  const sharedModulesPaths: Record<string, string> = {};
+  Object.keys(options.shared).forEach((name) => {
+    const sharedModule = getSharedModule(name);
+    const sharedFilePath = path.join(vmDirPath, "shared", `${name}.js`);
+    fs.writeFileSync(sharedFilePath, sharedModule, "utf-8");
+    sharedModulesPaths[name] = sharedFilePath;
+  });
+  return sharedModulesPaths;
+}
+
+function normalizeOptions(
+  options: ModuleFederationPluginConfiguration
+): ModuleFederationConfiguration {
+  const filename = options.filename ?? "remoteEntry.js";
+  // this is different from the default share strategy in mf-core
+  // it makes more sense to have loaded-first as default on mobile
+  // in order to avoid longer TTI upon app startup
+  const shareStrategy = options.shareStrategy ?? "loaded-first";
+
+  return {
+    name: options.name,
+    filename,
+    remotes: options.remotes ?? {},
+    exposes: options.exposes ?? {},
+    shared: options.shared ?? {},
+    shareStrategy,
+    plugins: options.plugins ?? [],
+  };
 }
 
 function withModuleFederation(
   config: ConfigT,
-  federationOptions: ModuleFederationConfiguration
+  federationOptions: ModuleFederationPluginConfiguration
 ): ConfigT {
-  const options = { ...federationOptions };
+  const isHost = !federationOptions.exposes;
+  const isRemote = !isHost;
 
-  const isContainer = !!options.exposes;
+  const options = normalizeOptions(federationOptions);
+
   const projectNodeModulesPath = path.resolve(
     config.projectRoot,
     "node_modules"
   );
+
   const mfMetroPath = createMFRuntimeNodeModules(projectNodeModulesPath);
 
   // auto-inject 'metro-core-plugin' MF runtime plugin
@@ -179,24 +256,19 @@ function withModuleFederation(
     ...options.plugins,
   ].map((plugin) => path.relative(mfMetroPath, plugin));
 
-  const initHostModule = getInitHostModule(options);
-  const initHostFilePath = path.join(mfMetroPath, "init-host.js");
+  const sharedRegistryPath = createSharedRegistryVirtualModule(
+    options,
+    mfMetroPath
+  );
 
-  fs.writeFileSync(initHostFilePath, initHostModule, "utf-8");
+  const sharedModulesPaths = createSharedVirtualModules(options, mfMetroPath);
 
-  const sharedModulesPaths: Record<string, string> = {};
-
-  Object.keys(options.shared).forEach((name) => {
-    const sharedModule = getSharedModule(name);
-    const sharedFilePath = path.join(mfMetroPath, "shared", `${name}.js`);
-
-    fs.writeFileSync(sharedFilePath, sharedModule, "utf-8");
-
-    sharedModulesPaths[name] = sharedFilePath;
-  });
+  const initHostPath = isHost
+    ? createInitHostVirtualModule(options, mfMetroPath)
+    : null;
 
   let remoteEntryPath: string | undefined;
-  if (isContainer) {
+  if (isRemote) {
     const filename = options.filename ?? "remoteEntry.js";
     remoteEntryPath = path.join(mfMetroPath, filename);
     fs.writeFileSync(remoteEntryPath, getRemoteEntryModule(options));
@@ -217,7 +289,7 @@ function withModuleFederation(
         // but we offset the ids for container modules by 10000
         // reference: https://github.com/facebook/metro/blob/cc7316b1f40ed5e4202a997673b26d55ff1b4ca5/packages/metro/src/lib/createModuleIdFactory.js
         const fileToIdMap: Map<string, number> = new Map();
-        let nextId = isContainer ? 10000 : 0;
+        let nextId = isRemote ? 10000 : 0;
         return (modulePath: string) => {
           let id = fileToIdMap.get(modulePath);
           if (typeof id !== "number") {
@@ -228,7 +300,7 @@ function withModuleFederation(
         };
       },
       getModulesRunBeforeMainModule: (entryFilePath) => {
-        return [initHostFilePath];
+        return initHostPath ? [initHostPath] : [];
       },
     },
     resolver: {
@@ -236,40 +308,49 @@ function withModuleFederation(
       resolveRequest: (context, moduleName, platform) => {
         // virtual module: init-host
         if (moduleName === "mf:init-host") {
-          return {
-            type: "sourceFile",
-            filePath: initHostFilePath,
-          };
+          return { type: "sourceFile", filePath: initHostPath as string };
         }
 
         // virtual module: async-require
         if (moduleName === "mf:async-require") {
-          return {
-            type: "sourceFile",
-            filePath: asyncRequirePath,
-          };
+          return { type: "sourceFile", filePath: asyncRequirePath };
+        }
+
+        // virtual module: shared-registry
+        if (moduleName === "mf:shared-registry") {
+          return { type: "sourceFile", filePath: sharedRegistryPath };
         }
 
         // virtual entrypoint to create MF containers
         // MF options.filename is provided as a name only and will be requested from the root of project
         // so the filename mini.js becomes ./mini.js and we need to match exactly that
         if (moduleName === `./${options.filename}`) {
-          return {
-            type: "sourceFile",
-            filePath: remoteEntryPath as string,
-          };
+          return { type: "sourceFile", filePath: remoteEntryPath as string };
+        }
+
+        // shared modules handling in init-host.js
+        if ([initHostPath].includes(context.originModulePath)) {
+          // init-host contains definition of shared modules so we need to prevent
+          // circular import of shared module, by allowing import shared dependencies directly
+          return context.resolveRequest(context, moduleName, platform);
+        }
+
+        // shared modules handling in remote-entry.js
+        if ([remoteEntryPath].includes(context.originModulePath)) {
+          const sharedModule = options.shared[moduleName];
+          // import: false means that the module is marked as external
+          if (sharedModule && sharedModule.import === false) {
+            const sharedPath = sharedModulesPaths[moduleName];
+            return { type: "sourceFile", filePath: sharedPath };
+          } else {
+            return context.resolveRequest(context, moduleName, platform);
+          }
         }
 
         // shared modules
-        // init-host contains definition of shared modules so we need to prevent
-        // circular import of shared module, by allowing import shared dependencies directly
-        if (![initHostFilePath].includes(context.originModulePath)) {
-          if (Object.keys(options.shared).includes(moduleName)) {
-            return {
-              type: "sourceFile",
-              filePath: sharedModulesPaths[moduleName],
-            };
-          }
+        if (Object.keys(options.shared).includes(moduleName)) {
+          const sharedPath = sharedModulesPaths[moduleName];
+          return { type: "sourceFile", filePath: sharedPath };
         }
 
         return context.resolveRequest(context, moduleName, platform);
