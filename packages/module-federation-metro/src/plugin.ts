@@ -21,7 +21,7 @@ export interface ModuleFederationPluginConfiguration {
   plugins?: string[];
 }
 
-type ModuleFederationConfiguration =
+export type ModuleFederationConfiguration =
   Required<ModuleFederationPluginConfiguration>;
 
 function getSharedString(options: ModuleFederationConfiguration) {
@@ -366,7 +366,7 @@ function withModuleFederation(
 
             const manifestContent = fs.readFileSync(manifestPath, "utf-8");
 
-            res.end(JSON.stringify(manifestContent));
+            res.end(manifestContent);
           } else {
             // @ts-ignore
             metroMiddleware(req, res, next);
