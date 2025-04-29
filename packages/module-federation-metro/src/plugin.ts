@@ -10,15 +10,18 @@ interface SharedConfig {
   import?: false;
 }
 
-interface ModuleFederationConfiguration {
+interface ModuleFederationPluginConfiguration {
   name: string;
-  filename: string;
-  shared: Record<string, SharedConfig>;
-  plugins: string[];
-  remotes: Record<string, string>;
+  filename?: string;
+  remotes?: Record<string, string>;
   exposes?: Record<string, string>;
+  shared?: Record<string, SharedConfig>;
   shareStrategy?: "loaded-first" | "version-first";
+  plugins?: string[];
 }
+
+type ModuleFederationConfiguration =
+  Required<ModuleFederationPluginConfiguration>;
 
 function getSharedString(options: ModuleFederationConfiguration) {
   const shared = Object.keys(options.shared).reduce((acc, name) => {
@@ -196,25 +199,48 @@ function createSharedRegistryVirtualModule(
   return sharedRegistryPath;
 }
 
-function normalizeOptions(options: ModuleFederationConfiguration) {
-  const opts = { ...options };
+function createSharedVirtualModules(
+  options: ModuleFederationConfiguration,
+  vmDirPath: string
+) {
+  const sharedModulesPaths: Record<string, string> = {};
+  Object.keys(options.shared).forEach((name) => {
+    const sharedModule = getSharedModule(name);
+    const sharedFilePath = path.join(vmDirPath, "shared", `${name}.js`);
+    fs.writeFileSync(sharedFilePath, sharedModule, "utf-8");
+    sharedModulesPaths[name] = sharedFilePath;
+  });
+  return sharedModulesPaths;
+}
 
+function normalizeOptions(
+  options: ModuleFederationPluginConfiguration
+): ModuleFederationConfiguration {
+  const filename = options.filename ?? "remoteEntry.js";
   // this is different from the default share strategy in mf-core
   // it makes more sense to have loaded-first as default on mobile
   // in order to avoid longer TTI upon app startup
-  opts.shareStrategy = opts.shareStrategy ?? "loaded-first";
+  const shareStrategy = options.shareStrategy ?? "loaded-first";
 
-  return opts;
+  return {
+    name: options.name,
+    filename,
+    remotes: options.remotes ?? {},
+    exposes: options.exposes ?? {},
+    shared: options.shared ?? {},
+    shareStrategy,
+    plugins: options.plugins ?? [],
+  };
 }
 
 function withModuleFederation(
   config: ConfigT,
-  federationOptions: ModuleFederationConfiguration
+  federationOptions: ModuleFederationPluginConfiguration
 ): ConfigT {
-  const options = normalizeOptions(federationOptions);
-
-  const isHost = !options.exposes;
+  const isHost = !federationOptions.exposes;
   const isRemote = !isHost;
+
+  const options = normalizeOptions(federationOptions);
 
   const projectNodeModulesPath = path.resolve(
     config.projectRoot,
@@ -234,21 +260,11 @@ function withModuleFederation(
     mfMetroPath
   );
 
+  const sharedModulesPaths = createSharedVirtualModules(options, mfMetroPath);
+
   const initHostPath = isHost
     ? createInitHostVirtualModule(options, mfMetroPath)
     : null;
-
-  const sharedModulesPaths: Record<string, string> = {};
-
-  if (options.shared) {
-    Object.keys(options.shared).forEach((name) => {
-      const sharedModule = getSharedModule(name);
-      const sharedFilePath = path.join(mfMetroPath, "shared", `${name}.js`);
-
-      fs.writeFileSync(sharedFilePath, sharedModule, "utf-8");
-      sharedModulesPaths[name] = sharedFilePath;
-    });
-  }
 
   let remoteEntryPath: string | undefined;
   if (isRemote) {
