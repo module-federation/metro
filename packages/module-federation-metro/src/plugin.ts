@@ -292,6 +292,9 @@ function withModuleFederation(
       },
       getRunModuleStatement: (moduleId: number | string) =>
         `${options.name}__r(${JSON.stringify(moduleId)});`,
+      getPolyfills: (options) => {
+        return isHost ? config.serializer?.getPolyfills?.(options) : [];
+      },
       // customSerializer: getBundleSplittingSerializer(),
     },
     transformer: {
