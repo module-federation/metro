@@ -20,7 +20,7 @@ export default function Button({onPress}: Props) {
     <Pressable style={styles.button} onPress={handlePress}>
       <LottieView
         ref={animationRef}
-        source={require('./gift.json')}
+        source={require('./gift-asset.json')}
         style={styles.animation}
         loop={false}
       />

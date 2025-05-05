@@ -274,31 +274,29 @@ function withModuleFederation(
     fs.writeFileSync(remoteEntryPath, getRemoteEntryModule(options));
   }
 
-  const asyncRequirePath = path.resolve(__dirname, "../async-require.js");
+  const asyncRequireHostPath = path.resolve(
+    __dirname,
+    "../async-require-host.js"
+  );
+  const asyncRequireRemotePath = path.resolve(
+    __dirname,
+    "../async-require-remote.js"
+  );
 
   return {
     ...config,
     serializer: {
       ...config.serializer,
-      createModuleIdFactory: () => {
-        // identical to metro's default module id factory
-        // but we offset the ids for container modules by 10000
-        // reference: https://github.com/facebook/metro/blob/cc7316b1f40ed5e4202a997673b26d55ff1b4ca5/packages/metro/src/lib/createModuleIdFactory.js
-        const fileToIdMap: Map<string, number> = new Map();
-        let nextId = isRemote ? 10000 : 0;
-        return (modulePath: string) => {
-          let id = fileToIdMap.get(modulePath);
-          if (typeof id !== "number") {
-            id = nextId++;
-            fileToIdMap.set(modulePath, id);
-          }
-          return id;
-        };
-      },
       getModulesRunBeforeMainModule: (entryFilePath) => {
         return initHostPath ? [initHostPath] : [];
       },
-      customSerializer: getBundleSplittingSerializer(),
+      getRunModuleStatement: (moduleId: number | string) =>
+        `${options.name}__r(${JSON.stringify(moduleId)});`,
+      // customSerializer: getBundleSplittingSerializer(),
+    },
+    transformer: {
+      ...config.transformer,
+      globalPrefix: options.name,
     },
     resolver: {
       ...config.resolver,
@@ -308,9 +306,14 @@ function withModuleFederation(
           return { type: "sourceFile", filePath: initHostPath as string };
         }
 
-        // virtual module: async-require
-        if (moduleName === "mf:async-require") {
-          return { type: "sourceFile", filePath: asyncRequirePath };
+        // virtual module: async-require-host
+        if (moduleName === "mf:async-require-host") {
+          return { type: "sourceFile", filePath: asyncRequireHostPath };
+        }
+
+        // virtual module: async-require-remote
+        if (moduleName === "mf:async-require-remote") {
+          return { type: "sourceFile", filePath: asyncRequireRemotePath };
         }
 
         // virtual module: shared-registry
