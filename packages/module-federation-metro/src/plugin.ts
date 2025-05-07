@@ -3,6 +3,11 @@ import fs from "node:fs";
 import type { ConfigT } from "metro-config";
 import { getBundleSplittingSerializer } from "./serializer";
 
+declare global {
+  var __METRO_FEDERATION_CONFIG: ModuleFederationConfiguration;
+  var __METRO_FEDERATION_REMOTE_ENTRY_PATH: string | undefined;
+}
+
 interface SharedConfig {
   singleton: boolean;
   eager: boolean;
@@ -283,6 +288,10 @@ function withModuleFederation(
     "../async-require-remote.js"
   );
 
+  // pass data to buildContainer command
+  global.__METRO_FEDERATION_CONFIG = options;
+  global.__METRO_FEDERATION_REMOTE_ENTRY_PATH = remoteEntryPath;
+
   return {
     ...config,
     serializer: {
@@ -295,7 +304,7 @@ function withModuleFederation(
       getPolyfills: (options) => {
         return isHost ? config.serializer?.getPolyfills?.(options) : [];
       },
-      // customSerializer: getBundleSplittingSerializer(),
+      customSerializer: getBundleSplittingSerializer(),
     },
     transformer: {
       ...config.transformer,

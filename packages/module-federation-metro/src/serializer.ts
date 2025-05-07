@@ -131,31 +131,6 @@ const getBundleSplittingSerializer: () => CustomSerializer = () => {
       createLazyBundle(module, graph, options, mainBundleModules)
     );
 
-    const manifest = Object.fromEntries(
-      lazyBundles.map(({ id }) => [
-        id,
-        `http://localhost:8888/${path.basename(id).split(".")[0]}.bundle`,
-      ])
-    );
-
-    // @ts-expect-error - preModules is marked as readonly
-    preModules.push({
-      path: "manifest",
-      dependencies: new Map(),
-      getSource: () => Buffer.from(""),
-      inverseDependencies: new Set(),
-      output: [
-        {
-          type: "js/script/virtual",
-          data: {
-            code: `var __BUNDLE_SPLITTING_MAP__=${JSON.stringify(manifest)}`,
-            lineCount: 1,
-            map: [],
-          },
-        },
-      ],
-    });
-
     const mainBundle = createMainBundle(
       entryPoint,
       preModules,
@@ -166,14 +141,11 @@ const getBundleSplittingSerializer: () => CustomSerializer = () => {
 
     await Promise.all(
       lazyBundles.map(async ({ id, bundle }) => {
-        await fs.writeFile(
-          path.join(
-            __dirname,
-            "dist",
-            `${path.basename(id).split(".")[0]}.bundle`
-          ),
-          bundle
-        );
+        const distPath = path.join(options.projectRoot, "mf-dist");
+        const bundleName = path.basename(id).split(".")[0];
+        // ensure dist directory exists
+        await fs.mkdir(distPath, { recursive: true });
+        await fs.writeFile(path.join(distPath, `${bundleName}.bundle`), bundle);
       })
     );
 
