@@ -21,6 +21,12 @@ const options = [
     parse: (val: string): boolean => val !== "false",
   },
   {
+    name: "--bundle-encoding <string>",
+    description:
+      "Encoding the bundle should be written in (https://nodejs.org/api/buffer.html#buffer_buffer).",
+    default: "utf8",
+  },
+  {
     name: "--max-workers <number>",
     description:
       "Specifies the maximum number of workers the worker-pool " +
@@ -47,6 +53,10 @@ const options = [
     name: "--assets-dest <string>",
     description:
       "Directory name where to store assets referenced in the bundle",
+  },
+  {
+    name: "--asset-catalog-dest [string]",
+    description: "Path where to create an iOS Asset Catalog for images",
   },
   {
     name: "--config <string>",

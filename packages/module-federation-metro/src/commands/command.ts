@@ -1,4 +1,5 @@
 import path from "node:path";
+import { pathToFileURL } from "node:url";
 import chalk from "chalk";
 import { promises as fs } from "fs";
 import type { Config } from "@react-native-community/cli-types";
@@ -19,18 +20,28 @@ export type BundleCommandArgs = {
   platform: string;
   dev: boolean;
   minify?: boolean;
+  bundleEncoding?: "utf8" | "utf16le" | "ascii";
   maxWorkers?: number;
   sourcemapOutput?: string;
   sourcemapSourcesRoot?: string;
+  sourcemapUseAbsolutePath?: boolean;
   assetsDest?: string;
+  assetCatalogDest?: string;
   config?: string;
 };
 
-async function buildBundle(server: Server, requestOpts: RequestOptions) {
+interface BundleRequestOptions extends RequestOptions {
+  lazy: boolean;
+  modulesOnly: boolean;
+  runModule: boolean;
+  sourceUrl: string;
+}
+
+async function buildBundle(server: Server, requestOpts: BundleRequestOptions) {
   const bundle = await server.build({
     ...Server.DEFAULT_BUNDLE_OPTIONS,
-    lazy: true,
     bundleType: "bundle",
+
     ...requestOpts,
   });
 
@@ -77,6 +88,50 @@ async function saveBundleAndMap(
   await Promise.all(writeFns.map((cb) => cb()));
 }
 
+function getRequestOpts(
+  args: BundleCommandArgs,
+  opts: {
+    isContainer: boolean;
+    entryFile: string;
+    sourceUrl: string;
+    sourceMapUrl: string;
+  }
+): BundleRequestOptions {
+  return {
+    dev: args.dev,
+    minify: args.minify !== undefined ? args.minify : !args.dev,
+    platform: args.platform,
+    entryFile: opts.entryFile,
+    sourceUrl: opts.sourceUrl,
+    sourceMapUrl: opts.sourceMapUrl,
+    // only use lazy for container bundles
+    lazy: opts.isContainer,
+    // remove prelude for non-container modules
+    modulesOnly: !opts.isContainer,
+    // don't run module for non-container modules
+    runModule: !opts.isContainer,
+  };
+}
+
+function getSaveBundleOpts(
+  args: BundleCommandArgs,
+  opts: {
+    bundleOutput: string;
+    sourcemapOutput: string;
+  }
+): OutputOptions {
+  return {
+    indexedRamBundle: false,
+    bundleEncoding: args.bundleEncoding,
+    dev: args.dev,
+    platform: args.platform,
+    sourcemapSourcesRoot: args.sourcemapSourcesRoot,
+    sourcemapUseAbsolutePath: args.sourcemapUseAbsolutePath,
+    bundleOutput: opts.bundleOutput,
+    sourcemapOutput: opts.sourcemapOutput,
+  };
+}
+
 async function buildContainerBundle(
   _argv: Array<string>,
   ctx: Config,
@@ -87,22 +142,17 @@ async function buildContainerBundle(
     config: args.config,
   });
 
-  return buildBundleWithConfig(args, config);
-}
-
-async function buildBundleWithConfig(
-  args: BundleCommandArgs,
-  config: ConfigT
-): Promise<void> {
+  // TODO: pass this without using globals
   const federationConfig = global.__METRO_FEDERATION_CONFIG;
-  const containerEntryFile = global.__METRO_FEDERATION_REMOTE_ENTRY_PATH;
-
-  if (!containerEntryFile) {
-    throw new Error("Name of the container entry file is not set");
+  if (!federationConfig) {
+    throw new Error("Federation config is not set");
   }
 
-  const bundleOutputDir = path.join(config.projectRoot, "dist");
-  const containerBundleOutput = path.join(bundleOutputDir, "mini.bundle");
+  // TODO: pass this without using globals
+  const containerEntryFilepath = global.__METRO_FEDERATION_REMOTE_ENTRY_PATH;
+  if (!containerEntryFilepath) {
+    throw new Error("Name of the container entry file is not set");
+  }
 
   if (config.resolver.platforms.indexOf(args.platform) === -1) {
     console.error(
@@ -126,57 +176,80 @@ async function buildBundleWithConfig(
   // have other choice than defining it as an env variable here.
   process.env.NODE_ENV = args.dev ? "development" : "production";
 
-  let sourceMapUrl = args.sourcemapOutput;
-  if (sourceMapUrl != null) {
-    sourceMapUrl = path.basename(sourceMapUrl);
-  }
+  // TODO: make this configurable
+  const outputDir = path.join(config.projectRoot, "dist");
 
-  const requestOpts: RequestOptions = {
-    entryFile: containerEntryFile,
-    sourceMapUrl,
-    dev: args.dev,
-    minify: args.minify !== undefined ? args.minify : !args.dev,
-    platform: args.platform,
+  const containerModule = {
+    [federationConfig.name]: {
+      moduleFilepath: containerEntryFilepath,
+      isContainer: true,
+    },
   };
 
-  const saveBundleOpts: OutputOptions = {
-    bundleOutput: containerBundleOutput,
-    bundleEncoding: "utf8",
-    dev: args.dev,
-    indexedRamBundle: false,
-    platform: args.platform,
-  };
+  const exposedModules = Object.entries(federationConfig.exposes)
+    .map(([moduleName, moduleFilepath]) => [
+      moduleName.slice(2),
+      moduleFilepath,
+    ])
+    .reduce((acc, [moduleName, moduleFilepath]) => {
+      acc[moduleName] = { moduleFilepath, isContainer: false };
+      return acc;
+    }, {} as Record<string, { moduleFilepath: string; isContainer: boolean }>);
 
-  const exposedModules = Object.values(federationConfig.exposes).map(
-    ([moduleName, moduleFilepath]) => {
-      const moduleBundleName = `${moduleName.slice(2)}.bundle`;
-      return [moduleBundleName, moduleFilepath];
+  const requests = Object.entries({
+    ...containerModule,
+    ...exposedModules,
+  }).map(
+    ([moduleName, { moduleFilepath: moduleInputFilepath, isContainer }]) => {
+      const moduleBundleName = `${moduleName}.bundle`;
+      const moduleBundleOutputFilepath = path.join(outputDir, moduleBundleName);
+      // TODO: should this use `file:///` protocol?
+      const moduleBundleUrl = pathToFileURL(moduleBundleOutputFilepath).href;
+      const moduleSourceMapName = `${moduleBundleName}.map`;
+      const moduleSourceMapFilepath = path.join(outputDir, moduleSourceMapName);
+      // TODO: should this use `file:///` protocol?
+      const moduleSourceMapUrl = pathToFileURL(moduleSourceMapFilepath).href;
+
+      return {
+        requestOpts: getRequestOpts(args, {
+          isContainer,
+          entryFile: moduleInputFilepath,
+          sourceUrl: moduleBundleUrl,
+          sourceMapUrl: moduleSourceMapUrl,
+        }),
+        saveBundleOpts: getSaveBundleOpts(args, {
+          bundleOutput: moduleBundleOutputFilepath,
+          sourcemapOutput: moduleSourceMapFilepath,
+        }),
+      };
     }
   );
 
-  console.log(exposedModules);
   const server = new Server(config);
 
   try {
-    const bundle = await buildBundle(server, requestOpts);
-    // Ensure destination directory exists before saving the bundle
-    await fs.mkdir(bundleOutputDir, { recursive: true, mode: 0o755 });
-    await saveBundleAndMap(bundle, saveBundleOpts, console.info);
+    // ensure output directory exists
+    await fs.mkdir(outputDir, { recursive: true, mode: 0o755 });
 
-    // Save the assets of the bundle
-    // const outputAssets = await server.getAssets({
-    //   ...Server.DEFAULT_BUNDLE_OPTIONS,
-    //   ...requestOpts,
-    //   bundleType: "todo",
-    // });
+    for (const { requestOpts, saveBundleOpts } of requests) {
+      const bundle = await buildBundle(server, requestOpts);
+      await saveBundleAndMap(bundle, saveBundleOpts, console.info);
 
-    // When we're done saving bundle output and the assets, we're done.
-    // return await saveAssets(
-    //   outputAssets,
-    //   args.platform,
-    //   args.assetsDest,
-    //   args.assetCatalogDest
-    // );
+      // Save the assets of the bundle
+      // const outputAssets = await server.getAssets({
+      //   ...Server.DEFAULT_BUNDLE_OPTIONS,
+      //   ...requestOpts,
+      //   bundleType: "todo",
+      // });
+
+      // When we're done saving bundle output and the assets, we're done.
+      // return await saveAssets(
+      //   outputAssets,
+      //   args.platform,
+      //   args.assetsDest,
+      //   args.assetCatalogDest
+      // );
+    }
   } finally {
     // incomplete types - this should be awaited
     await server.end();
