@@ -342,12 +342,6 @@ function withModuleFederation(
           }
         }
 
-        // federation runtime modules outside host & container bundles
-        // TODO determine if this is correct
-        if (moduleName.startsWith("@module-federation/")) {
-          return { type: "empty" };
-        }
-
         // shared modules
         if (Object.keys(options.shared).includes(moduleName)) {
           const sharedPath = sharedModulesPaths[moduleName];
