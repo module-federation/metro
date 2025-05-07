@@ -9,6 +9,7 @@ import type { RequestOptions, OutputOptions } from "metro/src/shared/types";
 import type { ModuleFederationConfigNormalized } from "../types";
 import loadMetroConfig from "./utils/loadMetroConfig";
 import relativizeSerializedMap from "./utils/relativizeSerializedMap";
+import { CLIError } from "./utils/cliError";
 
 declare global {
   var __METRO_FEDERATION_CONFIG: ModuleFederationConfigNormalized;
@@ -142,16 +143,32 @@ async function buildContainerBundle(
     config: args.config,
   });
 
-  // TODO: pass this without using globals
+  // TODO: pass this without globals
   const federationConfig = global.__METRO_FEDERATION_CONFIG;
   if (!federationConfig) {
-    throw new Error("Federation config is not set");
+    console.error(
+      `${chalk.red("error")}: Module Federation configuration is missing.`
+    );
+    console.info(
+      "Import the plugin 'withModuleFederation' " +
+        "from 'module-federation-metro' package " +
+        "and wrap your final Metro config with it."
+    );
+    throw new CLIError("Bundling failed");
   }
 
-  // TODO: pass this without using globals
+  // TODO: pass this without globals
+  // TODO: this should be validated inside the plugin
   const containerEntryFilepath = global.__METRO_FEDERATION_REMOTE_ENTRY_PATH;
   if (!containerEntryFilepath) {
-    throw new Error("Name of the container entry file is not set");
+    console.error(
+      `${chalk.red("error")}: Cannot determine the container entry file path.`
+    );
+    console.info(
+      "To bundle a container, you need to expose at least one module " +
+        "in your Module Federation configuration."
+    );
+    throw new CLIError("Bundling failed");
   }
 
   if (config.resolver.platforms.indexOf(args.platform) === -1) {
@@ -169,7 +186,7 @@ async function buildContainerBundle(
         )}. If you are trying to bundle for an out-of-tree platform, it may not be installed.`
     );
 
-    throw new Error("Bundling failed");
+    throw new CLIError("Bundling failed");
   }
 
   // This is used by a bazillion of npm modules we don't control so we don't
