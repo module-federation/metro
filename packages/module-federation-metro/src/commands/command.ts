@@ -5,11 +5,12 @@ import type { Config } from "@react-native-community/cli-types";
 import type { ConfigT } from "metro-config";
 import Server from "metro/src/Server";
 import type { RequestOptions, OutputOptions } from "metro/src/shared/types";
+import type { ModuleFederationConfigNormalized } from "../types";
 import loadMetroConfig from "./utils/loadMetroConfig";
 import relativizeSerializedMap from "./utils/relativizeSerializedMap";
 
 declare global {
-  var __METRO_FEDERATION_CONFIG: any;
+  var __METRO_FEDERATION_CONFIG: ModuleFederationConfigNormalized;
   var __METRO_FEDERATION_REMOTE_ENTRY_PATH: string | undefined;
 }
 
@@ -19,7 +20,6 @@ export type BundleCommandArgs = {
   dev: boolean;
   minify?: boolean;
   maxWorkers?: number;
-  bundleOutput: string;
   sourcemapOutput?: string;
   sourcemapSourcesRoot?: string;
   assetsDest?: string;
@@ -94,13 +94,15 @@ async function buildBundleWithConfig(
   args: BundleCommandArgs,
   config: ConfigT
 ): Promise<void> {
+  const federationConfig = global.__METRO_FEDERATION_CONFIG;
   const containerEntryFile = global.__METRO_FEDERATION_REMOTE_ENTRY_PATH;
 
   if (!containerEntryFile) {
     throw new Error("Name of the container entry file is not set");
   }
 
-  const bundleOutput = path.join(config.projectRoot, "dist", "mini.bundle");
+  const bundleOutputDir = path.join(config.projectRoot, "dist");
+  const containerBundleOutput = path.join(bundleOutputDir, "mini.bundle");
 
   if (config.resolver.platforms.indexOf(args.platform) === -1) {
     console.error(
@@ -138,24 +140,27 @@ async function buildBundleWithConfig(
   };
 
   const saveBundleOpts: OutputOptions = {
-    bundleOutput,
+    bundleOutput: containerBundleOutput,
     bundleEncoding: "utf8",
     dev: args.dev,
     indexedRamBundle: false,
     platform: args.platform,
   };
 
+  const exposedModules = Object.values(federationConfig.exposes).map(
+    ([moduleName, moduleFilepath]) => {
+      const moduleBundleName = `${moduleName.slice(2)}.bundle`;
+      return [moduleBundleName, moduleFilepath];
+    }
+  );
+
+  console.log(exposedModules);
   const server = new Server(config);
 
   try {
     const bundle = await buildBundle(server, requestOpts);
-
     // Ensure destination directory exists before saving the bundle
-    await fs.mkdir(path.dirname(bundleOutput), {
-      recursive: true,
-      mode: 0o755,
-    });
-
+    await fs.mkdir(bundleOutputDir, { recursive: true, mode: 0o755 });
     await saveBundleAndMap(bundle, saveBundleOpts, console.info);
 
     // Save the assets of the bundle
@@ -173,6 +178,7 @@ async function buildBundleWithConfig(
     //   args.assetCatalogDest
     // );
   } finally {
+    // incomplete types - this should be awaited
     await server.end();
   }
 }

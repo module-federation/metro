@@ -21,11 +21,6 @@ const options = [
     parse: (val: string): boolean => val !== "false",
   },
   {
-    name: "--bundle-output <string>",
-    description:
-      "File name where to store the resulting bundle, ex. /tmp/groups.bundle",
-  },
-  {
     name: "--max-workers <number>",
     description:
       "Specifies the maximum number of workers the worker-pool " +

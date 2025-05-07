@@ -1,35 +1,18 @@
 import path from "node:path";
 import fs from "node:fs";
 import type { ConfigT } from "metro-config";
-import { getBundleSplittingSerializer } from "./serializer";
+import {
+  SharedConfig,
+  ModuleFederationConfig,
+  ModuleFederationConfigNormalized,
+} from "./types";
 
 declare global {
-  var __METRO_FEDERATION_CONFIG: ModuleFederationConfiguration;
+  var __METRO_FEDERATION_CONFIG: ModuleFederationConfigNormalized;
   var __METRO_FEDERATION_REMOTE_ENTRY_PATH: string | undefined;
 }
 
-interface SharedConfig {
-  singleton: boolean;
-  eager: boolean;
-  version: string;
-  requiredVersion: string;
-  import?: false;
-}
-
-interface ModuleFederationPluginConfiguration {
-  name: string;
-  filename?: string;
-  remotes?: Record<string, string>;
-  exposes?: Record<string, string>;
-  shared?: Record<string, SharedConfig>;
-  shareStrategy?: "loaded-first" | "version-first";
-  plugins?: string[];
-}
-
-type ModuleFederationConfiguration =
-  Required<ModuleFederationPluginConfiguration>;
-
-function getSharedString(options: ModuleFederationConfiguration) {
+function getSharedString(options: ModuleFederationConfigNormalized) {
   const shared = Object.keys(options.shared).reduce((acc, name) => {
     acc[name] = `__SHARED_${name}__`;
     return acc;
@@ -45,7 +28,7 @@ function getSharedString(options: ModuleFederationConfiguration) {
   return sharedString;
 }
 
-function getInitHostModule(options: ModuleFederationConfiguration) {
+function getInitHostModule(options: ModuleFederationConfigNormalized) {
   const initHostPath = require.resolve("./runtime/init-host.js");
   let initHostModule = fs.readFileSync(initHostPath, "utf-8");
 
@@ -62,7 +45,7 @@ function getInitHostModule(options: ModuleFederationConfiguration) {
   return initHostModule;
 }
 
-function getSharedRegistryModule(options: ModuleFederationConfiguration) {
+function getSharedRegistryModule(options: ModuleFederationConfigNormalized) {
   const sharedRegistryPath = require.resolve("./runtime/shared-registry.js");
   let sharedRegistryModule = fs.readFileSync(sharedRegistryPath, "utf-8");
 
@@ -153,7 +136,7 @@ function generateRemotes(remotes: Record<string, string> = {}) {
   return `[${remotesEntries.join(",\n")}]`;
 }
 
-function getRemoteEntryModule(options: ModuleFederationConfiguration) {
+function getRemoteEntryModule(options: ModuleFederationConfigNormalized) {
   const remoteEntryTemplatePath = require.resolve("./runtime/remote-entry.js");
   let remoteEntryModule = fs.readFileSync(remoteEntryTemplatePath, "utf-8");
 
@@ -186,7 +169,7 @@ function getRemoteEntryModule(options: ModuleFederationConfiguration) {
 }
 
 function createInitHostVirtualModule(
-  options: ModuleFederationConfiguration,
+  options: ModuleFederationConfigNormalized,
   vmDirPath: string
 ) {
   const initHostModule = getInitHostModule(options);
@@ -196,7 +179,7 @@ function createInitHostVirtualModule(
 }
 
 function createSharedRegistryVirtualModule(
-  options: ModuleFederationConfiguration,
+  options: ModuleFederationConfigNormalized,
   vmDirPath: string
 ) {
   const sharedRegistryModule = getSharedRegistryModule(options);
@@ -206,7 +189,7 @@ function createSharedRegistryVirtualModule(
 }
 
 function createSharedVirtualModules(
-  options: ModuleFederationConfiguration,
+  options: ModuleFederationConfigNormalized,
   vmDirPath: string
 ) {
   const sharedModulesPaths: Record<string, string> = {};
@@ -220,8 +203,8 @@ function createSharedVirtualModules(
 }
 
 function normalizeOptions(
-  options: ModuleFederationPluginConfiguration
-): ModuleFederationConfiguration {
+  options: ModuleFederationConfig
+): ModuleFederationConfigNormalized {
   const filename = options.filename ?? "remoteEntry.js";
   // this is different from the default share strategy in mf-core
   // it makes more sense to have loaded-first as default on mobile
@@ -241,7 +224,7 @@ function normalizeOptions(
 
 function withModuleFederation(
   config: ConfigT,
-  federationOptions: ModuleFederationPluginConfiguration
+  federationOptions: ModuleFederationConfig
 ): ConfigT {
   const isHost = !federationOptions.exposes;
   const isRemote = !isHost;
@@ -304,7 +287,7 @@ function withModuleFederation(
       getPolyfills: (options) => {
         return isHost ? config.serializer?.getPolyfills?.(options) : [];
       },
-      customSerializer: getBundleSplittingSerializer(),
+      // customSerializer: getBundleSplittingSerializer(),
     },
     transformer: {
       ...config.transformer,
