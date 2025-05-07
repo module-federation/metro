@@ -3,7 +3,6 @@ import { pathToFileURL } from "node:url";
 import chalk from "chalk";
 import { promises as fs } from "fs";
 import type { Config } from "@react-native-community/cli-types";
-import type { ConfigT } from "metro-config";
 import Server from "metro/src/Server";
 import type { RequestOptions, OutputOptions } from "metro/src/shared/types";
 import type { ModuleFederationConfigNormalized } from "../types";
@@ -41,9 +40,8 @@ interface BundleRequestOptions extends RequestOptions {
 async function buildBundle(server: Server, requestOpts: BundleRequestOptions) {
   const bundle = await server.build({
     ...Server.DEFAULT_BUNDLE_OPTIONS,
-    bundleType: "bundle",
-
     ...requestOpts,
+    bundleType: "bundle",
   });
 
   return bundle;
