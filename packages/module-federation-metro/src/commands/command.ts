@@ -274,6 +274,10 @@ async function bundleFederatedRemote(
   const server = new Server(config);
 
   try {
+    console.info(
+      `${chalk.blue("Processing remote container and exposed modules")}`
+    );
+
     for (const { requestOpts, saveBundleOpts, targetDir } of requests) {
       // ensure output directory exists
       await fs.mkdir(targetDir, { recursive: true, mode: 0o755 });
@@ -296,9 +300,10 @@ async function bundleFederatedRemote(
       // );
     }
 
+    console.info(`${chalk.blue("Processing manifest")}`);
     const manifestOutputFilepath = path.join(outputDir, "mf-manifest.json");
     await fs.copyFile(manifestFilepath, manifestOutputFilepath);
-    console.info(`MF Manifest written to ${manifestOutputFilepath}`);
+    console.info(`Done writing MF Manifest to ${manifestOutputFilepath}`);
   } finally {
     // incomplete types - this should be awaited
     await server.end();
