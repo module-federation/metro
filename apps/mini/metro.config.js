@@ -25,6 +25,7 @@ module.exports = withModuleFederation(
     exposes: {
       './button': './src/button.tsx',
       './confetti': './src/confetti.tsx',
+      './info': './src/info.tsx',
     },
     shared: {
       react: {

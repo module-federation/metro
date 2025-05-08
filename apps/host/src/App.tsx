@@ -12,21 +12,17 @@ import type LottieView from 'lottie-react-native';
 
 // @ts-ignore
 import gradientBg from './aura.png';
-// lodash import synchronously
-import _ from 'lodash';
-
-// used as a side-effect to ensure that the lodash module is loaded
-// before we eval the App module
-const test = _.capitalize('capitalized');
-
-console.log('side-effect lodash test', test);
-console.log('lodash version in host', _.VERSION);
+import Card from './Card';
+import HostInfo from './Info';
 
 // @ts-ignore
 const Button = React.lazy(() => loadRemote('mini/button'));
 
 // @ts-ignore
 const Confetti = React.lazy(() => loadRemote('mini/confetti'));
+
+// @ts-ignore
+const Info = React.lazy(() => loadRemote('mini/info'));
 
 function App(): React.JSX.Element {
   const animationRef = useRef<LottieView>(null);
@@ -52,40 +48,34 @@ function App(): React.JSX.Element {
             Host providing shared dependencies
           </Text>
         </View>
-        <View style={styles.mainContainer}>
-          <View style={styles.miniappSection}>
-            <View style={styles.miniappCaption}>
-              <Text style={styles.miniappTitle}>Federated Remote</Text>
-              <Text style={styles.miniappDescription}>
-                Dynamically loaded module
+        <Card title="Federated Remote" description="Dynamically loaded module">
+          {!shouldLoadRemote ? (
+            <Pressable
+              style={styles.defaultButton}
+              onPress={() => setShouldLoadRemote(true)}>
+              <Text
+                testID="load-remote-button"
+                style={styles.defaultButtonText}>
+                Load Remote Component
               </Text>
-            </View>
-            <View style={styles.miniappHighlight}>
-              {!shouldLoadRemote ? (
-                <Pressable
-                  style={styles.defaultButton}
-                  onPress={() => setShouldLoadRemote(true)}>
-                  <Text style={styles.defaultButtonText}>
-                    Load Remote Component
-                  </Text>
-                </Pressable>
-              ) : (
-                <React.Suspense
-                  fallback={
-                    <View style={styles.loadingContainer}>
-                      <ActivityIndicator size="large" color="#8b5cf6" />
-                    </View>
-                  }>
-                  <Button
-                    onPress={() =>
-                      setTimeout(() => animationRef.current?.play(), 1000)
-                    }
-                  />
-                </React.Suspense>
-              )}
-            </View>
-          </View>
-        </View>
+            </Pressable>
+          ) : (
+            <React.Suspense
+              fallback={
+                <View style={styles.loadingContainer}>
+                  <ActivityIndicator size="large" color="#8b5cf6" />
+                </View>
+              }>
+              <Button
+                onPress={() =>
+                  setTimeout(() => animationRef.current?.play(), 1000)
+                }
+              />
+              <Info />
+            </React.Suspense>
+          )}
+        </Card>
+        <HostInfo />
       </View>
     </View>
   );

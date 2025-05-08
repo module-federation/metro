@@ -1,6 +1,5 @@
 import React from 'react';
 import {Pressable, StyleSheet} from 'react-native';
-import _ from 'lodash';
 import LottieView from 'lottie-react-native';
 
 type Props = {
@@ -8,7 +7,6 @@ type Props = {
 };
 
 export default function Button({onPress}: Props) {
-  console.log('lodash version in mini', _.VERSION);
   const animationRef = React.useRef<LottieView>(null);
 
   function handlePress() {
@@ -17,7 +15,7 @@ export default function Button({onPress}: Props) {
   }
 
   return (
-    <Pressable style={styles.button} onPress={handlePress}>
+    <Pressable testID="gift-button" style={styles.button} onPress={handlePress}>
       <LottieView
         ref={animationRef}
         source={require('./gift.json')}
