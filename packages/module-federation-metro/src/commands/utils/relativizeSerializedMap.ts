@@ -1,4 +1,4 @@
-import { MixedSourceMap } from "metro-source-map";
+import type { MixedSourceMap } from "metro-source-map";
 import relativizeSourceMapInline from "metro/src/lib/relativizeSourceMap";
 
 function relativizeSerializedMap(
