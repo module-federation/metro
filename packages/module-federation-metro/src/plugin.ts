@@ -1,6 +1,8 @@
 import path from "node:path";
 import fs from "node:fs";
 import type { ConfigT } from "metro-config";
+import generateManifest from "./generate-manifest";
+import createEnhanceMiddleware from "./enhance-middleware";
 import {
   SharedConfig,
   ModuleFederationConfig,
@@ -275,6 +277,10 @@ function withModuleFederation(
   global.__METRO_FEDERATION_CONFIG = options;
   global.__METRO_FEDERATION_REMOTE_ENTRY_PATH = remoteEntryPath;
 
+  const manifestPath = path.join(mfMetroPath, "mf-manifest.json");
+  const manifest = generateManifest(options);
+  fs.writeFileSync(manifestPath, JSON.stringify(manifest, undefined, 2));
+
   return {
     ...config,
     serializer: {
@@ -350,6 +356,10 @@ function withModuleFederation(
 
         return context.resolveRequest(context, moduleName, platform);
       },
+    },
+    server: {
+      ...config.server,
+      enhanceMiddleware: createEnhanceMiddleware(manifestPath),
     },
   };
 }
