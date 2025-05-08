@@ -131,7 +131,7 @@ function getSaveBundleOpts(
   };
 }
 
-async function buildContainerBundle(
+async function bundleFederatedRemote(
   _argv: Array<string>,
   ctx: Config,
   args: BundleCommandArgs
@@ -271,4 +271,4 @@ async function buildContainerBundle(
   }
 }
 
-export default buildContainerBundle;
+export default bundleFederatedRemote;

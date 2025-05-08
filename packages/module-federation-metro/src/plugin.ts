@@ -271,7 +271,7 @@ function withModuleFederation(
     "../async-require-remote.js"
   );
 
-  // pass data to buildContainer command
+  // pass data to bundle-mf-remote command
   global.__METRO_FEDERATION_CONFIG = options;
   global.__METRO_FEDERATION_REMOTE_ENTRY_PATH = remoteEntryPath;
 
