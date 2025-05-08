@@ -1,6 +1,6 @@
 import fs from "node:fs";
 import { IncomingMessage, ServerResponse } from "node:http";
-import { Middleware } from "metro-config";
+import type { Middleware } from "metro-config";
 
 export default function createEnhanceMiddleware(manifestPath: string) {
   return function enhanceMiddleware(metroMiddleware: Middleware): Middleware {
