@@ -28,6 +28,7 @@ export type BundleCommandArgs = {
   sourcemapUseAbsolutePath?: boolean;
   assetsDest?: string;
   assetCatalogDest?: string;
+  resetCache?: boolean;
   config?: string;
 };
 
@@ -139,6 +140,7 @@ async function bundleFederatedRemote(
 ): Promise<void> {
   const config = await loadMetroConfig(ctx, {
     maxWorkers: args.maxWorkers,
+    resetCache: args.resetCache,
     config: args.config,
   });
 

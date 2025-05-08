@@ -59,6 +59,11 @@ const options = [
     description: "Path where to create an iOS Asset Catalog for images",
   },
   {
+    name: "--reset-cache",
+    description: "Removes cached files",
+    default: false,
+  },
+  {
     name: "--config <string>",
     description: "Path to the CLI configuration file",
     parse: (val: string): string => path.resolve(val),
