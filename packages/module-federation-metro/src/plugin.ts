@@ -283,14 +283,6 @@ function withModuleFederation(
   global.__METRO_FEDERATION_REMOTE_ENTRY_PATH = remoteEntryPath;
   global.__METRO_FEDERATION_MANIFEST_PATH = manifestPath;
 
-  const extraTransformerOptions: Partial<TransformerConfigT> = {};
-  if (process.env.METRO_FEDERATION_DEV) {
-    // use worker stripped from flow types to handle NODE_ENV=production
-    // which disables ad hoc babel transforms through `metro-babel-register`
-    const workerPath = path.resolve(__dirname, "../vendor/metro/Worker.js");
-    extraTransformerOptions.workerPath = workerPath;
-  }
-
   return {
     ...config,
     serializer: {
@@ -303,11 +295,9 @@ function withModuleFederation(
       getPolyfills: (options) => {
         return isHost ? config.serializer?.getPolyfills?.(options) : [];
       },
-      // customSerializer: getBundleSplittingSerializer(),
     },
     transformer: {
       ...config.transformer,
-      ...extraTransformerOptions,
       globalPrefix: options.name,
     },
     resolver: {
