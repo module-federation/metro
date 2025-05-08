@@ -8,6 +8,7 @@
     "lint": "eslint .",
     "dev": "nodemon --config ../../nodemon.json --exec yarn start",
     "start": "react-native start --reset-cache --client-logs",
+    "pods": "(cd ios && bundle install && bundle exec pod install)",
     "test": "jest"
   },
   "dependencies": {
