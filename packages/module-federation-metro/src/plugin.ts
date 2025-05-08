@@ -12,6 +12,7 @@ import {
 declare global {
   var __METRO_FEDERATION_CONFIG: ModuleFederationConfigNormalized;
   var __METRO_FEDERATION_REMOTE_ENTRY_PATH: string | undefined;
+  var __METRO_FEDERATION_MANIFEST_PATH: string | undefined;
 }
 
 function getSharedString(options: ModuleFederationConfigNormalized) {
@@ -273,13 +274,14 @@ function withModuleFederation(
     "../async-require-remote.js"
   );
 
-  // pass data to bundle-mf-remote command
-  global.__METRO_FEDERATION_CONFIG = options;
-  global.__METRO_FEDERATION_REMOTE_ENTRY_PATH = remoteEntryPath;
-
   const manifestPath = path.join(mfMetroPath, "mf-manifest.json");
   const manifest = generateManifest(options);
   fs.writeFileSync(manifestPath, JSON.stringify(manifest, undefined, 2));
+
+  // pass data to bundle-mf-remote command
+  global.__METRO_FEDERATION_CONFIG = options;
+  global.__METRO_FEDERATION_REMOTE_ENTRY_PATH = remoteEntryPath;
+  global.__METRO_FEDERATION_MANIFEST_PATH = manifestPath;
 
   const extraTransformerOptions: Partial<TransformerConfigT> = {};
   if (process.env.METRO_FEDERATION_DEV) {

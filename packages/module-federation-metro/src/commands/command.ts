@@ -13,6 +13,7 @@ import { CLIError } from "./utils/cliError";
 declare global {
   var __METRO_FEDERATION_CONFIG: ModuleFederationConfigNormalized;
   var __METRO_FEDERATION_REMOTE_ENTRY_PATH: string | undefined;
+  var __METRO_FEDERATION_MANIFEST_PATH: string | undefined;
 }
 
 export type BundleCommandArgs = {
@@ -145,7 +146,7 @@ async function bundleFederatedRemote(
   const federationConfig = global.__METRO_FEDERATION_CONFIG;
   if (!federationConfig) {
     console.error(
-      `${chalk.red("error")}: Module Federation configuration is missing.`
+      `${chalk.red("error")} Module Federation configuration is missing.`
     );
     console.info(
       "Import the plugin 'withModuleFederation' " +
@@ -160,11 +161,19 @@ async function bundleFederatedRemote(
   const containerEntryFilepath = global.__METRO_FEDERATION_REMOTE_ENTRY_PATH;
   if (!containerEntryFilepath) {
     console.error(
-      `${chalk.red("error")}: Cannot determine the container entry file path.`
+      `${chalk.red("error")} Cannot determine the container entry file path.`
     );
     console.info(
       "To bundle a container, you need to expose at least one module " +
         "in your Module Federation configuration."
+    );
+    throw new CLIError("Bundling failed");
+  }
+
+  const manifestFilepath = global.__METRO_FEDERATION_MANIFEST_PATH;
+  if (!manifestFilepath) {
+    console.error(
+      `${chalk.red("error")} Cannot determine the manifest file path.`
     );
     throw new CLIError("Bundling failed");
   }
@@ -277,6 +286,10 @@ async function bundleFederatedRemote(
       //   args.assetCatalogDest
       // );
     }
+
+    const manifestOutputFilepath = path.join(outputDir, "mf-manifest.json");
+    await fs.copyFile(manifestFilepath, manifestOutputFilepath);
+    console.info(`MF Manifest written to ${manifestOutputFilepath}`);
   } finally {
     // incomplete types - this should be awaited
     await server.end();
