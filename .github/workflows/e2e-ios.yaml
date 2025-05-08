@@ -1,0 +1,62 @@
+name: iOS E2E Tests
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  ios-e2e-tests:
+    timeout-minutes: 90
+    runs-on: macos-latest
+    env:
+      RUBY_VERSION: 2.7.6
+      MAESTRO_VERSION: 1.39.13
+      MAESTRO_DRIVER_STARTUP_TIMEOUT: 360000
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ env.RUBY_VERSION }}
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install dependencies
+        run: yarn install
+
+      - name: Cache Pods (Host)
+        uses: actions/cache@v3
+        with:
+          path: apps/host/ios/Pods
+          key: ${{ runner.os }}-pods-${{ hashFiles('apps/host/ios/Podfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-pods-
+
+      - name: Install Pods
+        run: yarn pods
+        working-directory: apps/host
+        shell: bash
+
+      - name: Install Maestro CLI and iOS Utilities
+        run: |
+          curl -Ls "https://get.maestro.mobile.dev" | bash
+          brew tap facebook/fb
+          brew install facebook/fb/idb-companion
+          echo "${HOME}/.maestro/bin" >> $GITHUB_PATH
+        shell: bash
+
+      - name: Run iOS E2E Tests
+        run: |
+          yarn dev &
+          yarn workspace host ios
+          yarn workspace e2e test
+        shell: bash
