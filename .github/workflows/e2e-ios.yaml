@@ -39,7 +39,7 @@ jobs:
         run: yarn install
 
       - name: Install Metro dependencies
-        working-directory: exteernal/metro
+        working-directory: external/metro
         run: yarn set version 1.22.22 && yarn install
 
       - name: Cache Pods
