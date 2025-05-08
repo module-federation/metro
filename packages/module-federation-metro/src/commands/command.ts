@@ -217,15 +217,28 @@ async function bundleFederatedRemote(
   }).map(
     ([moduleName, { moduleFilepath: moduleInputFilepath, isContainer }]) => {
       const moduleBundleName = `${moduleName}.bundle`;
-      const moduleBundleOutputFilepath = path.join(outputDir, moduleBundleName);
+      const moduleBundleFilepath = isContainer
+        ? path.join(outputDir, moduleBundleName)
+        : path.join(
+            outputDir,
+            path.dirname(moduleInputFilepath),
+            moduleBundleName
+          );
       // TODO: should this use `file:///` protocol?
-      const moduleBundleUrl = pathToFileURL(moduleBundleOutputFilepath).href;
+      const moduleBundleUrl = pathToFileURL(moduleBundleFilepath).href;
       const moduleSourceMapName = `${moduleBundleName}.map`;
-      const moduleSourceMapFilepath = path.join(outputDir, moduleSourceMapName);
+      const moduleSourceMapFilepath = isContainer
+        ? path.join(outputDir, moduleSourceMapName)
+        : path.join(
+            outputDir,
+            path.dirname(moduleInputFilepath),
+            moduleSourceMapName
+          );
       // TODO: should this use `file:///` protocol?
       const moduleSourceMapUrl = pathToFileURL(moduleSourceMapFilepath).href;
 
       return {
+        targetDir: path.dirname(moduleBundleFilepath),
         requestOpts: getRequestOpts(args, {
           isContainer,
           entryFile: moduleInputFilepath,
@@ -233,7 +246,7 @@ async function bundleFederatedRemote(
           sourceMapUrl: moduleSourceMapUrl,
         }),
         saveBundleOpts: getSaveBundleOpts(args, {
-          bundleOutput: moduleBundleOutputFilepath,
+          bundleOutput: moduleBundleFilepath,
           sourcemapOutput: moduleSourceMapFilepath,
         }),
       };
@@ -243,10 +256,9 @@ async function bundleFederatedRemote(
   const server = new Server(config);
 
   try {
-    // ensure output directory exists
-    await fs.mkdir(outputDir, { recursive: true, mode: 0o755 });
-
-    for (const { requestOpts, saveBundleOpts } of requests) {
+    for (const { requestOpts, saveBundleOpts, targetDir } of requests) {
+      // ensure output directory exists
+      await fs.mkdir(targetDir, { recursive: true, mode: 0o755 });
       const bundle = await buildBundle(server, requestOpts);
       await saveBundleAndMap(bundle, saveBundleOpts, console.info);
 
