@@ -65,7 +65,7 @@ jobs:
 
       - name: Run iOS E2E Tests
         run: |
-          yarn dev &
+          yarn workspaces foreach --all -p run start &
           yarn workspace host ios
           yarn workspace e2e test
         shell: bash
