@@ -107,10 +107,10 @@ function getRequestOpts(
     sourceMapUrl: opts.sourceMapUrl,
     // only use lazy for container bundles
     lazy: opts.isContainer,
+    // only run module for container bundles
+    runModule: opts.isContainer,
     // remove prelude for non-container modules
     modulesOnly: !opts.isContainer,
-    // don't run module for non-container modules
-    runModule: !opts.isContainer,
   };
 }
 
@@ -213,7 +213,7 @@ async function bundleFederatedRemote(
   const outputDir = path.join(config.projectRoot, "dist");
 
   const containerModule = {
-    [federationConfig.name]: {
+    [federationConfig.filename]: {
       moduleFilepath: containerEntryFilepath,
       isContainer: true,
     },
