@@ -1,6 +1,6 @@
 import path from "node:path";
 import fs from "node:fs";
-import type { ConfigT } from "metro-config";
+import type { ConfigT, TransformerConfigT } from "metro-config";
 import generateManifest from "./generate-manifest";
 import createEnhanceMiddleware from "./enhance-middleware";
 import {
@@ -281,6 +281,14 @@ function withModuleFederation(
   const manifest = generateManifest(options);
   fs.writeFileSync(manifestPath, JSON.stringify(manifest, undefined, 2));
 
+  const extraTransformerOptions: Partial<TransformerConfigT> = {};
+  if (process.env.METRO_FEDERATION_DEV) {
+    // use worker stripped from flow types to handle NODE_ENV=production
+    // which disables ad hoc babel transforms through `metro-babel-register`
+    const workerPath = path.resolve(__dirname, "../vendor/metro/Worker.js");
+    extraTransformerOptions.workerPath = workerPath;
+  }
+
   return {
     ...config,
     serializer: {
@@ -297,6 +305,7 @@ function withModuleFederation(
     },
     transformer: {
       ...config.transformer,
+      ...extraTransformerOptions,
       globalPrefix: options.name,
     },
     resolver: {
