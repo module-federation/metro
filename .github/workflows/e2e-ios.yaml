@@ -38,7 +38,7 @@ jobs:
       - name: Install dependencies
         run: yarn install
 
-      - name: Cache Pods (Host)
+      - name: Cache Pods
         uses: actions/cache@v3
         with:
           path: apps/host/ios/Pods
@@ -47,8 +47,8 @@ jobs:
             ${{ runner.os }}-pods-
 
       - name: Install Pods
-        run: yarn pods
-        working-directory: apps/host
+        run: pod install
+        working-directory: apps/host/ios
         shell: bash
 
       - name: Install Maestro CLI and iOS Utilities
