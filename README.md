@@ -47,7 +47,13 @@ yarn set version 1.22.22 && yarn install
 
 ## Development
 
-Run the development servers for both apps:
+Set the `METRO_FEDERATION_DEV` environment variable in your shell:
+
+```bash
+export METRO_FEDERATION_DEV=1
+```
+
+Then, run the development servers for both apps:
 
 ```bash
 yarn dev

@@ -13,7 +13,7 @@ export default function Confetti({ref}: Props) {
     <View pointerEvents="none" style={[styles.container, {width, height}]}>
       <LottieView
         ref={ref}
-        source={require('./confetti.json')}
+        source={require('./confetti-asset.json')}
         style={styles.animation}
         loop={false}
       />

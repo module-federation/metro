@@ -1,8 +1,8 @@
 import type { Manifest, StatsAssets } from "@module-federation/sdk";
-import type { ModuleFederationConfiguration } from "./plugin";
+import type { ModuleFederationConfigNormalized } from "./types";
 
 export default function generateManifest(
-  config: ModuleFederationConfiguration
+  config: ModuleFederationConfigNormalized
 ): Manifest {
   return {
     id: config.name,
@@ -15,7 +15,7 @@ export default function generateManifest(
 }
 
 function generateMetaData(
-  config: ModuleFederationConfiguration
+  config: ModuleFederationConfigNormalized
 ): Manifest["metaData"] {
   return {
     name: config.name,
@@ -42,7 +42,7 @@ function generateMetaData(
 }
 
 function generateRemotes(
-  config: ModuleFederationConfiguration
+  config: ModuleFederationConfigNormalized
 ): Manifest["remotes"] {
   return Object.keys(config.remotes).map((remote) => ({
     federationContainerName: config.remotes[remote],
@@ -53,7 +53,7 @@ function generateRemotes(
 }
 
 function generateShared(
-  config: ModuleFederationConfiguration
+  config: ModuleFederationConfigNormalized
 ): Manifest["shared"] {
   return Object.keys(config.shared).map((shared) => ({
     id: shared,
@@ -67,7 +67,7 @@ function generateShared(
 }
 
 function generateExposes(
-  config: ModuleFederationConfiguration
+  config: ModuleFederationConfigNormalized
 ): Manifest["exposes"] {
   return Object.keys(config.exposes).map((expose) => {
     const formatKey = expose.replace("./", "");

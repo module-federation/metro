@@ -7,36 +7,53 @@ declare global {
       __shareLoading: Promise<void>;
     };
   };
+  var __DEV__: boolean;
   var __METRO_GLOBAL_PREFIX__: string;
   var __loadBundleAsync: (entry: string) => Promise<void>;
 }
+
+const getPublicPath = (url: string) => {
+  return url.split("/").slice(0, -1).join("/");
+};
+
+const buildUrlForEntryBundle = (entry: string) => {
+  if (__DEV__) {
+    return `${entry}?lazy=true`;
+  } else {
+    return entry;
+  }
+};
 
 const MetroCorePlugin: () => FederationRuntimePlugin = () => ({
   name: "metro-core-plugin",
   loadEntry: async ({ remoteInfo }) => {
     const { entry, entryGlobalName } = remoteInfo;
     const loadBundleAsyncGlobalKey = `${
-      globalThis.__METRO_GLOBAL_PREFIX__ ?? ""
+      __METRO_GLOBAL_PREFIX__ ?? ""
     }__loadBundleAsync`;
 
     // @ts-ignore
-    const __loadBundleAsync = globalThis[loadBundleAsyncGlobalKey];
+    const __loadBundleAsync = global[loadBundleAsyncGlobalKey];
 
     const loadBundleAsync =
-      __loadBundleAsync as typeof globalThis.__loadBundleAsync;
+      __loadBundleAsync as typeof global.__loadBundleAsync;
 
     if (!loadBundleAsync) {
       throw new Error("loadBundleAsync is not defined");
     }
 
     try {
-      await loadBundleAsync(entry);
+      const entryUrl = buildUrlForEntryBundle(entry);
+      await loadBundleAsync(entryUrl);
 
-      if (!globalThis.__METRO_FEDERATION__[entryGlobalName]) {
+      if (!global.__METRO_FEDERATION__[entryGlobalName]) {
         throw new Error();
       }
 
-      return globalThis.__METRO_FEDERATION__[entryGlobalName];
+      global.__METRO_FEDERATION__[entryGlobalName].location =
+        getPublicPath(entry);
+
+      return global.__METRO_FEDERATION__[entryGlobalName];
     } catch (error) {
       console.error(
         `Failed to load remote entry: ${entryGlobalName}. Reason: ${error}`

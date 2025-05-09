@@ -1907,11 +1907,11 @@ __metadata:
 
 "@module-federation/runtime-core@patch:@module-federation/runtime-core@npm%3A0.11.4#~/.yarn/patches/@module-federation-runtime-core-npm-0.11.4-46a703d27e.patch":
   version: 0.11.4
-  resolution: "@module-federation/runtime-core@patch:@module-federation/runtime-core@npm%3A0.11.4#~/.yarn/patches/@module-federation-runtime-core-npm-0.11.4-46a703d27e.patch::version=0.11.4&hash=8f5d21"
+  resolution: "@module-federation/runtime-core@patch:@module-federation/runtime-core@npm%3A0.11.4#~/.yarn/patches/@module-federation-runtime-core-npm-0.11.4-46a703d27e.patch::version=0.11.4&hash=5b3cf4"
   dependencies:
     "@module-federation/error-codes": "npm:0.11.4"
     "@module-federation/sdk": "npm:0.11.4"
-  checksum: 10c0/f6dd3f9df9de4bb5678f7ff5e2ca4fd1ee82e6db9edaa626fa075214fb88fccb67998dfdf8f33b061be03d4fbcede69dfb2fcf876face5a0a5cef802bbac15f9
+  checksum: 10c0/e29de899776015c3c2ce74830d7ed2eab3cfbe01be6b9cdeeb04de0e28bd43bb8d0d7fc8ce9e7520efb9ec1f458d0eb4b70668c7bf7131e5eb3be4579319796f
   languageName: node
   linkType: hard
 
@@ -7161,7 +7161,9 @@ __metadata:
   dependencies:
     "@module-federation/runtime": "npm:^0.11.4"
     "@types/node": "npm:^20.0.0"
+    metro: "npm:^0.82.1"
     metro-config: "npm:^0.82.1"
+    metro-source-map: "npm:^0.82.3"
     react-native: "npm:0.79.0"
     ts-node: "npm:^10.9.2"
     typescript: "npm:5.0.4"

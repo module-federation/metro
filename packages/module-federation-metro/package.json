@@ -11,7 +11,9 @@
   "devDependencies": {
     "@module-federation/runtime": "^0.11.4",
     "@types/node": "^20.0.0",
+    "metro": "^0.82.1",
     "metro-config": "^0.82.1",
+    "metro-source-map": "^0.82.3",
     "react-native": "0.79.0",
     "ts-node": "^10.9.2",
     "typescript": "5.0.4"
