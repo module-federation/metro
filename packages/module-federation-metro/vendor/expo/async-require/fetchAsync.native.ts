@@ -55,7 +55,7 @@ export function fetchAsync(
         'asyncRequest',
         url,
         {
-          'expo-platform': process.env.EXPO_OS ?? '',
+          'expo-platform': process.env.EXPO_OS,
         },
         '',
         'text',
