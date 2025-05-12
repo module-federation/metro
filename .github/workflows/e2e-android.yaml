@@ -1,0 +1,58 @@
+name: Android E2E Tests
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  android-e2e-tests:
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    env:
+      ANDROID_EMULATOR_API_LEVEL: 28
+      ANDROID_EMULATOR_TARGET: default
+      ANDROID_EMULATOR_ARCH: x86_64
+      ANDROID_EMULATOR_DISK_SPACE: 1024M
+      ANDROID_EMULATOR_RAM_SIZE: 256M
+      ANDROID_EMULATOR_HEAP_SIZE: 256M
+      ANDROID_EMULATOR_BOOT_TIMEOUT: 2700
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Install dependencies
+        run: yarn install
+
+      - name: Install Metro dependencies
+        working-directory: external/metro
+        run: yarn set version 1.22.22 && yarn install
+
+      - name: Run Android E2E Tests
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: ${{ env.ANDROID_EMULATOR_API_LEVEL }}
+          target: ${{ env.ANDROID_EMULATOR_TARGET }}
+          arch: ${{ env.ANDROID_EMULATOR_ARCH }}
+          disk-size: ${{ env.ANDROID_EMULATOR_DISK_SPACE }}
+          emulator-boot-timeout: ${{ env.ANDROID_EMULATOR_BOOT_TIMEOUT }}
+          force-avd-creation: false
+          disable-animations: true
+          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          script: |
+            yarn workspaces foreach --all -p run start &
+            yarn workspace host android
+            yarn workspace e2e test
