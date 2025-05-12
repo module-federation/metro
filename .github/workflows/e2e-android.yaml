@@ -42,6 +42,14 @@ jobs:
         working-directory: external/metro
         run: yarn set version 1.22.22 && yarn install
 
+      - name: Install Maestro CLI and iOS Utilities
+        run: |
+          curl -Ls "https://get.maestro.mobile.dev" | bash
+          brew tap facebook/fb
+          brew install facebook/fb/idb-companion
+          echo "${HOME}/.maestro/bin" >> $GITHUB_PATH
+        shell: bash
+
       - name: Run Android E2E Tests
         uses: reactivecircus/android-emulator-runner@v2
         with:
