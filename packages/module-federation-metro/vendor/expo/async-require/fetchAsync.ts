@@ -9,10 +9,6 @@ export async function fetchAsync(
 ): Promise<{ body: string; status: number; headers: Headers }> {
   const response = await fetch(url, {
     method: 'GET',
-    headers: {
-      // No real reason for this but we try to use this format for everything.
-      'expo-platform': 'web',
-    },
   });
   return {
     body: await response.text(),
