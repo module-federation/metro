@@ -18,7 +18,9 @@ const getPublicPath = (url: string) => {
 
 const buildUrlForEntryBundle = (entry: string) => {
   if (__DEV__) {
-    return `${entry}?lazy=true`;
+    // inlined by metro
+    const platform = require("react-native").Platform.OS;
+    return `${entry}?platform=${platform}&dev=${true}&lazy=${true}`;
   } else {
     return entry;
   }
