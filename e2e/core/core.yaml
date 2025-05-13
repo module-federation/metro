@@ -1,4 +1,4 @@
-appId: org.reactjs.native.example.host
+appId: ${APP_ID}
 ---
 - launchApp:
     clearState: true
