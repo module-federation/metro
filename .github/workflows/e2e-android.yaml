@@ -93,4 +93,8 @@ jobs:
             yarn workspace host android
             adb reverse tcp:8082 tcp:8082
             yarn workspace e2e test:android
-            adb emu kill || true
+
+      - name: Kill emulator after tests
+        if: always()
+        run: adb emu kill || true
+        shell: bash
