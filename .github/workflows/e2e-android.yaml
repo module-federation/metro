@@ -94,4 +94,5 @@ jobs:
             yarn workspace host android
             adb reverse tcp:8082 tcp:8082
             yarn workspace e2e test:android
+            echo $SERVER_PID
             kill $SERVER_PID

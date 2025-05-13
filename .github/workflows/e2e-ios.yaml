@@ -4,9 +4,10 @@ on:
   push:
     branches:
       - main
-  pull_request:
-    branches:
-      - main
+  # FIXME: Disable for now
+  # pull_request:
+  #   branches:
+  #     - main
 
 jobs:
   ios-e2e-tests:
