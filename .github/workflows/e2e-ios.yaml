@@ -68,5 +68,5 @@ jobs:
         run: |
           yarn workspaces foreach --all -p run start &
           yarn workspace host ios
-          yarn workspace e2e test
+          yarn workspace e2e test:ios
         shell: bash

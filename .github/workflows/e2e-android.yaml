@@ -91,4 +91,5 @@ jobs:
           script: |
             yarn workspaces foreach --all -p run start &
             yarn workspace host android
-            yarn workspace e2e test
+            adb reverse tcp:8082 tcp:8082
+            yarn workspace e2e test:android
