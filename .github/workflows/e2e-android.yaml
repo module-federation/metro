@@ -85,10 +85,13 @@ jobs:
           arch: ${{ env.ANDROID_EMULATOR_ARCH }}
           disk-size: ${{ env.ANDROID_EMULATOR_DISK_SPACE }}
           emulator-boot-timeout: ${{ env.ANDROID_EMULATOR_BOOT_TIMEOUT }}
-          force-avd-creation: false
           disable-animations: true
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
-          script: |
+          script: echo "Emulator started"
+
+      - name: Run tests
+        shell: bash
+        run: |
             yarn workspaces foreach --all -p run start &
             yarn workspace host android
             adb reverse tcp:8082 tcp:8082
