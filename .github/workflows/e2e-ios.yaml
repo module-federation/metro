@@ -64,6 +64,13 @@ jobs:
           echo "${HOME}/.maestro/bin" >> $GITHUB_PATH
         shell: bash
 
+      - name: Upload Maestro Logs on Failure
+        if: failure() # Runs only if any of the previous steps fail
+        uses: actions/upload-artifact@v4
+        with:
+          name: maestro-logs-ios
+          path: ~/.maestro/tests/
+
       - name: Run iOS E2E Tests
         run: |
           yarn start:example &

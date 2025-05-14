@@ -99,6 +99,13 @@ jobs:
             adb reverse tcp:8082 tcp:8082
             yarn workspace example-host e2e
 
+      - name: Upload Maestro Logs on Failure
+        if: failure() # Runs only if any of the previous steps fail
+        uses: actions/upload-artifact@v4
+        with:
+          name: maestro-logs-android
+          path: ~/.maestro/tests/
+
       - name: Stop background process
         if: always()
         run: |
