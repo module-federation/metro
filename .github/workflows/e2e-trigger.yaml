@@ -19,12 +19,12 @@ jobs:
 
       - name: iOS E2E Tests
         if: matrix.platform == 'ios'
-        uses: ./.github/actions/ios-e2e.yaml
+        uses: ./.github/actions/ios-e2e
         with:
           app_name: ${{ matrix.app_name }}
 
       - name: Android E2E Tests
         if: matrix.platform == 'android'
-        uses: ./.github/actions/android-e2e.yaml
+        uses: ./.github/actions/android-e2e
         with:
           app_name: ${{ matrix.app_name }}
