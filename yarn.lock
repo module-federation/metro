@@ -4681,6 +4681,72 @@ __metadata:
   languageName: node
   linkType: hard
 
+"example-host@workspace:apps/example-host":
+  version: 0.0.0-use.local
+  resolution: "example-host@workspace:apps/example-host"
+  dependencies:
+    "@babel/core": "npm:^7.25.2"
+    "@babel/preset-env": "npm:^7.25.3"
+    "@babel/runtime": "npm:^7.25.0"
+    "@module-federation/runtime": "npm:^0.11.4"
+    "@react-native-community/cli": "npm:18.0.0"
+    "@react-native-community/cli-platform-android": "npm:18.0.0"
+    "@react-native-community/cli-platform-ios": "npm:18.0.0"
+    "@react-native/babel-preset": "npm:0.79.0"
+    "@react-native/eslint-config": "npm:0.79.0"
+    "@react-native/metro-config": "npm:0.79.0"
+    "@react-native/typescript-config": "npm:0.79.0"
+    "@types/jest": "npm:^29.5.13"
+    "@types/lodash": "npm:^4"
+    "@types/react": "npm:^19.0.0"
+    "@types/react-test-renderer": "npm:^19.0.0"
+    eslint: "npm:^8.19.0"
+    jest: "npm:^29.6.3"
+    lodash: "npm:4.16.6"
+    lottie-react-native: "npm:^7.2.2"
+    module-federation-metro: "workspace:*"
+    nodemon: "npm:^3.1.9"
+    prettier: "npm:2.8.8"
+    react: "npm:19.0.0"
+    react-native: "npm:0.79.0"
+    react-test-renderer: "npm:19.0.0"
+    typescript: "npm:5.0.4"
+  languageName: unknown
+  linkType: soft
+
+"example-mini@workspace:apps/example-mini":
+  version: 0.0.0-use.local
+  resolution: "example-mini@workspace:apps/example-mini"
+  dependencies:
+    "@babel/core": "npm:^7.25.2"
+    "@babel/preset-env": "npm:^7.25.3"
+    "@babel/runtime": "npm:^7.25.0"
+    "@module-federation/runtime": "npm:^0.11.4"
+    "@react-native-community/cli": "npm:18.0.0"
+    "@react-native-community/cli-platform-android": "npm:18.0.0"
+    "@react-native-community/cli-platform-ios": "npm:18.0.0"
+    "@react-native/babel-preset": "npm:0.79.0"
+    "@react-native/eslint-config": "npm:0.79.0"
+    "@react-native/metro-config": "npm:0.79.0"
+    "@react-native/typescript-config": "npm:0.79.0"
+    "@types/jest": "npm:^29.5.13"
+    "@types/lodash": "npm:^4"
+    "@types/react": "npm:^19.0.0"
+    "@types/react-test-renderer": "npm:^19.0.0"
+    eslint: "npm:^8.19.0"
+    jest: "npm:^29.6.3"
+    lodash: "npm:^4.17.21"
+    lottie-react-native: "npm:^7.2.2"
+    module-federation-metro: "workspace:*"
+    nodemon: "npm:^3.1.9"
+    prettier: "npm:2.8.8"
+    react: "npm:19.0.0"
+    react-native: "npm:0.79.0"
+    react-test-renderer: "npm:19.0.0"
+    typescript: "npm:5.0.4"
+  languageName: unknown
+  linkType: soft
+
 "execa@npm:^5.0.0":
   version: 5.1.1
   resolution: "execa@npm:5.1.1"
@@ -5233,39 +5299,6 @@ __metadata:
   checksum: 10c0/3abaa4c6f1bcc25273f267297a89a4904963ea29af19b8e4f6eabe04f1c2c7e9abd7bfc4730ddb1d58f2ea04b6fee74053d8bddb5656ec6ebf6c79cc8d14202c
   languageName: node
   linkType: hard
-
-"host@workspace:apps/host":
-  version: 0.0.0-use.local
-  resolution: "host@workspace:apps/host"
-  dependencies:
-    "@babel/core": "npm:^7.25.2"
-    "@babel/preset-env": "npm:^7.25.3"
-    "@babel/runtime": "npm:^7.25.0"
-    "@module-federation/runtime": "npm:^0.11.4"
-    "@react-native-community/cli": "npm:18.0.0"
-    "@react-native-community/cli-platform-android": "npm:18.0.0"
-    "@react-native-community/cli-platform-ios": "npm:18.0.0"
-    "@react-native/babel-preset": "npm:0.79.0"
-    "@react-native/eslint-config": "npm:0.79.0"
-    "@react-native/metro-config": "npm:0.79.0"
-    "@react-native/typescript-config": "npm:0.79.0"
-    "@types/jest": "npm:^29.5.13"
-    "@types/lodash": "npm:^4"
-    "@types/react": "npm:^19.0.0"
-    "@types/react-test-renderer": "npm:^19.0.0"
-    eslint: "npm:^8.19.0"
-    jest: "npm:^29.6.3"
-    lodash: "npm:4.16.6"
-    lottie-react-native: "npm:^7.2.2"
-    module-federation-metro: "workspace:*"
-    nodemon: "npm:^3.1.9"
-    prettier: "npm:2.8.8"
-    react: "npm:19.0.0"
-    react-native: "npm:0.79.0"
-    react-test-renderer: "npm:19.0.0"
-    typescript: "npm:5.0.4"
-  languageName: unknown
-  linkType: soft
 
 "html-escaper@npm:^2.0.0":
   version: 2.0.2
@@ -7016,39 +7049,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"mini@workspace:apps/mini":
-  version: 0.0.0-use.local
-  resolution: "mini@workspace:apps/mini"
-  dependencies:
-    "@babel/core": "npm:^7.25.2"
-    "@babel/preset-env": "npm:^7.25.3"
-    "@babel/runtime": "npm:^7.25.0"
-    "@module-federation/runtime": "npm:^0.11.4"
-    "@react-native-community/cli": "npm:18.0.0"
-    "@react-native-community/cli-platform-android": "npm:18.0.0"
-    "@react-native-community/cli-platform-ios": "npm:18.0.0"
-    "@react-native/babel-preset": "npm:0.79.0"
-    "@react-native/eslint-config": "npm:0.79.0"
-    "@react-native/metro-config": "npm:0.79.0"
-    "@react-native/typescript-config": "npm:0.79.0"
-    "@types/jest": "npm:^29.5.13"
-    "@types/lodash": "npm:^4"
-    "@types/react": "npm:^19.0.0"
-    "@types/react-test-renderer": "npm:^19.0.0"
-    eslint: "npm:^8.19.0"
-    jest: "npm:^29.6.3"
-    lodash: "npm:^4.17.21"
-    lottie-react-native: "npm:^7.2.2"
-    module-federation-metro: "workspace:*"
-    nodemon: "npm:^3.1.9"
-    prettier: "npm:2.8.8"
-    react: "npm:19.0.0"
-    react-native: "npm:0.79.0"
-    react-test-renderer: "npm:19.0.0"
-    typescript: "npm:5.0.4"
-  languageName: unknown
-  linkType: soft
-
 "minimatch@npm:^3.0.4, minimatch@npm:^3.0.5, minimatch@npm:^3.1.1, minimatch@npm:^3.1.2":
   version: 3.1.2
   resolution: "minimatch@npm:3.1.2"
@@ -8410,6 +8410,72 @@ __metadata:
   checksum: 10c0/85fdd44f2ad76e723d34eb72c753f04d847ab64e9f1f10677e3f518d0e5b0752a176fd805297b30bb8c3a1556ebe6e77d2288dbd7b7b0110c7e941e9e9c20ce1
   languageName: node
   linkType: hard
+
+"showcase-host@workspace:apps/showcase-host":
+  version: 0.0.0-use.local
+  resolution: "showcase-host@workspace:apps/showcase-host"
+  dependencies:
+    "@babel/core": "npm:^7.25.2"
+    "@babel/preset-env": "npm:^7.25.3"
+    "@babel/runtime": "npm:^7.25.0"
+    "@module-federation/runtime": "npm:^0.11.4"
+    "@react-native-community/cli": "npm:18.0.0"
+    "@react-native-community/cli-platform-android": "npm:18.0.0"
+    "@react-native-community/cli-platform-ios": "npm:18.0.0"
+    "@react-native/babel-preset": "npm:0.79.0"
+    "@react-native/eslint-config": "npm:0.79.0"
+    "@react-native/metro-config": "npm:0.79.0"
+    "@react-native/typescript-config": "npm:0.79.0"
+    "@types/jest": "npm:^29.5.13"
+    "@types/lodash": "npm:^4"
+    "@types/react": "npm:^19.0.0"
+    "@types/react-test-renderer": "npm:^19.0.0"
+    eslint: "npm:^8.19.0"
+    jest: "npm:^29.6.3"
+    lodash: "npm:4.16.6"
+    lottie-react-native: "npm:^7.2.2"
+    module-federation-metro: "workspace:*"
+    nodemon: "npm:^3.1.9"
+    prettier: "npm:2.8.8"
+    react: "npm:19.0.0"
+    react-native: "npm:0.79.0"
+    react-test-renderer: "npm:19.0.0"
+    typescript: "npm:5.0.4"
+  languageName: unknown
+  linkType: soft
+
+"showcase-mini@workspace:apps/showcase-mini":
+  version: 0.0.0-use.local
+  resolution: "showcase-mini@workspace:apps/showcase-mini"
+  dependencies:
+    "@babel/core": "npm:^7.25.2"
+    "@babel/preset-env": "npm:^7.25.3"
+    "@babel/runtime": "npm:^7.25.0"
+    "@module-federation/runtime": "npm:^0.11.4"
+    "@react-native-community/cli": "npm:18.0.0"
+    "@react-native-community/cli-platform-android": "npm:18.0.0"
+    "@react-native-community/cli-platform-ios": "npm:18.0.0"
+    "@react-native/babel-preset": "npm:0.79.0"
+    "@react-native/eslint-config": "npm:0.79.0"
+    "@react-native/metro-config": "npm:0.79.0"
+    "@react-native/typescript-config": "npm:0.79.0"
+    "@types/jest": "npm:^29.5.13"
+    "@types/lodash": "npm:^4"
+    "@types/react": "npm:^19.0.0"
+    "@types/react-test-renderer": "npm:^19.0.0"
+    eslint: "npm:^8.19.0"
+    jest: "npm:^29.6.3"
+    lodash: "npm:^4.17.21"
+    lottie-react-native: "npm:^7.2.2"
+    module-federation-metro: "workspace:*"
+    nodemon: "npm:^3.1.9"
+    prettier: "npm:2.8.8"
+    react: "npm:19.0.0"
+    react-native: "npm:0.79.0"
+    react-test-renderer: "npm:19.0.0"
+    typescript: "npm:5.0.4"
+  languageName: unknown
+  linkType: soft
 
 "side-channel-list@npm:^1.0.0":
   version: 1.0.0

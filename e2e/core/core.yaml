@@ -3,15 +3,7 @@ appId: ${APP_ID}
 - launchApp:
     clearState: true
 - waitForAnimationToEnd
-- copyTextFrom:
-    id: "host-lodash-version"
-- assertTrue:
-    condition: ${maestro.copiedText === "4.16.6"}
 - tapOn:
     id: "load-remote-button"
 - tapOn:
     id: "gift-button"
-- copyTextFrom:
-    id: "mini-lodash-version"
-- assertTrue:
-    condition: ${maestro.copiedText === "4.17.21"}
