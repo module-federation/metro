@@ -50,13 +50,16 @@ runs:
 
     - name: Enable Corepack
       run: corepack enable
+      shell: bash
 
     - name: Install dependencies
       run: yarn install
+      shell: bash
 
     - name: Install Metro dependencies
       working-directory: external/metro
       run: yarn set version 1.22.22 && yarn install
+      shell: bash
 
     - name: Install Maestro CLI
       run: |
