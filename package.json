@@ -8,6 +8,7 @@
     "e2e"
   ],
   "devDependencies": {
+    "serve": "^14.2.4",
     "turbo": "^2.5.0"
   },
   "scripts": {
