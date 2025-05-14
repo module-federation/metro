@@ -7,14 +7,6 @@ inputs:
 
 runs:
   using: "composite"
-  env:
-    ANDROID_EMULATOR_API_LEVEL: 28
-    ANDROID_EMULATOR_TARGET: default
-    ANDROID_EMULATOR_ARCH: x86_64
-    ANDROID_EMULATOR_DISK_SPACE: 1024M
-    ANDROID_EMULATOR_RAM_SIZE: 256M
-    ANDROID_EMULATOR_HEAP_SIZE: 256M
-    ANDROID_EMULATOR_BOOT_TIMEOUT: 2700
   steps:
     - name: Checkout repository
       uses: actions/checkout@v4

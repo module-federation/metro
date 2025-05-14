@@ -7,10 +7,6 @@ inputs:
 
 runs:
   using: "composite"
-  env:
-    RUBY_VERSION: 2.7.6
-    MAESTRO_VERSION: 1.39.13
-    MAESTRO_DRIVER_STARTUP_TIMEOUT: 360000
   steps:
     - name: Checkout repository
       uses: actions/checkout@v4
