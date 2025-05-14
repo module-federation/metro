@@ -79,7 +79,7 @@ jobs:
 
       - name: Start Dev Server
         run: |
-          nohup yarn start:example &
+          nohup yarn workspaces foreach --all -p --include='example-*' run start &
           echo $! > server.pid
         shell: bash
 
@@ -95,7 +95,7 @@ jobs:
           disable-animations: true
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           script: |
-            yarn run:example:android
+            yarn workspace example-host android
             adb reverse tcp:8082 tcp:8082
             yarn workspace example-host e2e
 
