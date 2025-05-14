@@ -10,7 +10,9 @@
     "start": "react-native start --reset-cache --client-logs",
     "pods": "(cd ios && bundle install && bundle exec pod install)",
     "test": "jest",
-    "e2e": "maestro test e2e"
+    "adbreverse": "adb reverse tcp:8082 tcp:8082",
+    "e2e:prepare": "yarn workspace mini run start",
+    "e2e:run": "maestro test e2e"
   },
   "dependencies": {
     "lodash": "4.16.6",

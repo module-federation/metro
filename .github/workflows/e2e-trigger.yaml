@@ -1,0 +1,30 @@
+name: Trigger E2E Tests
+
+on:
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  matrix-run:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        app_name: [example-host]
+        platform: [ios, android]
+  steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: iOS E2E Tests
+      if: matrix.platform == 'ios'
+      uses: ./.github/actions/ios-e2e.yaml
+      with:
+        app_name: ${{ matrix.app_name }}
+
+    - name: Android E2E Tests
+      if: matrix.platform == 'android'
+      uses: ./.github/actions/android-e2e.yaml
+      with:
+        app_name: ${{ matrix.app_name }}
