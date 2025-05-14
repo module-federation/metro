@@ -5,6 +5,8 @@
   "scripts": {
     "android": "react-native run-android",
     "ios": "react-native run-ios",
+    "android:release": "react-native run-android --no-packager --mode 'Release'",
+    "ios:release": "react-native run-ios --no-packager --mode 'Release'",
     "lint": "eslint .",
     "dev": "nodemon --config ../../nodemon.json --exec yarn start",
     "start": "react-native start --reset-cache --client-logs",
