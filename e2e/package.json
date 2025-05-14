@@ -1,7 +1,0 @@
-{
-  "name": "e2e",
-  "scripts": {
-    "test:ios": "maestro test . -e APP_ID=org.reactjs.native.example.host",
-    "test:android": "maestro test . -e APP_ID=com.host"
-  }
-}

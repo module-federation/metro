@@ -1,4 +1,4 @@
-appId: ${APP_ID}
+appId: com.mf.example.host
 ---
 - launchApp:
     clearState: true

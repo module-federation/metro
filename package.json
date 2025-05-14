@@ -4,15 +4,19 @@
   "private": true,
   "workspaces": [
     "packages/*",
-    "apps/*",
-    "e2e"
+    "apps/*"
   ],
   "devDependencies": {
     "serve": "^14.2.4",
     "turbo": "^2.5.0"
   },
   "scripts": {
-    "dev": "turbo dev"
+    "dev": "turbo dev --filter=showcase-host --filter=showcase-mini",
+    "start:example": "turbe dev --filter=example-host --filter=example-mini",
+    "run:showcase:ios": "yarn workspace showcase-host ios",
+    "run:showcase:android": "yarn workspace showcase-host android",
+    "run:example:ios": "yarn workspace example-host ios",
+    "run:example:android": "yarn workspace example-host android"
   },
   "resolutions": {
     "buck-worker-tool": "portal:./external/metro/packages/buck-worker-tool",

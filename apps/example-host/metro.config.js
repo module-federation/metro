@@ -21,7 +21,7 @@ const config = {
 module.exports = withModuleFederation(
   mergeConfig(getDefaultConfig(__dirname), config),
   {
-    name: 'host',
+    name: 'MFExampleHost',
     remotes: {
       mini: 'mini@http://localhost:8082/mf-manifest.json',
     },
@@ -43,12 +43,6 @@ module.exports = withModuleFederation(
         eager: false,
         requiredVersion: '4.16.6',
         version: '4.16.6',
-      },
-      'lottie-react-native': {
-        singleton: true,
-        eager: true,
-        requiredVersion: '7.2.2',
-        version: '7.2.2',
       },
     },
     shareStrategy: 'loaded-first',

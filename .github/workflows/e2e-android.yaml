@@ -76,10 +76,10 @@ jobs:
           curl -Ls "https://get.maestro.mobile.dev" | bash
           echo "${HOME}/.maestro/bin" >> $GITHUB_PATH
         shell: bash
-      
+
       - name: Start Dev Server
         run: |
-          nohup yarn workspaces foreach --all -p run start &
+          nohup yarn start:example &
           echo $! > server.pid
         shell: bash
 
@@ -95,9 +95,9 @@ jobs:
           disable-animations: true
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           script: |
-            yarn workspace host android
+            yarn run:example:android
             adb reverse tcp:8082 tcp:8082
-            yarn workspace e2e test:android
+            yarn workspace example-host e2e
 
       - name: Stop background process
         if: always()

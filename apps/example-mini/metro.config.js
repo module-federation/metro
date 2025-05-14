@@ -24,7 +24,6 @@ module.exports = withModuleFederation(
     filename: 'mini.js',
     exposes: {
       './button': './src/button.tsx',
-      './confetti': './src/confetti.tsx',
     },
     shared: {
       react: {
@@ -46,13 +45,6 @@ module.exports = withModuleFederation(
         eager: false,
         requiredVersion: '^4.17.21',
         version: '4.17.21',
-      },
-      'lottie-react-native': {
-        singleton: true,
-        eager: false,
-        requiredVersion: '7.2.2',
-        version: '7.2.2',
-        import: false,
       },
     },
     shareStrategy: 'loaded-first',

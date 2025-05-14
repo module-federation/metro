@@ -4263,12 +4263,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"e2e@workspace:e2e":
-  version: 0.0.0-use.local
-  resolution: "e2e@workspace:e2e"
-  languageName: unknown
-  linkType: soft
-
 "eastasianwidth@npm:^0.2.0":
   version: 0.2.0
   resolution: "eastasianwidth@npm:0.2.0"
@@ -4845,7 +4839,6 @@ __metadata:
     eslint: "npm:^8.19.0"
     jest: "npm:^29.6.3"
     lodash: "npm:4.16.6"
-    lottie-react-native: "npm:^7.2.2"
     module-federation-metro: "workspace:*"
     nodemon: "npm:^3.1.9"
     prettier: "npm:2.8.8"
@@ -4878,7 +4871,6 @@ __metadata:
     eslint: "npm:^8.19.0"
     jest: "npm:^29.6.3"
     lodash: "npm:^4.17.21"
-    lottie-react-native: "npm:^7.2.2"
     module-federation-metro: "workspace:*"
     nodemon: "npm:^3.1.9"
     prettier: "npm:2.8.8"

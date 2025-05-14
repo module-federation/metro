@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-               BuildableName = "host.app"
-               BlueprintName = "host"
-               ReferencedContainer = "container:host.xcodeproj">
+               BuildableName = "MFExampleHost.app"
+               BlueprintName = "MFExampleHost"
+               ReferencedContainer = "container:MFExampleHost.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "00E356ED1AD99517003FC87E"
-               BuildableName = "hostTests.xctest"
-               BlueprintName = "hostTests"
-               ReferencedContainer = "container:host.xcodeproj">
+               BuildableName = "MFExampleHostTests.xctest"
+               BlueprintName = "MFExampleHostTests"
+               ReferencedContainer = "container:MFExampleHost.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -55,9 +55,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "host.app"
-            BlueprintName = "host"
-            ReferencedContainer = "container:host.xcodeproj">
+            BuildableName = "MFExampleHost.app"
+            BlueprintName = "MFExampleHost"
+            ReferencedContainer = "container:MFExampleHost.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -72,9 +72,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "host.app"
-            BlueprintName = "host"
-            ReferencedContainer = "container:host.xcodeproj">
+            BuildableName = "MFExampleHost.app"
+            BlueprintName = "MFExampleHost"
+            ReferencedContainer = "container:MFExampleHost.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

@@ -41,8 +41,6 @@ const styles = StyleSheet.create({
   miniappCaption: {
     paddingVertical: 12,
     paddingHorizontal: 16,
-    borderWidth: 2,
-    borderColor: 'rgba(255, 255, 255, 0.1)',
     borderRadius: 16,
     borderBottomLeftRadius: 0,
     borderBottomRightRadius: 0,
