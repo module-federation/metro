@@ -69,8 +69,7 @@ runs:
 
     - name: E2E Prepare Script
       run: |
-        yarn workspace ${{ inputs.app_name }} run start &
-        yarn workspace ${{ inputs.app_name }} run e2e:prepare &
+        yarn workspace ${{ inputs.app_name }} e2e:prepare &
       shell: bash
 
     - name: Run Android E2E Tests
@@ -85,7 +84,7 @@ runs:
         disable-animations: true
         emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
         script: |
-          yarn workspace ${{ inputs.app_name }} android
+          yarn workspace ${{ inputs.app_name }} android:release
           yarn workspace ${{ inputs.app_name }} adbreverse
           yarn workspace ${{ inputs.app_name }} e2e:run
 

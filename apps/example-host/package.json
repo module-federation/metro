@@ -13,7 +13,8 @@
     "pods": "(cd ios && bundle install && bundle exec pod install)",
     "test": "jest",
     "adbreverse": "adb reverse tcp:8082 tcp:8082",
-    "e2e:prepare": "yarn workspace example-mini run start",
+    "e2e:prepare:ios": "yarn workspace example-mini run serve:ios",
+    "e2e:prepare:android": "yarn workspace example-mini run serve:android",
     "e2e:run": "maestro test e2e"
   },
   "dependencies": {

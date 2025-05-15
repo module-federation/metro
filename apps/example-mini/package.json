@@ -8,7 +8,12 @@
     "lint": "eslint .",
     "dev": "nodemon --config ../../nodemon.json --exec yarn start",
     "start": "react-native start --port 8082",
-    "test": "jest"
+    "test": "jest",
+    "build:ios": "react-native bundle-mf-remote --platform ios",
+    "build:android": "react-native bundle-mf-remote --platform android",
+    "serve": "serve dist -p 8082",
+    "serve:ios": "yarn build:ios && yarn serve",
+    "serve:android": "yarn build:android && yarn serve"
   },
   "dependencies": {
     "lodash": "^4.17.21",
@@ -37,6 +42,7 @@
     "nodemon": "^3.1.9",
     "prettier": "2.8.8",
     "react-test-renderer": "19.0.0",
+    "serve": "^14.2.4",
     "typescript": "5.0.4"
   },
   "engines": {
