@@ -60,7 +60,7 @@ runs:
 
     - name: Run iOS E2E Tests
       run: |
-        yarn workspace ${{ inputs.app_name }} e2e:prepare &
+        yarn workspace ${{ inputs.app_name }} e2e:prepare:ios &
         yarn workspace ${{ inputs.app_name }} ios:release
         yarn workspace ${{ inputs.app_name }} e2e:run
       shell: bash
