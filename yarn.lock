@@ -2286,7 +2286,7 @@ __metadata:
 
 "@react-native/community-cli-plugin@patch:@react-native/community-cli-plugin@npm%3A0.79.0#~/.yarn/patches/@react-native-community-cli-plugin-npm-0.79.0-d467a2c1a8.patch":
   version: 0.79.0
-  resolution: "@react-native/community-cli-plugin@patch:@react-native/community-cli-plugin@npm%3A0.79.0#~/.yarn/patches/@react-native-community-cli-plugin-npm-0.79.0-d467a2c1a8.patch::version=0.79.0&hash=6d9b53"
+  resolution: "@react-native/community-cli-plugin@patch:@react-native/community-cli-plugin@npm%3A0.79.0#~/.yarn/patches/@react-native-community-cli-plugin-npm-0.79.0-d467a2c1a8.patch::version=0.79.0&hash=4b5b48"
   dependencies:
     "@react-native/dev-middleware": "npm:0.79.0"
     chalk: "npm:^4.0.0"
@@ -2301,7 +2301,7 @@ __metadata:
   peerDependenciesMeta:
     "@react-native-community/cli":
       optional: true
-  checksum: 10c0/04b8c9eb5d6a88414c3ed414ba9234378dbed9c3ac0a4b32723f9b5716802303dc9da7bd607bb91c0678bb0154f68f5a609468b009d0c5de0846d72e74467d8a
+  checksum: 10c0/8f3ea6681477b7f7680b11296cac1f5363495fd88d8cca810fcf8651e91658306dabe6b89a2c92e0122d8efc1ec5001029e4fe7c3674ec1034a609a0af4aa779
   languageName: node
   linkType: hard
 
