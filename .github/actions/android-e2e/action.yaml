@@ -69,7 +69,7 @@ runs:
 
     - name: E2E Prepare Script
       run: |
-        nohup yarn workspace ${{ inputs.app_name }} e2e:prepare:android &
+        yarn workspace ${{ inputs.app_name }} e2e:prepare:android &
       shell: bash
 
     - name: Run Android E2E Tests
