@@ -20,3 +20,15 @@ index 0f9977969bd44f9f418dd1ad7d054250097c547e..9ef78a997bfef177a623102531959d5a
    let sourceMapUrl = args.sourcemapOutput;
    if (sourceMapUrl != null && !args.sourcemapUseAbsolutePath) {
      sourceMapUrl = _path.default.basename(sourceMapUrl);
+diff --git a/dist/utils/loadMetroConfig.js b/dist/utils/loadMetroConfig.js
+index c0749e111d342611631c3eedc9c757936e8ff225..1405ad2b05d99120225563827aaddf07cdc35018 100644
+--- a/dist/utils/loadMetroConfig.js
++++ b/dist/utils/loadMetroConfig.js
+@@ -33,6 +33,7 @@ function getOverrideConfig(ctx, config) {
+     resolver,
+     serializer: {
+       getModulesRunBeforeMainModule: () => [
++        ...(config.serializer?.getModulesRunBeforeMainModule?.() || []),
+         require.resolve(
+           _path.default.join(
+             ctx.reactNativePath,
