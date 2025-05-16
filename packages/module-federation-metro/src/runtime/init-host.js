@@ -1,4 +1,4 @@
-import { loadSharedToRegistry } from "mf:shared-registry";
+import { loadSharedToRegistrySync } from "mf:shared-registry";
 import { init } from "@module-federation/runtime";
 
 __PLUGINS__;
@@ -31,6 +31,4 @@ global.__METRO_FEDERATION__[__NAME__].__shareInit = Promise.all(
   })
 );
 
-global.__METRO_FEDERATION__[__NAME__].__shareLoading = Promise.all(
-  Object.keys(usedShared).map(loadSharedToRegistry)
-);
+Object.keys(usedShared).map(loadSharedToRegistrySync);
