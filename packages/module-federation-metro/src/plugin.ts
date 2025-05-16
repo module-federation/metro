@@ -15,7 +15,10 @@ declare global {
   var __METRO_FEDERATION_MANIFEST_PATH: string | undefined;
 }
 
-function getSharedString(options: ModuleFederationConfigNormalized) {
+function getSharedString(
+  options: ModuleFederationConfigNormalized,
+  forceEager: boolean = false
+) {
   const shared = Object.keys(options.shared).reduce((acc, name) => {
     acc[name] = `__SHARED_${name}__`;
     return acc;
@@ -23,8 +26,8 @@ function getSharedString(options: ModuleFederationConfigNormalized) {
 
   let sharedString = JSON.stringify(shared);
   Object.keys(options.shared).forEach((name) => {
-    // @ts-ignore
-    const entry = createSharedModuleEntry(name, options.shared[name]);
+    const sharedConfig = options.shared[name];
+    const entry = createSharedModuleEntry(name, sharedConfig, forceEager);
     sharedString = sharedString.replaceAll(`"__SHARED_${name}__"`, entry);
   });
 
@@ -35,7 +38,8 @@ function getInitHostModule(options: ModuleFederationConfigNormalized) {
   const initHostPath = require.resolve("./runtime/init-host.js");
   let initHostModule = fs.readFileSync(initHostPath, "utf-8");
 
-  const sharedString = getSharedString(options);
+  // force all shared modules in host to be eager
+  const sharedString = getSharedString(options, true);
 
   // Replace placeholders with actual values
   initHostModule = initHostModule
@@ -60,23 +64,49 @@ function getSharedRegistryModule(options: ModuleFederationConfigNormalized) {
   return sharedRegistryModule;
 }
 
-function createSharedModuleEntry(name: string, options: SharedConfig) {
-  const template = {
+interface SharedModuleTemplate {
+  version: string;
+  scope: string;
+  get?: string;
+  lib?: string;
+  shareConfig: {
+    singleton: boolean;
+    eager: boolean;
+    requiredVersion: string;
+  };
+}
+
+function createSharedModuleEntry(
+  name: string,
+  options: SharedConfig,
+  forceEager: boolean
+) {
+  const template: SharedModuleTemplate = {
     version: options.version,
     scope: "default",
-    get: "__GET_PLACEHOLDER__",
     shareConfig: {
       singleton: options.singleton,
       eager: options.eager,
       requiredVersion: options.requiredVersion,
     },
   };
+
+  if (options.eager || forceEager) {
+    template.lib = `__LIB_PLACEHOLDER__`;
+    template.get = `__GET_SYNC_PLACEHOLDER__`;
+  } else {
+    template.get = `__GET_ASYNC_PLACEHOLDER__`;
+  }
+
   const templateString = JSON.stringify(template);
 
-  return templateString.replaceAll(
-    '"__GET_PLACEHOLDER__"',
-    `() => () => require("${name}")`
-  );
+  return templateString
+    .replaceAll('"__LIB_PLACEHOLDER__"', `() => require("${name}")`)
+    .replaceAll('"__GET_SYNC_PLACEHOLDER__"', `() => () => require("${name}")`)
+    .replaceAll(
+      '"__GET_ASYNC_PLACEHOLDER__"',
+      `async () => import("${name}").then((m) => () => m)`
+    );
 }
 
 function getSharedModule(name: string) {
