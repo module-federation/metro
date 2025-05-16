@@ -3,6 +3,13 @@ import { loadShare, loadShareSync } from "@module-federation/runtime";
 const registry = {};
 const loading = {};
 
+function cloneModule(module, target) {
+  Object.getOwnPropertyNames(module).forEach((key) => {
+    const descriptor = Object.getOwnPropertyDescriptor(module, key);
+    Object.defineProperty(target, key, descriptor);
+  });
+}
+
 export async function loadSharedToRegistryAsync(id) {
   const promise = loading[id];
   if (promise) {
@@ -12,10 +19,7 @@ export async function loadSharedToRegistryAsync(id) {
     loading[id] = (async () => {
       const factory = await loadShare(id);
       const sharedModule = factory();
-      Object.getOwnPropertyNames(sharedModule).forEach((key) => {
-        const descriptor = Object.getOwnPropertyDescriptor(sharedModule, key);
-        Object.defineProperty(registry[id], key, descriptor);
-      });
+      cloneModule(sharedModule, registry[id]);
     })();
   }
 }
