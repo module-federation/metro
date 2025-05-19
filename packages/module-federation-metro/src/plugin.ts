@@ -69,20 +69,8 @@ function getSharedRegistryModule(options: ModuleFederationConfigNormalized) {
   return sharedRegistryModule;
 }
 
-interface SharedModuleTemplate {
-  version: string;
-  scope: string;
-  get?: string;
-  lib?: string;
-  shareConfig: {
-    singleton: boolean;
-    eager: boolean;
-    requiredVersion: string;
-  };
-}
-
 function createSharedModuleEntry(name: string, options: SharedConfig) {
-  const template: SharedModuleTemplate = {
+  const template = {
     version: options.version,
     scope: "default",
     shareConfig: {
@@ -90,13 +78,10 @@ function createSharedModuleEntry(name: string, options: SharedConfig) {
       eager: options.eager,
       requiredVersion: options.requiredVersion,
     },
+    get: options.eager
+      ? `__GET_SYNC_PLACEHOLDER__`
+      : `__GET_ASYNC_PLACEHOLDER__`,
   };
-
-  if (options.eager) {
-    template.get = `__GET_SYNC_PLACEHOLDER__`;
-  } else {
-    template.get = `__GET_ASYNC_PLACEHOLDER__`;
-  }
 
   const templateString = JSON.stringify(template);
 
