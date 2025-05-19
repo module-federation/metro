@@ -41,11 +41,19 @@ function getInitHostModule(options: ModuleFederationConfigNormalized) {
   // force all shared modules in host to be eager
   const sharedString = getSharedString(options, true);
 
+  // must be loaded synchronously at all times
+  const syncSharedDeps = ["react", "react-native"];
+  const asyncSharedDeps = Object.keys(options.shared).filter(
+    (name) => !syncSharedDeps.includes(name)
+  );
+
   // Replace placeholders with actual values
   initHostModule = initHostModule
     .replaceAll("__NAME__", JSON.stringify(options.name))
     .replaceAll("__REMOTES__", generateRemotes(options.remotes))
     .replaceAll("__SHARED__", sharedString)
+    .replaceAll("__SYNC_SHARED_DEPS__", JSON.stringify(syncSharedDeps))
+    .replaceAll("__ASYNC_SHARED_DEPS__", JSON.stringify(asyncSharedDeps))
     .replaceAll("__PLUGINS__", generateRuntimePlugins(options.plugins))
     .replaceAll("__SHARE_STRATEGY__", JSON.stringify(options.shareStrategy));
 
@@ -92,7 +100,6 @@ function createSharedModuleEntry(
   };
 
   if (options.eager || forceEager) {
-    template.lib = `__LIB_PLACEHOLDER__`;
     template.get = `__GET_SYNC_PLACEHOLDER__`;
   } else {
     template.get = `__GET_ASYNC_PLACEHOLDER__`;
@@ -101,7 +108,6 @@ function createSharedModuleEntry(
   const templateString = JSON.stringify(template);
 
   return templateString
-    .replaceAll('"__LIB_PLACEHOLDER__"', `() => require("${name}")`)
     .replaceAll('"__GET_SYNC_PLACEHOLDER__"', `() => () => require("${name}")`)
     .replaceAll(
       '"__GET_ASYNC_PLACEHOLDER__"',

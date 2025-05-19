@@ -51,22 +51,7 @@ async function init(shared = {}, initScope = []) {
     })
   );
 
-  // load eager shared modules
-  const eagerSharedModules = Object.entries(usedShared)
-    .filter(([, shared]) => shared.shareConfig.eager)
-    .map(([name]) => loadSharedToRegistryAsync(name));
-
-  // load shared modules loaded in host
-  const scope = initRes.shareScopeMap[shareScopeName];
-  const loadedSharedModules = Object.entries(scope)
-    .filter(([, versions]) =>
-      Object.values(versions)
-        .map((shared) => shared.loaded)
-        .some(Boolean)
-    )
-    .map(([sharedName]) => loadSharedToRegistryAsync(sharedName));
-
-  await Promise.all([...eagerSharedModules, ...loadedSharedModules]);
+  await Promise.all(Object.keys(shared).map(loadSharedToRegistryAsync));
 
   return initRes;
 }

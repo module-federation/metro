@@ -4,7 +4,7 @@ export default function (): FederationRuntimePlugin {
   return {
     name: 'custom-plugin-build',
     beforeLoadShare(args) {
-      console.log('[build time inject] beforeLoadShare');
+      console.log('[build time inject] beforeLoadShare', args.pkgName);
       return args;
     },
   };

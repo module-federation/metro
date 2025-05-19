@@ -21,6 +21,7 @@ export async function loadSharedToRegistryAsync(id) {
       const sharedModule = factory();
       cloneModule(sharedModule, registry[id]);
     })();
+    return loading[id];
   }
 }
 
