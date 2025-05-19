@@ -15,10 +15,7 @@ declare global {
   var __METRO_FEDERATION_MANIFEST_PATH: string | undefined;
 }
 
-function getSharedString(
-  options: ModuleFederationConfigNormalized,
-  forceEager: boolean = false
-) {
+function getSharedString(options: ModuleFederationConfigNormalized) {
   const shared = Object.keys(options.shared).reduce((acc, name) => {
     acc[name] = `__SHARED_${name}__`;
     return acc;
@@ -27,7 +24,7 @@ function getSharedString(
   let sharedString = JSON.stringify(shared);
   Object.keys(options.shared).forEach((name) => {
     const sharedConfig = options.shared[name];
-    const entry = createSharedModuleEntry(name, sharedConfig, forceEager);
+    const entry = createSharedModuleEntry(name, sharedConfig);
     sharedString = sharedString.replaceAll(`"__SHARED_${name}__"`, entry);
   });
 
@@ -39,7 +36,7 @@ function getInitHostModule(options: ModuleFederationConfigNormalized) {
   let initHostModule = fs.readFileSync(initHostPath, "utf-8");
 
   // force all shared modules in host to be eager
-  const sharedString = getSharedString(options, true);
+  const sharedString = getSharedString(options);
 
   // must be loaded synchronously at all times
   const syncSharedDeps = ["react", "react-native"];
@@ -84,11 +81,7 @@ interface SharedModuleTemplate {
   };
 }
 
-function createSharedModuleEntry(
-  name: string,
-  options: SharedConfig,
-  forceEager: boolean
-) {
+function createSharedModuleEntry(name: string, options: SharedConfig) {
   const template: SharedModuleTemplate = {
     version: options.version,
     scope: "default",
@@ -99,7 +92,7 @@ function createSharedModuleEntry(
     },
   };
 
-  if (options.eager || forceEager) {
+  if (options.eager) {
     template.get = `__GET_SYNC_PLACEHOLDER__`;
   } else {
     template.get = `__GET_ASYNC_PLACEHOLDER__`;
@@ -245,6 +238,15 @@ function normalizeOptions(
   options: ModuleFederationConfig
 ): ModuleFederationConfigNormalized {
   const filename = options.filename ?? "remoteEntry.js";
+
+  // force all shared modules in host to be eager
+  const shared = options.shared ?? {};
+  if (!options.exposes) {
+    Object.keys(shared).forEach((sharedName) => {
+      shared[sharedName].eager = true;
+    });
+  }
+
   // this is different from the default share strategy in mf-core
   // it makes more sense to have loaded-first as default on mobile
   // in order to avoid longer TTI upon app startup
@@ -255,7 +257,7 @@ function normalizeOptions(
     filename,
     remotes: options.remotes ?? {},
     exposes: options.exposes ?? {},
-    shared: options.shared ?? {},
+    shared,
     shareStrategy,
     plugins: options.plugins ?? [],
   };
