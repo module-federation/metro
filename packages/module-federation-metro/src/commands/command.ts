@@ -9,6 +9,7 @@ import type { ModuleFederationConfigNormalized } from "../types";
 import loadMetroConfig from "./utils/loadMetroConfig";
 import relativizeSerializedMap from "./utils/relativizeSerializedMap";
 import { CLIError } from "./utils/cliError";
+import { createResolver } from "./utils/createResolver";
 
 declare global {
   var __METRO_FEDERATION_CONFIG: ModuleFederationConfigNormalized;
@@ -31,6 +32,14 @@ export type BundleCommandArgs = {
   resetCache?: boolean;
   config?: string;
 };
+
+interface ModuleDescriptor {
+  [moduleName: string]: {
+    isContainer?: boolean;
+    moduleFilepath: string;
+    targetDir?: string;
+  };
+}
 
 interface BundleRequestOptions extends RequestOptions {
   lazy: boolean;
@@ -209,10 +218,13 @@ async function bundleFederatedRemote(
     process.env.NODE_ENV = args.dev ? "development" : "production";
   }
 
+  const server = new Server(config);
+  const resolver = await createResolver(server, args.platform);
+
   // TODO: make this configurable
   const outputDir = path.join(config.projectRoot, "dist");
 
-  const containerModule = {
+  const containerModule: ModuleDescriptor = {
     [federationConfig.filename]: {
       moduleFilepath: containerEntryFilepath,
       isContainer: true,
@@ -225,33 +237,55 @@ async function bundleFederatedRemote(
       moduleFilepath,
     ])
     .reduce((acc, [moduleName, moduleFilepath]) => {
-      acc[moduleName] = { moduleFilepath, isContainer: false };
+      acc[moduleName] = {
+        moduleFilepath,
+        targetDir: "exposed",
+        isContainer: false,
+      };
       return acc;
-    }, {} as Record<string, { moduleFilepath: string; isContainer: boolean }>);
+    }, {} as ModuleDescriptor);
+
+  // TODO: we might detect if the dependency is native and skip emitting the bundle altogether
+  const sharedModules = Object.entries(federationConfig.shared)
+    .filter(([, sharedConfig]) => {
+      return !sharedConfig.eager && sharedConfig.import !== false;
+    })
+    .reduce((acc, [moduleName]) => {
+      const moduleFilepath = resolver.resolve(
+        containerEntryFilepath,
+        moduleName
+      );
+      acc[moduleName] = {
+        moduleFilepath,
+        targetDir: "shared",
+        isContainer: false,
+      };
+      return acc;
+    }, {} as ModuleDescriptor);
 
   const requests = Object.entries({
     ...containerModule,
     ...exposedModules,
+    ...sharedModules,
   }).map(
-    ([moduleName, { moduleFilepath: moduleInputFilepath, isContainer }]) => {
+    ([
+      moduleName,
+      {
+        moduleFilepath: moduleInputFilepath,
+        isContainer = false,
+        targetDir = ".",
+      },
+    ]) => {
       const moduleBundleName = `${moduleName}.bundle`;
       const moduleBundleFilepath = isContainer
-        ? path.join(outputDir, moduleBundleName)
-        : path.join(
-            outputDir,
-            path.dirname(moduleInputFilepath),
-            moduleBundleName
-          );
+        ? path.resolve(outputDir, moduleBundleName)
+        : path.resolve(outputDir, targetDir, moduleBundleName);
       // TODO: should this use `file:///` protocol?
       const moduleBundleUrl = pathToFileURL(moduleBundleFilepath).href;
       const moduleSourceMapName = `${moduleBundleName}.map`;
       const moduleSourceMapFilepath = isContainer
-        ? path.join(outputDir, moduleSourceMapName)
-        : path.join(
-            outputDir,
-            path.dirname(moduleInputFilepath),
-            moduleSourceMapName
-          );
+        ? path.resolve(outputDir, moduleSourceMapName)
+        : path.resolve(outputDir, targetDir, moduleSourceMapName);
       // TODO: should this use `file:///` protocol?
       const moduleSourceMapUrl = pathToFileURL(moduleSourceMapFilepath).href;
 
@@ -270,8 +304,6 @@ async function bundleFederatedRemote(
       };
     }
   );
-
-  const server = new Server(config);
 
   try {
     console.info(
