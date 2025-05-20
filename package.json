@@ -10,7 +10,7 @@
     "turbo": "^2.5.0"
   },
   "scripts": {
-    "dev": "turbo dev"
+    "dev": "turbo dev --filter=showcase-host --filter=showcase-mini"
   },
   "resolutions": {
     "buck-worker-tool": "portal:./external/metro/packages/buck-worker-tool",
