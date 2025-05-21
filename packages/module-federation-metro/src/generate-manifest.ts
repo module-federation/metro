@@ -58,7 +58,9 @@ function generateShared(
   return Object.keys(config.shared).map((sharedName) => {
     const assets = getEmptyAssets();
 
-    if (config.shared[sharedName].import !== false) {
+    if (config.shared[sharedName].eager) {
+      assets.js.sync.push(`${config.filename}.bundle`);
+    } else if (config.shared[sharedName].import !== false) {
       assets.js.sync.push(`shared/${sharedName}.bundle`);
     }
 
