@@ -51,7 +51,7 @@ interface BundleRequestOptions extends RequestOptions {
   sourceUrl: string;
 }
 
-function createResolveRequestInterceptor() {
+function createResolveRequestInterceptor(entry: string) {
   const interceptors = new Map<string, string>();
 
   return {
@@ -61,7 +61,8 @@ function createResolveRequestInterceptor() {
     removeInterceptor(originalPath: string) {
       interceptors.delete(originalPath);
     },
-    intercept(resolved: Resolution): Resolution {
+    intercept(origin: string, resolved: Resolution): Resolution {
+      if (origin !== entry) return resolved;
       if (!("filePath" in resolved)) return resolved;
       if (!interceptors.has(resolved.filePath)) return resolved;
       const overridePath = interceptors.get(resolved.filePath)!;
@@ -243,13 +244,17 @@ async function bundleFederatedRemote(
 
   // wrap the resolveRequest with our own interceptor
   // to replace the paths of remote/shared modules
-  const resolveInterceptor = createResolveRequestInterceptor();
+  const resolveInterceptor = createResolveRequestInterceptor(
+    containerEntryFilepath
+  );
   const config = mergeConfig(rawConfig, {
     resolver: {
       resolveRequest: (context, moduleName, platform) => {
-        const __resolveRequest = rawConfig.resolver!.resolveRequest!;
-        const res = __resolveRequest(context, moduleName, platform);
-        return resolveInterceptor.intercept(res);
+        // always defined since we define it in the MF plugin
+        const originalResolveRequest = rawConfig.resolver!.resolveRequest!;
+        const origin = context.originModulePath;
+        const res = originalResolveRequest(context, moduleName, platform);
+        return resolveInterceptor.intercept(origin, res);
       },
     },
   });
