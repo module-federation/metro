@@ -3,6 +3,8 @@ import { pathToFileURL } from "node:url";
 import chalk from "chalk";
 import { promises as fs } from "fs";
 import type { Config } from "@react-native-community/cli-types";
+import type { Resolution } from "metro-resolver";
+import { mergeConfig } from "metro";
 import Server from "metro/src/Server";
 import type { RequestOptions, OutputOptions } from "metro/src/shared/types";
 import type { ModuleFederationConfigNormalized } from "../types";
@@ -36,7 +38,8 @@ export type BundleCommandArgs = {
 interface ModuleDescriptor {
   [moduleName: string]: {
     isContainer?: boolean;
-    moduleFilepath: string;
+    moduleInputFilepath: string;
+    moduleOutputDir: string;
     targetDir?: string;
   };
 }
@@ -46,6 +49,26 @@ interface BundleRequestOptions extends RequestOptions {
   modulesOnly: boolean;
   runModule: boolean;
   sourceUrl: string;
+}
+
+function createResolveRequestInterceptor() {
+  const interceptors = new Map<string, string>();
+
+  return {
+    addInterceptor(originalPath: string, overridePath: string) {
+      interceptors.set(originalPath, overridePath);
+    },
+    removeInterceptor(originalPath: string) {
+      interceptors.delete(originalPath);
+    },
+    intercept(resolved: Resolution): Resolution {
+      if (!("filePath" in resolved)) return resolved;
+      if (!interceptors.has(resolved.filePath)) return resolved;
+      const overridePath = interceptors.get(resolved.filePath)!;
+      console.log("intercept", resolved.filePath, overridePath);
+      return { filePath: overridePath, type: resolved.type };
+    },
+  };
 }
 
 async function buildBundle(server: Server, requestOpts: BundleRequestOptions) {
@@ -147,7 +170,7 @@ async function bundleFederatedRemote(
   ctx: Config,
   args: BundleCommandArgs
 ): Promise<void> {
-  const config = await loadMetroConfig(ctx, {
+  const rawConfig = await loadMetroConfig(ctx, {
     maxWorkers: args.maxWorkers,
     resetCache: args.resetCache,
     config: args.config,
@@ -189,7 +212,7 @@ async function bundleFederatedRemote(
     throw new CLIError("Bundling failed");
   }
 
-  if (config.resolver.platforms.indexOf(args.platform) === -1) {
+  if (rawConfig.resolver.platforms.indexOf(args.platform) === -1) {
     console.error(
       `${chalk.red("error")}: Invalid platform ${
         args.platform ? `"${chalk.bold(args.platform)}" ` : ""
@@ -197,7 +220,7 @@ async function bundleFederatedRemote(
     );
 
     console.info(
-      `Available platforms are: ${config.resolver.platforms
+      `Available platforms are: ${rawConfig.resolver.platforms
         .map((x) => `"${chalk.bold(x)}"`)
         .join(
           ", "
@@ -218,6 +241,19 @@ async function bundleFederatedRemote(
     process.env.NODE_ENV = args.dev ? "development" : "production";
   }
 
+  // wrap the resolveRequest with our own interceptor
+  // to replace the paths of remote/shared modules
+  const resolveInterceptor = createResolveRequestInterceptor();
+  const config = mergeConfig(rawConfig, {
+    resolver: {
+      resolveRequest: (context, moduleName, platform) => {
+        const __resolveRequest = rawConfig.resolver!.resolveRequest!;
+        const res = __resolveRequest(context, moduleName, platform);
+        return resolveInterceptor.intercept(res);
+      },
+    },
+  });
+
   const server = new Server(config);
   const resolver = await createResolver(server, args.platform);
 
@@ -226,7 +262,8 @@ async function bundleFederatedRemote(
 
   const containerModule: ModuleDescriptor = {
     [federationConfig.filename]: {
-      moduleFilepath: containerEntryFilepath,
+      moduleInputFilepath: containerEntryFilepath,
+      moduleOutputDir: outputDir,
       isContainer: true,
     },
   };
@@ -236,10 +273,10 @@ async function bundleFederatedRemote(
       moduleName.slice(2),
       moduleFilepath,
     ])
-    .reduce((acc, [moduleName, moduleFilepath]) => {
+    .reduce((acc, [moduleName, moduleInputFilepath]) => {
       acc[moduleName] = {
-        moduleFilepath,
-        targetDir: "exposed",
+        moduleInputFilepath,
+        moduleOutputDir: path.join(outputDir, "exposed"),
         isContainer: false,
       };
       return acc;
@@ -251,13 +288,13 @@ async function bundleFederatedRemote(
       return !sharedConfig.eager && sharedConfig.import !== false;
     })
     .reduce((acc, [moduleName]) => {
-      const moduleFilepath = resolver.resolve(
+      const inputFilepath = resolver.resolve(
         containerEntryFilepath,
         moduleName
       );
       acc[moduleName] = {
-        moduleFilepath,
-        targetDir: "shared",
+        moduleInputFilepath: inputFilepath,
+        moduleOutputDir: path.join(outputDir, "shared"),
         isContainer: false,
       };
       return acc;
@@ -270,24 +307,29 @@ async function bundleFederatedRemote(
   }).map(
     ([
       moduleName,
-      {
-        moduleFilepath: moduleInputFilepath,
-        isContainer = false,
-        targetDir = ".",
-      },
+      { moduleInputFilepath, moduleOutputDir, isContainer = false },
     ]) => {
       const moduleBundleName = `${moduleName}.bundle`;
-      const moduleBundleFilepath = isContainer
-        ? path.resolve(outputDir, moduleBundleName)
-        : path.resolve(outputDir, targetDir, moduleBundleName);
+      const moduleBundleFilepath = path.resolve(
+        moduleOutputDir,
+        moduleBundleName
+      );
       // TODO: should this use `file:///` protocol?
       const moduleBundleUrl = pathToFileURL(moduleBundleFilepath).href;
       const moduleSourceMapName = `${moduleBundleName}.map`;
-      const moduleSourceMapFilepath = isContainer
-        ? path.resolve(outputDir, moduleSourceMapName)
-        : path.resolve(outputDir, targetDir, moduleSourceMapName);
+      const moduleSourceMapFilepath = path.resolve(
+        moduleOutputDir,
+        moduleSourceMapName
+      );
       // TODO: should this use `file:///` protocol?
       const moduleSourceMapUrl = pathToFileURL(moduleSourceMapFilepath).href;
+
+      if (!isContainer) {
+        resolveInterceptor.addInterceptor(
+          moduleInputFilepath,
+          path.relative(outputDir, moduleBundleFilepath)
+        );
+      }
 
       return {
         targetDir: path.dirname(moduleBundleFilepath),
