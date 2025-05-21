@@ -1,0 +1,9 @@
+appId: com.mf.example.host
+---
+- launchApp:
+    clearState: true
+- waitForAnimationToEnd
+- tapOn:
+    id: "load-remote-button"
+- tapOn:
+    id: "gift-button"
