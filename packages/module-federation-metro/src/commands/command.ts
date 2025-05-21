@@ -51,23 +51,30 @@ interface BundleRequestOptions extends RequestOptions {
   sourceUrl: string;
 }
 
-function createResolveRequestInterceptor(entry: string) {
-  const interceptors = new Map<string, string>();
+function createModulePathRemapper() {
+  const mappings = new Map<string, string>();
+  const reverseMappings = new Map<string, string>();
 
   return {
-    addInterceptor(originalPath: string, overridePath: string) {
-      interceptors.set(originalPath, overridePath);
+    addMapping(originalPath: string, overridePath: string) {
+      mappings.set(originalPath, overridePath);
+      reverseMappings.set(overridePath, originalPath);
     },
-    removeInterceptor(originalPath: string) {
-      interceptors.delete(originalPath);
+    removeMapping(originalPath: string) {
+      const overridePath = mappings.get(originalPath);
+      if (!overridePath) return;
+      mappings.delete(originalPath);
+      reverseMappings.delete(overridePath);
     },
-    intercept(origin: string, resolved: Resolution): Resolution {
-      if (origin !== entry) return resolved;
+    remap(resolved: Resolution): Resolution {
       if (!("filePath" in resolved)) return resolved;
-      if (!interceptors.has(resolved.filePath)) return resolved;
-      const overridePath = interceptors.get(resolved.filePath)!;
-      console.log("intercept", resolved.filePath, overridePath);
+      if (!mappings.has(resolved.filePath)) return resolved;
+      const overridePath = mappings.get(resolved.filePath)!;
       return { filePath: overridePath, type: resolved.type };
+    },
+    reverse(overridePath: string) {
+      if (!reverseMappings.has(overridePath)) return overridePath;
+      return reverseMappings.get(overridePath)!;
     },
   };
 }
@@ -242,19 +249,30 @@ async function bundleFederatedRemote(
     process.env.NODE_ENV = args.dev ? "development" : "production";
   }
 
-  // wrap the resolveRequest with our own interceptor
+  // wrap the resolveRequest with our own remapper
   // to replace the paths of remote/shared modules
-  const resolveInterceptor = createResolveRequestInterceptor(
-    containerEntryFilepath
-  );
+  const modulePathRemapper = createModulePathRemapper();
+
   const config = mergeConfig(rawConfig, {
     resolver: {
+      // remap the paths of remote & shared modules to prevent raw project paths
+      // ending up in the bundles e.g. ../../node_modules/lodash.js -> shared/lodash.js
       resolveRequest: (context, moduleName, platform) => {
         // always defined since we define it in the MF plugin
         const originalResolveRequest = rawConfig.resolver!.resolveRequest!;
         const origin = context.originModulePath;
         const res = originalResolveRequest(context, moduleName, platform);
-        return resolveInterceptor.intercept(origin, res);
+        return modulePathRemapper.remap(res);
+      },
+    },
+    serializer: {
+      // since we override the paths of split modules, we need to remap the module ids
+      // back to the original paths, so that they point to correct modules in runtime
+      // note: the split modules become separate entrypoints, and entrypoints are not
+      // resolved using the metro resolver, so the only way is to remap the module ids
+      createModuleIdFactory: () => {
+        const factory = rawConfig.serializer.createModuleIdFactory();
+        return (path: string) => factory(modulePathRemapper.reverse(path));
       },
     },
   });
@@ -263,7 +281,7 @@ async function bundleFederatedRemote(
   const resolver = await createResolver(server, args.platform);
 
   // TODO: make this configurable
-  const outputDir = path.join(config.projectRoot, "dist");
+  const outputDir = path.resolve(config.projectRoot, "dist");
 
   const containerModule: ModuleDescriptor = {
     [federationConfig.filename]: {
@@ -280,8 +298,11 @@ async function bundleFederatedRemote(
     ])
     .reduce((acc, [moduleName, moduleInputFilepath]) => {
       acc[moduleName] = {
-        moduleInputFilepath,
-        moduleOutputDir: path.join(outputDir, "exposed"),
+        moduleInputFilepath: path.resolve(
+          config.projectRoot,
+          moduleInputFilepath
+        ),
+        moduleOutputDir: path.resolve(outputDir, "exposed"),
         isContainer: false,
       };
       return acc;
@@ -299,7 +320,7 @@ async function bundleFederatedRemote(
       );
       acc[moduleName] = {
         moduleInputFilepath: inputFilepath,
-        moduleOutputDir: path.join(outputDir, "shared"),
+        moduleOutputDir: path.resolve(outputDir, "shared"),
         isContainer: false,
       };
       return acc;
@@ -330,7 +351,7 @@ async function bundleFederatedRemote(
       const moduleSourceMapUrl = pathToFileURL(moduleSourceMapFilepath).href;
 
       if (!isContainer) {
-        resolveInterceptor.addInterceptor(
+        modulePathRemapper.addMapping(
           moduleInputFilepath,
           path.relative(outputDir, moduleBundleFilepath)
         );
@@ -380,7 +401,7 @@ async function bundleFederatedRemote(
     }
 
     console.info(`${chalk.blue("Processing manifest")}`);
-    const manifestOutputFilepath = path.join(outputDir, "mf-manifest.json");
+    const manifestOutputFilepath = path.resolve(outputDir, "mf-manifest.json");
     await fs.copyFile(manifestFilepath, manifestOutputFilepath);
     console.info(`Done writing MF Manifest to ${manifestOutputFilepath}`);
   } finally {
