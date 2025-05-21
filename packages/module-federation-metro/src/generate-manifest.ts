@@ -55,15 +55,23 @@ function generateRemotes(
 function generateShared(
   config: ModuleFederationConfigNormalized
 ): Manifest["shared"] {
-  return Object.keys(config.shared).map((shared) => ({
-    id: shared,
-    name: shared,
-    version: config.shared[shared].version,
-    requiredVersion: config.shared[shared].requiredVersion,
-    singleton: config.shared[shared].singleton,
-    hash: "",
-    assets: getEmptyAssets(),
-  }));
+  return Object.keys(config.shared).map((sharedName) => {
+    const assets = getEmptyAssets();
+
+    if (config.shared[sharedName].import !== false) {
+      assets.js.sync.push(`shared/${sharedName}.bundle`);
+    }
+
+    return {
+      id: sharedName,
+      name: sharedName,
+      version: config.shared[sharedName].version,
+      requiredVersion: config.shared[sharedName].requiredVersion,
+      singleton: config.shared[sharedName].singleton,
+      hash: "",
+      assets,
+    };
+  });
 }
 
 function generateExposes(
