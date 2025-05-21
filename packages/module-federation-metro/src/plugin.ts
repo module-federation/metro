@@ -1,6 +1,6 @@
 import path from "node:path";
 import fs from "node:fs";
-import type { ConfigT, TransformerConfigT } from "metro-config";
+import type { ConfigT } from "metro-config";
 import generateManifest from "./generate-manifest";
 import createEnhanceMiddleware from "./enhance-middleware";
 import {
@@ -35,7 +35,6 @@ function getInitHostModule(options: ModuleFederationConfigNormalized) {
   const initHostPath = require.resolve("./runtime/init-host.js");
   let initHostModule = fs.readFileSync(initHostPath, "utf-8");
 
-  // force all shared modules in host to be eager
   const sharedString = getSharedString(options);
 
   // must be loaded synchronously at all times
