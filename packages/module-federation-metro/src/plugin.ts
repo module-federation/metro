@@ -215,7 +215,7 @@ function normalizeOptions(
   const shareStrategy = options.shareStrategy ?? "loaded-first";
 
   return {
-    name: options.name,
+    name: options.name.replace(/-/g, "_"),
     filename,
     remotes: options.remotes ?? {},
     exposes: options.exposes ?? {},
