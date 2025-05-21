@@ -37,10 +37,9 @@ export type BundleCommandArgs = {
 
 interface ModuleDescriptor {
   [moduleName: string]: {
-    isContainer?: boolean;
+    isContainerModule?: boolean;
     moduleInputFilepath: string;
     moduleOutputDir: string;
-    targetDir?: string;
   };
 }
 
@@ -104,7 +103,7 @@ async function saveBundleAndMap(
 function getRequestOpts(
   args: BundleCommandArgs,
   opts: {
-    isContainer: boolean;
+    isContainerModule: boolean;
     entryFile: string;
     sourceUrl: string;
     sourceMapUrl: string;
@@ -118,11 +117,11 @@ function getRequestOpts(
     sourceUrl: opts.sourceUrl,
     sourceMapUrl: opts.sourceMapUrl,
     // only use lazy for container bundles
-    lazy: opts.isContainer,
+    lazy: opts.isContainerModule,
     // only run module for container bundles
-    runModule: opts.isContainer,
+    runModule: opts.isContainerModule,
     // remove prelude for non-container modules
-    modulesOnly: !opts.isContainer,
+    modulesOnly: !opts.isContainerModule,
   };
 }
 
@@ -258,7 +257,7 @@ async function bundleFederatedRemote(
     [federationConfig.filename]: {
       moduleInputFilepath: containerEntryFilepath,
       moduleOutputDir: outputDir,
-      isContainer: true,
+      isContainerModule: true,
     },
   };
 
@@ -274,7 +273,7 @@ async function bundleFederatedRemote(
           moduleInputFilepath
         ),
         moduleOutputDir: path.resolve(outputDir, "exposed"),
-        isContainer: false,
+        isContainerModule: false,
       };
       return acc;
     }, {} as ModuleDescriptor);
@@ -292,7 +291,7 @@ async function bundleFederatedRemote(
       acc[moduleName] = {
         moduleInputFilepath: inputFilepath,
         moduleOutputDir: path.resolve(outputDir, "shared"),
-        isContainer: false,
+        isContainerModule: false,
       };
       return acc;
     }, {} as ModuleDescriptor);
@@ -304,7 +303,7 @@ async function bundleFederatedRemote(
   }).map(
     ([
       moduleName,
-      { moduleInputFilepath, moduleOutputDir, isContainer = false },
+      { moduleInputFilepath, moduleOutputDir, isContainerModule = false },
     ]) => {
       const moduleBundleName = `${moduleName}.bundle`;
       const moduleBundleFilepath = path.resolve(
@@ -321,7 +320,7 @@ async function bundleFederatedRemote(
       // TODO: should this use `file:///` protocol?
       const moduleSourceMapUrl = pathToFileURL(moduleSourceMapFilepath).href;
 
-      if (!isContainer) {
+      if (!isContainerModule) {
         modulePathRemapper.addMapping(
           moduleInputFilepath,
           path.relative(outputDir, moduleBundleFilepath)
@@ -331,7 +330,7 @@ async function bundleFederatedRemote(
       return {
         targetDir: path.dirname(moduleBundleFilepath),
         requestOpts: getRequestOpts(args, {
-          isContainer,
+          isContainerModule,
           entryFile: moduleInputFilepath,
           sourceUrl: moduleBundleUrl,
           sourceMapUrl: moduleSourceMapUrl,
