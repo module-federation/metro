@@ -17,5 +17,8 @@
     "react-native": "0.79.0",
     "ts-node": "^10.9.2",
     "typescript": "5.0.4"
+  },
+  "dependencies": {
+    "is-identifier": "^1.0.1"
   }
 }

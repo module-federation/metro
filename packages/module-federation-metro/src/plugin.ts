@@ -8,6 +8,7 @@ import {
   ModuleFederationConfig,
   ModuleFederationConfigNormalized,
 } from "./types";
+import isIdentifier from "is-identifier";
 
 declare global {
   var __METRO_FEDERATION_CONFIG: ModuleFederationConfigNormalized;
@@ -233,6 +234,11 @@ function withModuleFederation(
   const isRemote = !isHost;
 
   const options = normalizeOptions(federationOptions);
+
+  // check if the name is a valid identifier
+  if (!isIdentifier(options.name)) {
+    throw new Error("[Module Federation]: `options.name` must be a valid JavaScript identifier");
+  }
 
   const projectNodeModulesPath = path.resolve(
     config.projectRoot,
