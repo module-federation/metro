@@ -3,7 +3,6 @@ import { pathToFileURL } from "node:url";
 import chalk from "chalk";
 import { promises as fs } from "fs";
 import type { Config } from "@react-native-community/cli-types";
-import type { Resolution } from "metro-resolver";
 import { mergeConfig } from "metro";
 import Server from "metro/src/Server";
 import type { RequestOptions, OutputOptions } from "metro/src/shared/types";
@@ -12,6 +11,7 @@ import loadMetroConfig from "./utils/loadMetroConfig";
 import relativizeSerializedMap from "./utils/relativizeSerializedMap";
 import { CLIError } from "./utils/cliError";
 import { createResolver } from "./utils/createResolver";
+import { createModulePathRemapper } from "./utils/createModulePathRemapper";
 
 declare global {
   var __METRO_FEDERATION_CONFIG: ModuleFederationConfigNormalized;
@@ -49,34 +49,6 @@ interface BundleRequestOptions extends RequestOptions {
   modulesOnly: boolean;
   runModule: boolean;
   sourceUrl: string;
-}
-
-function createModulePathRemapper() {
-  const mappings = new Map<string, string>();
-  const reverseMappings = new Map<string, string>();
-
-  return {
-    addMapping(originalPath: string, overridePath: string) {
-      mappings.set(originalPath, overridePath);
-      reverseMappings.set(overridePath, originalPath);
-    },
-    removeMapping(originalPath: string) {
-      const overridePath = mappings.get(originalPath);
-      if (!overridePath) return;
-      mappings.delete(originalPath);
-      reverseMappings.delete(overridePath);
-    },
-    remap(resolved: Resolution): Resolution {
-      if (!("filePath" in resolved)) return resolved;
-      if (!mappings.has(resolved.filePath)) return resolved;
-      const overridePath = mappings.get(resolved.filePath)!;
-      return { filePath: overridePath, type: resolved.type };
-    },
-    reverse(overridePath: string) {
-      if (!reverseMappings.has(overridePath)) return overridePath;
-      return reverseMappings.get(overridePath)!;
-    },
-  };
 }
 
 async function buildBundle(server: Server, requestOpts: BundleRequestOptions) {
@@ -260,7 +232,6 @@ async function bundleFederatedRemote(
       resolveRequest: (context, moduleName, platform) => {
         // always defined since we define it in the MF plugin
         const originalResolveRequest = rawConfig.resolver!.resolveRequest!;
-        const origin = context.originModulePath;
         const res = originalResolveRequest(context, moduleName, platform);
         return modulePathRemapper.remap(res);
       },
