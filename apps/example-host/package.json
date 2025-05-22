@@ -13,7 +13,7 @@
     "pods": "(cd ios && bundle install && bundle exec pod install)",
     "test": "jest",
     "adbreverse": "yarn workspaces foreach --all -p --include=example-mini --include=example-nested-mini run adbreverse",
-    "e2e:prepare:ios": "yarn workspace example-mini run serve:ios",
+    "e2e:prepare:ios": "yarn workspaces foreach --all -p --include=example-mini --include=example-nested-mini run serve:ios",
     "e2e:prepare:android": "yarn workspaces foreach --all -p --include=example-mini --include=example-nested-mini run serve:android",
     "e2e:run": "maestro test e2e"
   },
