@@ -12,10 +12,12 @@ function loadBundleAsyncMFWrapper(bundlePath) {
   }
 
   // resolve the remote bundle path based on the remote location
-  const remoteBundlePath = joinComponents(
-    global.__METRO_FEDERATION__[__METRO_GLOBAL_PREFIX__].location,
-    bundlePath
-  );
+  const remoteBundlePath = bundlePath.match(/^https?:\/\//)
+    ? bundlePath
+    : joinComponents(
+        global.__METRO_FEDERATION__[__METRO_GLOBAL_PREFIX__].location,
+        bundlePath
+      );
 
   return loadBundleAsync(remoteBundlePath);
 }
