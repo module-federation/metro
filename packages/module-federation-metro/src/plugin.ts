@@ -1,6 +1,6 @@
 import path from "node:path";
 import fs from "node:fs";
-import type { ConfigT, TransformerConfigT } from "metro-config";
+import type { ConfigT } from "metro-config";
 import generateManifest from "./generate-manifest";
 import createEnhanceMiddleware from "./enhance-middleware";
 import {
@@ -23,8 +23,8 @@ function getSharedString(options: ModuleFederationConfigNormalized) {
 
   let sharedString = JSON.stringify(shared);
   Object.keys(options.shared).forEach((name) => {
-    // @ts-ignore
-    const entry = createSharedModuleEntry(name, options.shared[name]);
+    const sharedConfig = options.shared[name];
+    const entry = createSharedModuleEntry(name, sharedConfig);
     sharedString = sharedString.replaceAll(`"__SHARED_${name}__"`, entry);
   });
 
@@ -37,11 +37,19 @@ function getInitHostModule(options: ModuleFederationConfigNormalized) {
 
   const sharedString = getSharedString(options);
 
+  // must be loaded synchronously at all times
+  const syncSharedDeps = ["react", "react-native"];
+  const asyncSharedDeps = Object.keys(options.shared).filter(
+    (name) => !syncSharedDeps.includes(name)
+  );
+
   // Replace placeholders with actual values
   initHostModule = initHostModule
     .replaceAll("__NAME__", JSON.stringify(options.name))
     .replaceAll("__REMOTES__", generateRemotes(options.remotes))
     .replaceAll("__SHARED__", sharedString)
+    .replaceAll("__SYNC_SHARED_DEPS__", JSON.stringify(syncSharedDeps))
+    .replaceAll("__ASYNC_SHARED_DEPS__", JSON.stringify(asyncSharedDeps))
     .replaceAll("__PLUGINS__", generateRuntimePlugins(options.plugins))
     .replaceAll("__SHARE_STRATEGY__", JSON.stringify(options.shareStrategy));
 
@@ -64,19 +72,24 @@ function createSharedModuleEntry(name: string, options: SharedConfig) {
   const template = {
     version: options.version,
     scope: "default",
-    get: "__GET_PLACEHOLDER__",
     shareConfig: {
       singleton: options.singleton,
       eager: options.eager,
       requiredVersion: options.requiredVersion,
     },
+    get: options.eager
+      ? `__GET_SYNC_PLACEHOLDER__`
+      : `__GET_ASYNC_PLACEHOLDER__`,
   };
+
   const templateString = JSON.stringify(template);
 
-  return templateString.replaceAll(
-    '"__GET_PLACEHOLDER__"',
-    `() => () => require("${name}")`
-  );
+  return templateString
+    .replaceAll('"__GET_SYNC_PLACEHOLDER__"', `() => () => require("${name}")`)
+    .replaceAll(
+      '"__GET_ASYNC_PLACEHOLDER__"',
+      `async () => import("${name}").then((m) => () => m)`
+    );
 }
 
 function getSharedModule(name: string) {
@@ -209,6 +222,15 @@ function normalizeOptions(
   options: ModuleFederationConfig
 ): ModuleFederationConfigNormalized {
   const filename = options.filename ?? "remoteEntry.js";
+
+  // force all shared modules in host to be eager
+  const shared = options.shared ?? {};
+  if (!options.exposes) {
+    Object.keys(shared).forEach((sharedName) => {
+      shared[sharedName].eager = true;
+    });
+  }
+
   // this is different from the default share strategy in mf-core
   // it makes more sense to have loaded-first as default on mobile
   // in order to avoid longer TTI upon app startup
@@ -219,7 +241,7 @@ function normalizeOptions(
     filename,
     remotes: options.remotes ?? {},
     exposes: options.exposes ?? {},
-    shared: options.shared ?? {},
+    shared,
     shareStrategy,
     plugins: options.plugins ?? [],
   };

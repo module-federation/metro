@@ -1,6 +1,6 @@
 import "mf:async-require-remote";
 
-import { loadSharedToRegistry } from "mf:shared-registry";
+import { loadSharedToRegistryAsync } from "mf:shared-registry";
 import { init as runtimeInit } from "@module-federation/runtime";
 
 __PLUGINS__;
@@ -43,7 +43,7 @@ async function init(shared = {}, initScope = []) {
   initScope.push(initToken);
   initRes.initShareScopeMap(shareScopeName, shared);
 
-  global.__METRO_FEDERATION__[__NAME__].__shareInit = Promise.all(
+  await Promise.all(
     initRes.initializeSharing(shareScopeName, {
       strategy: shareStrategy,
       from: "build",
@@ -51,7 +51,7 @@ async function init(shared = {}, initScope = []) {
     })
   );
 
-  await Promise.all(Object.keys(usedShared).map(loadSharedToRegistry));
+  await Promise.all(Object.keys(shared).map(loadSharedToRegistryAsync));
 
   return initRes;
 }
