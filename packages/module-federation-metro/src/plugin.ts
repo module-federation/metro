@@ -148,19 +148,21 @@ function getRemoteEntryModule(options: ModuleFederationConfigNormalized) {
   const exposes = options.exposes || {};
 
   const exposesString = Object.keys(exposes)
-    .map(
-      (key) =>
-        `"${key}": async () => {
-      const module = await import("../../${exposes[key]}");
+    .map((key) => {
+      const importName = path.relative(".", exposes[key]);
+      const importPath = `../../${importName}`;
 
-      const target = { ...module };
-
-      Object.defineProperty(target, "__esModule", { value: true, enumerable: false });
-
-      return target;
-    }
-    `
-    )
+      return `"${key}": async () => {
+          const module = await import("${importPath}");
+          
+          if (__DEV__) {
+              const hmr = require("mf:remote-hmr");
+              hmr.registerBundle("${importName}");
+          }
+          
+          return module;
+        }`;
+    })
     .join(",");
 
   return remoteEntryModule
@@ -169,6 +171,16 @@ function getRemoteEntryModule(options: ModuleFederationConfigNormalized) {
     .replaceAll("__EXPOSES_MAP__", `{${exposesString}}`)
     .replaceAll("__NAME__", `"${options.name}"`)
     .replaceAll("__SHARE_STRATEGY__", JSON.stringify(options.shareStrategy));
+}
+
+function getRemoteHMRSetupModule() {
+  const remoteHMRSetupTemplatePath = require.resolve("./runtime/remote-hmr.js");
+  let remoteHMRSetupModule = fs.readFileSync(
+    remoteHMRSetupTemplatePath,
+    "utf-8"
+  );
+
+  return remoteHMRSetupModule;
 }
 
 function createInitHostVirtualModule(
@@ -258,11 +270,15 @@ function withModuleFederation(
     ? createInitHostVirtualModule(options, mfMetroPath)
     : null;
 
-  let remoteEntryPath: string | undefined;
+  let remoteEntryPath: string | undefined,
+    remoteHMRSetupPath: string | undefined;
+
   if (isRemote) {
-    const filename = options.filename ?? "remoteEntry.js";
-    remoteEntryPath = path.join(mfMetroPath, filename);
+    remoteEntryPath = path.join(mfMetroPath, options.filename);
     fs.writeFileSync(remoteEntryPath, getRemoteEntryModule(options));
+
+    remoteHMRSetupPath = path.join(mfMetroPath, "remote-hmr.js");
+    fs.writeFileSync(remoteHMRSetupPath, getRemoteHMRSetupModule());
   }
 
   const asyncRequireHostPath = path.resolve(
@@ -316,6 +332,11 @@ function withModuleFederation(
         // virtual module: async-require-remote
         if (moduleName === "mf:async-require-remote") {
           return { type: "sourceFile", filePath: asyncRequireRemotePath };
+        }
+
+        // virtual module: remote-hmr
+        if (moduleName === "mf:remote-hmr") {
+          return { type: "sourceFile", filePath: remoteHMRSetupPath as string };
         }
 
         // virtual module: shared-registry

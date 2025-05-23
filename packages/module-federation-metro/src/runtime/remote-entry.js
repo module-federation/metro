@@ -22,6 +22,8 @@ const shareScopeName = "default";
 const shareStrategy = __SHARE_STRATEGY__;
 const name = __NAME__;
 
+let hmrInitialized = false;
+
 async function init(shared = {}, initScope = []) {
   const initRes = runtimeInit({
     name,
@@ -52,6 +54,13 @@ async function init(shared = {}, initScope = []) {
   );
 
   await Promise.all(Object.keys(usedShared).map(loadSharedToRegistry));
+
+  // setup HMR client after the initializing shared deps
+  if (__DEV__ && !hmrInitialized) {
+    const hmr = require("mf:remote-hmr");
+    hmr.setup();
+    hmrInitialized = true;
+  }
 
   return initRes;
 }

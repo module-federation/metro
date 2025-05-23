@@ -3,6 +3,10 @@ function loadBundleAsyncMFWrapper(bundlePath) {
     return prefix.replace(/\/+$/, "") + "/" + suffix.replace(/^\/+/, "");
   }
 
+  function getPublicPath(url) {
+    return url.split("/").slice(0, -1).join("/");
+  }
+
   // grab the global loadBundleAsync from host
   const loadBundleAsync =
     global[`${global.__METRO_GLOBAL_PREFIX__ ?? ""}__loadBundleAsync`];
@@ -11,9 +15,12 @@ function loadBundleAsyncMFWrapper(bundlePath) {
     throw new Error("loadBundleAsync is not defined in host");
   }
 
-  // resolve the remote bundle path based on the remote location
+  const remoteEntry =
+    global.__METRO_FEDERATION__[__METRO_GLOBAL_PREFIX__].location;
+
+  // resolve the remote bundle path based on the remote public path
   const remoteBundlePath = joinComponents(
-    global.__METRO_FEDERATION__[__METRO_GLOBAL_PREFIX__].location,
+    getPublicPath(remoteEntry),
     bundlePath
   );
 
