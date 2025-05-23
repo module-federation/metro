@@ -1,0 +1,34 @@
+diff --git a/Libraries/Utilities/HMRClient.js b/Libraries/Utilities/HMRClient.js
+index 776056cf527553fb659c0de31ab376342deddb10..5c06361e9d28b448507d6bfc2508a81ef4b96280 100644
+--- a/Libraries/Utilities/HMRClient.js
++++ b/Libraries/Utilities/HMRClient.js
+@@ -100,6 +100,9 @@ const HMRClient: HMRClientNativeInterface = {
+   },
+ 
+   registerBundle(requestUrl: string) {
++    const host = hmrClient._ws.url.split('/hot')[0];
++    // skip registerBundle calls from other hosts
++    if (!requestUrl.startsWith(host)) return;
+     invariant(hmrClient, 'Expected HMRClient.setup() call at startup.');
+     pendingEntryPoints.push(requestUrl);
+     registerBundleEntryPoints(hmrClient);
+@@ -166,13 +169,17 @@ const HMRClient: HMRClientNativeInterface = {
+ 
+     hmrClient = client;
+ 
++    // getDevServer is only useful for the host app
+     const {fullBundleUrl} = getDevServer();
++    const __host = hmrClient._ws.url.split('/hot')[0];
++    const actualBundleUrl = fullBundleUrl.startsWith(__host) ? fullBundleUrl : null
++
+     pendingEntryPoints.push(
+       // HMRServer understands regular bundle URLs, so prefer that in case
+       // there are any important URL parameters we can't reconstruct from
+       // `setup()`'s arguments.
+-      fullBundleUrl ??
+-        `${serverScheme}://${serverHost}/hot?bundleEntry=${bundleEntry}&platform=${platform}`,
++      actualBundleUrl ??
++        `${serverScheme}://${serverHost}/${bundleEntry}`,
+     );
+ 
+     client.on('connection-error', e => {
