@@ -1,18 +1,43 @@
-const path = require('path');
 const commands = require('module-federation-metro/commands');
+const path = require('path');
+const zephyr = require('zephyr-metro-plugin');
+const {loadMetroConfig} = require('module-federation-metro/commands');
 
 async function zephyrWrapper(...args) {
-  console.log(args[1].project);
-  const bundleFederatedRemote = commands[0]['func'];
   // before build
-  console.log('before');
+  console.log('======before======');
+  console.log('zephyrWrapper', args);
+
+  const isDev = args[0][0]['mode'];
+  const platform = args[0][0]['platform'];
+
+  const context = args[1].root;
+
+  const bundleFederatedRemote = commands[0]['func'];
+
+  const loadMetroConfig = commands[1];
+
+  // const rawConfig = await loadMetroConfig(args[1], {
+  //   maxWorkers: args[2].maxWorkers,
+  //   resetCache: args[2].resetCache,
+  //   config: args[2].config,
+  // });
+
+  // console.log('======rawConfig======', rawConfig);
+
+  // await zephyr.zephyrCommandWrapper({
+  //   platform,
+  //   mode: isDev ? 'development' : 'production',
+  //   context,
+  // });
   const res = await bundleFederatedRemote(...args);
-  console.log('after build');
-  return res;
+  console.log('======after build======');
+  console.log('bundleFederatedRemote res', res);
+  // return res;
 }
 
 const zephyrCommand = {
-  name: 'bundle-mf-remote',
+  name: 'bundle',
   description:
     'Bundles a Module Federation remote, including its container entry and all exposed modules for consumption by host applications',
   // @ts-ignore
@@ -83,6 +108,16 @@ const zephyrCommand = {
     {
       name: '--config <string>',
       description: 'Path to the CLI configuration file',
+      parse: val => path.resolve(val),
+    },
+    {
+      name: '--entry-file <string>',
+      description: 'Absolute path to the root JS file',
+      parse: val => path.resolve(val),
+    },
+    {
+      name: '--bundle-output <string>',
+      description: 'Absolute path to the root JS file',
       parse: val => path.resolve(val),
     },
   ],
