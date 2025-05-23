@@ -53,14 +53,27 @@ async function init(shared = {}, initScope = []) {
     })
   );
 
-  await Promise.all(Object.keys(shared).map(loadSharedToRegistryAsync));
+  // TODO we should load only sync shared deps here
+  // non-eager shared deps should be loaded after HMR is initialized
+  await Promise.all(
+    Object.keys(usedShared)
+      .filter((m) => m === "react" || m.startsWith("react-native"))
+      .map(loadSharedToRegistryAsync)
+  );
 
-  // setup HMR client after the initializing shared deps
+  // setup HMR client after the initializing sync shared deps
   if (__DEV__ && !hmrInitialized) {
     const hmr = require("mf:remote-hmr");
     hmr.setup();
     hmrInitialized = true;
   }
+
+  // load non-eager shared deps
+  await Promise.all(
+    Object.keys(shared)
+      .filter((m) => m !== "react" && !m.startsWith("react-native"))
+      .map(loadSharedToRegistryAsync)
+  );
 
   return initRes;
 }
