@@ -154,12 +154,6 @@ function getRemoteEntryModule(options: ModuleFederationConfigNormalized) {
 
       return `"${key}": async () => {
           const module = await import("${importPath}");
-          
-          if (__DEV__) {
-              const hmr = require("mf:remote-hmr");
-              hmr.registerBundle("${importName}");
-          }
-          
           return module;
         }`;
     })
@@ -211,6 +205,8 @@ function createSharedVirtualModules(
   Object.keys(options.shared).forEach((name) => {
     const sharedModule = getSharedModule(name);
     const sharedFilePath = path.join(vmDirPath, "shared", `${name}.js`);
+    // needed for deep imports
+    fs.mkdirSync(path.dirname(sharedFilePath), { recursive: true });
     fs.writeFileSync(sharedFilePath, sharedModule, "utf-8");
     sharedModulesPaths[name] = sharedFilePath;
   });
@@ -374,6 +370,21 @@ function withModuleFederation(
         if (Object.keys(options.shared).includes(moduleName)) {
           const sharedPath = sharedModulesPaths[moduleName];
           return { type: "sourceFile", filePath: sharedPath };
+        }
+
+        // replace getDevServer module in remote with our own implementation
+        if (isRemote && moduleName.includes("getDevServer")) {
+          const res = context.resolveRequest(context, moduleName, platform);
+          if (
+            res.filePath.endsWith(
+              "node_modules/react-native/Libraries/Core/Devtools/getDevServer.js"
+            )
+          ) {
+            return {
+              type: "sourceFile",
+              filePath: path.resolve(__dirname, "../getDevServer.js"),
+            };
+          }
         }
 
         return context.resolveRequest(context, moduleName, platform);
