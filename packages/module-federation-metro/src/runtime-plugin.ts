@@ -1,14 +1,11 @@
 import type { FederationRuntimePlugin } from "@module-federation/runtime";
 
 declare global {
-  var __METRO_FEDERATION__: Record<string, any> & {
-    __HOST__: {
-      __shareInit: Promise<void>;
-      __shareLoading: Promise<void>;
-    };
-  };
   var __DEV__: boolean;
   var __METRO_GLOBAL_PREFIX__: string;
+  var __METRO_FEDERATION__: Record<string, any> & {
+    [key: string]: { __shareInit: Promise<void> };
+  };
   var __FUSEBOX_HAS_FULL_CONSOLE_SUPPORT__: boolean;
   var __loadBundleAsync: (entry: string) => Promise<void>;
 }

@@ -1,4 +1,7 @@
-import { loadSharedToRegistry } from "mf:shared-registry";
+import {
+  loadSharedToRegistrySync,
+  loadSharedToRegistryAsync,
+} from "mf:shared-registry";
 import { init } from "@module-federation/runtime";
 
 __PLUGINS__;
@@ -8,6 +11,9 @@ const usedShared = __SHARED__;
 
 const shareScopeName = "default";
 const shareStrategy = __SHARE_STRATEGY__;
+
+const syncShared = __SYNC_SHARED_DEPS__;
+const asyncShared = __ASYNC_SHARED_DEPS__;
 
 const initRes = init({
   name: __NAME__,
@@ -21,16 +27,12 @@ global.__METRO_FEDERATION__ = global.__METRO_FEDERATION__ || {};
 global.__METRO_FEDERATION__[__NAME__] =
   global.__METRO_FEDERATION__[__NAME__] || {};
 
-global.__METRO_FEDERATION__.__HOST__ = global.__METRO_FEDERATION__[__NAME__];
-
 global.__METRO_FEDERATION__[__NAME__].__shareInit = Promise.all(
   initRes.initializeSharing(shareScopeName, {
     strategy: shareStrategy,
     from: "build",
     initScope: [],
   })
-);
+).then(() => Promise.all(asyncShared.map(loadSharedToRegistryAsync)));
 
-global.__METRO_FEDERATION__[__NAME__].__shareLoading = Promise.all(
-  Object.keys(usedShared).map(loadSharedToRegistry)
-);
+syncShared.forEach(loadSharedToRegistrySync);

@@ -2,10 +2,7 @@ import React from "react";
 
 declare global {
   var __METRO_FEDERATION__: Record<string, any> & {
-    __HOST__: {
-      __shareInit: Promise<void>;
-      __shareLoading: Promise<void>;
-    };
+    [key: string]: { __shareInit: Promise<void> };
   };
 }
 
@@ -22,8 +19,7 @@ export function withAsyncStartup(
   lazyFallbackFn?: () => LazyComponent
 ): () => () => React.JSX.Element {
   const AppComponent = React.lazy(async () => {
-    await global.__METRO_FEDERATION__.__HOST__.__shareInit;
-    await global.__METRO_FEDERATION__.__HOST__.__shareLoading;
+    await global.__METRO_FEDERATION__[__METRO_GLOBAL_PREFIX__].__shareInit;
     return lazyAppFn();
   });
 

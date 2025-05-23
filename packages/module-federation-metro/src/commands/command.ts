@@ -3,12 +3,15 @@ import { pathToFileURL } from "node:url";
 import chalk from "chalk";
 import { promises as fs } from "fs";
 import type { Config } from "@react-native-community/cli-types";
+import { mergeConfig } from "metro";
 import Server from "metro/src/Server";
 import type { RequestOptions, OutputOptions } from "metro/src/shared/types";
 import type { ModuleFederationConfigNormalized } from "../types";
 import loadMetroConfig from "./utils/loadMetroConfig";
 import relativizeSerializedMap from "./utils/relativizeSerializedMap";
 import { CLIError } from "./utils/cliError";
+import { createResolver } from "./utils/createResolver";
+import { createModulePathRemapper } from "./utils/createModulePathRemapper";
 
 declare global {
   var __METRO_FEDERATION_CONFIG: ModuleFederationConfigNormalized;
@@ -31,6 +34,14 @@ export type BundleCommandArgs = {
   resetCache?: boolean;
   config?: string;
 };
+
+interface ModuleDescriptor {
+  [moduleName: string]: {
+    isContainerModule?: boolean;
+    moduleInputFilepath: string;
+    moduleOutputDir: string;
+  };
+}
 
 interface BundleRequestOptions extends RequestOptions {
   lazy: boolean;
@@ -92,7 +103,7 @@ async function saveBundleAndMap(
 function getRequestOpts(
   args: BundleCommandArgs,
   opts: {
-    isContainer: boolean;
+    isContainerModule: boolean;
     entryFile: string;
     sourceUrl: string;
     sourceMapUrl: string;
@@ -106,11 +117,11 @@ function getRequestOpts(
     sourceUrl: opts.sourceUrl,
     sourceMapUrl: opts.sourceMapUrl,
     // only use lazy for container bundles
-    lazy: opts.isContainer,
+    lazy: opts.isContainerModule,
     // only run module for container bundles
-    runModule: opts.isContainer,
+    runModule: opts.isContainerModule,
     // remove prelude for non-container modules
-    modulesOnly: !opts.isContainer,
+    modulesOnly: !opts.isContainerModule,
   };
 }
 
@@ -138,7 +149,7 @@ async function bundleFederatedRemote(
   ctx: Config,
   args: BundleCommandArgs
 ): Promise<void> {
-  const config = await loadMetroConfig(ctx, {
+  const rawConfig = await loadMetroConfig(ctx, {
     maxWorkers: args.maxWorkers,
     resetCache: args.resetCache,
     config: args.config,
@@ -180,7 +191,7 @@ async function bundleFederatedRemote(
     throw new CLIError("Bundling failed");
   }
 
-  if (config.resolver.platforms.indexOf(args.platform) === -1) {
+  if (rawConfig.resolver.platforms.indexOf(args.platform) === -1) {
     console.error(
       `${chalk.red("error")}: Invalid platform ${
         args.platform ? `"${chalk.bold(args.platform)}" ` : ""
@@ -188,7 +199,7 @@ async function bundleFederatedRemote(
     );
 
     console.info(
-      `Available platforms are: ${config.resolver.platforms
+      `Available platforms are: ${rawConfig.resolver.platforms
         .map((x) => `"${chalk.bold(x)}"`)
         .join(
           ", "
@@ -209,13 +220,44 @@ async function bundleFederatedRemote(
     process.env.NODE_ENV = args.dev ? "development" : "production";
   }
 
-  // TODO: make this configurable
-  const outputDir = path.join(config.projectRoot, "dist");
+  // wrap the resolveRequest with our own remapper
+  // to replace the paths of remote/shared modules
+  const modulePathRemapper = createModulePathRemapper();
 
-  const containerModule = {
+  const config = mergeConfig(rawConfig, {
+    resolver: {
+      // remap the paths of remote & shared modules to prevent raw project paths
+      // ending up in the bundles e.g. ../../node_modules/lodash.js -> shared/lodash.js
+      resolveRequest: (context, moduleName, platform) => {
+        // always defined since we define it in the MF plugin
+        const originalResolveRequest = rawConfig.resolver!.resolveRequest!;
+        const res = originalResolveRequest(context, moduleName, platform);
+        return modulePathRemapper.remap(res);
+      },
+    },
+    serializer: {
+      // since we override the paths of split modules, we need to remap the module ids
+      // back to the original paths, so that they point to correct modules in runtime
+      // note: the split modules become separate entrypoints, and entrypoints are not
+      // resolved using the metro resolver, so the only way is to remap the module ids
+      createModuleIdFactory: () => {
+        const factory = rawConfig.serializer.createModuleIdFactory();
+        return (path: string) => factory(modulePathRemapper.reverse(path));
+      },
+    },
+  });
+
+  const server = new Server(config);
+  const resolver = await createResolver(server, args.platform);
+
+  // TODO: make this configurable
+  const outputDir = path.resolve(config.projectRoot, "dist");
+
+  const containerModule: ModuleDescriptor = {
     [federationConfig.filename]: {
-      moduleFilepath: containerEntryFilepath,
-      isContainer: true,
+      moduleInputFilepath: containerEntryFilepath,
+      moduleOutputDir: outputDir,
+      isContainerModule: true,
     },
   };
 
@@ -224,41 +266,71 @@ async function bundleFederatedRemote(
       moduleName.slice(2),
       moduleFilepath,
     ])
-    .reduce((acc, [moduleName, moduleFilepath]) => {
-      acc[moduleName] = { moduleFilepath, isContainer: false };
+    .reduce((acc, [moduleName, moduleInputFilepath]) => {
+      acc[moduleName] = {
+        moduleInputFilepath: path.resolve(
+          config.projectRoot,
+          moduleInputFilepath
+        ),
+        moduleOutputDir: path.resolve(outputDir, "exposed"),
+        isContainerModule: false,
+      };
       return acc;
-    }, {} as Record<string, { moduleFilepath: string; isContainer: boolean }>);
+    }, {} as ModuleDescriptor);
+
+  // TODO: we might detect if the dependency is native and skip emitting the bundle altogether
+  const sharedModules = Object.entries(federationConfig.shared)
+    .filter(([, sharedConfig]) => {
+      return !sharedConfig.eager && sharedConfig.import !== false;
+    })
+    .reduce((acc, [moduleName]) => {
+      const inputFilepath = resolver.resolve(
+        containerEntryFilepath,
+        moduleName
+      );
+      acc[moduleName] = {
+        moduleInputFilepath: inputFilepath,
+        moduleOutputDir: path.resolve(outputDir, "shared"),
+        isContainerModule: false,
+      };
+      return acc;
+    }, {} as ModuleDescriptor);
 
   const requests = Object.entries({
     ...containerModule,
     ...exposedModules,
+    ...sharedModules,
   }).map(
-    ([moduleName, { moduleFilepath: moduleInputFilepath, isContainer }]) => {
+    ([
+      moduleName,
+      { moduleInputFilepath, moduleOutputDir, isContainerModule = false },
+    ]) => {
       const moduleBundleName = `${moduleName}.bundle`;
-      const moduleBundleFilepath = isContainer
-        ? path.join(outputDir, moduleBundleName)
-        : path.join(
-            outputDir,
-            path.dirname(moduleInputFilepath),
-            moduleBundleName
-          );
+      const moduleBundleFilepath = path.resolve(
+        moduleOutputDir,
+        moduleBundleName
+      );
       // TODO: should this use `file:///` protocol?
       const moduleBundleUrl = pathToFileURL(moduleBundleFilepath).href;
       const moduleSourceMapName = `${moduleBundleName}.map`;
-      const moduleSourceMapFilepath = isContainer
-        ? path.join(outputDir, moduleSourceMapName)
-        : path.join(
-            outputDir,
-            path.dirname(moduleInputFilepath),
-            moduleSourceMapName
-          );
+      const moduleSourceMapFilepath = path.resolve(
+        moduleOutputDir,
+        moduleSourceMapName
+      );
       // TODO: should this use `file:///` protocol?
       const moduleSourceMapUrl = pathToFileURL(moduleSourceMapFilepath).href;
+
+      if (!isContainerModule) {
+        modulePathRemapper.addMapping(
+          moduleInputFilepath,
+          path.relative(outputDir, moduleBundleFilepath)
+        );
+      }
 
       return {
         targetDir: path.dirname(moduleBundleFilepath),
         requestOpts: getRequestOpts(args, {
-          isContainer,
+          isContainerModule,
           entryFile: moduleInputFilepath,
           sourceUrl: moduleBundleUrl,
           sourceMapUrl: moduleSourceMapUrl,
@@ -270,8 +342,6 @@ async function bundleFederatedRemote(
       };
     }
   );
-
-  const server = new Server(config);
 
   try {
     console.info(
@@ -301,7 +371,7 @@ async function bundleFederatedRemote(
     }
 
     console.info(`${chalk.blue("Processing manifest")}`);
-    const manifestOutputFilepath = path.join(outputDir, "mf-manifest.json");
+    const manifestOutputFilepath = path.resolve(outputDir, "mf-manifest.json");
     await fs.copyFile(manifestFilepath, manifestOutputFilepath);
     console.info(`Done writing MF Manifest to ${manifestOutputFilepath}`);
   } finally {
