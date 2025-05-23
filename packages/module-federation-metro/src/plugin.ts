@@ -1,6 +1,7 @@
 import path from "node:path";
 import fs from "node:fs";
 import type { ConfigT, TransformerConfigT } from "metro-config";
+import type { Resolution } from "metro-resolver";
 import generateManifest from "./generate-manifest";
 import createEnhanceMiddleware from "./enhance-middleware";
 import {
@@ -213,6 +214,15 @@ function createSharedVirtualModules(
   return sharedModulesPaths;
 }
 
+function replaceModule(from: RegExp, to: string) {
+  return (resolved: Resolution): Resolution => {
+    if (resolved.type === "sourceFile" && from.test(resolved.filePath)) {
+      return { type: "sourceFile", filePath: to };
+    }
+    return resolved;
+  };
+}
+
 function normalizeOptions(
   options: ModuleFederationConfig
 ): ModuleFederationConfigNormalized {
@@ -375,16 +385,10 @@ function withModuleFederation(
         // replace getDevServer module in remote with our own implementation
         if (isRemote && moduleName.includes("getDevServer")) {
           const res = context.resolveRequest(context, moduleName, platform);
-          if (
-            res.filePath.endsWith(
-              "node_modules/react-native/Libraries/Core/Devtools/getDevServer.js"
-            )
-          ) {
-            return {
-              type: "sourceFile",
-              filePath: path.resolve(__dirname, "../getDevServer.js"),
-            };
-          }
+          const from =
+            /react-native\/Libraries\/Core\/Devtools\/getDevServer\.js$/;
+          const to = path.resolve(__dirname, "../getDevServer.js");
+          return replaceModule(from, to)(res);
         }
 
         return context.resolveRequest(context, moduleName, platform);
