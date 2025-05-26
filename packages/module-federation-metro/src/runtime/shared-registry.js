@@ -26,12 +26,12 @@ export async function loadSharedToRegistryAsync(id) {
     await promise;
   } else {
     registry[id] = {};
-    loading[id] = async () => {
+    loading[id] = (async () => {
       const factory = await loadShare(id);
       const sharedModule = factory();
       cloneModule(sharedModule, registry[id]);
-    };
-    await loading[id]();
+    })();
+    await loading[id];
   }
 }
 
