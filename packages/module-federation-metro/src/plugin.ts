@@ -39,18 +39,14 @@ function getInitHostModule(options: ModuleFederationConfigNormalized) {
   const sharedString = getSharedString(options);
 
   // must be loaded synchronously at all times
-  const syncSharedDeps = ["react", "react-native"];
-  const asyncSharedDeps = Object.keys(options.shared).filter(
-    (name) => !syncSharedDeps.includes(name)
-  );
+  const earlySharedDeps = ["react", "react-native"];
 
   // Replace placeholders with actual values
   initHostModule = initHostModule
     .replaceAll("__NAME__", JSON.stringify(options.name))
     .replaceAll("__REMOTES__", generateRemotes(options.remotes))
     .replaceAll("__SHARED__", sharedString)
-    .replaceAll("__SYNC_SHARED_DEPS__", JSON.stringify(syncSharedDeps))
-    .replaceAll("__ASYNC_SHARED_DEPS__", JSON.stringify(asyncSharedDeps))
+    .replaceAll("__EARLY_SHARED__", JSON.stringify(earlySharedDeps))
     .replaceAll("__PLUGINS__", generateRuntimePlugins(options.plugins))
     .replaceAll("__SHARE_STRATEGY__", JSON.stringify(options.shareStrategy));
 
@@ -62,8 +58,8 @@ function getSharedRegistryModule(options: ModuleFederationConfigNormalized) {
   let sharedRegistryModule = fs.readFileSync(sharedRegistryPath, "utf-8");
 
   sharedRegistryModule = sharedRegistryModule.replaceAll(
-    "__NAME__",
-    JSON.stringify(options.name)
+    "__EARLY_MODULE_TEST__",
+    "/^react(-native(\\/|$)|$)/"
   );
 
   return sharedRegistryModule;
@@ -158,6 +154,7 @@ function getRemoteEntryModule(options: ModuleFederationConfigNormalized) {
   let remoteEntryModule = fs.readFileSync(remoteEntryTemplatePath, "utf-8");
 
   const sharedString = getSharedString(options);
+  const earlySharedDeps = ["react", "react-native"];
 
   const exposes = options.exposes || {};
 
@@ -176,6 +173,7 @@ function getRemoteEntryModule(options: ModuleFederationConfigNormalized) {
   return remoteEntryModule
     .replaceAll("__PLUGINS__", generateRuntimePlugins(options.plugins))
     .replaceAll("__SHARED__", sharedString)
+    .replaceAll("__EARLY_SHARED__", JSON.stringify(earlySharedDeps))
     .replaceAll("__EXPOSES_MAP__", `{${exposesString}}`)
     .replaceAll("__NAME__", `"${options.name}"`)
     .replaceAll("__SHARE_STRATEGY__", JSON.stringify(options.shareStrategy));

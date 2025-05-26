@@ -1,12 +1,13 @@
 import "mf:async-require-remote";
 
-import { loadSharedToRegistryAsync } from "mf:shared-registry";
+import { loadSharedToRegistry } from "mf:shared-registry";
 import { init as runtimeInit } from "@module-federation/runtime";
 
 __PLUGINS__;
 
 const usedRemotes = [];
 const usedShared = __SHARED__;
+const earlyShared = __EARLY_SHARED__;
 
 const exposesMap = __EXPOSES_MAP__;
 
@@ -53,13 +54,8 @@ async function init(shared = {}, initScope = []) {
     })
   );
 
-  // TODO we should load only sync shared deps here
-  // non-eager shared deps should be loaded after HMR is initialized
-  await Promise.all(
-    Object.keys(usedShared)
-      .filter((m) => m === "react" || m.startsWith("react-native"))
-      .map(loadSharedToRegistryAsync)
-  );
+  // load early shared deps
+  earlyShared.forEach(loadSharedToRegistry);
 
   // setup HMR client after the initializing sync shared deps
   if (__DEV__ && !hmrInitialized) {
@@ -68,12 +64,8 @@ async function init(shared = {}, initScope = []) {
     hmrInitialized = true;
   }
 
-  // load non-eager shared deps
-  await Promise.all(
-    Object.keys(shared)
-      .filter((m) => m !== "react" && !m.startsWith("react-native"))
-      .map(loadSharedToRegistryAsync)
-  );
+  // load the rest of shared deps
+  await Promise.all(Object.keys(shared).map(loadSharedToRegistry));
 
   return initRes;
 }
