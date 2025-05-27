@@ -1,1 +1,2 @@
-export { default } from "../src/commands";
+import commands from "../src/commands";
+export = commands;

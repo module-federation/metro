@@ -1,12 +1,12 @@
 import type { PluginApi, PluginOutput } from "@rnef/config";
-import { color, logger, intro } from "@rnef/tools";
+import { color, logger } from "@rnef/tools";
 import commands from "module-federation-metro/commands";
 
 interface PluginConfig {
   platforms?: Record<string, object>;
 }
 
-const bundleFederatedRemote = commands.default[0];
+const bundleFederatedRemote = commands[0];
 
 type BundleRemoteArgs = Parameters<(typeof bundleFederatedRemote)["func"]>[2];
 
@@ -26,14 +26,14 @@ export const pluginModuleFederation =
           ...pluginConfig,
         };
 
-        intro(
+        logger.info(
           `Bundling Module Federation remote for platform ${color.cyan(
             args.platform
           )}`
         );
 
         await bundleFederatedRemote.func([], commandConfig, args);
-        logger.info(`Successfully bundled Module Federation remote at ...`);
+        logger.success(`Successfully bundled Module Federation remote at ...`);
       },
       options: bundleFederatedRemote.options,
     });
