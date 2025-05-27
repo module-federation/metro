@@ -1,5 +1,3 @@
-import type { Command } from "@react-native-community/cli-types";
-
 import bundleFederatedRemote from "./command";
 import options from "./options";
 
