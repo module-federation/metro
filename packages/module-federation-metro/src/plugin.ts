@@ -93,10 +93,18 @@ function createSharedModuleEntry(name: string, options: SharedConfig) {
 }
 
 function getSharedModule(name: string) {
-  const sharedTemplatePath = require.resolve("./runtime/shared.js");
+  const sharedTemplatePath = require.resolve("./runtime/shared-module.js");
 
   return fs
     .readFileSync(sharedTemplatePath, "utf-8")
+    .replaceAll("__MODULE_ID__", `"${name}"`);
+}
+
+function getRemoteModule(name: string) {
+  const remoteTemplatePath = require.resolve("./runtime/remote-module.js");
+
+  return fs
+    .readFileSync(remoteTemplatePath, "utf-8")
     .replaceAll("__MODULE_ID__", `"${name}"`);
 }
 
@@ -216,6 +224,24 @@ function createSharedVirtualModules(
     sharedModulesPaths[name] = sharedFilePath;
   });
   return sharedModulesPaths;
+}
+
+function createRemoteModule(name: string, outputDir: string) {
+  const remoteModule = getRemoteModule(name);
+  const remoteFilePath = getRemoteModulePath(name, outputDir);
+  fs.mkdirSync(path.dirname(remoteFilePath), { recursive: true });
+  fs.writeFileSync(remoteFilePath, remoteModule, "utf-8");
+  return remoteFilePath;
+}
+
+function getRemoteModulePath(name: string, outputDir: string) {
+  const remoteModuleName = name.replaceAll("/", "_");
+  const remoteModulePath = path.join(
+    outputDir,
+    "remote",
+    `${remoteModuleName}.js`
+  );
+  return remoteModulePath;
 }
 
 function normalizeOptions(
@@ -375,6 +401,14 @@ function withModuleFederation(
         if (Object.keys(options.shared).includes(moduleName)) {
           const sharedPath = sharedModulesPaths[moduleName];
           return { type: "sourceFile", filePath: sharedPath };
+        }
+
+        // remote modules
+        for (const remote of Object.keys(options.remotes)) {
+          if (moduleName.startsWith(`${remote}/`)) {
+            const remotePath = createRemoteModule(moduleName, mfMetroPath);
+            return { type: "sourceFile", filePath: remotePath };
+          }
         }
 
         return context.resolveRequest(context, moduleName, platform);
