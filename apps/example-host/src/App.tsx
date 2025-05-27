@@ -5,42 +5,74 @@ import {
   StyleSheet,
   ActivityIndicator,
   Pressable,
+  SafeAreaView,
 } from 'react-native';
 import {loadRemote} from '@module-federation/runtime';
+import {VERSION} from 'lodash';
 
 import Card from './Card';
 
 // @ts-ignore
-const Button = React.lazy(() => loadRemote('mini/button'));
+const Info = React.lazy(() => loadRemote('mini/info'));
+
+// @ts-ignore
+const NestedMiniInfo = React.lazy(() =>
+  loadRemote('nestedMini/nestedMiniInfo'),
+);
 
 function App(): React.JSX.Element {
-  const [shouldLoadRemote, setShouldLoadRemote] = useState(false);
+  const [shouldLoadMini, setShouldLoadMini] = useState(false);
 
   return (
     <View style={styles.backgroundStyle}>
-      <View style={styles.darkOverlay} />
+      <SafeAreaView />
       <View style={styles.contentContainer}>
+        <Card title="Host Info" description="Host app info">
+          <React.Suspense
+            fallback={
+              <View>
+                <ActivityIndicator size="large" color="#8b5cf6" />
+              </View>
+            }>
+            <Info
+              testID="host-app-info"
+              sections={[
+                {name: 'lodash version', value: VERSION, testID: 'host-lodash'},
+              ]}
+            />
+          </React.Suspense>
+        </Card>
         <Card title="Federated Remote" description="Dynamically loaded module">
-          {!shouldLoadRemote ? (
+          {!shouldLoadMini ? (
             <Pressable
               style={styles.defaultButton}
-              onPress={() => setShouldLoadRemote(true)}>
-              <Text
-                testID="load-remote-button"
-                style={styles.defaultButtonText}>
+              onPress={() => setShouldLoadMini(true)}>
+              <Text testID="load-mini-button" style={styles.defaultButtonText}>
                 Load Remote Component
               </Text>
             </Pressable>
           ) : (
             <React.Suspense
               fallback={
-                <View style={styles.loadingContainer}>
+                <View>
                   <ActivityIndicator size="large" color="#8b5cf6" />
                 </View>
               }>
-              <Button onPress={() => {}} />
+              <Info />
             </React.Suspense>
           )}
+        </Card>
+        <Card
+          title="Nested Federated Remote"
+          description="Dynamically loaded nested module">
+          <React.Suspense
+            fallback={
+              <View>
+                <ActivityIndicator size="large" color="#8b5cf6" />
+              </View>
+            }>
+            <NestedMiniInfo />
+          </React.Suspense>
         </Card>
       </View>
     </View>
@@ -50,20 +82,11 @@ function App(): React.JSX.Element {
 const styles = StyleSheet.create({
   backgroundStyle: {
     flex: 1,
-  },
-  darkOverlay: {
-    ...StyleSheet.absoluteFillObject,
     backgroundColor: 'rgba(0, 0, 0, 0.65)',
   },
   contentContainer: {
     flex: 1,
     paddingHorizontal: 24,
-  },
-  loadingContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    minHeight: 100,
   },
   defaultButton: {
     backgroundColor: '#000',
