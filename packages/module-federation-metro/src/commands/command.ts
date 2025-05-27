@@ -75,7 +75,7 @@ async function saveBundleAndMap(
   const writeFns = [];
 
   writeFns.push(async () => {
-    log(`Writing bundle output to: ${bundleOutput}`);
+    log(`Writing bundle output to:\n${chalk.dim(bundleOutput)}`);
     await fs.writeFile(bundleOutput, bundle.code, encoding);
     log("Done writing bundle output");
   });
@@ -83,14 +83,14 @@ async function saveBundleAndMap(
   if (sourcemapOutput) {
     let { map } = bundle;
     if (sourcemapSourcesRoot != null) {
-      log("start relativating source map");
+      log("Start relativating source map");
 
       map = relativizeSerializedMap(map, sourcemapSourcesRoot);
-      log("finished relativating");
+      log("Finished relativating");
     }
 
     writeFns.push(async () => {
-      log(`Writing sourcemap output to: ${sourcemapOutput}`);
+      log(`Writing sourcemap output to:\n${chalk.dim(sourcemapOutput)}`);
       await fs.writeFile(sourcemapOutput, map);
       log("Done writing sourcemap output");
     });
@@ -155,13 +155,15 @@ async function bundleFederatedRemote(
     config: args.config,
   });
 
+  const logger = cfg.logger ?? console;
+
   // TODO: pass this without globals
   const federationConfig = global.__METRO_FEDERATION_CONFIG;
   if (!federationConfig) {
-    console.error(
+    logger.error(
       `${chalk.red("error")} Module Federation configuration is missing.`
     );
-    console.info(
+    logger.info(
       "Import the plugin 'withModuleFederation' " +
         "from 'module-federation-metro' package " +
         "and wrap your final Metro config with it."
@@ -173,10 +175,10 @@ async function bundleFederatedRemote(
   // TODO: this should be validated inside the plugin
   const containerEntryFilepath = global.__METRO_FEDERATION_REMOTE_ENTRY_PATH;
   if (!containerEntryFilepath) {
-    console.error(
+    logger.error(
       `${chalk.red("error")} Cannot determine the container entry file path.`
     );
-    console.info(
+    logger.info(
       "To bundle a container, you need to expose at least one module " +
         "in your Module Federation configuration."
     );
@@ -185,20 +187,20 @@ async function bundleFederatedRemote(
 
   const manifestFilepath = global.__METRO_FEDERATION_MANIFEST_PATH;
   if (!manifestFilepath) {
-    console.error(
+    logger.error(
       `${chalk.red("error")} Cannot determine the manifest file path.`
     );
     throw new CLIError("Bundling failed");
   }
 
   if (rawConfig.resolver.platforms.indexOf(args.platform) === -1) {
-    console.error(
+    logger.error(
       `${chalk.red("error")}: Invalid platform ${
         args.platform ? `"${chalk.bold(args.platform)}" ` : ""
       }selected.`
     );
 
-    console.info(
+    logger.info(
       `Available platforms are: ${rawConfig.resolver.platforms
         .map((x) => `"${chalk.bold(x)}"`)
         .join(
@@ -344,7 +346,7 @@ async function bundleFederatedRemote(
   );
 
   try {
-    console.info(
+    logger.info(
       `${chalk.blue("Processing remote container and exposed modules")}`
     );
 
@@ -352,7 +354,7 @@ async function bundleFederatedRemote(
       // ensure output directory exists
       await fs.mkdir(targetDir, { recursive: true, mode: 0o755 });
       const bundle = await buildBundle(server, requestOpts);
-      await saveBundleAndMap(bundle, saveBundleOpts, console.info);
+      await saveBundleAndMap(bundle, saveBundleOpts, logger.info);
 
       // Save the assets of the bundle
       // const outputAssets = await server.getAssets({
@@ -370,10 +372,12 @@ async function bundleFederatedRemote(
       // );
     }
 
-    console.info(`${chalk.blue("Processing manifest")}`);
+    logger.info(`${chalk.blue("Processing manifest")}`);
     const manifestOutputFilepath = path.resolve(outputDir, "mf-manifest.json");
     await fs.copyFile(manifestFilepath, manifestOutputFilepath);
-    console.info(`Done writing MF Manifest to ${manifestOutputFilepath}`);
+    logger.info(
+      `Done writing MF Manifest to:\n${chalk.dim(manifestOutputFilepath)}`
+    );
   } finally {
     // incomplete types - this should be awaited
     await server.end();

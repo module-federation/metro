@@ -1,5 +1,5 @@
 import type { PluginApi, PluginOutput } from "@rnef/config";
-import { color, logger } from "@rnef/tools";
+import { color, logger, outro } from "@rnef/tools";
 import commands from "module-federation-metro/commands";
 
 interface PluginConfig {
@@ -33,7 +33,8 @@ export const pluginModuleFederation =
         );
 
         await bundleFederatedRemote.func([], commandConfig, args);
-        logger.success(`Successfully bundled Module Federation remote at ...`);
+        logger.info("Bundle artifacts available at ...");
+        outro(`Success 🎉.`);
       },
       options: bundleFederatedRemote.options,
     });
