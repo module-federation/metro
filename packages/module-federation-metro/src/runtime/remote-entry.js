@@ -1,12 +1,13 @@
 import "mf:async-require-remote";
 
-import { loadSharedToRegistryAsync } from "mf:shared-registry";
+import { loadSharedToRegistry } from "mf:shared-registry";
 import { init as runtimeInit } from "@module-federation/runtime";
 
 __PLUGINS__;
 
 const usedRemotes = __REMOTES__;
 const usedShared = __SHARED__;
+const earlyShared = __EARLY_SHARED__;
 
 const exposesMap = __EXPOSES_MAP__;
 
@@ -21,6 +22,8 @@ const initTokens = {};
 const shareScopeName = "default";
 const shareStrategy = __SHARE_STRATEGY__;
 const name = __NAME__;
+
+let hmrInitialized = false;
 
 async function init(shared = {}, initScope = []) {
   const initRes = runtimeInit({
@@ -51,7 +54,18 @@ async function init(shared = {}, initScope = []) {
     })
   );
 
-  await Promise.all(Object.keys(shared).map(loadSharedToRegistryAsync));
+  // load early shared deps
+  earlyShared.forEach(loadSharedToRegistry);
+
+  // setup HMR client after the initializing sync shared deps
+  if (__DEV__ && !hmrInitialized) {
+    const hmr = require("mf:remote-hmr");
+    hmr.setup();
+    hmrInitialized = true;
+  }
+
+  // load the rest of shared deps
+  await Promise.all(Object.keys(shared).map(loadSharedToRegistry));
 
   return initRes;
 }
