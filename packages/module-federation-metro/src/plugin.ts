@@ -224,11 +224,9 @@ function createRemoteModuleRegistryModule(
 function createSharedModule(sharedName: string, outputDir: string) {
   const sharedFilePath = getSharedPath(sharedName, outputDir);
   // we need to create the shared module if it doesn't exist
-  if (!fs.existsSync(sharedFilePath)) {
-    const sharedModule = getRemoteModule(sharedName);
-    fs.mkdirSync(path.dirname(sharedFilePath), { recursive: true });
-    fs.writeFileSync(sharedFilePath, sharedModule, "utf-8");
-  }
+  const sharedModule = getRemoteModule(sharedName);
+  fs.mkdirSync(path.dirname(sharedFilePath), { recursive: true });
+  fs.writeFileSync(sharedFilePath, sharedModule, "utf-8");
   return sharedFilePath;
 }
 
@@ -351,6 +349,8 @@ function withModuleFederation(
   global.__METRO_FEDERATION_REMOTE_ENTRY_PATH = remoteEntryPath;
   global.__METRO_FEDERATION_MANIFEST_PATH = manifestPath;
 
+  const createdSharedModules = new Set<string>();
+
   return {
     ...config,
     serializer: {
@@ -435,7 +435,11 @@ function withModuleFederation(
           const importName = options.shared[sharedName].import || sharedName;
           // module import
           if (moduleName === importName) {
-            const sharedPath = createSharedModule(moduleName, mfMetroPath);
+            const sharedPath = getSharedPath(moduleName, mfMetroPath);
+            if (!createdSharedModules.has(sharedPath)) {
+              createSharedModule(moduleName, mfMetroPath);
+              createdSharedModules.add(sharedPath);
+            }
             return { type: "sourceFile", filePath: sharedPath };
           }
           // TODO: module deep import
