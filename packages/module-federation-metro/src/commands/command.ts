@@ -2,7 +2,6 @@ import path from "node:path";
 import { pathToFileURL } from "node:url";
 import chalk from "chalk";
 import { promises as fs } from "fs";
-import type { Config } from "@react-native-community/cli-types";
 import { mergeConfig } from "metro";
 import Server from "metro/src/Server";
 import type { RequestOptions, OutputOptions } from "metro/src/shared/types";
@@ -12,6 +11,7 @@ import relativizeSerializedMap from "./utils/relativizeSerializedMap";
 import { CLIError } from "./utils/cliError";
 import { createResolver } from "./utils/createResolver";
 import { createModulePathRemapper } from "./utils/createModulePathRemapper";
+import { BundleRemoteConfig } from "./types";
 
 declare global {
   var __METRO_FEDERATION_CONFIG: ModuleFederationConfigNormalized;
@@ -146,10 +146,10 @@ function getSaveBundleOpts(
 
 async function bundleFederatedRemote(
   _argv: Array<string>,
-  ctx: Config,
+  cfg: BundleRemoteConfig,
   args: BundleCommandArgs
 ): Promise<void> {
-  const rawConfig = await loadMetroConfig(ctx, {
+  const rawConfig = await loadMetroConfig(cfg, {
     maxWorkers: args.maxWorkers,
     resetCache: args.resetCache,
     config: args.config,

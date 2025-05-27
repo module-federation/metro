@@ -1,23 +1,15 @@
 import path from "node:path";
-import type { Config } from "@react-native-community/cli-types";
 import type { ConfigT, InputConfigT, YargArguments } from "metro-config";
 import { loadConfig, mergeConfig, resolveConfig } from "metro-config";
+import { BundleRemoteConfig } from "../types";
 import { CLIError } from "./cliError";
 
-export type { Config };
-
-export interface ConfigLoadingContext {
-  root: Config["root"];
-  reactNativePath: Config["reactNativePath"];
-  platforms: Config["platforms"];
-}
-
 function getOverrideConfig(
-  ctx: ConfigLoadingContext,
+  ctx: BundleRemoteConfig,
   config: ConfigT
 ): InputConfigT {
   const resolver: Partial<ConfigT["resolver"]> = {
-    platforms: [...Object.keys(ctx.platforms), "native"],
+    platforms: [...ctx.platforms, "native"],
   };
 
   return {
@@ -36,7 +28,7 @@ function getOverrideConfig(
 }
 
 export default async function loadMetroConfig(
-  ctx: ConfigLoadingContext,
+  ctx: BundleRemoteConfig,
   options: YargArguments = {}
 ): Promise<ConfigT> {
   const cwd = ctx.root;
