@@ -7,7 +7,7 @@
     "ios": "rnef run:ios",
     "lint": "eslint .",
     "dev": "nodemon --config ../../nodemon.json --exec yarn start",
-    "start": "rnef start --reset-cache --client-logs",
+    "start": "rnef start --reset-cache --client-logs --max-workers=6",
     "pods": "(cd ios && bundle install && bundle exec pod install)",
     "test": "jest"
   },
