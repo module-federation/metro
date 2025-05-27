@@ -1,7 +1,7 @@
 import {
   loadSharedToRegistrySync,
   loadSharedToRegistryAsync,
-} from "mf:shared-registry";
+} from "mf:remote-module-registry";
 import { init } from "@module-federation/runtime";
 
 __PLUGINS__;

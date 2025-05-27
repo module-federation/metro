@@ -56,8 +56,12 @@ function getInitHostModule(options: ModuleFederationConfigNormalized) {
   return initHostModule;
 }
 
-function getSharedRegistryModule(options: ModuleFederationConfigNormalized) {
-  const sharedRegistryPath = require.resolve("./runtime/shared-registry.js");
+function getRemoteModuleRegistryModule(
+  options: ModuleFederationConfigNormalized
+) {
+  const sharedRegistryPath = require.resolve(
+    "./runtime/remote-module-registry.js"
+  );
   let sharedRegistryModule = fs.readFileSync(sharedRegistryPath, "utf-8");
 
   sharedRegistryModule = sharedRegistryModule.replaceAll(
@@ -93,7 +97,7 @@ function createSharedModuleEntry(name: string, options: SharedConfig) {
 }
 
 function getSharedModule(name: string) {
-  const sharedTemplatePath = require.resolve("./runtime/shared-module.js");
+  const sharedTemplatePath = require.resolve("./runtime/remote-module.js");
 
   return fs
     .readFileSync(sharedTemplatePath, "utf-8")
@@ -206,8 +210,8 @@ function createSharedRegistryVirtualModule(
   options: ModuleFederationConfigNormalized,
   vmDirPath: string
 ) {
-  const sharedRegistryModule = getSharedRegistryModule(options);
-  const sharedRegistryPath = path.join(vmDirPath, "shared-registry.js");
+  const sharedRegistryModule = getRemoteModuleRegistryModule(options);
+  const sharedRegistryPath = path.join(vmDirPath, "remote-module-registry.js");
   fs.writeFileSync(sharedRegistryPath, sharedRegistryModule, "utf-8");
   return sharedRegistryPath;
 }
@@ -366,8 +370,8 @@ function withModuleFederation(
           return { type: "sourceFile", filePath: asyncRequireRemotePath };
         }
 
-        // virtual module: shared-registry
-        if (moduleName === "mf:shared-registry") {
+        // virtual module: remote-module-registry
+        if (moduleName === "mf:remote-module-registry") {
           return { type: "sourceFile", filePath: sharedRegistryPath };
         }
 
