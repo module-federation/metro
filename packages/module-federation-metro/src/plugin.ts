@@ -94,12 +94,13 @@ function createSharedModuleEntry(name: string, options: SharedConfig) {
     );
 }
 
+// shared modules are prefixed with `mf:shared-module:` prefix
 function getSharedModule(name: string) {
   const sharedTemplatePath = require.resolve("./runtime/remote-module.js");
 
   return fs
     .readFileSync(sharedTemplatePath, "utf-8")
-    .replaceAll("__MODULE_ID__", `"${name}"`);
+    .replaceAll("__MODULE_ID__", `"mf:shared-module:${name}"`);
 }
 
 function getRemoteModule(name: string) {
