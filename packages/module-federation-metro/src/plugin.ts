@@ -59,17 +59,15 @@ function getInitHostModule(options: ModuleFederationConfigNormalized) {
 function getRemoteModuleRegistryModule(
   options: ModuleFederationConfigNormalized
 ) {
-  const sharedRegistryPath = require.resolve(
-    "./runtime/remote-module-registry.js"
-  );
-  let sharedRegistryModule = fs.readFileSync(sharedRegistryPath, "utf-8");
+  const registryPath = require.resolve("./runtime/remote-module-registry.js");
+  let registryModule = fs.readFileSync(registryPath, "utf-8");
 
-  sharedRegistryModule = sharedRegistryModule.replaceAll(
+  registryModule = registryModule.replaceAll(
     "__NAME__",
     JSON.stringify(options.name)
   );
 
-  return sharedRegistryModule;
+  return registryModule;
 }
 
 function createSharedModuleEntry(name: string, options: SharedConfig) {
@@ -206,14 +204,15 @@ function createInitHostVirtualModule(
   return initHostPath;
 }
 
-function createSharedRegistryVirtualModule(
+// virtual module: remote-module-registry
+function createRemoteModuleRegistryModule(
   options: ModuleFederationConfigNormalized,
   vmDirPath: string
 ) {
-  const sharedRegistryModule = getRemoteModuleRegistryModule(options);
-  const sharedRegistryPath = path.join(vmDirPath, "remote-module-registry.js");
-  fs.writeFileSync(sharedRegistryPath, sharedRegistryModule, "utf-8");
-  return sharedRegistryPath;
+  const registryModule = getRemoteModuleRegistryModule(options);
+  const registryPath = path.join(vmDirPath, "remote-module-registry.js");
+  fs.writeFileSync(registryPath, registryModule, "utf-8");
+  return registryPath;
 }
 
 function createSharedVirtualModules(
@@ -299,10 +298,7 @@ function withModuleFederation(
     ...options.plugins,
   ].map((plugin) => path.relative(mfMetroPath, plugin));
 
-  const sharedRegistryPath = createSharedRegistryVirtualModule(
-    options,
-    mfMetroPath
-  );
+  const registryPath = createRemoteModuleRegistryModule(options, mfMetroPath);
 
   const sharedModulesPaths = createSharedVirtualModules(options, mfMetroPath);
 
@@ -372,7 +368,7 @@ function withModuleFederation(
 
         // virtual module: remote-module-registry
         if (moduleName === "mf:remote-module-registry") {
-          return { type: "sourceFile", filePath: sharedRegistryPath };
+          return { type: "sourceFile", filePath: registryPath };
         }
 
         // virtual entrypoint to create MF containers
