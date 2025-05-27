@@ -102,14 +102,6 @@ function createSharedModuleEntry(name: string, options: SharedConfig) {
     );
 }
 
-function getSharedModule(name: string) {
-  const sharedTemplatePath = require.resolve("./runtime/remote-module.js");
-
-  return fs
-    .readFileSync(sharedTemplatePath, "utf-8")
-    .replaceAll("__MODULE_ID__", `"${name}"`);
-}
-
 function getRemoteModule(name: string) {
   const remoteTemplatePath = require.resolve("./runtime/remote-module.js");
 
@@ -229,7 +221,7 @@ function createSharedVirtualModules(
 ) {
   const sharedModulesPaths: Record<string, string> = {};
   Object.keys(options.shared).forEach((name) => {
-    const sharedModule = getSharedModule(name);
+    const sharedModule = getRemoteModule(name);
     const sharedFilePath = path.join(vmDirPath, "shared", `${name}.js`);
     fs.writeFileSync(sharedFilePath, sharedModule, "utf-8");
     sharedModulesPaths[name] = sharedFilePath;
