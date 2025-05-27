@@ -15,15 +15,13 @@ declare global {
   var __METRO_FEDERATION_MANIFEST_PATH: string | undefined;
 }
 
-export const INIT_HOST = "mf:init-host";
-export const REMOTE_ENTRY = "mf:remote-entry";
-export const SHARED_MODULE_PREFIX = "mf:shared-module:";
-export const REMOTE_MODULE_REGISTRY = "mf:remote-module-registry";
-export const ASYNC_REQUIRE_HOST = "mf:async-require-host";
-export const ASYNC_REQUIRE_REMOTE = "mf:async-require-remote";
+const INIT_HOST = "mf:init-host";
+const REMOTE_MODULE_REGISTRY = "mf:remote-module-registry";
+const ASYNC_REQUIRE_HOST = "mf:async-require-host";
+const ASYNC_REQUIRE_REMOTE = "mf:async-require-remote";
 
-export const MANIFEST_FILENAME = "mf-manifest.json";
-export const DEFAULT_ENTRY_FILENAME = "remoteEntry.js";
+const MANIFEST_FILENAME = "mf-manifest.json";
+const DEFAULT_ENTRY_FILENAME = "remoteEntry.js";
 
 function getSharedString(options: ModuleFederationConfigNormalized) {
   const shared = Object.keys(options.shared).reduce((acc, name) => {
