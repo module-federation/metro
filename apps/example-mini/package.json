@@ -13,7 +13,8 @@
     "build:android": "react-native bundle-mf-remote --platform android",
     "serve": "serve dist -p 8082",
     "serve:ios": "yarn build:ios && yarn serve",
-    "serve:android": "yarn build:android && yarn serve"
+    "serve:android": "yarn build:android && yarn serve",
+    "adbreverse": "adb reverse tcp:8082 tcp:8082"
   },
   "dependencies": {
     "lodash": "^4.17.21",
