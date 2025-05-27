@@ -422,6 +422,14 @@ function withModuleFederation(
           }
         }
 
+        // remote modules
+        for (const remoteName of Object.keys(options.remotes)) {
+          if (moduleName.startsWith(remoteName + "/")) {
+            const remotePath = createRemoteModule(moduleName, mfMetroPath);
+            return { type: "sourceFile", filePath: remotePath };
+          }
+        }
+
         // shared module handling
         for (const sharedName of Object.keys(options.shared)) {
           const importName = options.shared[sharedName].import || sharedName;
@@ -430,19 +438,11 @@ function withModuleFederation(
             const sharedPath = createSharedModule(moduleName, mfMetroPath);
             return { type: "sourceFile", filePath: sharedPath };
           }
-          // module deep import
-          if (importName.endsWith("/") && moduleName.startsWith(importName)) {
-            const sharedPath = createSharedModule(moduleName, mfMetroPath);
-            return { type: "sourceFile", filePath: sharedPath };
-          }
-        }
-
-        // remote modules
-        for (const remote of Object.keys(options.remotes)) {
-          if (moduleName.startsWith(remote + "/")) {
-            const remotePath = createRemoteModule(moduleName, mfMetroPath);
-            return { type: "sourceFile", filePath: remotePath };
-          }
+          // TODO: module deep import
+          // if (importName.endsWith("/") && moduleName.startsWith(importName)) {
+          //   const sharedPath = createSharedModule(moduleName, mfMetroPath);
+          //   return { type: "sourceFile", filePath: sharedPath };
+          // }
         }
 
         // replace getDevServer module in remote with our own implementation
