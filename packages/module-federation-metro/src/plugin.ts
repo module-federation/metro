@@ -15,6 +15,16 @@ declare global {
   var __METRO_FEDERATION_MANIFEST_PATH: string | undefined;
 }
 
+export const INIT_HOST = "mf:init-host";
+export const REMOTE_ENTRY = "mf:remote-entry";
+export const SHARED_MODULE_PREFIX = "mf:shared-module:";
+export const REMOTE_MODULE_REGISTRY = "mf:remote-module-registry";
+export const ASYNC_REQUIRE_HOST = "mf:async-require-host";
+export const ASYNC_REQUIRE_REMOTE = "mf:async-require-remote";
+
+export const MANIFEST_FILENAME = "mf-manifest.json";
+export const DEFAULT_ENTRY_FILENAME = "remoteEntry.js";
+
 function getSharedString(options: ModuleFederationConfigNormalized) {
   const shared = Object.keys(options.shared).reduce((acc, name) => {
     acc[name] = `__SHARED_${name}__`;
@@ -94,13 +104,13 @@ function createSharedModuleEntry(name: string, options: SharedConfig) {
     );
 }
 
-// shared modules are prefixed with `mf:shared-module:` prefix
+// shared modules are prefixed with shared module prefix
 function getSharedModule(name: string) {
   const sharedTemplatePath = require.resolve("./runtime/remote-module.js");
 
   return fs
     .readFileSync(sharedTemplatePath, "utf-8")
-    .replaceAll("__MODULE_ID__", `"mf:shared-module:${name}"`);
+    .replaceAll("__MODULE_ID__", `"${SHARED_MODULE_PREFIX}${name}"`);
 }
 
 function getRemoteModule(name: string) {
@@ -251,7 +261,7 @@ function getRemoteModulePath(name: string, outputDir: string) {
 function normalizeOptions(
   options: ModuleFederationConfig
 ): ModuleFederationConfigNormalized {
-  const filename = options.filename ?? "remoteEntry.js";
+  const filename = options.filename ?? DEFAULT_ENTRY_FILENAME;
 
   // force all shared modules in host to be eager
   const shared = options.shared ?? {};
@@ -309,7 +319,7 @@ function withModuleFederation(
 
   let remoteEntryPath: string | undefined;
   if (isRemote) {
-    const filename = options.filename ?? "remoteEntry.js";
+    const filename = options.filename;
     remoteEntryPath = path.join(mfMetroPath, filename);
     fs.writeFileSync(remoteEntryPath, getRemoteEntryModule(options));
   }
@@ -323,7 +333,7 @@ function withModuleFederation(
     "../async-require-remote.js"
   );
 
-  const manifestPath = path.join(mfMetroPath, "mf-manifest.json");
+  const manifestPath = path.join(mfMetroPath, MANIFEST_FILENAME);
   const manifest = generateManifest(options);
   fs.writeFileSync(manifestPath, JSON.stringify(manifest, undefined, 2));
 
@@ -353,22 +363,22 @@ function withModuleFederation(
       ...config.resolver,
       resolveRequest: (context, moduleName, platform) => {
         // virtual module: init-host
-        if (moduleName === "mf:init-host") {
+        if (moduleName === INIT_HOST) {
           return { type: "sourceFile", filePath: initHostPath as string };
         }
 
         // virtual module: async-require-host
-        if (moduleName === "mf:async-require-host") {
+        if (moduleName === ASYNC_REQUIRE_HOST) {
           return { type: "sourceFile", filePath: asyncRequireHostPath };
         }
 
         // virtual module: async-require-remote
-        if (moduleName === "mf:async-require-remote") {
+        if (moduleName === ASYNC_REQUIRE_REMOTE) {
           return { type: "sourceFile", filePath: asyncRequireRemotePath };
         }
 
         // virtual module: remote-module-registry
-        if (moduleName === "mf:remote-module-registry") {
+        if (moduleName === REMOTE_MODULE_REGISTRY) {
           return { type: "sourceFile", filePath: registryPath };
         }
 
