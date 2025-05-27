@@ -1,25 +1,14 @@
 import type { PluginApi, PluginOutput } from "@rnef/config";
-import { color, logger, RnefError } from "@rnef/tools";
+import { color, logger, intro } from "@rnef/tools";
 import commands from "module-federation-metro/commands";
 
-type PluginConfig = {
-  /**
-   * Custom configuration for the Module Federation plugin
-   */
-  moduleFederation?: {
-    /**
-     * Default platform to use when not specified in the command
-     * @default 'ios'
-     */
-    defaultPlatform?: string;
-  };
-};
+interface PluginConfig {
+  platforms?: Record<string, object>;
+}
 
-type BundleArgs = BundleCommandArgs & {
-  // Add any custom flags specific to this plugin
-  // For example:
-  // customFlag?: boolean;
-};
+const bundleFederatedRemote = commands.default[0];
+
+type BundleRemoteArgs = Parameters<(typeof bundleFederatedRemote)["func"]>[2];
 
 export const pluginModuleFederation =
   (pluginConfig: PluginConfig = {}) =>
@@ -29,54 +18,24 @@ export const pluginModuleFederation =
       name: "bundle-mf-remote",
       description:
         "Bundles a Module Federation remote, including its container entry and all exposed modules for consumption by host applications",
-      action: async (args: BundleArgs) => {
-        if (!args.entryFile) {
-          throw new RnefError(
-            '"rnef bundle-mf-remote" command is missing required "--entry-file" argument.'
-          );
-        }
+      action: async (args: BundleRemoteArgs) => {
+        const commandConfig = {
+          root: api.getProjectRoot(),
+          platforms: api.getPlatforms(),
+          reactNativePath: api.getReactNativePath(),
+          ...pluginConfig,
+        };
 
-        const root = api.getProjectRoot();
-        const platforms = api.getPlatforms();
-
-        // Set default platform if not provided
-        if (!args.platform) {
-          args.platform =
-            pluginConfig.moduleFederation?.defaultPlatform || "ios";
-          logger.info(
-            `No platform specified, using default: ${color.cyan(args.platform)}`
-          );
-        }
-
-        logger.info(
-          `Bundling Module Federation remote from ${color.cyan(
-            args.entryFile
-          )} for platform ${color.cyan(args.platform)}`
+        intro(
+          `Bundling Module Federation remote for platform ${color.cyan(
+            args.platform
+          )}`
         );
 
-        try {
-          // Execute the bundle command
-          await bundleFederatedRemote([], { root, platforms }, args);
-
-          logger.success(
-            `Successfully bundled Module Federation remote at: ${color.cyan(
-              args.entryFile
-            )}`
-          );
-        } catch (error) {
-          logger.error("Failed to bundle Module Federation remote:");
-          throw error;
-        }
+        await bundleFederatedRemote.func([], commandConfig, args);
+        logger.info(`Successfully bundled Module Federation remote at ...`);
       },
-      options: [
-        // Pass through all the options from module-federation-metro
-        ...options,
-        // Add any additional options specific to this plugin
-        // {
-        //   name: '--custom-flag',
-        //   description: 'Custom flag description',
-        // },
-      ],
+      options: bundleFederatedRemote.options,
     });
 
     return {

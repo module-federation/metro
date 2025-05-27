@@ -25,7 +25,7 @@ export type BundleCommandArgs = {
   dev: boolean;
   minify?: boolean;
   bundleEncoding?: "utf8" | "utf16le" | "ascii";
-  maxWorkers?: number;
+  maxWorkers?: string;
   sourcemapOutput?: string;
   sourcemapSourcesRoot?: string;
   sourcemapUseAbsolutePath?: boolean;

@@ -9,7 +9,7 @@ function getOverrideConfig(
   config: ConfigT
 ): InputConfigT {
   const resolver: Partial<ConfigT["resolver"]> = {
-    platforms: [...ctx.platforms, "native"],
+    platforms: [...Object.keys(ctx.platforms), "native"],
   };
 
   return {
