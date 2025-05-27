@@ -104,13 +104,12 @@ function createSharedModuleEntry(name: string, options: SharedConfig) {
     );
 }
 
-// shared modules are prefixed with shared module prefix
 function getSharedModule(name: string) {
   const sharedTemplatePath = require.resolve("./runtime/remote-module.js");
 
   return fs
     .readFileSync(sharedTemplatePath, "utf-8")
-    .replaceAll("__MODULE_ID__", `"${SHARED_MODULE_PREFIX}${name}"`);
+    .replaceAll("__MODULE_ID__", `"${name}"`);
 }
 
 function getRemoteModule(name: string) {
