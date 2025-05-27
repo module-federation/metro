@@ -17,17 +17,16 @@
     "dev": "tsc --watch"
   },
   "dependencies": {
-    "@rnef/tools": "^0.7.13",
-    "tslib": "^2.3.0"
+    "@rnef/tools": "^0.7.13"
   },
   "devDependencies": {
     "@rnef/config": "^0.7.13",
     "@rnef/tools": "^0.7.13",
-    "@types/node": "^18.15.11",
-    "typescript": "^5.8.3"
+    "@types/node": "^20.0.0",
+    "typescript": "5.0.4"
   },
   "peerDependencies": {
-    "@module-federation/metro": "workspace:*",
-    "@rnef/tools": "^0.7.13"
+    "@rnef/tools": "^0.7.13",
+    "module-federation-metro": "workspace:*"
   }
 }

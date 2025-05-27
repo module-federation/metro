@@ -1,12 +1,6 @@
-import type { PluginApi, PluginOutput } from '@rnef/config';
-import { color, logger, RnefError } from '@rnef/tools';
-import type { BundleCommandArgs } from '@module-federation/metro/commands';
-
-// Import the bundleFederatedRemote command
-const { default: bundleFederatedRemote } = require('@module-federation/metro/commands');
-
-// Import options from the module-federation-metro package
-const options = require('@module-federation/metro/commands/options');
+import type { PluginApi, PluginOutput } from "@rnef/config";
+import { color, logger, RnefError } from "@rnef/tools";
+import commands from "module-federation-metro/commands";
 
 type PluginConfig = {
   /**
@@ -32,9 +26,9 @@ export const pluginModuleFederation =
   (api: PluginApi): PluginOutput => {
     // Register the bundle-mf-remote command
     api.registerCommand({
-      name: 'bundle-mf-remote',
+      name: "bundle-mf-remote",
       description:
-        'Bundles a Module Federation remote, including its container entry and all exposed modules for consumption by host applications',
+        "Bundles a Module Federation remote, including its container entry and all exposed modules for consumption by host applications",
       action: async (args: BundleArgs) => {
         if (!args.entryFile) {
           throw new RnefError(
@@ -47,7 +41,8 @@ export const pluginModuleFederation =
 
         // Set default platform if not provided
         if (!args.platform) {
-          args.platform = pluginConfig.moduleFederation?.defaultPlatform || 'ios';
+          args.platform =
+            pluginConfig.moduleFederation?.defaultPlatform || "ios";
           logger.info(
             `No platform specified, using default: ${color.cyan(args.platform)}`
           );
@@ -62,14 +57,14 @@ export const pluginModuleFederation =
         try {
           // Execute the bundle command
           await bundleFederatedRemote([], { root, platforms }, args);
-          
+
           logger.success(
             `Successfully bundled Module Federation remote at: ${color.cyan(
               args.entryFile
             )}`
           );
         } catch (error) {
-          logger.error('Failed to bundle Module Federation remote:');
+          logger.error("Failed to bundle Module Federation remote:");
           throw error;
         }
       },
@@ -85,8 +80,8 @@ export const pluginModuleFederation =
     });
 
     return {
-      name: '@metro-mf/plugin-rnef',
-      description: 'RNEF plugin for Module Federation with Metro',
+      name: "@module-federation/metro-plugin-rnef",
+      description: "RNEF plugin for Module Federation with Metro",
     };
   };
 
