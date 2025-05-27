@@ -1,4 +1,4 @@
-import { loadSharedToRegistry } from "mf:shared-registry";
+import { loadSharedToRegistry } from "mf:remote-module-registry";
 import { init } from "@module-federation/runtime";
 
 __PLUGINS__;

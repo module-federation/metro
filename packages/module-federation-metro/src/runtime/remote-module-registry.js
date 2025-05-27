@@ -1,4 +1,8 @@
-import { loadShare, loadShareSync } from "@module-federation/runtime";
+import {
+  loadRemote,
+  loadShare,
+  loadShareSync,
+} from "@module-federation/runtime";
 
 const registry = {};
 const loading = {};
@@ -10,6 +14,20 @@ function cloneModule(module, target) {
     const descriptor = Object.getOwnPropertyDescriptor(module, key);
     Object.defineProperty(target, key, descriptor);
   });
+}
+
+export async function loadRemoteToRegistry(id) {
+  const promise = loading[id];
+  if (promise) {
+    await promise;
+  } else {
+    registry[id] = {};
+    loading[id] = (async () => {
+      const remoteModule = await loadRemote(id);
+      cloneModule(remoteModule, registry[id]);
+    })();
+    return loading[id];
+  }
 }
 
 export function loadSharedToRegistry(id) {

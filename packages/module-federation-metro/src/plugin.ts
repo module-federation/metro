@@ -16,6 +16,14 @@ declare global {
   var __METRO_FEDERATION_MANIFEST_PATH: string | undefined;
 }
 
+const INIT_HOST = "mf:init-host";
+const REMOTE_MODULE_REGISTRY = "mf:remote-module-registry";
+const ASYNC_REQUIRE_HOST = "mf:async-require-host";
+const ASYNC_REQUIRE_REMOTE = "mf:async-require-remote";
+
+const MANIFEST_FILENAME = "mf-manifest.json";
+const DEFAULT_ENTRY_FILENAME = "remoteEntry.js";
+
 function getSharedString(options: ModuleFederationConfigNormalized) {
   const shared = Object.keys(options.shared).reduce((acc, name) => {
     acc[name] = `__SHARED_${name}__`;
@@ -53,16 +61,18 @@ function getInitHostModule(options: ModuleFederationConfigNormalized) {
   return initHostModule;
 }
 
-function getSharedRegistryModule(options: ModuleFederationConfigNormalized) {
-  const sharedRegistryPath = require.resolve("./runtime/shared-registry.js");
-  let sharedRegistryModule = fs.readFileSync(sharedRegistryPath, "utf-8");
+function getRemoteModuleRegistryModule(
+  options: ModuleFederationConfigNormalized
+) {
+  const registryPath = require.resolve("./runtime/remote-module-registry.js");
+  let registryModule = fs.readFileSync(registryPath, "utf-8");
 
-  sharedRegistryModule = sharedRegistryModule.replaceAll(
+  registryModule = registryModule.replaceAll(
     "__EARLY_MODULE_TEST__",
     "/^react(-native(\\/|$)|$)/"
   );
 
-  return sharedRegistryModule;
+  return registryModule;
 }
 
 function createSharedModuleEntry(name: string, options: SharedConfig) {
@@ -89,11 +99,11 @@ function createSharedModuleEntry(name: string, options: SharedConfig) {
     );
 }
 
-function getSharedModule(name: string) {
-  const sharedTemplatePath = require.resolve("./runtime/shared.js");
+function getRemoteModule(name: string) {
+  const remoteTemplatePath = require.resolve("./runtime/remote-module.js");
 
   return fs
-    .readFileSync(sharedTemplatePath, "utf-8")
+    .readFileSync(remoteTemplatePath, "utf-8")
     .replaceAll("__MODULE_ID__", `"${name}"`);
 }
 
@@ -200,21 +210,22 @@ function createInitHostVirtualModule(
   return initHostPath;
 }
 
-function createSharedRegistryVirtualModule(
+// virtual module: remote-module-registry
+function createRemoteModuleRegistryModule(
   options: ModuleFederationConfigNormalized,
   vmDirPath: string
 ) {
-  const sharedRegistryModule = getSharedRegistryModule(options);
-  const sharedRegistryPath = path.join(vmDirPath, "shared-registry.js");
-  fs.writeFileSync(sharedRegistryPath, sharedRegistryModule, "utf-8");
-  return sharedRegistryPath;
+  const registryModule = getRemoteModuleRegistryModule(options);
+  const registryPath = path.join(vmDirPath, "remote-module-registry.js");
+  fs.writeFileSync(registryPath, registryModule, "utf-8");
+  return registryPath;
 }
 
 function createSharedModule(sharedName: string, outputDir: string) {
   const sharedFilePath = getSharedPath(sharedName, outputDir);
   // we need to create the shared module if it doesn't exist
   if (!fs.existsSync(sharedFilePath)) {
-    const sharedModule = getSharedModule(sharedName);
+    const sharedModule = getRemoteModule(sharedName);
     fs.mkdirSync(path.dirname(sharedFilePath), { recursive: true });
     fs.writeFileSync(sharedFilePath, sharedModule, "utf-8");
   }
@@ -225,6 +236,24 @@ function getSharedPath(name: string, dir: string) {
   const sharedName = name.replaceAll("/", "_");
   const sharedDir = path.join(dir, "shared");
   return path.join(sharedDir, `${sharedName}.js`);
+}
+
+function createRemoteModule(name: string, outputDir: string) {
+  const remoteModule = getRemoteModule(name);
+  const remoteFilePath = getRemoteModulePath(name, outputDir);
+  fs.mkdirSync(path.dirname(remoteFilePath), { recursive: true });
+  fs.writeFileSync(remoteFilePath, remoteModule, "utf-8");
+  return remoteFilePath;
+}
+
+function getRemoteModulePath(name: string, outputDir: string) {
+  const remoteModuleName = name.replaceAll("/", "_");
+  const remoteModulePath = path.join(
+    outputDir,
+    "remote",
+    `${remoteModuleName}.js`
+  );
+  return remoteModulePath;
 }
 
 function replaceModule(from: RegExp, to: string) {
@@ -239,7 +268,7 @@ function replaceModule(from: RegExp, to: string) {
 function normalizeOptions(
   options: ModuleFederationConfig
 ): ModuleFederationConfigNormalized {
-  const filename = options.filename ?? "remoteEntry.js";
+  const filename = options.filename ?? DEFAULT_ENTRY_FILENAME;
 
   // force all shared modules in host to be eager
   const shared = options.shared ?? {};
@@ -287,10 +316,7 @@ function withModuleFederation(
     ...options.plugins,
   ].map((plugin) => path.relative(mfMetroPath, plugin));
 
-  const sharedRegistryPath = createSharedRegistryVirtualModule(
-    options,
-    mfMetroPath
-  );
+  const registryPath = createRemoteModuleRegistryModule(options, mfMetroPath);
 
   const initHostPath = isHost
     ? createInitHostVirtualModule(options, mfMetroPath)
@@ -316,7 +342,7 @@ function withModuleFederation(
     "../async-require-remote.js"
   );
 
-  const manifestPath = path.join(mfMetroPath, "mf-manifest.json");
+  const manifestPath = path.join(mfMetroPath, MANIFEST_FILENAME);
   const manifest = generateManifest(options);
   fs.writeFileSync(manifestPath, JSON.stringify(manifest, undefined, 2));
 
@@ -346,28 +372,28 @@ function withModuleFederation(
       ...config.resolver,
       resolveRequest: (context, moduleName, platform) => {
         // virtual module: init-host
-        if (moduleName === "mf:init-host") {
+        if (moduleName === INIT_HOST) {
           return { type: "sourceFile", filePath: initHostPath as string };
         }
 
         // virtual module: async-require-host
-        if (moduleName === "mf:async-require-host") {
+        if (moduleName === ASYNC_REQUIRE_HOST) {
           return { type: "sourceFile", filePath: asyncRequireHostPath };
         }
 
         // virtual module: async-require-remote
-        if (moduleName === "mf:async-require-remote") {
+        if (moduleName === ASYNC_REQUIRE_REMOTE) {
           return { type: "sourceFile", filePath: asyncRequireRemotePath };
+        }
+
+        // virtual module: remote-module-registry
+        if (moduleName === REMOTE_MODULE_REGISTRY) {
+          return { type: "sourceFile", filePath: registryPath };
         }
 
         // virtual module: remote-hmr
         if (moduleName === "mf:remote-hmr") {
           return { type: "sourceFile", filePath: remoteHMRSetupPath as string };
-        }
-
-        // virtual module: shared-registry
-        if (moduleName === "mf:shared-registry") {
-          return { type: "sourceFile", filePath: sharedRegistryPath };
         }
 
         // virtual entrypoint to create MF containers
@@ -396,15 +422,6 @@ function withModuleFederation(
           }
         }
 
-        // replace getDevServer module in remote with our own implementation
-        if (isRemote && moduleName.includes("getDevServer")) {
-          const res = context.resolveRequest(context, moduleName, platform);
-          const from =
-            /react-native\/Libraries\/Core\/Devtools\/getDevServer\.js$/;
-          const to = path.resolve(__dirname, "../getDevServer.js");
-          return replaceModule(from, to)(res);
-        }
-
         // shared module handling
         for (const sharedName of Object.keys(options.shared)) {
           const importName = options.shared[sharedName].import || sharedName;
@@ -420,12 +437,32 @@ function withModuleFederation(
           }
         }
 
+        // remote modules
+        for (const remote of Object.keys(options.remotes)) {
+          if (moduleName.startsWith(remote + "/")) {
+            const remotePath = createRemoteModule(moduleName, mfMetroPath);
+            return { type: "sourceFile", filePath: remotePath };
+          }
+        }
+
+        // replace getDevServer module in remote with our own implementation
+        if (isRemote && moduleName.includes("getDevServer")) {
+          const res = context.resolveRequest(context, moduleName, platform);
+          const from =
+            /react-native\/Libraries\/Core\/Devtools\/getDevServer\.js$/;
+          const to = path.resolve(__dirname, "../getDevServer.js");
+          return replaceModule(from, to)(res);
+        }
+
         return context.resolveRequest(context, moduleName, platform);
       },
     },
     server: {
       ...config.server,
-      enhanceMiddleware: createEnhanceMiddleware(manifestPath),
+      enhanceMiddleware: createEnhanceMiddleware(
+        MANIFEST_FILENAME,
+        manifestPath
+      ),
     },
   };
 }

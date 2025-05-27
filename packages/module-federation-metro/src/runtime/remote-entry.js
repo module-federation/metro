@@ -1,6 +1,6 @@
 import "mf:async-require-remote";
 
-import { loadSharedToRegistry } from "mf:shared-registry";
+import { loadSharedToRegistry } from "mf:remote-module-registry";
 import { init as runtimeInit } from "@module-federation/runtime";
 
 __PLUGINS__;
