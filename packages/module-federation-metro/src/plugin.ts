@@ -221,20 +221,19 @@ function createRemoteModuleRegistryModule(
   return registryPath;
 }
 
-function createSharedVirtualModules(
-  options: ModuleFederationConfigNormalized,
-  vmDirPath: string
-) {
-  const sharedModulesPaths: Record<string, string> = {};
-  Object.keys(options.shared).forEach((name) => {
-    const sharedModule = getRemoteModule(name);
-    const sharedFilePath = path.join(vmDirPath, "shared", `${name}.js`);
-    // needed for deep imports
-    fs.mkdirSync(path.dirname(sharedFilePath), { recursive: true });
-    fs.writeFileSync(sharedFilePath, sharedModule, "utf-8");
-    sharedModulesPaths[name] = sharedFilePath;
-  });
-  return sharedModulesPaths;
+function createSharedModule(sharedName: string, outputDir: string) {
+  const sharedFilePath = getSharedPath(sharedName, outputDir);
+  // we need to create the shared module if it doesn't exist
+  const sharedModule = getRemoteModule(sharedName);
+  fs.mkdirSync(path.dirname(sharedFilePath), { recursive: true });
+  fs.writeFileSync(sharedFilePath, sharedModule, "utf-8");
+  return sharedFilePath;
+}
+
+function getSharedPath(name: string, dir: string) {
+  const sharedName = name.replaceAll("/", "_");
+  const sharedDir = path.join(dir, "shared");
+  return path.join(sharedDir, `${sharedName}.js`);
 }
 
 function createRemoteModule(name: string, outputDir: string) {
@@ -317,8 +316,6 @@ function withModuleFederation(
 
   const registryPath = createRemoteModuleRegistryModule(options, mfMetroPath);
 
-  const sharedModulesPaths = createSharedVirtualModules(options, mfMetroPath);
-
   const initHostPath = isHost
     ? createInitHostVirtualModule(options, mfMetroPath)
     : null;
@@ -351,6 +348,8 @@ function withModuleFederation(
   global.__METRO_FEDERATION_CONFIG = options;
   global.__METRO_FEDERATION_REMOTE_ENTRY_PATH = remoteEntryPath;
   global.__METRO_FEDERATION_MANIFEST_PATH = manifestPath;
+
+  const createdSharedModules = new Set<string>();
 
   return {
     ...config,
@@ -416,25 +415,38 @@ function withModuleFederation(
           const sharedModule = options.shared[moduleName];
           // import: false means that the module is marked as external
           if (sharedModule && sharedModule.import === false) {
-            const sharedPath = sharedModulesPaths[moduleName];
+            const sharedPath = getSharedPath(moduleName, mfMetroPath);
             return { type: "sourceFile", filePath: sharedPath };
           } else {
             return context.resolveRequest(context, moduleName, platform);
           }
         }
 
-        // shared modules
-        if (Object.keys(options.shared).includes(moduleName)) {
-          const sharedPath = sharedModulesPaths[moduleName];
-          return { type: "sourceFile", filePath: sharedPath };
-        }
-
         // remote modules
-        for (const remote of Object.keys(options.remotes)) {
-          if (moduleName.startsWith(remote + "/")) {
+        for (const remoteName of Object.keys(options.remotes)) {
+          if (moduleName.startsWith(remoteName + "/")) {
             const remotePath = createRemoteModule(moduleName, mfMetroPath);
             return { type: "sourceFile", filePath: remotePath };
           }
+        }
+
+        // shared module handling
+        for (const sharedName of Object.keys(options.shared)) {
+          const importName = options.shared[sharedName].import || sharedName;
+          // module import
+          if (moduleName === importName) {
+            const sharedPath = getSharedPath(moduleName, mfMetroPath);
+            if (!createdSharedModules.has(sharedPath)) {
+              createSharedModule(moduleName, mfMetroPath);
+              createdSharedModules.add(sharedPath);
+            }
+            return { type: "sourceFile", filePath: sharedPath };
+          }
+          // TODO: module deep import
+          // if (importName.endsWith("/") && moduleName.startsWith(importName)) {
+          //   const sharedPath = createSharedModule(moduleName, mfMetroPath);
+          //   return { type: "sourceFile", filePath: sharedPath };
+          // }
         }
 
         // replace getDevServer module in remote with our own implementation
