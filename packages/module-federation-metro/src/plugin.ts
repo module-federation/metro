@@ -427,7 +427,10 @@ function withModuleFederation(
     },
     server: {
       ...config.server,
-      enhanceMiddleware: createEnhanceMiddleware(manifestPath),
+      enhanceMiddleware: createEnhanceMiddleware(
+        MANIFEST_FILENAME,
+        manifestPath
+      ),
     },
   };
 }
