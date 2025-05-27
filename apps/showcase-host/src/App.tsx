@@ -13,17 +13,19 @@ import type LottieView from 'lottie-react-native';
 import gradientBg from './aura.png';
 import Card from './Card';
 
-// @ts-ignore
+// the loadRemoteToRegistry part should be added through babel transform
 const Button = React.lazy(() =>
   require('mf:remote-module-registry')
     .loadRemoteToRegistry('mini/button')
+    // @ts-ignore
     .then(() => import('mini/button')),
 );
 
-// @ts-ignore
+// the loadRemoteToRegistry part should be added through babel transform
 const Confetti = React.lazy(() =>
   require('mf:remote-module-registry')
     .loadRemoteToRegistry('mini/confetti')
+    // @ts-ignore
     .then(() => import('mini/confetti')),
 );
 
