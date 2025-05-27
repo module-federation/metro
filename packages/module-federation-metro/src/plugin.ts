@@ -413,7 +413,7 @@ function withModuleFederation(
 
         // remote modules
         for (const remote of Object.keys(options.remotes)) {
-          if (moduleName.startsWith(`${remote}/`)) {
+          if (moduleName.startsWith(remote + "/")) {
             const remotePath = createRemoteModule(moduleName, mfMetroPath);
             return { type: "sourceFile", filePath: remotePath };
           }
