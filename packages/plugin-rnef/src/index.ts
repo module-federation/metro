@@ -1,4 +1,4 @@
-import { pluginModuleFederation } from "./plugin.js";
+import { pluginMetroModuleFederation } from "./plugin.js";
 
-export { pluginModuleFederation };
-export default pluginModuleFederation;
+export { pluginMetroModuleFederation };
+export default pluginMetroModuleFederation;

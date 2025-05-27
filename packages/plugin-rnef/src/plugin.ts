@@ -10,7 +10,7 @@ const bundleFederatedRemote = commands[0];
 
 type BundleRemoteArgs = Parameters<(typeof bundleFederatedRemote)["func"]>[2];
 
-export const pluginModuleFederation =
+export const pluginMetroModuleFederation =
   (pluginConfig: PluginConfig = {}) =>
   (api: PluginApi): PluginOutput => {
     // Register the bundle-mf-remote command
