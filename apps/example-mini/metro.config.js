@@ -23,7 +23,7 @@ module.exports = withModuleFederation(
     name: 'mini',
     filename: 'mini.js',
     exposes: {
-      './button': './src/button.tsx',
+      './info': './src/info.tsx',
     },
     shared: {
       react: {
@@ -47,6 +47,6 @@ module.exports = withModuleFederation(
         version: '4.17.21',
       },
     },
-    shareStrategy: 'loaded-first',
+    shareStrategy: 'version-first',
   },
 );

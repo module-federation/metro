@@ -5,7 +5,7 @@ import { init as runtimeInit } from "@module-federation/runtime";
 
 __PLUGINS__;
 
-const usedRemotes = [];
+const usedRemotes = __REMOTES__;
 const usedShared = __SHARED__;
 const earlyShared = __EARLY_SHARED__;
 

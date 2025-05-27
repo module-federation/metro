@@ -20,10 +20,9 @@ if (process.env.NODE_ENV === "production") {
       global.__METRO_FEDERATION__[__METRO_GLOBAL_PREFIX__].location;
 
     // resolve the remote bundle path based on the remote location
-    const remoteBundlePath = joinComponents(
-      getPublicPath(remoteEntry),
-      bundlePath
-    );
+    const remoteBundlePath = bundlePath.match(/^https?:\/\//)
+      ? bundlePath
+      : joinComponents(getPublicPath(remoteEntry), bundlePath);
 
     return loadBundleAsync(remoteBundlePath);
   }

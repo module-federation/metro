@@ -173,6 +173,7 @@ function getRemoteEntryModule(options: ModuleFederationConfigNormalized) {
   return remoteEntryModule
     .replaceAll("__PLUGINS__", generateRuntimePlugins(options.plugins))
     .replaceAll("__SHARED__", sharedString)
+    .replaceAll("__REMOTES__", generateRemotes(options.remotes))
     .replaceAll("__EARLY_SHARED__", JSON.stringify(earlySharedDeps))
     .replaceAll("__EXPOSES_MAP__", `{${exposesString}}`)
     .replaceAll("__NAME__", `"${options.name}"`)
