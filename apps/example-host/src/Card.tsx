@@ -28,15 +28,12 @@ export default function Card({
 
 const styles = StyleSheet.create({
   mainContainer: {
-    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    marginVertical: 16,
   },
   miniappSection: {
     width: '100%',
-    maxWidth: 400,
-    marginVertical: 20,
-    zIndex: 1,
   },
   miniappCaption: {
     paddingVertical: 12,
@@ -47,9 +44,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
   miniappHighlight: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: '100%',
     backgroundColor: 'rgba(255, 255, 255, 0.95)',
     borderRadius: 16,
     borderTopLeftRadius: 0,
@@ -65,7 +59,7 @@ const styles = StyleSheet.create({
     shadowRadius: 8,
     elevation: 5,
     padding: 20,
-    minHeight: 150,
+    minHeight: 60,
   },
   miniappTitle: {
     fontSize: 20,
