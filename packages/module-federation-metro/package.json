@@ -10,7 +10,7 @@
       "types": "./types/index.d.ts",
       "default": "./index.js"
     },
-    "./bootstrap": "./bootstrap.js",
+    "./bootstrap": "./bootstrap/index.js",
     "./commands": "./commands/index.js",
     "./async-require-host": "./async-require-host.js",
     "./async-require-remote": "./async-require-remote.js",
