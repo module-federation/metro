@@ -3,11 +3,11 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "android": "react-native run-android",
-    "ios": "react-native run-ios",
+    "android": "rnef run:android",
+    "ios": "rnef run:ios",
     "lint": "eslint .",
     "dev": "nodemon --config ../../nodemon.json --exec yarn start",
-    "start": "react-native start --reset-cache --client-logs",
+    "start": "rnef start --reset-cache --client-logs",
     "pods": "(cd ios && bundle install && bundle exec pod install)",
     "test": "jest"
   },
