@@ -1945,7 +1945,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@module-federation/metro-plugin-rnef@workspace:packages/plugin-rnef":
+"@module-federation/metro-plugin-rnef@workspace:*, @module-federation/metro-plugin-rnef@workspace:packages/plugin-rnef":
   version: 0.0.0-use.local
   resolution: "@module-federation/metro-plugin-rnef@workspace:packages/plugin-rnef"
   dependencies:
@@ -9050,6 +9050,7 @@ __metadata:
     "@babel/core": "npm:^7.25.2"
     "@babel/preset-env": "npm:^7.25.3"
     "@babel/runtime": "npm:^7.25.0"
+    "@module-federation/metro-plugin-rnef": "workspace:*"
     "@module-federation/runtime": "npm:^0.11.4"
     "@react-native/babel-preset": "npm:0.79.0"
     "@react-native/eslint-config": "npm:0.79.0"
@@ -9084,6 +9085,7 @@ __metadata:
     "@babel/core": "npm:^7.25.2"
     "@babel/preset-env": "npm:^7.25.3"
     "@babel/runtime": "npm:^7.25.0"
+    "@module-federation/metro-plugin-rnef": "workspace:*"
     "@module-federation/runtime": "npm:^0.11.4"
     "@react-native/babel-preset": "npm:0.79.0"
     "@react-native/eslint-config": "npm:0.79.0"

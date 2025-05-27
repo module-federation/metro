@@ -2,6 +2,7 @@
 import {platformIOS} from '@rnef/platform-ios';
 import {platformAndroid} from '@rnef/platform-android';
 import {pluginMetro} from '@rnef/plugin-metro';
+import {pluginModuleFederation} from '@module-federation/metro-plugin-rnef';
 
 /** @type {import('@rnef/config').Config} */
 export default {
@@ -11,4 +12,5 @@ export default {
     android: platformAndroid(),
   },
   remoteCacheProvider: null,
+  plugins: [pluginModuleFederation()],
 };

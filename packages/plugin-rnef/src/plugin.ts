@@ -43,5 +43,3 @@ export const pluginModuleFederation =
       description: "RNEF plugin for Module Federation with Metro",
     };
   };
-
-export default pluginModuleFederation;

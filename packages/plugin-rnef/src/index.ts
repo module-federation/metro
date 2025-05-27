@@ -1,1 +1,4 @@
-export { default } from "./plugin.js";
+import { pluginModuleFederation } from "./plugin.js";
+
+export { pluginModuleFederation };
+export default pluginModuleFederation;
