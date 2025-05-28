@@ -264,6 +264,11 @@ function replaceModule(from: RegExp, to: string) {
   };
 }
 
+function replaceExtension(filepath: string, extension: string) {
+  const { dir, name } = path.parse(filepath);
+  return path.format({ dir, name, ext: extension });
+}
+
 function validateOptions(options: ModuleFederationConfigNormalized) {
   // validate filename
   if (!options.filename.endsWith(".bundle")) {
@@ -333,11 +338,13 @@ function withModuleFederation(
     ? createInitHostVirtualModule(options, mfMetroPath)
     : null;
 
-  let remoteEntryPath: string | undefined,
+  let remoteEntryFilename: string | undefined,
+    remoteEntryPath: string | undefined,
     remoteHMRSetupPath: string | undefined;
 
   if (isRemote) {
-    remoteEntryPath = path.join(mfMetroPath, options.filename);
+    remoteEntryFilename = replaceExtension(options.filename, ".js");
+    remoteEntryPath = path.join(mfMetroPath, remoteEntryFilename);
     fs.writeFileSync(remoteEntryPath, getRemoteEntryModule(options));
 
     remoteHMRSetupPath = path.join(mfMetroPath, "remote-hmr.js");
@@ -412,7 +419,7 @@ function withModuleFederation(
         // virtual entrypoint to create MF containers
         // MF options.filename is provided as a name only and will be requested from the root of project
         // so the filename mini.js becomes ./mini.js and we need to match exactly that
-        if (moduleName === `./${options.filename}`) {
+        if (moduleName === `./${remoteEntryFilename}`) {
           return { type: "sourceFile", filePath: remoteEntryPath as string };
         }
 
@@ -480,6 +487,19 @@ function withModuleFederation(
         MANIFEST_FILENAME,
         manifestPath
       ),
+      rewriteRequestUrl(url) {
+        const { pathname } = new URL(url, "protocol://host");
+        // rewrite /mini.bundle -> /mini.js.bundle
+        if (pathname.startsWith(`/${options.filename}`)) {
+          const target = replaceExtension(options.filename, ".js.bundle");
+          return url.replace(options.filename, target);
+        }
+        // pass through to original rewriteRequestUrl
+        if (config.server.rewriteRequestUrl) {
+          return config.server.rewriteRequestUrl(url);
+        }
+        return url;
+      },
     },
   };
 }
