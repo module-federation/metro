@@ -1,36 +1,28 @@
-# @metro-mf/plugin-rnef
+# @module-federation/metro-plugin-rnef
 
-Module Federation for React Native Enterprise Framework (RNEF) using Metro bundler. This plugin integrates the `@module-federation/metro` package with RNEF, providing commands to bundle Module Federation remotes in a React Native environment.
+Module Federation for React Native Enterprise Framework (RNEF) using Metro bundler. This plugin integrates the `@module-federation/metro` package with RNEF, providing commands to bundle Module Federation remotes.
 
 ## Installation
 
-1. First, ensure you have RNEF set up in your project.
+1. First, ensure you have [RNEF](https://github.com/callstack/rnef) set up in your project.
 
 2. Install the plugin:
 
 ```bash
-npm install --save-dev @metro-mf/plugin-rnef
-# or
-yarn add --dev @metro-mf/plugin-rnef
+npm install --save-dev @module-federation/metro-plugin-rnef
 ```
 
-3. Add the plugin to your RNEF configuration (typically in `rnef.config.ts` or `rnef.config.js`):
+3. Add the plugin to your RNEF configuration (typically in `rnef.config.mjs`):
 
 ```typescript
-import { defineConfig } from '@rnef/config';
-import moduleFederation from '@metro-mf/plugin-rnef';
+import { pluginMetro } from "@rnef/plugin-metro";
+import moduleFederation from "@module-federation/metro-plugin-rnef";
 
-export default defineConfig({
-  plugins: [
-    // ... other plugins
-    moduleFederation({
-      moduleFederation: {
-        // Optional: Set default platform if not specified in the command
-        defaultPlatform: 'ios',
-      },
-    }),
-  ],
-});
+/** @type {import('@rnef/config').Config} */
+export default {
+  bundler: pluginMetro(),
+  plugins: [moduleFederation()],
+};
 ```
 
 ## Usage
@@ -39,42 +31,24 @@ export default defineConfig({
 
 ```bash
 # Bundle for iOS
-rnef bundle-mf-remote --entry-file ./src/remoteEntry.js --platform ios --bundle-output ./dist/ios/remote.bundle
+rnef bundle-mf-remote --platform ios
 
 # Bundle for Android
-rnef bundle-mf-remote --entry-file ./src/remoteEntry.js --platform android --bundle-output ./dist/android/remote.bundle
-
-# With source maps
-rnef bundle-mf-remote \
-  --entry-file ./src/remoteEntry.js \
-  --platform ios \
-  --bundle-output ./dist/ios/remote.bundle \
-  --sourcemap-output ./dist/ios/remote.map
-
-# Production build with minification
-rnef bundle-mf-remote --entry-file ./src/remoteEntry.js --platform ios --dev false --bundle-output ./dist/ios/remote.bundle
+rnef bundle-mf-remote --platform android
 ```
 
 ### Available Options
 
-All standard `@module-federation/metro` options are supported. Common ones include:
-
-- `--entry-file <path>`: (Required) Path to the entry file
-- `--platform <string>`: Target platform (ios, android, etc.)
-- `--dev [boolean]`: Whether to build in development mode (default: true)
-- `--minify [boolean]`: Whether to minify the bundle
+- `--platform <string>`: Target platform (default: "ios") - Either "ios" or "android"
+- `--dev [boolean]`: If false, warnings are disabled and the bundle is minified (default: true)
+- `--minify [boolean]`: Allows overriding whether bundle is minified. This defaults to false if dev is true, and true if dev is false. Disabling minification can be useful for speeding up production builds for testing purposes.
+- `--bundle-encoding <string>`: Encoding the bundle should be written in (default: "utf8")
+- `--max-workers <number>`: Specifies the maximum number of workers the worker-pool will spawn for transforming files. This defaults to the number of the cores available on your machine.
 - `--bundle-output <string>`: File path where to store the resulting bundle
-- `--sourcemap-output <string>`: File path where to store the source map
-- `--assets-dest <string>`: Directory to copy assets to
-- `--reset-cache`: Whether to reset the Metro cache
-
-## Development
-
-1. Clone the repository
-2. Install dependencies: `yarn`
-3. Build the package: `yarn build`
-4. Link the package for local development: `yarn link`
-
-## License
-
-MIT
+- `--sourcemap-output <string>`: File name where to store the sourcemap file for resulting bundle, ex. /tmp/groups.map
+- `--sourcemap-sources-root <string>`: Path to make sourcemap's sources entries relative to, ex. /root/dir
+- `--sourcemap-use-absolute-path`: Report SourceMapURL using its full path (default: false)
+- `--assets-dest <string>`: Directory name where to store assets referenced in the bundle
+- `--asset-catalog-dest [string]`: Path where to create an iOS Asset Catalog for images
+- `--reset-cache`: Removes cached files (default: false)
+- `--config <string>`: Path to the CLI configuration file
