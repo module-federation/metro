@@ -9,6 +9,7 @@ import {
   ModuleFederationConfig,
   ModuleFederationConfigNormalized,
 } from "./types";
+import { ConfigError } from "./utils/errors";
 
 declare global {
   var __METRO_FEDERATION_CONFIG: ModuleFederationConfigNormalized;
@@ -263,6 +264,16 @@ function replaceModule(from: RegExp, to: string) {
   };
 }
 
+function validateOptions(options: ModuleFederationConfigNormalized) {
+  // validate filename
+  if (!options.filename.endsWith(".bundle")) {
+    throw new ConfigError(
+      `Invalid filename: ${options.filename}. ` +
+        "Filename must end with .bundle extension."
+    );
+  }
+}
+
 function normalizeOptions(
   options: ModuleFederationConfig
 ): ModuleFederationConfigNormalized {
@@ -300,6 +311,8 @@ function withModuleFederation(
   const isRemote = !isHost;
 
   const options = normalizeOptions(federationOptions);
+
+  validateOptions(options);
 
   const projectNodeModulesPath = path.resolve(
     config.projectRoot,
