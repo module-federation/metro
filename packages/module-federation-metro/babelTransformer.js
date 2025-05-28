@@ -42,33 +42,12 @@ function transform({ filename, options, plugins, src }) {
         })
       : parseSync(src, babelConfig);
 
-    if (filename === "index.js") {
-      console.log("options", options);
-    }
-
-    // if (filename === "index.js") {
-    //   console.log("Before");
-    //   console.log(sourceAst);
-    // }
-
-    traverse(sourceAst, {
-      ImportDeclaration(path) {},
-    });
-
-    // if (filename === "index.js") {
-    //   console.log("After");
-    //   console.log(sourceAst);
-    // }
-
     const transformResult = transformFromAstSync(sourceAst, src, babelConfig);
 
     return {
       ast: nullthrows(transformResult.ast),
       metadata: transformResult.metadata,
     };
-  } catch (e) {
-    // console.log("ERROR HERE");
-    // console.log(e);
   } finally {
     if (OLD_BABEL_ENV) {
       process.env.BABEL_ENV = OLD_BABEL_ENV;
