@@ -23,7 +23,7 @@ const ASYNC_REQUIRE_HOST = "mf:async-require-host";
 const ASYNC_REQUIRE_REMOTE = "mf:async-require-remote";
 
 const MANIFEST_FILENAME = "mf-manifest.json";
-const DEFAULT_ENTRY_FILENAME = "remoteEntry.js";
+const DEFAULT_ENTRY_FILENAME = "remoteEntry.bundle";
 
 function getSharedString(options: ModuleFederationConfigNormalized) {
   const shared = Object.keys(options.shared).reduce((acc, name) => {
