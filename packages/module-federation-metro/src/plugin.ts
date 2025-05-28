@@ -3,7 +3,6 @@ import fs from "node:fs";
 import type { ConfigT } from "metro-config";
 import type { Resolution } from "metro-resolver";
 import generateManifest from "./generate-manifest";
-import createEnhanceMiddleware from "./enhance-middleware";
 import {
   SharedConfig,
   ModuleFederationConfig,
