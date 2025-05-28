@@ -1,0 +1,65 @@
+const t = require("@babel/types");
+
+const projectRoot = process.cwd();
+const metroConfig = require(`${projectRoot}/metro.config.js`);
+
+const remotes = metroConfig.extra.moduleFederation.remotes;
+const REMOTES_REGEX = new RegExp(`^(${Object.keys(remotes).join("|")})\/`);
+
+function isRemoteImport(path) {
+  return (
+    t.isImport(path.node.callee) &&
+    t.isStringLiteral(path.node.arguments[0]) &&
+    path.node.arguments[0].value.match(REMOTES_REGEX)
+  );
+}
+
+function getWrappedRemoteImport(importName) {
+  const importArg = t.stringLiteral(importName);
+
+  // require('mf:remote-module-registry')
+  const requireCall = t.callExpression(t.identifier("require"), [
+    t.stringLiteral("mf:remote-module-registry"),
+  ]);
+
+  // .loadRemoteToRegistry('mini/button')
+  const loadCall = t.callExpression(
+    t.memberExpression(requireCall, t.identifier("loadRemoteToRegistry")),
+    [importArg]
+  );
+
+  // import('mini/button')
+  const importCall = t.callExpression(t.import(), [importArg]);
+  importCall.__wasTransformed = true;
+
+  // .then(() => import('mini/button'))
+  const thenCall = t.callExpression(
+    t.memberExpression(loadCall, t.identifier("then")),
+    [t.arrowFunctionExpression([], importCall)]
+  );
+
+  return thenCall;
+}
+
+function moduleFederationBabelPlugin() {
+  return {
+    name: "module-federation-babel-plugin",
+    visitor: {
+      CallExpression(path) {
+        if (path.node.__wasTransformed) {
+          return;
+        }
+
+        if (isRemoteImport(path)) {
+          const wrappedImport = getWrappedRemoteImport(
+            path.node.arguments[0].value
+          );
+
+          path.replaceWith(wrappedImport);
+        }
+      },
+    },
+  };
+}
+
+module.exports = moduleFederationBabelPlugin;
