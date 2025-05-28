@@ -109,16 +109,7 @@ function getRemoteModule(name: string) {
 
 function createMFRuntimeNodeModules(projectNodeModulesPath: string) {
   const mfMetroPath = path.join(projectNodeModulesPath, ".mf-metro");
-
-  if (!fs.existsSync(mfMetroPath)) {
-    fs.mkdirSync(mfMetroPath, { recursive: true });
-  }
-
-  const sharedPath = path.join(mfMetroPath, "shared");
-  if (!fs.existsSync(sharedPath)) {
-    fs.mkdirSync(sharedPath, { recursive: true });
-  }
-
+  fs.mkdirSync(mfMetroPath, { recursive: true });
   return mfMetroPath;
 }
 
@@ -254,6 +245,18 @@ function getRemoteModulePath(name: string, outputDir: string) {
   return remoteModulePath;
 }
 
+function stubSharedModules(
+  options: ModuleFederationConfigNormalized,
+  outputDir: string
+) {
+  const sharedDir = path.join(outputDir, "shared");
+  fs.mkdirSync(sharedDir, { recursive: true });
+  Object.keys(options.shared).forEach((sharedName) => {
+    const sharedFilePath = getSharedPath(sharedName, outputDir);
+    fs.writeFileSync(sharedFilePath, `// shared/${sharedName} stub`, "utf-8");
+  });
+}
+
 function replaceModule(from: RegExp, to: string) {
   return (resolved: Resolution): Resolution => {
     if (resolved.type === "sourceFile" && from.test(resolved.filePath)) {
@@ -307,6 +310,9 @@ function withModuleFederation(
   );
 
   const mfMetroPath = createMFRuntimeNodeModules(projectNodeModulesPath);
+
+  // create stubs for shared modules for watchman
+  stubSharedModules(options, mfMetroPath);
 
   // auto-inject 'metro-core-plugin' MF runtime plugin
   options.plugins = [
