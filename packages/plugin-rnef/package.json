@@ -2,6 +2,16 @@
   "name": "@module-federation/metro-plugin-rnef",
   "version": "0.0.1",
   "type": "module",
+  "private": true,
+  "description": "Metro Module Federation plugin for React Native Enterprise Framework (RNEF)",
+  "keywords": [
+    "rnef",
+    "module-federation",
+    "metro",
+    "react-native"
+  ],
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "exports": {
     "types": "./dist/index.d.ts",
     "import": "./dist/index.js"
@@ -10,9 +20,11 @@
     "dist"
   ],
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
   },
   "author": "Jakub Romanczyk <jakub.romanczyk@callstack.com>",
+  "license": "MIT",
   "scripts": {
     "build": "tsc",
     "dev": "tsc --watch"
