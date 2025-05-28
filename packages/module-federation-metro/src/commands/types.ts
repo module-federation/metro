@@ -7,9 +7,25 @@ type Logger = {
   log: (...messages: Array<unknown>) => void;
 };
 
-export interface BundleRemoteConfig {
+export interface BundleFederatedRemoteConfig {
   root: string;
   platforms: Record<string, object>;
   reactNativePath: string;
   logger?: Logger;
 }
+
+export type BundleFederatedRemoteArgs = {
+  entryFile: string;
+  platform: string;
+  dev: boolean;
+  minify?: boolean;
+  bundleEncoding?: "utf8" | "utf16le" | "ascii";
+  maxWorkers?: string;
+  sourcemapOutput?: string;
+  sourcemapSourcesRoot?: string;
+  sourcemapUseAbsolutePath?: boolean;
+  assetsDest?: string;
+  assetCatalogDest?: string;
+  resetCache?: boolean;
+  config?: string;
+};

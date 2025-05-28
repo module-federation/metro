@@ -11,29 +11,16 @@ import relativizeSerializedMap from "./utils/relativizeSerializedMap";
 import { CLIError } from "./utils/cliError";
 import { createResolver } from "./utils/createResolver";
 import { createModulePathRemapper } from "./utils/createModulePathRemapper";
-import { BundleRemoteConfig } from "./types";
+import {
+  BundleFederatedRemoteArgs,
+  BundleFederatedRemoteConfig,
+} from "./types";
 
 declare global {
   var __METRO_FEDERATION_CONFIG: ModuleFederationConfigNormalized;
   var __METRO_FEDERATION_REMOTE_ENTRY_PATH: string | undefined;
   var __METRO_FEDERATION_MANIFEST_PATH: string | undefined;
 }
-
-export type BundleCommandArgs = {
-  entryFile: string;
-  platform: string;
-  dev: boolean;
-  minify?: boolean;
-  bundleEncoding?: "utf8" | "utf16le" | "ascii";
-  maxWorkers?: string;
-  sourcemapOutput?: string;
-  sourcemapSourcesRoot?: string;
-  sourcemapUseAbsolutePath?: boolean;
-  assetsDest?: string;
-  assetCatalogDest?: string;
-  resetCache?: boolean;
-  config?: string;
-};
 
 interface ModuleDescriptor {
   [moduleName: string]: {
@@ -101,7 +88,7 @@ async function saveBundleAndMap(
 }
 
 function getRequestOpts(
-  args: BundleCommandArgs,
+  args: BundleFederatedRemoteArgs,
   opts: {
     isContainerModule: boolean;
     entryFile: string;
@@ -126,7 +113,7 @@ function getRequestOpts(
 }
 
 function getSaveBundleOpts(
-  args: BundleCommandArgs,
+  args: BundleFederatedRemoteArgs,
   opts: {
     bundleOutput: string;
     sourcemapOutput: string;
@@ -146,8 +133,8 @@ function getSaveBundleOpts(
 
 async function bundleFederatedRemote(
   _argv: Array<string>,
-  cfg: BundleRemoteConfig,
-  args: BundleCommandArgs
+  cfg: BundleFederatedRemoteConfig,
+  args: BundleFederatedRemoteArgs
 ): Promise<void> {
   const rawConfig = await loadMetroConfig(cfg, {
     maxWorkers: args.maxWorkers,

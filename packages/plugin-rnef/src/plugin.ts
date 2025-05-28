@@ -1,14 +1,11 @@
 import type { PluginApi, PluginOutput } from "@rnef/config";
 import { color, logger, outro } from "@rnef/tools";
 import commands from "module-federation-metro/commands";
+import type { BundleFederatedRemoteArgs } from "module-federation-metro/commands";
 
 interface PluginConfig {
   platforms?: Record<string, object>;
 }
-
-const bundleFederatedRemote = commands[0];
-
-type BundleRemoteArgs = Parameters<(typeof bundleFederatedRemote)["func"]>[2];
 
 export const pluginMetroModuleFederation =
   (pluginConfig: PluginConfig = {}) =>
@@ -18,7 +15,7 @@ export const pluginMetroModuleFederation =
       name: "bundle-mf-remote",
       description:
         "Bundles a Module Federation remote, including its container entry and all exposed modules for consumption by host applications",
-      action: async (args: BundleRemoteArgs) => {
+      action: async (args: BundleFederatedRemoteArgs) => {
         const commandConfig = {
           root: api.getProjectRoot(),
           platforms: api.getPlatforms(),
@@ -32,11 +29,11 @@ export const pluginMetroModuleFederation =
           )}`
         );
 
-        await bundleFederatedRemote.func([], commandConfig, args);
+        await commands.bundleFederatedRemote([], commandConfig, args);
         logger.info("Bundle artifacts available at ...");
         outro(`Success 🎉.`);
       },
-      options: bundleFederatedRemote.options,
+      options: commands.bundleFederatedRemoteOptions,
     });
 
     return {

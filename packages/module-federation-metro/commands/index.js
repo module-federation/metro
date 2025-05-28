@@ -6,4 +6,4 @@ try {
   });
 } catch {}
 
-module.exports = require("../src/commands/index").default;
+module.exports = require("../src/commands/index");

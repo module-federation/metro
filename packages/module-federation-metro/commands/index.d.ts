@@ -1,2 +1,1 @@
-import commands from "../src/commands";
-export = commands;
+export * from "../src/commands";

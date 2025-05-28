@@ -1,13 +1,8 @@
-import bundleFederatedRemote from "./command";
-import options from "./options";
+export { default as bundleFederatedRemote } from "./command";
 
-const bundleMFRemoteCommand = {
-  name: "bundle-mf-remote",
-  description:
-    "Bundles a Module Federation remote, including its container entry and all exposed modules for consumption by host applications",
-  // @ts-ignore
-  func: bundleFederatedRemote,
-  options,
-} as const;
+export { default as bundleFederatedRemoteOptions } from "./options";
 
-export default [bundleMFRemoteCommand];
+export type {
+  BundleFederatedRemoteArgs,
+  BundleFederatedRemoteConfig,
+} from "./types";
