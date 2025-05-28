@@ -12,12 +12,10 @@
   "publishConfig": {
     "access": "public"
   },
+  "author": "Jakub Romanczyk <jakub.romanczyk@callstack.com>",
   "scripts": {
     "build": "tsc",
     "dev": "tsc --watch"
-  },
-  "dependencies": {
-    "@rnef/tools": "^0.7.13"
   },
   "devDependencies": {
     "@rnef/config": "^0.7.13",
