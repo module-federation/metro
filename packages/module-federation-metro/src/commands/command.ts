@@ -305,7 +305,9 @@ async function bundleFederatedRemote(
       moduleName,
       { moduleInputFilepath, moduleOutputDir, isContainerModule = false },
     ]) => {
-      const moduleBundleName = `${moduleName}.bundle`;
+      const moduleBundleName = isContainerModule
+        ? moduleName
+        : `${moduleName}.bundle`;
       const moduleBundleFilepath = path.resolve(
         moduleOutputDir,
         moduleBundleName
