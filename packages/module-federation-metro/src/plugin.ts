@@ -367,7 +367,6 @@ function withModuleFederation(
     transformer: {
       ...config.transformer,
       globalPrefix: options.name,
-      // babelTransformerPath: babelTransformerPath,
     },
     resolver: {
       ...config.resolver,
