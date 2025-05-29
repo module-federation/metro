@@ -1,5 +1,5 @@
 import LottieView from 'lottie-react-native';
-import React, {Ref, useRef} from 'react';
+import React, {Ref} from 'react';
 import {StyleSheet, useWindowDimensions, View} from 'react-native';
 
 type Props = {

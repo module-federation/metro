@@ -7,18 +7,15 @@ import {
   Pressable,
   SafeAreaView,
 } from 'react-native';
-import {loadRemote} from '@module-federation/runtime';
 import {VERSION} from 'lodash';
 
 import Card from './Card';
 
 // @ts-ignore
-const Info = React.lazy(() => loadRemote('mini/info'));
+const Info = React.lazy(() => import('mini/info'));
 
 // @ts-ignore
-const NestedMiniInfo = React.lazy(() =>
-  loadRemote('nestedMini/nestedMiniInfo'),
-);
+const NestedMiniInfo = React.lazy(() => import('nestedMini/nestedMiniInfo'));
 
 function App(): React.JSX.Element {
   const [shouldLoadMini, setShouldLoadMini] = useState(false);

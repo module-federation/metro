@@ -3,13 +3,14 @@ const t = require("@babel/types");
 const projectRoot = process.cwd();
 const metroConfig = require(`${projectRoot}/metro.config.js`);
 
-const remotes = metroConfig.extra.moduleFederation.remotes;
+const remotes = metroConfig.extra.moduleFederation?.remotes || {};
 const REMOTES_REGEX = new RegExp(`^(${Object.keys(remotes).join("|")})\/`);
 
 function isRemoteImport(path) {
   return (
     t.isImport(path.node.callee) &&
     t.isStringLiteral(path.node.arguments[0]) &&
+    Object.keys(remotes).length > 0 &&
     path.node.arguments[0].value.match(REMOTES_REGEX)
   );
 }

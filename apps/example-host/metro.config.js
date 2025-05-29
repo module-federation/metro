@@ -39,6 +39,12 @@ module.exports = withModuleFederation(
         requiredVersion: '0.79.0',
         version: '0.79.0',
       },
+      'react-native/Libraries/Network/RCTNetworking': {
+        singleton: true,
+        eager: true,
+        requiredVersion: '0.79.0',
+        version: '0.79.0',
+      },
       lodash: {
         singleton: false,
         eager: false,
