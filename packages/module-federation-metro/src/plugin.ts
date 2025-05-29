@@ -339,10 +339,6 @@ function withModuleFederation(
     __dirname,
     "../async-require-remote.js"
   );
-  const babelTransformerPath = path.resolve(
-    __dirname,
-    "../babelTransformer.js"
-  );
 
   const manifestPath = path.join(mfMetroPath, MANIFEST_FILENAME);
   const manifest = generateManifest(options);
