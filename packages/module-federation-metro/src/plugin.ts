@@ -8,6 +8,7 @@ import {
   SharedConfig,
   ModuleFederationConfig,
   ModuleFederationConfigNormalized,
+  Shared,
 } from "./types";
 
 declare global {
@@ -40,6 +41,15 @@ function getSharedString(options: ModuleFederationConfigNormalized) {
   return sharedString;
 }
 
+function getEarlySharedDeps(shared: Shared) {
+  return Object.keys(shared).filter((name) => {
+    if (name === "react") return true;
+    if (name === "react-native") return true;
+    if (name.startsWith("react-native/")) return true;
+    return false;
+  });
+}
+
 function getInitHostModule(options: ModuleFederationConfigNormalized) {
   const initHostPath = require.resolve("./runtime/init-host.js");
   let initHostModule = fs.readFileSync(initHostPath, "utf-8");
@@ -47,11 +57,7 @@ function getInitHostModule(options: ModuleFederationConfigNormalized) {
   const sharedString = getSharedString(options);
 
   // must be loaded synchronously at all times
-  const earlySharedDeps = [
-    "react",
-    "react-native",
-    "react-native/Libraries/Network/RCTNetworking",
-  ];
+  const earlySharedDeps = getEarlySharedDeps(options.shared);
 
   // Replace placeholders with actual values
   initHostModule = initHostModule
@@ -159,7 +165,7 @@ function getRemoteEntryModule(options: ModuleFederationConfigNormalized) {
   let remoteEntryModule = fs.readFileSync(remoteEntryTemplatePath, "utf-8");
 
   const sharedString = getSharedString(options);
-  const earlySharedDeps = ["react", "react-native"];
+  const earlySharedDeps = getEarlySharedDeps(options.shared);
 
   const exposes = options.exposes || {};
 
