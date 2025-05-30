@@ -47,7 +47,11 @@ function getInitHostModule(options: ModuleFederationConfigNormalized) {
   const sharedString = getSharedString(options);
 
   // must be loaded synchronously at all times
-  const earlySharedDeps = ["react", "react-native"];
+  const earlySharedDeps = [
+    "react",
+    "react-native",
+    "react-native/Libraries/Network/RCTNetworking",
+  ];
 
   // Replace placeholders with actual values
   initHostModule = initHostModule
