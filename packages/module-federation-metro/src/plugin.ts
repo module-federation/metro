@@ -3,6 +3,7 @@ import fs from "node:fs";
 import type { ConfigT } from "metro-config";
 import type { Resolution } from "metro-resolver";
 import generateManifest from "./generate-manifest";
+import { getModuleFederationSerializer } from "./serializer";
 import {
   SharedConfig,
   ModuleFederationConfig,
@@ -390,6 +391,7 @@ function withModuleFederation(
     ...config,
     serializer: {
       ...config.serializer,
+      customSerializer: getModuleFederationSerializer(),
       getModulesRunBeforeMainModule: (entryFilePath) => {
         return initHostPath ? [initHostPath] : [];
       },
