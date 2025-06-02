@@ -12,10 +12,10 @@ import type { ModuleFederationConfigNormalized } from "./types";
 
 type CustomSerializer = SerializerConfigT["customSerializer"];
 
-const getSyncRemoteModules = (
+function getSyncRemoteModules(
   graph: ReadOnlyGraph<MixedOutput>,
   _remotes: Record<string, string>
-) => {
+) {
   const remotes = new Set(Object.keys(_remotes));
   const syncRemoteModules = new Set<string>();
 
@@ -38,20 +38,20 @@ const getSyncRemoteModules = (
   }
 
   return syncRemoteModules;
-};
+}
 
-const createMainBundle = (
+function createMainBundle(
   entryPoint: string,
   preModules: readonly Module<MixedOutput>[],
   graph: ReadOnlyGraph<MixedOutput>,
   bundleOptions: SerializerOptions<MixedOutput>
-) => {
+) {
   const { code: bundle } = bundleToString(
     baseJSBundle(entryPoint, preModules, graph, bundleOptions)
   );
 
   return bundle;
-};
+}
 
 const getModuleFederationSerializer: (
   mfConfig: ModuleFederationConfigNormalized
