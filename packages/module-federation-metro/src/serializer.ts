@@ -8,59 +8,36 @@ import type { SerializerConfigT } from "metro-config";
 
 import baseJSBundle from "metro/src/DeltaBundler/Serializers/baseJSBundle";
 import bundleToString from "metro/src/lib/bundleToString";
+import type { ModuleFederationConfigNormalized } from "./types";
 
 type CustomSerializer = SerializerConfigT["customSerializer"];
 
-const getLazyModules = (graph: ReadOnlyGraph<MixedOutput>) => {
-  const lazyModules = new Set<string>();
+const getSyncRemoteModules = (
+  graph: ReadOnlyGraph<MixedOutput>,
+  _remotes: Record<string, string>
+) => {
+  const remotes = new Set(Object.keys(_remotes));
+  const syncRemoteModules = new Set<string>();
 
   for (const [, module] of graph.dependencies) {
     for (const dependency of module.dependencies.values()) {
-      if (dependency.data.data.asyncType === "async") {
-        lazyModules.add(dependency.absolutePath);
+      // null means it's a sync dependency
+      if (dependency.data.data.asyncType !== null) {
+        continue;
+      }
+
+      // remotes always follow format of <remoteName>/<exposedModule>
+      const remoteCandidate = dependency.data.name.split("/")[0];
+      const isValidCandidate =
+        remoteCandidate.length < dependency.data.name.length;
+
+      if (isValidCandidate && remotes.has(remoteCandidate)) {
+        syncRemoteModules.add(dependency.absolutePath);
       }
     }
   }
 
-  return lazyModules;
-};
-
-const getMainBundleModules = (
-  entryPoint: string,
-  graph: ReadOnlyGraph<MixedOutput>
-) => {
-  const mainBundleModules = new Set<string>();
-
-  const stack = [entryPoint];
-  const visited = new Set<string>();
-
-  while (stack.length > 0) {
-    const modulePath = stack.pop() as string;
-
-    if (visited.has(modulePath)) {
-      continue;
-    }
-
-    visited.add(modulePath);
-
-    const module = graph.dependencies.get(modulePath);
-
-    if (!module) {
-      continue;
-    }
-
-    mainBundleModules.add(module.path);
-
-    if (module.dependencies) {
-      for (const [, dependency] of module.dependencies) {
-        if (dependency.data.data.asyncType === "async") {
-          stack.push(dependency.absolutePath);
-        }
-      }
-    }
-  }
-
-  return mainBundleModules;
+  return syncRemoteModules;
 };
 
 const createMainBundle = (
@@ -76,45 +53,11 @@ const createMainBundle = (
   return bundle;
 };
 
-const createLazyBundle = (
-  entryPoint: string,
-  graph: ReadOnlyGraph<MixedOutput>,
-  bundleOptions: SerializerOptions<MixedOutput>,
-  mainBundleModules: Set<unknown>
-) => {
-  const filteredGraph = {
-    ...graph,
-    entryPoints: new Set([entryPoint]),
-    dependencies: new Map(),
-  };
-
-  for (const [id, module] of graph.dependencies) {
-    if (!mainBundleModules.has(module.path)) {
-      filteredGraph.dependencies.set(id, module);
-    }
-  }
-
-  const { code: bundle } = bundleToString(
-    baseJSBundle(entryPoint, [], filteredGraph, {
-      ...bundleOptions,
-      modulesOnly: true,
-      runModule: true,
-    })
-  );
-
-  return {
-    id: entryPoint,
-    bundle,
-  };
-};
-
-const getModuleFederationSerializer: () => CustomSerializer = () => {
+const getModuleFederationSerializer: (
+  mfConfig: ModuleFederationConfigNormalized
+) => CustomSerializer = (mfConfig) => {
   return async (entryPoint, preModules, graph, options) => {
-    const lazyModules = getLazyModules(graph);
-    const mainBundleModules = getMainBundleModules(entryPoint, graph);
-    const lazyBundles = Array.from(lazyModules).map((module) =>
-      createLazyBundle(module, graph, options, mainBundleModules)
-    );
+    const syncRemoteModules = getSyncRemoteModules(graph, mfConfig.remotes);
 
     const mainBundle = createMainBundle(entryPoint, preModules, graph, options);
 

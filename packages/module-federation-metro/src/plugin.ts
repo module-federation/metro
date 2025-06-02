@@ -391,7 +391,7 @@ function withModuleFederation(
     ...config,
     serializer: {
       ...config.serializer,
-      customSerializer: getModuleFederationSerializer(),
+      customSerializer: getModuleFederationSerializer(options),
       getModulesRunBeforeMainModule: (entryFilePath) => {
         return initHostPath ? [initHostPath] : [];
       },
