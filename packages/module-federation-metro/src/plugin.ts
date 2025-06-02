@@ -3,12 +3,12 @@ import fs from "node:fs";
 import type { ConfigT } from "metro-config";
 import type { Resolution } from "metro-resolver";
 import generateManifest from "./generate-manifest";
-import createEnhanceMiddleware from "./enhance-middleware";
 import {
   SharedConfig,
   ModuleFederationConfig,
   ModuleFederationConfigNormalized,
 } from "./types";
+import { ConfigError } from "./utils/errors";
 
 declare global {
   var __METRO_FEDERATION_CONFIG: ModuleFederationConfigNormalized;
@@ -22,7 +22,7 @@ const ASYNC_REQUIRE_HOST = "mf:async-require-host";
 const ASYNC_REQUIRE_REMOTE = "mf:async-require-remote";
 
 const MANIFEST_FILENAME = "mf-manifest.json";
-const DEFAULT_ENTRY_FILENAME = "remoteEntry.js";
+const DEFAULT_ENTRY_FILENAME = "remoteEntry.bundle";
 
 function getSharedString(options: ModuleFederationConfigNormalized) {
   const shared = Object.keys(options.shared).reduce((acc, name) => {
@@ -266,6 +266,21 @@ function replaceModule(from: RegExp, to: string) {
   };
 }
 
+function replaceExtension(filepath: string, extension: string) {
+  const { dir, name } = path.parse(filepath);
+  return path.format({ dir, name, ext: extension });
+}
+
+function validateOptions(options: ModuleFederationConfigNormalized) {
+  // validate filename
+  if (!options.filename.endsWith(".bundle")) {
+    throw new ConfigError(
+      `Invalid filename: ${options.filename}. ` +
+        "Filename must end with .bundle extension."
+    );
+  }
+}
+
 function normalizeOptions(
   options: ModuleFederationConfig
 ): ModuleFederationConfigNormalized {
@@ -304,6 +319,8 @@ function withModuleFederation(
 
   const options = normalizeOptions(federationOptions);
 
+  validateOptions(options);
+
   const projectNodeModulesPath = path.resolve(
     config.projectRoot,
     "node_modules"
@@ -326,11 +343,13 @@ function withModuleFederation(
     ? createInitHostVirtualModule(options, mfMetroPath)
     : null;
 
-  let remoteEntryPath: string | undefined,
+  let remoteEntryFilename: string | undefined,
+    remoteEntryPath: string | undefined,
     remoteHMRSetupPath: string | undefined;
 
   if (isRemote) {
-    remoteEntryPath = path.join(mfMetroPath, options.filename);
+    remoteEntryFilename = replaceExtension(options.filename, ".js");
+    remoteEntryPath = path.join(mfMetroPath, remoteEntryFilename);
     fs.writeFileSync(remoteEntryPath, getRemoteEntryModule(options));
 
     remoteHMRSetupPath = path.join(mfMetroPath, "remote-hmr.js");
@@ -405,7 +424,7 @@ function withModuleFederation(
         // virtual entrypoint to create MF containers
         // MF options.filename is provided as a name only and will be requested from the root of project
         // so the filename mini.js becomes ./mini.js and we need to match exactly that
-        if (moduleName === `./${options.filename}`) {
+        if (moduleName === `./${remoteEntryFilename}`) {
           return { type: "sourceFile", filePath: remoteEntryPath as string };
         }
 
@@ -469,10 +488,25 @@ function withModuleFederation(
     },
     server: {
       ...config.server,
-      enhanceMiddleware: createEnhanceMiddleware(
-        MANIFEST_FILENAME,
-        manifestPath
-      ),
+      rewriteRequestUrl(url) {
+        const { pathname } = new URL(url, "protocol://host");
+        // rewrite /mini.bundle -> /mini.js.bundle
+        if (pathname.startsWith(`/${options.filename}`)) {
+          const target = replaceExtension(options.filename, ".js.bundle");
+          return url.replace(options.filename, target);
+        }
+        // rewrite /mf-manifest.json -> /[metro-project]/node_modules/.mf-metro/mf-manifest.json
+        if (pathname.startsWith(`/${MANIFEST_FILENAME}`)) {
+          const root = config.projectRoot;
+          const target = manifestPath.replace(root, "[metro-project]");
+          return url.replace(MANIFEST_FILENAME, target);
+        }
+        // pass through to original rewriteRequestUrl
+        if (config.server.rewriteRequestUrl) {
+          return config.server.rewriteRequestUrl(url);
+        }
+        return url;
+      },
     },
   };
 }
