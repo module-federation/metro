@@ -7,10 +7,13 @@ import type {
 import type { SerializerConfigT } from "metro-config";
 
 import bundleToString from "metro/src/lib/bundleToString";
+import CountingSet from "metro/src/lib/CountingSet";
 import getAppendScripts from "metro/src/lib/getAppendScripts";
 import processModules from "metro/src/DeltaBundler/Serializers/helpers/processModules";
 
-import type { ModuleFederationConfigNormalized, Shared } from "./types";
+import type { ModuleFederationConfigNormalized, Shared } from "../types";
+import { countLines } from "./utils";
+// import { getInitHostModule } from "./host";
 
 type CustomSerializer = SerializerConfigT["customSerializer"];
 
@@ -20,11 +23,38 @@ interface Bundle {
   pre: string;
 }
 
+// function generateInitHostModule(
+//   mfConfig: ModuleFederationConfigNormalized
+// ): Module<MixedOutput> {
+//   const code = getInitHostModule(mfConfig);
+//   const dependencies = new Map();
+
+//   dependencies.set()
+//   return {
+//     path: "mf:init-host",
+//     dependencies: new Map(),
+//     getSource: (): Buffer => Buffer.from(""),
+//     inverseDependencies: new CountingSet(),
+//     output: [
+//       {
+//         type: "js/script/virtual",
+//         data: {
+//           code,
+//           // @ts-ignore
+//           lineCount: countLines(code),
+//           map: [],
+//         },
+//       },
+//     ],
+//   };
+// }
+
 function baseJSBundle(
   entryPoint: string,
   preModules: readonly Module[],
   graph: ReadOnlyGraph,
-  options: SerializerOptions
+  options: SerializerOptions,
+  mfConfig: ModuleFederationConfigNormalized
 ): Bundle {
   for (const module of graph.dependencies.values()) {
     options.createModuleId(module.path);
@@ -55,19 +85,22 @@ function baseJSBundle(
   );
 
   const postCode = processModules(
-    getAppendScripts(entryPoint, [...preModules, ...modules], {
-      asyncRequireModulePath: options.asyncRequireModulePath,
-      createModuleId: options.createModuleId,
-      getRunModuleStatement: options.getRunModuleStatement,
-      inlineSourceMap: options.inlineSourceMap,
-      runBeforeMainModule: options.runBeforeMainModule,
-      runModule: options.runModule,
-      shouldAddToIgnoreList: options.shouldAddToIgnoreList,
-      sourceMapUrl: options.sourceMapUrl,
-      sourceUrl: options.sourceUrl,
-      // @ts-expect-error incomplete declaration
-      getSourceUrl: options.getSourceUrl,
-    }),
+    [
+      // generateInitHostModule(mfConfig),
+      ...getAppendScripts(entryPoint, [...preModules, ...modules], {
+        asyncRequireModulePath: options.asyncRequireModulePath,
+        createModuleId: options.createModuleId,
+        getRunModuleStatement: options.getRunModuleStatement,
+        inlineSourceMap: options.inlineSourceMap,
+        runBeforeMainModule: options.runBeforeMainModule,
+        runModule: options.runModule,
+        shouldAddToIgnoreList: options.shouldAddToIgnoreList,
+        sourceMapUrl: options.sourceMapUrl,
+        sourceUrl: options.sourceUrl,
+        // @ts-expect-error incomplete declaration
+        getSourceUrl: options.getSourceUrl,
+      }),
+    ],
     processModulesOptions
   )
     .map(([_, code]) => code)
@@ -146,10 +179,11 @@ function createMainBundle(
   entryPoint: string,
   preModules: readonly Module<MixedOutput>[],
   graph: ReadOnlyGraph<MixedOutput>,
-  bundleOptions: SerializerOptions<MixedOutput>
+  bundleOptions: SerializerOptions<MixedOutput>,
+  mfConfig: ModuleFederationConfigNormalized
 ) {
   const { code: bundle } = bundleToString(
-    baseJSBundle(entryPoint, preModules, graph, bundleOptions)
+    baseJSBundle(entryPoint, preModules, graph, bundleOptions, mfConfig)
   );
 
   return bundle;
@@ -162,7 +196,13 @@ const getModuleFederationSerializer: (
     const syncRemoteModules = getSyncRemoteModules(graph, mfConfig.remotes);
     const syncSharedModules = getSyncSharedModules(graph, mfConfig.shared);
 
-    const mainBundle = createMainBundle(entryPoint, preModules, graph, options);
+    const mainBundle = createMainBundle(
+      entryPoint,
+      preModules,
+      graph,
+      options,
+      mfConfig
+    );
 
     return mainBundle;
   };
