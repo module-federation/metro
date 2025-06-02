@@ -21,7 +21,7 @@ module.exports = withModuleFederation(
   mergeConfig(getDefaultConfig(__dirname), config),
   {
     name: 'nestedMini',
-    filename: 'nestedMini.js',
+    filename: 'nestedMini.bundle',
     exposes: {
       './nestedMiniInfo': './src/nested-mini-info.tsx',
     },

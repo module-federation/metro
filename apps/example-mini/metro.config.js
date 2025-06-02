@@ -21,7 +21,7 @@ module.exports = withModuleFederation(
   mergeConfig(getDefaultConfig(__dirname), config),
   {
     name: 'mini',
-    filename: 'mini.js',
+    filename: 'mini.bundle',
     exposes: {
       './info': './src/info.tsx',
     },
