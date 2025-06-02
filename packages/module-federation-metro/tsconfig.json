@@ -19,6 +19,10 @@
         "./vendor/metro/baseJSBundle"
       ],
       "metro/src/lib/bundleToString": ["./vendor/metro/bundleToString"],
+      "metro/src/lib/getAppendScripts": ["./vendor/metro/getAppendScripts"],
+      "metro/src/DeltaBundler/Serializers/helpers/processModules": [
+        "./vendor/metro/processModules"
+      ],
       "metro/src/lib/relativizeSourceMap": [
         "./vendor/metro/relativizeSourceMap"
       ]
