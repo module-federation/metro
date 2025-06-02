@@ -58,6 +58,10 @@ function getSyncSharedModules(
         continue;
       }
 
+      if (module.path.endsWith("init-host.js")) {
+        continue;
+      }
+
       if (sharedImports.has(dependency.data.name)) {
         syncSharedModules.add(dependency.data.name);
       }
