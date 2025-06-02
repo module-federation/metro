@@ -339,6 +339,10 @@ function withModuleFederation(
     __dirname,
     "../async-require-remote.js"
   );
+  const babelTransformerPath = path.resolve(
+    __dirname,
+    "../babel-transformer.js"
+  );
 
   const manifestPath = path.join(mfMetroPath, MANIFEST_FILENAME);
   const manifest = generateManifest(options);
@@ -367,6 +371,7 @@ function withModuleFederation(
     transformer: {
       ...config.transformer,
       globalPrefix: options.name,
+      babelTransformerPath: babelTransformerPath,
     },
     resolver: {
       ...config.resolver,
@@ -471,6 +476,7 @@ function withModuleFederation(
     // @ts-ignore
     extra: {
       moduleFederation: federationOptions,
+      proxiedBabelTransformerPath: config.transformer.babelTransformerPath,
     },
   };
 }
