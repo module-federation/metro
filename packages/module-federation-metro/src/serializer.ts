@@ -8,7 +8,7 @@ import type { SerializerConfigT } from "metro-config";
 
 import baseJSBundle from "metro/src/DeltaBundler/Serializers/baseJSBundle";
 import bundleToString from "metro/src/lib/bundleToString";
-import type { ModuleFederationConfigNormalized } from "./types";
+import type { ModuleFederationConfigNormalized, Shared } from "./types";
 
 type CustomSerializer = SerializerConfigT["customSerializer"];
 
@@ -32,12 +32,39 @@ function getSyncRemoteModules(
         remoteCandidate.length < dependency.data.name.length;
 
       if (isValidCandidate && remotes.has(remoteCandidate)) {
-        syncRemoteModules.add(dependency.absolutePath);
+        syncRemoteModules.add(dependency.data.name);
       }
     }
   }
 
   return syncRemoteModules;
+}
+
+function getSyncSharedModules(
+  graph: ReadOnlyGraph<MixedOutput>,
+  _shared: Shared
+) {
+  const sharedImports = new Set(
+    Object.keys(_shared).map((sharedName) => {
+      return _shared[sharedName].import || sharedName;
+    })
+  );
+  const syncSharedModules = new Set<string>();
+
+  for (const [, module] of graph.dependencies) {
+    for (const dependency of module.dependencies.values()) {
+      // null means it's a sync dependency
+      if (dependency.data.data.asyncType !== null) {
+        continue;
+      }
+
+      if (sharedImports.has(dependency.data.name)) {
+        syncSharedModules.add(dependency.data.name);
+      }
+    }
+  }
+
+  return syncSharedModules;
 }
 
 function createMainBundle(
@@ -58,6 +85,7 @@ const getModuleFederationSerializer: (
 ) => CustomSerializer = (mfConfig) => {
   return async (entryPoint, preModules, graph, options) => {
     const syncRemoteModules = getSyncRemoteModules(graph, mfConfig.remotes);
+    const syncSharedModules = getSyncSharedModules(graph, mfConfig.shared);
 
     const mainBundle = createMainBundle(entryPoint, preModules, graph, options);
 
