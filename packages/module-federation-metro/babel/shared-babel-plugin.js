@@ -1,21 +1,21 @@
 const t = require("@babel/types");
 
 const projectRoot = process.cwd();
-const metroConfig = require(`${projectRoot}/metro.config.js`);
+const manifest = require(`${projectRoot}/node_modules/.mf-metro/mf-manifest.json`);
 
-const remotes = metroConfig.extra.moduleFederation?.remotes || {};
-const REMOTES_REGEX = new RegExp(`^(${Object.keys(remotes).join("|")})\/`);
+const shared = manifest.shared;
+const SHARED_REGEX = new RegExp(`^(${shared.map((s) => s.name).join("|")})\/`);
 
-function isRemoteImport(path) {
+function isSharedImport(path) {
   return (
     t.isImport(path.node.callee) &&
     t.isStringLiteral(path.node.arguments[0]) &&
-    Object.keys(remotes).length > 0 &&
-    path.node.arguments[0].value.match(REMOTES_REGEX)
+    shared.length > 0 &&
+    path.node.arguments[0].value.match(SHARED_REGEX)
   );
 }
 
-function getWrappedRemoteImport(importName) {
+function getWrappedSharedImport(importName) {
   const importArg = t.stringLiteral(importName);
 
   // require('mf:remote-module-registry')
@@ -23,9 +23,9 @@ function getWrappedRemoteImport(importName) {
     t.stringLiteral("mf:remote-module-registry"),
   ]);
 
-  // .loadRemoteToRegistry('mini/button')
+  // .loadSharedToRegistry('mini/button')
   const loadCall = t.callExpression(
-    t.memberExpression(requireCall, t.identifier("loadRemoteToRegistry")),
+    t.memberExpression(requireCall, t.identifier("loadSharedToRegistry")),
     [importArg]
   );
 
@@ -42,17 +42,17 @@ function getWrappedRemoteImport(importName) {
   return thenCall;
 }
 
-function moduleFederationBabelPlugin() {
+function moduleFederationSharedBabelPlugin() {
   return {
-    name: "module-federation-babel-plugin",
+    name: "module-federation-shared-babel-plugin",
     visitor: {
       CallExpression(path) {
         if (path.node.__wasTransformed) {
           return;
         }
 
-        if (isRemoteImport(path)) {
-          const wrappedImport = getWrappedRemoteImport(
+        if (isSharedImport(path)) {
+          const wrappedImport = getWrappedSharedImport(
             path.node.arguments[0].value
           );
 
@@ -63,4 +63,4 @@ function moduleFederationBabelPlugin() {
   };
 }
 
-module.exports = moduleFederationBabelPlugin;
+module.exports = moduleFederationSharedBabelPlugin;

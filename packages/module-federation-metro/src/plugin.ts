@@ -263,6 +263,30 @@ function replaceModule(from: RegExp, to: string) {
   };
 }
 
+function createBabelTransformer({
+  config,
+  mfMetroPath,
+}: {
+  config: ConfigT;
+  mfMetroPath: string;
+}) {
+  const babelTransformerPath = path.join(mfMetroPath, "babel-transformer.js");
+
+  const babelTransformerTemplate = fs.readFileSync(
+    require.resolve("./runtime/babel-transformer.js"),
+    "utf-8"
+  );
+
+  const babelTransformer = babelTransformerTemplate.replaceAll(
+    "__BABEL_TRANSFORMER_PATH__",
+    config.transformer.babelTransformerPath
+  );
+
+  fs.writeFileSync(babelTransformerPath, babelTransformer, "utf-8");
+
+  return babelTransformerPath;
+}
+
 function normalizeOptions(
   options: ModuleFederationConfig
 ): ModuleFederationConfigNormalized {
@@ -339,10 +363,8 @@ function withModuleFederation(
     __dirname,
     "../async-require-remote.js"
   );
-  const babelTransformerPath = path.resolve(
-    __dirname,
-    "../babel-transformer.js"
-  );
+
+  const babelTransformerPath = createBabelTransformer({ config, mfMetroPath });
 
   const manifestPath = path.join(mfMetroPath, MANIFEST_FILENAME);
   const manifest = generateManifest(options);
@@ -472,11 +494,6 @@ function withModuleFederation(
         MANIFEST_FILENAME,
         manifestPath
       ),
-    },
-    // @ts-ignore
-    extra: {
-      moduleFederation: federationOptions,
-      proxiedBabelTransformerPath: config.transformer.babelTransformerPath,
     },
   };
 }

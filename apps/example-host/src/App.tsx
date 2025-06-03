@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -7,7 +7,6 @@ import {
   Pressable,
   SafeAreaView,
 } from 'react-native';
-import {VERSION} from 'lodash';
 
 import Card from './Card';
 
@@ -19,6 +18,13 @@ const NestedMiniInfo = React.lazy(() => import('nestedMini/nestedMiniInfo'));
 
 function App(): React.JSX.Element {
   const [shouldLoadMini, setShouldLoadMini] = useState(false);
+  const [lodashVersion, setLodashVersion] = useState<string>();
+
+  useEffect(() => {
+    import('lodash').then(lodash => {
+      setLodashVersion(lodash.VERSION);
+    });
+  }, [setLodashVersion]);
 
   return (
     <View style={styles.backgroundStyle}>
@@ -34,7 +40,11 @@ function App(): React.JSX.Element {
             <Info
               testID="host-app-info"
               sections={[
-                {name: 'lodash version', value: VERSION, testID: 'host-lodash'},
+                {
+                  name: 'lodash version',
+                  value: lodashVersion,
+                  testID: 'host-lodash',
+                },
               ]}
             />
           </React.Suspense>
