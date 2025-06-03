@@ -57,24 +57,18 @@ function getInitHostModule(options: ModuleFederationConfigNormalized) {
 
   const sharedString = getSharedString(options);
 
-  // must be loaded synchronously at all times
-  const earlySharedDeps = getEarlySharedDeps(options.shared);
-
   // Replace placeholders with actual values
   initHostModule = initHostModule
     .replaceAll("__NAME__", JSON.stringify(options.name))
     .replaceAll("__REMOTES__", generateRemotes(options.remotes))
     .replaceAll("__SHARED__", sharedString)
-    .replaceAll("__EARLY_SHARED__", JSON.stringify(earlySharedDeps))
     .replaceAll("__PLUGINS__", generateRuntimePlugins(options.plugins))
     .replaceAll("__SHARE_STRATEGY__", JSON.stringify(options.shareStrategy));
 
   return initHostModule;
 }
 
-function getRemoteModuleRegistryModule(
-  options: ModuleFederationConfigNormalized
-) {
+function getRemoteModuleRegistryModule() {
   const registryPath = require.resolve("./runtime/remote-module-registry.js");
   let registryModule = fs.readFileSync(registryPath, "utf-8");
 
@@ -213,11 +207,8 @@ function createInitHostVirtualModule(
 }
 
 // virtual module: remote-module-registry
-function createRemoteModuleRegistryModule(
-  options: ModuleFederationConfigNormalized,
-  vmDirPath: string
-) {
-  const registryModule = getRemoteModuleRegistryModule(options);
+function createRemoteModuleRegistryModule(vmDirPath: string) {
+  const registryModule = getRemoteModuleRegistryModule();
   const registryPath = path.join(vmDirPath, "remote-module-registry.js");
   fs.writeFileSync(registryPath, registryModule, "utf-8");
   return registryPath;
@@ -348,7 +339,7 @@ function withModuleFederation(
     ...options.plugins,
   ].map((plugin) => path.relative(mfMetroPath, plugin));
 
-  const registryPath = createRemoteModuleRegistryModule(options, mfMetroPath);
+  const registryPath = createRemoteModuleRegistryModule(mfMetroPath);
 
   const initHostPath = isHost
     ? createInitHostVirtualModule(options, mfMetroPath)
