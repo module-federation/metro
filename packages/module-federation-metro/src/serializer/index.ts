@@ -13,7 +13,6 @@ import processModules from "metro/src/DeltaBundler/Serializers/helpers/processMo
 
 import type { ModuleFederationConfigNormalized, Shared } from "../types";
 import { countLines } from "./utils";
-// import { getInitHostModule } from "./host";
 
 type CustomSerializer = SerializerConfigT["customSerializer"];
 
@@ -23,31 +22,38 @@ interface Bundle {
   pre: string;
 }
 
-// function generateInitHostModule(
-//   mfConfig: ModuleFederationConfigNormalized
-// ): Module<MixedOutput> {
-//   const code = getInitHostModule(mfConfig);
-//   const dependencies = new Map();
+function getEarlyShared(shared: string[]): Module<MixedOutput> {
+  const code = `var __EARLY_SHARED__=${JSON.stringify(shared)};`;
+  return generateVirtualModule("__early_shared__", code);
+}
 
-//   dependencies.set()
-//   return {
-//     path: "mf:init-host",
-//     dependencies: new Map(),
-//     getSource: (): Buffer => Buffer.from(""),
-//     inverseDependencies: new CountingSet(),
-//     output: [
-//       {
-//         type: "js/script/virtual",
-//         data: {
-//           code,
-//           // @ts-ignore
-//           lineCount: countLines(code),
-//           map: [],
-//         },
-//       },
-//     ],
-//   };
-// }
+function getEarlyRemotes(remotes: string[]): Module<MixedOutput> {
+  const code = `var __EARLY_REMOTES__=${JSON.stringify(remotes)};`;
+  return generateVirtualModule("__early_remotes__", code);
+}
+
+function generateVirtualModule(
+  name: string,
+  code: string
+): Module<MixedOutput> {
+  return {
+    dependencies: new Map(),
+    getSource: (): Buffer => Buffer.from(code),
+    inverseDependencies: new CountingSet(),
+    path: name,
+    output: [
+      {
+        type: "js/script/virtual",
+        data: {
+          code,
+          // @ts-ignore
+          lineCount: countLines(code),
+          map: [],
+        },
+      },
+    ],
+  };
+}
 
 function baseJSBundle(
   entryPoint: string,
@@ -141,7 +147,7 @@ function getSyncRemoteModules(
     }
   }
 
-  return syncRemoteModules;
+  return Array.from(syncRemoteModules);
 }
 
 function getSyncSharedModules(
@@ -172,7 +178,7 @@ function getSyncSharedModules(
     }
   }
 
-  return syncSharedModules;
+  return Array.from(syncSharedModules);
 }
 
 function createMainBundle(
@@ -196,9 +202,13 @@ const getModuleFederationSerializer: (
     const syncRemoteModules = getSyncRemoteModules(graph, mfConfig.remotes);
     const syncSharedModules = getSyncSharedModules(graph, mfConfig.shared);
 
+    const earlyShared = getEarlyShared(syncSharedModules);
+    const earlyRemotes = getEarlyRemotes(syncRemoteModules);
+    const finalPreModules = [earlyShared, earlyRemotes, ...preModules];
+
     const mainBundle = createMainBundle(
       entryPoint,
-      preModules,
+      finalPreModules,
       graph,
       options,
       mfConfig
