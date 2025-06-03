@@ -4,7 +4,7 @@ if (!process.env.EXPO_OS) {
 }
 
 if (process.env.NODE_ENV === "production") {
-  function loadBundleAsyncMFWrapper(bundlePath) {
+  function createLoadBundleAsyncMFWrapper() {
     function joinComponents(prefix, suffix) {
       return prefix.replace(/\/+$/, "") + "/" + suffix.replace(/^\/+/, "");
     }
@@ -13,20 +13,25 @@ if (process.env.NODE_ENV === "production") {
       return url.split("/").slice(0, -1).join("/");
     }
 
-    const loadBundleAsync =
+    function getBundlePath(bundlePath, entryUrl) {
+      if (bundlePath.match(/^https?:\/\//)) {
+        return bundlePath;
+      }
+      return joinComponents(getPublicPath(entryUrl), bundlePath);
+    }
+
+    const originalLoadBundleAsync =
       global[`${__METRO_GLOBAL_PREFIX__ ?? ""}__loadBundleAsync`];
 
-    const remoteEntry =
-      global.__METRO_FEDERATION__[__METRO_GLOBAL_PREFIX__].location;
-
-    // resolve the remote bundle path based on the remote location
-    const remoteBundlePath = bundlePath.match(/^https?:\/\//)
-      ? bundlePath
-      : joinComponents(getPublicPath(remoteEntry), bundlePath);
-
-    return loadBundleAsync(remoteBundlePath);
+    return (bundlePath) => {
+      const remoteEntry =
+        global.__METRO_FEDERATION__[__METRO_GLOBAL_PREFIX__].location;
+      // resolve the remote bundle path based on the remote location
+      const remoteBundlePath = getBundlePath(bundlePath, remoteEntry);
+      return originalLoadBundleAsync(remoteBundlePath);
+    };
   }
 
   global[`${__METRO_GLOBAL_PREFIX__}__loadBundleAsync`] =
-    loadBundleAsyncMFWrapper;
+    createLoadBundleAsyncMFWrapper();
 }

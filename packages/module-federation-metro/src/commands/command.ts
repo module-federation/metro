@@ -9,7 +9,7 @@ import type { RequestOptions, OutputOptions } from "metro/src/shared/types";
 import type { ModuleFederationConfigNormalized } from "../types";
 import loadMetroConfig from "./utils/loadMetroConfig";
 import relativizeSerializedMap from "./utils/relativizeSerializedMap";
-import { CLIError } from "./utils/cliError";
+import { CLIError } from "../utils/errors";
 import { createResolver } from "./utils/createResolver";
 import { createModulePathRemapper } from "./utils/createModulePathRemapper";
 
@@ -305,7 +305,9 @@ async function bundleFederatedRemote(
       moduleName,
       { moduleInputFilepath, moduleOutputDir, isContainerModule = false },
     ]) => {
-      const moduleBundleName = `${moduleName}.bundle`;
+      const moduleBundleName = isContainerModule
+        ? moduleName
+        : `${moduleName}.bundle`;
       const moduleBundleFilepath = path.resolve(
         moduleOutputDir,
         moduleBundleName

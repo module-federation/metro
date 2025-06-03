@@ -6,12 +6,14 @@ export interface SharedConfig {
   import?: false;
 }
 
+export type Shared = Record<string, SharedConfig>;
+
 export interface ModuleFederationConfig {
   name: string;
   filename?: string;
   remotes?: Record<string, string>;
   exposes?: Record<string, string>;
-  shared?: Record<string, SharedConfig>;
+  shared?: Shared;
   shareStrategy?: "loaded-first" | "version-first";
   plugins?: string[];
 }

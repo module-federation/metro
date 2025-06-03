@@ -18,3 +18,10 @@ node_modules
 
 # turbo
 .turbo
+
+# dist
+apps/*/dist
+packages/*/dist
+
+# RNEF
+apps/*/.rnef

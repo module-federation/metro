@@ -2,7 +2,7 @@ import path from "node:path";
 import type { Config } from "@react-native-community/cli-types";
 import type { ConfigT, InputConfigT, YargArguments } from "metro-config";
 import { loadConfig, mergeConfig, resolveConfig } from "metro-config";
-import { CLIError } from "./cliError";
+import { CLIError } from "../../utils/errors";
 
 export type { Config };
 

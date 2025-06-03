@@ -21,7 +21,7 @@ module.exports = withModuleFederation(
   mergeConfig(getDefaultConfig(__dirname), config),
   {
     name: 'nestedMini',
-    filename: 'nestedMini.js',
+    filename: 'nestedMini.bundle',
     exposes: {
       './nestedMiniInfo': './src/nested-mini-info.tsx',
     },
@@ -45,10 +45,9 @@ module.exports = withModuleFederation(
       },
       'react-native/Libraries/Network/RCTNetworking': {
         singleton: true,
-        eager: true,
+        eager: false,
         requiredVersion: '0.79.0',
         version: '0.79.0',
-        import: false,
       },
       lodash: {
         singleton: false,
