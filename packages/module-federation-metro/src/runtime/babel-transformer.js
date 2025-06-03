@@ -1,16 +1,14 @@
 const proxiedBabelTransformer = require("__BABEL_TRANSFORMER_PATH__");
 
-function transform({ filename, options, src, plugins }) {
+function transform(config) {
   const enhancedPlugins = [
-    ...plugins,
     "module-federation-metro/babel/remotes-babel-plugin",
     "module-federation-metro/babel/shared-babel-plugin",
+    ...config.plugins,
   ];
 
   return proxiedBabelTransformer.transform({
-    filename,
-    options,
-    src,
+    ...config,
     plugins: enhancedPlugins,
   });
 }
