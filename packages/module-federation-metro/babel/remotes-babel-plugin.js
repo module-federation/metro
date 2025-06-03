@@ -1,19 +1,15 @@
 const t = require("@babel/types");
 
-const projectRoot = process.cwd();
-const manifest = require(`${projectRoot}/node_modules/.mf-metro/mf-manifest.json`);
+function getRemotesRegExp(remotes) {
+  return new RegExp(`^(${Object.keys(remotes).join("|")})\/`);
+}
 
-const remotes = manifest.remotes;
-const REMOTES_REGEX = new RegExp(
-  `^(${remotes.map((r) => r.moduleName).join("|")})\/`
-);
-
-function isRemoteImport(path) {
+function isRemoteImport(path, options) {
   return (
     t.isImport(path.node.callee) &&
     t.isStringLiteral(path.node.arguments[0]) &&
-    remotes.length > 0 &&
-    path.node.arguments[0].value.match(REMOTES_REGEX)
+    Object.keys(options.remotes).length > 0 &&
+    path.node.arguments[0].value.match(getRemotesRegExp(options.remotes))
   );
 }
 
@@ -48,12 +44,12 @@ function moduleFederationRemotesBabelPlugin() {
   return {
     name: "module-federation-remotes-babel-plugin",
     visitor: {
-      CallExpression(path) {
+      CallExpression(path, state) {
         if (path.node.__wasTransformed) {
           return;
         }
 
-        if (isRemoteImport(path)) {
+        if (isRemoteImport(path, state.opts)) {
           const wrappedImport = getWrappedRemoteImport(
             path.node.arguments[0].value
           );

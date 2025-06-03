@@ -1,17 +1,15 @@
 const t = require("@babel/types");
 
-const projectRoot = process.cwd();
-const manifest = require(`${projectRoot}/node_modules/.mf-metro/mf-manifest.json`);
+function getSharedRegExp(shared) {
+  return new RegExp(`^(${Object.keys(shared).join("|")})\/`);
+}
 
-const shared = manifest.shared;
-const SHARED_REGEX = new RegExp(`^(${shared.map((s) => s.name).join("|")})\/`);
-
-function isSharedImport(path) {
+function isSharedImport(path, options) {
   return (
     t.isImport(path.node.callee) &&
     t.isStringLiteral(path.node.arguments[0]) &&
-    shared.length > 0 &&
-    path.node.arguments[0].value.match(SHARED_REGEX)
+    Object.keys(options.shared).length > 0 &&
+    path.node.arguments[0].value.match(getSharedRegExp(options.shared))
   );
 }
 
@@ -46,12 +44,12 @@ function moduleFederationSharedBabelPlugin() {
   return {
     name: "module-federation-shared-babel-plugin",
     visitor: {
-      CallExpression(path) {
+      CallExpression(path, state) {
         if (path.node.__wasTransformed) {
           return;
         }
 
-        if (isSharedImport(path)) {
+        if (isSharedImport(path, state.opts)) {
           const wrappedImport = getWrappedSharedImport(
             path.node.arguments[0].value
           );

@@ -277,10 +277,12 @@ function replaceModule(from: RegExp, to: string) {
 }
 
 function createBabelTransformer({
-  config,
+  proxiedBabelTrasnsformerPath,
+  mfConfig,
   mfMetroPath,
 }: {
-  config: ConfigT;
+  proxiedBabelTrasnsformerPath: string;
+  mfConfig: ModuleFederationConfigNormalized;
   mfMetroPath: string;
 }) {
   const babelTransformerPath = path.join(mfMetroPath, "babel-transformer.js");
@@ -290,10 +292,9 @@ function createBabelTransformer({
     "utf-8"
   );
 
-  const babelTransformer = babelTransformerTemplate.replaceAll(
-    "__BABEL_TRANSFORMER_PATH__",
-    config.transformer.babelTransformerPath
-  );
+  const babelTransformer = babelTransformerTemplate
+    .replaceAll("__BABEL_TRANSFORMER_PATH__", proxiedBabelTrasnsformerPath)
+    .replaceAll("__MF_CONFIG__", JSON.stringify(mfConfig));
 
   fs.writeFileSync(babelTransformerPath, babelTransformer, "utf-8");
 
@@ -399,7 +400,11 @@ function withModuleFederation(
     "../async-require-remote.js"
   );
 
-  const babelTransformerPath = createBabelTransformer({ config, mfMetroPath });
+  const babelTransformerPath = createBabelTransformer({
+    proxiedBabelTrasnsformerPath: config.transformer.babelTransformerPath,
+    mfMetroPath,
+    mfConfig: options,
+  });
 
   const manifestPath = path.join(mfMetroPath, MANIFEST_FILENAME);
   const manifest = generateManifest(options);
