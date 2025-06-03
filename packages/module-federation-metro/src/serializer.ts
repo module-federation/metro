@@ -7,7 +7,6 @@ import type {
 import type { SerializerConfigT } from "metro-config";
 
 import bundleToString from "metro/src/lib/bundleToString";
-import CountingSet from "metro/src/lib/CountingSet";
 import getAppendScripts from "metro/src/lib/getAppendScripts";
 import processModules from "metro/src/DeltaBundler/Serializers/helpers/processModules";
 
@@ -59,8 +58,7 @@ function baseJSBundle(
   entryPoint: string,
   preModules: readonly Module[],
   graph: ReadOnlyGraph,
-  options: SerializerOptions,
-  mfConfig: ModuleFederationConfigNormalized
+  options: SerializerOptions
 ): Bundle {
   for (const module of graph.dependencies.values()) {
     options.createModuleId(module.path);
@@ -91,22 +89,19 @@ function baseJSBundle(
   );
 
   const postCode = processModules(
-    [
-      // generateInitHostModule(mfConfig),
-      ...getAppendScripts(entryPoint, [...preModules, ...modules], {
-        asyncRequireModulePath: options.asyncRequireModulePath,
-        createModuleId: options.createModuleId,
-        getRunModuleStatement: options.getRunModuleStatement,
-        inlineSourceMap: options.inlineSourceMap,
-        runBeforeMainModule: options.runBeforeMainModule,
-        runModule: options.runModule,
-        shouldAddToIgnoreList: options.shouldAddToIgnoreList,
-        sourceMapUrl: options.sourceMapUrl,
-        sourceUrl: options.sourceUrl,
-        // @ts-expect-error incomplete declaration
-        getSourceUrl: options.getSourceUrl,
-      }),
-    ],
+    getAppendScripts(entryPoint, [...preModules, ...modules], {
+      asyncRequireModulePath: options.asyncRequireModulePath,
+      createModuleId: options.createModuleId,
+      getRunModuleStatement: options.getRunModuleStatement,
+      inlineSourceMap: options.inlineSourceMap,
+      runBeforeMainModule: options.runBeforeMainModule,
+      runModule: options.runModule,
+      shouldAddToIgnoreList: options.shouldAddToIgnoreList,
+      sourceMapUrl: options.sourceMapUrl,
+      sourceUrl: options.sourceUrl,
+      // @ts-expect-error incomplete declaration
+      getSourceUrl: options.getSourceUrl,
+    }),
     processModulesOptions
   )
     .map(([_, code]) => code)
@@ -185,11 +180,10 @@ function createMainBundle(
   entryPoint: string,
   preModules: readonly Module<MixedOutput>[],
   graph: ReadOnlyGraph<MixedOutput>,
-  bundleOptions: SerializerOptions<MixedOutput>,
-  mfConfig: ModuleFederationConfigNormalized
+  bundleOptions: SerializerOptions<MixedOutput>
 ) {
   const { code: bundle } = bundleToString(
-    baseJSBundle(entryPoint, preModules, graph, bundleOptions, mfConfig)
+    baseJSBundle(entryPoint, preModules, graph, bundleOptions)
   );
 
   return bundle;
