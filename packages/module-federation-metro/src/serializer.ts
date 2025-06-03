@@ -5,21 +5,13 @@ import type {
   SerializerOptions,
 } from "metro";
 import type { SerializerConfigT } from "metro-config";
-
+import baseJSBundle from "metro/src/DeltaBundler/Serializers/baseJSBundle";
 import bundleToString from "metro/src/lib/bundleToString";
 import CountingSet from "metro/src/lib/CountingSet";
-import getAppendScripts from "metro/src/lib/getAppendScripts";
-import processModules from "metro/src/DeltaBundler/Serializers/helpers/processModules";
 
 import type { ModuleFederationConfigNormalized, Shared } from "./types";
 
 type CustomSerializer = SerializerConfigT["customSerializer"];
-
-interface Bundle {
-  modules: readonly [number, string][];
-  post: string;
-  pre: string;
-}
 
 const newline = /\r\n?|\n|\u2028|\u2029/g;
 
@@ -57,69 +49,6 @@ function generateVirtualModule(
         },
       },
     ],
-  };
-}
-
-function baseJSBundle(
-  entryPoint: string,
-  preModules: readonly Module[],
-  graph: ReadOnlyGraph,
-  options: SerializerOptions
-): Bundle {
-  for (const module of graph.dependencies.values()) {
-    options.createModuleId(module.path);
-  }
-
-  const processModulesOptions = {
-    filter: options.processModuleFilter,
-    createModuleId: options.createModuleId,
-    dev: options.dev,
-    includeAsyncPaths: options.includeAsyncPaths,
-    projectRoot: options.projectRoot,
-    serverRoot: options.serverRoot,
-    sourceUrl: options.sourceUrl,
-  };
-
-  // Do not prepend polyfills or the require runtime when only modules are requested
-  if (options.modulesOnly) {
-    preModules = [];
-  }
-
-  const preCode = processModules(preModules, processModulesOptions)
-    .map(([_, code]) => code)
-    .join("\n");
-
-  const modules = [...graph.dependencies.values()].sort(
-    (a: Module<MixedOutput>, b: Module<MixedOutput>) =>
-      options.createModuleId(a.path) - options.createModuleId(b.path)
-  );
-
-  const postCode = processModules(
-    getAppendScripts(entryPoint, [...preModules, ...modules], {
-      asyncRequireModulePath: options.asyncRequireModulePath,
-      createModuleId: options.createModuleId,
-      getRunModuleStatement: options.getRunModuleStatement,
-      inlineSourceMap: options.inlineSourceMap,
-      runBeforeMainModule: options.runBeforeMainModule,
-      runModule: options.runModule,
-      shouldAddToIgnoreList: options.shouldAddToIgnoreList,
-      sourceMapUrl: options.sourceMapUrl,
-      sourceUrl: options.sourceUrl,
-      // @ts-expect-error incomplete declaration
-      getSourceUrl: options.getSourceUrl,
-    }),
-    processModulesOptions
-  )
-    .map(([_, code]) => code)
-    .join("\n");
-
-  return {
-    pre: preCode,
-    post: postCode,
-    modules: processModules(
-      [...graph.dependencies.values()],
-      processModulesOptions
-    ).map(([module, code]) => [options.createModuleId(module.path), code]),
   };
 }
 
