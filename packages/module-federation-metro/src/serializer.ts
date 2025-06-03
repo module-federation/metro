@@ -89,7 +89,8 @@ function getSyncSharedModules(
       return _shared[sharedName].import || sharedName;
     })
   );
-  const syncSharedModules = new Set<string>();
+  // always include `react` and `react-native`
+  const syncSharedModules = new Set<string>(["react", "react-native"]);
 
   for (const [, module] of graph.dependencies) {
     for (const dependency of module.dependencies.values()) {

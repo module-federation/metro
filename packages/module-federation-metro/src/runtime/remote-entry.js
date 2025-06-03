@@ -7,7 +7,6 @@ __PLUGINS__;
 
 const usedRemotes = __REMOTES__;
 const usedShared = __SHARED__;
-const earlyShared = __EARLY_SHARED__;
 
 const exposesMap = __EXPOSES_MAP__;
 
@@ -55,7 +54,7 @@ async function init(shared = {}, initScope = []) {
   );
 
   // load early shared deps
-  earlyShared.forEach(loadSharedToRegistry);
+  __EARLY_SHARED__.forEach(loadSharedToRegistry);
 
   // setup HMR client after the initializing sync shared deps
   if (__DEV__ && !hmrInitialized) {

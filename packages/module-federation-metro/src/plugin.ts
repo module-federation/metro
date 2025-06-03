@@ -8,7 +8,6 @@ import {
   SharedConfig,
   ModuleFederationConfig,
   ModuleFederationConfigNormalized,
-  Shared,
 } from "./types";
 import { ConfigError } from "./utils/errors";
 
@@ -40,15 +39,6 @@ function getSharedString(options: ModuleFederationConfigNormalized) {
   });
 
   return sharedString;
-}
-
-function getEarlySharedDeps(shared: Shared) {
-  return Object.keys(shared).filter((name) => {
-    if (name === "react") return true;
-    if (name === "react-native") return true;
-    if (name.startsWith("react-native/")) return true;
-    return false;
-  });
 }
 
 function getInitHostModule(options: ModuleFederationConfigNormalized) {
@@ -160,7 +150,6 @@ function getRemoteEntryModule(options: ModuleFederationConfigNormalized) {
   let remoteEntryModule = fs.readFileSync(remoteEntryTemplatePath, "utf-8");
 
   const sharedString = getSharedString(options);
-  const earlySharedDeps = getEarlySharedDeps(options.shared);
 
   const exposes = options.exposes || {};
 
@@ -180,7 +169,6 @@ function getRemoteEntryModule(options: ModuleFederationConfigNormalized) {
     .replaceAll("__PLUGINS__", generateRuntimePlugins(options.plugins))
     .replaceAll("__SHARED__", sharedString)
     .replaceAll("__REMOTES__", generateRemotes(options.remotes))
-    .replaceAll("__EARLY_SHARED__", JSON.stringify(earlySharedDeps))
     .replaceAll("__EXPOSES_MAP__", `{${exposesString}}`)
     .replaceAll("__NAME__", `"${options.name}"`)
     .replaceAll("__SHARE_STRATEGY__", JSON.stringify(options.shareStrategy));
