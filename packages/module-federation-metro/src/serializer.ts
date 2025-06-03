@@ -7,11 +7,11 @@ import type {
 import type { SerializerConfigT } from "metro-config";
 
 import bundleToString from "metro/src/lib/bundleToString";
+import CountingSet from "metro/src/lib/CountingSet";
 import getAppendScripts from "metro/src/lib/getAppendScripts";
 import processModules from "metro/src/DeltaBundler/Serializers/helpers/processModules";
 
-import type { ModuleFederationConfigNormalized, Shared } from "../types";
-import { countLines } from "./utils";
+import type { ModuleFederationConfigNormalized, Shared } from "./types";
 
 type CustomSerializer = SerializerConfigT["customSerializer"];
 
@@ -19,6 +19,12 @@ interface Bundle {
   modules: readonly [number, string][];
   post: string;
   pre: string;
+}
+
+const newline = /\r\n?|\n|\u2028|\u2029/g;
+
+function countLines(string: string): number {
+  return (string.match(newline) || []).length + 1;
 }
 
 function getEarlyShared(shared: string[]): Module<MixedOutput> {
@@ -204,8 +210,7 @@ const getModuleFederationSerializer: (
       entryPoint,
       finalPreModules,
       graph,
-      options,
-      mfConfig
+      options
     );
 
     return mainBundle;
