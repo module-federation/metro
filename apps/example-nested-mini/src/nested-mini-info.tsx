@@ -1,10 +1,9 @@
 import React from 'react';
 import {View} from 'react-native';
-import {loadRemote} from '@module-federation/runtime';
 import {VERSION} from 'lodash';
 
 // @ts-ignore
-const Info = React.lazy(() => loadRemote('mini/info'));
+const Info = React.lazy(() => import('mini/info'));
 
 export default function NestedMiniInfo() {
   return (
