@@ -28,7 +28,7 @@ function getFederationRemotesDependenciesNamespace(scope: string) {
   return `globalThis.__METRO_FEDERATION__["${scope}"].dependencies.remotes`;
 }
 
-function getRequiredSharedDependencies(
+function getSyncShared(
   shared: string[],
   entry: string,
   scope: string
@@ -38,7 +38,7 @@ function getRequiredSharedDependencies(
   return generateVirtualModule("__required_shared__", code);
 }
 
-function getRequiredRemotesDependencies(
+function getSyncRemotes(
   remotes: string[],
   entry: string,
   scope: string
@@ -81,7 +81,7 @@ function generateVirtualModule(
   };
 }
 
-function getSyncRemoteModules(
+function collectSyncRemoteModules(
   graph: ReadOnlyGraph<MixedOutput>,
   _remotes: Record<string, string>
 ) {
@@ -105,7 +105,7 @@ function getSyncRemoteModules(
   return Array.from(syncRemoteModules);
 }
 
-function getSyncSharedModules(
+function collectSyncSharedModules(
   graph: ReadOnlyGraph<MixedOutput>,
   _shared: Shared
 ) {
@@ -162,37 +162,30 @@ const getModuleFederationSerializer: (
   mfConfig: ModuleFederationConfigNormalized
 ) => CustomSerializer = (mfConfig) => {
   return async (entryPoint, preModules, graph, options) => {
-    const syncRemoteModules = getSyncRemoteModules(graph, mfConfig.remotes);
-    const syncSharedModules = getSyncSharedModules(graph, mfConfig.shared);
+    const syncRemoteModules = collectSyncRemoteModules(graph, mfConfig.remotes);
+    const syncSharedModules = collectSyncSharedModules(graph, mfConfig.shared);
     // main entrypoints always have runModule set to true
     if (options.runModule === true) {
-      const earlyShared = getEarlyShared(syncSharedModules);
-      const earlyRemotes = getEarlyRemotes(syncRemoteModules);
-
-      const finalPreModules = [earlyShared, earlyRemotes, ...preModules];
+      const finalPreModules = [
+        getEarlyShared(syncSharedModules),
+        getEarlyRemotes(syncRemoteModules),
+        ...preModules,
+      ];
       return getBundleCode(entryPoint, finalPreModules, graph, options);
     }
 
-    // TODO revisit this
     // skip non-project source like node_modules
     if (!isProjectSource(entryPoint, options.projectRoot)) {
       return getBundleCode(entryPoint, preModules, graph, options);
     }
 
     const bundlePath = getBundlePath(entryPoint, options.projectRoot);
+    const finalPreModules = [
+      getSyncShared(syncSharedModules, bundlePath, mfConfig.name),
+      getSyncRemotes(syncRemoteModules, bundlePath, mfConfig.name),
+    ];
 
-    const earlyShared = getRequiredSharedDependencies(
-      syncSharedModules,
-      bundlePath,
-      mfConfig.name
-    );
-    const earlyRemotes = getRequiredRemotesDependencies(
-      syncRemoteModules,
-      bundlePath,
-      mfConfig.name
-    );
-
-    const finalPreModules = [earlyShared, earlyRemotes];
+    // include the original preModules if not in modulesOnly mode
     if (options.modulesOnly === false) {
       finalPreModules.push(...preModules);
     }
