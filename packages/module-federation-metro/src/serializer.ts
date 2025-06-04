@@ -1,9 +1,4 @@
-import type {
-  MixedOutput,
-  Module,
-  ReadOnlyGraph,
-  SerializerOptions,
-} from "metro";
+import type { MixedOutput, Module, ReadOnlyGraph } from "metro";
 import type { SerializerConfigT } from "metro-config";
 import baseJSBundle from "metro/src/DeltaBundler/Serializers/baseJSBundle";
 import bundleToString from "metro/src/lib/bundleToString";
@@ -58,25 +53,21 @@ function getSyncRemoteModules(
 ) {
   const remotes = new Set(Object.keys(_remotes));
   const syncRemoteModules = new Set<string>();
-
   for (const [, module] of graph.dependencies) {
     for (const dependency of module.dependencies.values()) {
       // null means it's a sync dependency
       if (dependency.data.data.asyncType !== null) {
         continue;
       }
-
       // remotes always follow format of <remoteName>/<exposedModule>
       const remoteCandidate = dependency.data.name.split("/")[0];
       const isValidCandidate =
         remoteCandidate.length < dependency.data.name.length;
-
       if (isValidCandidate && remotes.has(remoteCandidate)) {
         syncRemoteModules.add(dependency.data.name);
       }
     }
   }
-
   return Array.from(syncRemoteModules);
 }
 
@@ -91,38 +82,21 @@ function getSyncSharedModules(
   );
   // always include `react` and `react-native`
   const syncSharedModules = new Set<string>(["react", "react-native"]);
-
   for (const [, module] of graph.dependencies) {
     for (const dependency of module.dependencies.values()) {
       // null means it's a sync dependency
       if (dependency.data.data.asyncType !== null) {
         continue;
       }
-
       if (module.path.endsWith("init-host.js")) {
         continue;
       }
-
       if (sharedImports.has(dependency.data.name)) {
         syncSharedModules.add(dependency.data.name);
       }
     }
   }
-
   return Array.from(syncSharedModules);
-}
-
-function createMainBundle(
-  entryPoint: string,
-  preModules: readonly Module<MixedOutput>[],
-  graph: ReadOnlyGraph<MixedOutput>,
-  bundleOptions: SerializerOptions<MixedOutput>
-) {
-  const { code: bundle } = bundleToString(
-    baseJSBundle(entryPoint, preModules, graph, bundleOptions)
-  );
-
-  return bundle;
 }
 
 const getModuleFederationSerializer: (
@@ -134,16 +108,19 @@ const getModuleFederationSerializer: (
 
     const earlyShared = getEarlyShared(syncSharedModules);
     const earlyRemotes = getEarlyRemotes(syncRemoteModules);
-    const finalPreModules = [earlyShared, earlyRemotes, ...preModules];
 
-    const mainBundle = createMainBundle(
-      entryPoint,
-      finalPreModules,
-      graph,
-      options
+    const finalPreModules = [earlyShared, earlyRemotes];
+    if (options.modulesOnly === false) {
+      finalPreModules.push(...preModules);
+    }
+
+    const finalOptions = { ...options, modulesOnly: false };
+
+    const { code: bundle } = bundleToString(
+      baseJSBundle(entryPoint, finalPreModules, graph, finalOptions)
     );
 
-    return mainBundle;
+    return bundle;
   };
 };
 
