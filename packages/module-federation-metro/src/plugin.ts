@@ -255,6 +255,31 @@ function replaceModule(from: RegExp, to: string) {
   };
 }
 
+function createBabelTransformer({
+  proxiedBabelTrasnsformerPath,
+  mfConfig,
+  mfMetroPath,
+}: {
+  proxiedBabelTrasnsformerPath: string;
+  mfConfig: ModuleFederationConfigNormalized;
+  mfMetroPath: string;
+}) {
+  const babelTransformerPath = path.join(mfMetroPath, "babel-transformer.js");
+
+  const babelTransformerTemplate = fs.readFileSync(
+    require.resolve("./runtime/babel-transformer.js"),
+    "utf-8"
+  );
+
+  const babelTransformer = babelTransformerTemplate
+    .replaceAll("__BABEL_TRANSFORMER_PATH__", proxiedBabelTrasnsformerPath)
+    .replaceAll("__MF_CONFIG__", JSON.stringify(mfConfig));
+
+  fs.writeFileSync(babelTransformerPath, babelTransformer, "utf-8");
+
+  return babelTransformerPath;
+}
+
 function replaceExtension(filepath: string, extension: string) {
   const { dir, name } = path.parse(filepath);
   return path.format({ dir, name, ext: extension });
@@ -347,6 +372,12 @@ function withModuleFederation(
 
   const asyncRequirePath = path.resolve(__dirname, "../async-require.js");
 
+  const babelTransformerPath = createBabelTransformer({
+    proxiedBabelTrasnsformerPath: config.transformer.babelTransformerPath,
+    mfMetroPath,
+    mfConfig: options,
+  });
+
   const manifestPath = path.join(mfMetroPath, MANIFEST_FILENAME);
   const manifest = generateManifest(options);
   fs.writeFileSync(manifestPath, JSON.stringify(manifest, undefined, 2));
@@ -375,6 +406,7 @@ function withModuleFederation(
     transformer: {
       ...config.transformer,
       globalPrefix: options.name,
+      babelTransformerPath: babelTransformerPath,
     },
     resolver: {
       ...config.resolver,
