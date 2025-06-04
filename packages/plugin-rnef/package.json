@@ -30,13 +30,13 @@
     "dev": "tsc --watch"
   },
   "devDependencies": {
-    "@rnef/config": "^0.7.13",
-    "@rnef/tools": "^0.7.13",
+    "@rnef/config": "^0.7.18",
+    "@rnef/tools": "^0.7.18",
     "@types/node": "^20.0.0",
     "typescript": "5.0.4"
   },
   "peerDependencies": {
-    "@rnef/tools": "^0.7.13",
+    "@rnef/tools": "^0.7.18",
     "module-federation-metro": "workspace:*"
   }
 }
