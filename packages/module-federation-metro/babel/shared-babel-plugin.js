@@ -21,25 +21,13 @@ function getWrappedSharedImport(importName) {
     t.stringLiteral("mf:remote-module-registry"),
   ]);
 
-  // .loadSharedToRegistry('mini/button')
-  const loadCall = t.callExpression(
-    t.memberExpression(requireCall, t.identifier("loadSharedToRegistry")),
+  // .loadAndGetShared(importName)
+  const loadAndGetSharedCall = t.callExpression(
+    t.memberExpression(requireCall, t.identifier("loadAndGetShared")),
     [importArg]
   );
 
-  // getModuleFromRegistry('mini/button')
-  const getModuleCall = t.callExpression(
-    t.memberExpression(requireCall, t.identifier("getModuleFromRegistry")),
-    [importArg]
-  );
-
-  // .then(() => require('mf:remote-module-registry').getModuleFromRegistry('mini/button'))
-  const thenCall = t.callExpression(
-    t.memberExpression(loadCall, t.identifier("then")),
-    [t.arrowFunctionExpression([], getModuleCall)]
-  );
-
-  return thenCall;
+  return loadAndGetSharedCall;
 }
 
 function moduleFederationSharedBabelPlugin() {
