@@ -10,6 +10,7 @@
       "types": "./types/index.d.ts",
       "default": "./index.js"
     },
+    "./babel/*": "./babel/*.js",
     "./bootstrap": "./bootstrap/index.js",
     "./commands": "./commands/index.js",
     "./async-require-host": "./async-require-host.js",
