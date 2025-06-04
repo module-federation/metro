@@ -27,14 +27,16 @@ function getWrappedSharedImport(importName) {
     [importArg]
   );
 
-  // import('mini/button')
-  const importCall = t.callExpression(t.import(), [importArg]);
-  importCall.__wasTransformed = true;
+  // getModuleFromRegistry('mini/button')
+  const getModuleCall = t.callExpression(
+    t.memberExpression(requireCall, t.identifier("getModuleFromRegistry")),
+    [importArg]
+  );
 
-  // .then(() => import('mini/button'))
+  // .then(() => require('mf:remote-module-registry').getModuleFromRegistry('mini/button'))
   const thenCall = t.callExpression(
     t.memberExpression(loadCall, t.identifier("then")),
-    [t.arrowFunctionExpression([], importCall)]
+    [t.arrowFunctionExpression([], getModuleCall)]
   );
 
   return thenCall;
