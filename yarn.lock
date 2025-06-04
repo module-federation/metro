@@ -2593,13 +2593,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rnef/plugin-metro@npm:0.7.13":
-  version: 0.7.13
-  resolution: "@rnef/plugin-metro@npm:0.7.13"
+"@rnef/plugin-metro@npm:0.7.18":
+  version: 0.7.18
+  resolution: "@rnef/plugin-metro@npm:0.7.18"
   dependencies:
     "@react-native-community/cli-server-api": "npm:^18.0.0"
     "@react-native/dev-middleware": "npm:^0.79.1"
-    "@rnef/tools": "npm:^0.7.13"
+    "@rnef/tools": "npm:^0.7.18"
     metro: "npm:^0.82.1"
     metro-config: "npm:^0.82.1"
     metro-core: "npm:^0.82.1"
@@ -2607,17 +2607,17 @@ __metadata:
     tslib: "npm:^2.3.0"
   peerDependencies:
     "@react-native/community-cli-plugin": "*"
-  checksum: 10c0/81930dffa631a5ec3ce5cfef5004696c3acb414c1deb4c69d144b4ce7c91ef96ccd4368ed32f41b3ed27e9c86f2f4fdf674f63ca4352b34d033e122cbaaf7302
+  checksum: 10c0/04ee58b620c6832c406c6188463a1d3d5f768f3c3aabe19d97f940f2a263e4b69110a0d3d1326da19662a8bd98ec0751c3158e8de970f3fb501fc369014db169
   languageName: node
   linkType: hard
 
-"@rnef/plugin-metro@patch:@rnef/plugin-metro@npm%3A0.7.13#~/.yarn/patches/@rnef-plugin-metro-npm-0.7.13-743cc0c7e7.patch":
-  version: 0.7.13
-  resolution: "@rnef/plugin-metro@patch:@rnef/plugin-metro@npm%3A0.7.13#~/.yarn/patches/@rnef-plugin-metro-npm-0.7.13-743cc0c7e7.patch::version=0.7.13&hash=6634d5"
+"@rnef/plugin-metro@patch:@rnef/plugin-metro@npm%3A0.7.18#~/.yarn/patches/@rnef-plugin-metro-npm-0.7.18-cb2976474f.patch":
+  version: 0.7.18
+  resolution: "@rnef/plugin-metro@patch:@rnef/plugin-metro@npm%3A0.7.18#~/.yarn/patches/@rnef-plugin-metro-npm-0.7.18-cb2976474f.patch::version=0.7.18&hash=658173"
   dependencies:
     "@react-native-community/cli-server-api": "npm:^18.0.0"
     "@react-native/dev-middleware": "npm:^0.79.1"
-    "@rnef/tools": "npm:^0.7.13"
+    "@rnef/tools": "npm:^0.7.18"
     metro: "npm:^0.82.1"
     metro-config: "npm:^0.82.1"
     metro-core: "npm:^0.82.1"
@@ -2625,7 +2625,7 @@ __metadata:
     tslib: "npm:^2.3.0"
   peerDependencies:
     "@react-native/community-cli-plugin": "*"
-  checksum: 10c0/6a2bca5e28946f2efa21033df87bfdc8f70356cee9b1aee1bc6e65d8ad4c9ff1bedf48fa48e70fe28223d5192126dab528c3201a513857ccbef9ee2067b15d2f
+  checksum: 10c0/736c5d167f3f9202625e00bb599eb45ae23a1dba3cb9fdf2584911e1b29df65aaed810cf57a527ca69145ebb7c2f199c41189e7c7ee53141d9cdcb927cb33bd9
   languageName: node
   linkType: hard
 
@@ -2637,26 +2637,6 @@ __metadata:
     ts-regex-builder: "npm:^1.8.2"
     tslib: "npm:^2.3.0"
   checksum: 10c0/4d3050ca973cf4f00d3f3223dd4acb39a8d4c708a26830e72f8f0b9145053e69b5513f103c7688865ae5148945abfa07bf589f6b6f0b7bbb312eecc94a8eb819
-  languageName: node
-  linkType: hard
-
-"@rnef/tools@npm:^0.7.13":
-  version: 0.7.13
-  resolution: "@rnef/tools@npm:0.7.13"
-  dependencies:
-    "@clack/prompts": "npm:^0.10.0"
-    "@expo/fingerprint": "npm:^0.11.6"
-    "@types/adm-zip": "npm:^0.5.7"
-    adm-zip: "npm:^0.5.16"
-    appdirsjs: "npm:^1.2.7"
-    fast-glob: "npm:^3.3.2"
-    is-unicode-supported: "npm:^2.1.0"
-    nano-spawn: "npm:^0.2.0"
-    picocolors: "npm:^1.1.1"
-    string-argv: "npm:^0.3.2"
-    tar: "npm:^7.4.3"
-    tslib: "npm:^2.3.0"
-  checksum: 10c0/14cf32bd22513f1176a12bf794d1c64151ce84e57e1fb265992a0d81ff66342af9ea0fc59fcfd4256dfeb2794133868c66ebe18fb1f8116ffa7033eff725f452
   languageName: node
   linkType: hard
 

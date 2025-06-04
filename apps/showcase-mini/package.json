@@ -7,7 +7,7 @@
     "ios": "rnef run:ios",
     "lint": "eslint .",
     "dev": "nodemon --config ../../nodemon.json --exec yarn start",
-    "start": "rnef start --reset-cache --client-logs --port 8082 --max-workers=6",
+    "start": "rnef start --reset-cache --client-logs --port 8082",
     "test": "jest"
   },
   "dependencies": {
