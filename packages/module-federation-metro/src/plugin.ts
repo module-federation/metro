@@ -271,11 +271,11 @@ function stubRemoteModules(
   options: ModuleFederationConfigNormalized,
   outputDir: string
 ) {
-  const remotesDir = path.join(outputDir, "remotes");
+  const remotesDir = path.join(outputDir, "remote");
   fs.mkdirSync(remotesDir, { recursive: true });
   Object.keys(options.remotes).forEach((remoteName) => {
     const remoteFilePath = getSharedPath(remoteName, outputDir);
-    fs.writeFileSync(remoteFilePath, `// remotes/${remoteName} stub`, "utf-8");
+    fs.writeFileSync(remoteFilePath, `// remote/${remoteName} stub`, "utf-8");
   });
 }
 
