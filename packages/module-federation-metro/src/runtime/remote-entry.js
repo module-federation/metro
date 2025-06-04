@@ -72,5 +72,11 @@ async function init(shared = {}, initScope = []) {
 global.__METRO_FEDERATION__[__NAME__] =
   global.__METRO_FEDERATION__[__NAME__] || {};
 
+global.__METRO_FEDERATION__[__NAME__].dependencies = global
+  .__METRO_FEDERATION__[__NAME__].dependencies || {
+  shared: {},
+  remotes: {},
+};
+
 global.__METRO_FEDERATION__[__NAME__].get = get;
 global.__METRO_FEDERATION__[__NAME__].init = init;

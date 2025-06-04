@@ -24,6 +24,12 @@ global.__METRO_FEDERATION__ = global.__METRO_FEDERATION__ || {};
 global.__METRO_FEDERATION__[__NAME__] =
   global.__METRO_FEDERATION__[__NAME__] || {};
 
+global.__METRO_FEDERATION__[__NAME__].dependencies = global
+  .__METRO_FEDERATION__[__NAME__].dependencies || {
+  shared: {},
+  remotes: {},
+};
+
 global.__METRO_FEDERATION__[__NAME__].__shareInit = Promise.all(
   initRes.initializeSharing(shareScopeName, {
     strategy: shareStrategy,

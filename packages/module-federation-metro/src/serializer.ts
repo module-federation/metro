@@ -28,6 +28,24 @@ function getFederationRemotesDependenciesNamespace() {
   return `globalThis.__METRO_FEDERATION__[__METRO_GLOBAL_PREFIX__].dependencies.remotes`;
 }
 
+function getRequiredSharedDependencies(
+  shared: string[],
+  entry: string
+): Module<MixedOutput> {
+  const namespace = getFederationSharedDependenciesNamespace();
+  const code = `${namespace}["${entry}"]=${JSON.stringify(shared)};`;
+  return generateVirtualModule("__required_shared__", code);
+}
+
+function getRequiredRemotesDependencies(
+  remotes: string[],
+  entry: string
+): Module<MixedOutput> {
+  const namespace = getFederationRemotesDependenciesNamespace();
+  const code = `${namespace}["${entry}"]=${JSON.stringify(remotes)};`;
+  return generateVirtualModule("__required_remotes__", code);
+}
+
 function getEarlyShared(shared: string[]): Module<MixedOutput> {
   const code = `var __EARLY_SHARED__=${JSON.stringify(shared)};`;
   return generateVirtualModule("__early_shared__", code);
@@ -136,11 +154,10 @@ const getModuleFederationSerializer: (
   mfConfig: ModuleFederationConfigNormalized
 ) => CustomSerializer = (mfConfig) => {
   return async (entryPoint, preModules, graph, options) => {
+    const syncRemoteModules = getSyncRemoteModules(graph, mfConfig.remotes);
+    const syncSharedModules = getSyncSharedModules(graph, mfConfig.shared);
     // main entrypoints always have runModule set to true
     if (options.runModule === true) {
-      const syncRemoteModules = getSyncRemoteModules(graph, mfConfig.remotes);
-      const syncSharedModules = getSyncSharedModules(graph, mfConfig.shared);
-
       const earlyShared = getEarlyShared(syncSharedModules);
       const earlyRemotes = getEarlyRemotes(syncRemoteModules);
 
@@ -148,13 +165,34 @@ const getModuleFederationSerializer: (
       return getBundleCode(entryPoint, finalPreModules, graph, options);
     }
 
-    return getBundleCode(entryPoint, preModules, graph, options);
-
+    // TODO revisit this
+    // skip non-project source like node_modules
     if (!isProjectSource(entryPoint, options.projectRoot)) {
       return getBundleCode(entryPoint, preModules, graph, options);
     }
 
-    return getBundleCode(entryPoint, preModules, graph, options);
+    const bundlePath = path.relative(options.projectRoot, entryPoint);
+    console.log(">>>>", bundlePath);
+    console.log(">>>>", bundlePath);
+    console.log(">>>>", bundlePath);
+
+    const earlyShared = getRequiredSharedDependencies(
+      syncSharedModules,
+      bundlePath
+    );
+    const earlyRemotes = getRequiredRemotesDependencies(
+      syncRemoteModules,
+      bundlePath
+    );
+
+    const finalPreModules = [earlyShared, earlyRemotes];
+    if (options.modulesOnly === false) {
+      finalPreModules.push(...preModules);
+    }
+
+    // prevent resetting preModules in metro/src/DeltaBundler/Serializers/baseJSBundle.js
+    const finalOptions = { ...options, modulesOnly: false };
+    return getBundleCode(entryPoint, finalPreModules, graph, finalOptions);
   };
 };
 
