@@ -20,4 +20,8 @@ node_modules
 .turbo
 
 # dist
+apps/*/dist
 packages/*/dist
+
+# RNEF
+apps/*/.rnef

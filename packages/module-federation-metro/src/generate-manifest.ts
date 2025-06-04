@@ -25,7 +25,7 @@ function generateMetaData(
       buildName: config.name,
     },
     remoteEntry: {
-      name: `${config.filename}.bundle`,
+      name: config.filename,
       path: "",
       type: "global",
     },
@@ -59,7 +59,7 @@ function generateShared(
     const assets = getEmptyAssets();
 
     if (config.shared[sharedName].eager) {
-      assets.js.sync.push(`${config.filename}.bundle`);
+      assets.js.sync.push(config.filename);
     } else if (config.shared[sharedName].import !== false) {
       assets.js.sync.push(`shared/${sharedName}.bundle`);
     }

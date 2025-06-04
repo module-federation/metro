@@ -21,7 +21,7 @@ module.exports = withModuleFederation(
   mergeConfig(getDefaultConfig(__dirname), config),
   {
     name: 'mini',
-    filename: 'mini.js',
+    filename: 'mini.bundle',
     exposes: {
       './info': './src/info.tsx',
     },
@@ -39,6 +39,12 @@ module.exports = withModuleFederation(
         requiredVersion: '0.79.0',
         version: '0.79.0',
         import: false,
+      },
+      'react-native/Libraries/Network/RCTNetworking': {
+        singleton: true,
+        eager: false,
+        requiredVersion: '0.79.0',
+        version: '0.79.0',
       },
       lodash: {
         singleton: false,

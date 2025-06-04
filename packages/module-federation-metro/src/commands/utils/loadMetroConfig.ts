@@ -2,7 +2,7 @@ import path from "node:path";
 import type { ConfigT, InputConfigT, YargArguments } from "metro-config";
 import { loadConfig, mergeConfig, resolveConfig } from "metro-config";
 import { BundleFederatedRemoteConfig } from "../types";
-import { CLIError } from "./cliError";
+import { CLIError } from "../../utils/errors";
 
 function getOverrideConfig(
   cfg: BundleFederatedRemoteConfig,

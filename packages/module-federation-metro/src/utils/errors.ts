@@ -1,7 +1,7 @@
 const inlineString = (str: string = ""): string =>
   str.replace(/(\s{2,})/gm, " ").trim();
 
-export class CLIError extends Error {
+class EnhancedError extends Error {
   constructor(msg: string, originalError?: Error | string) {
     super(inlineString(msg));
     if (originalError != null) {
@@ -17,3 +17,7 @@ export class CLIError extends Error {
     }
   }
 }
+
+export class ConfigError extends EnhancedError {}
+
+export class CLIError extends EnhancedError {}

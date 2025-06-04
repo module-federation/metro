@@ -3,12 +3,13 @@ import fs from "node:fs";
 import type { ConfigT } from "metro-config";
 import type { Resolution } from "metro-resolver";
 import generateManifest from "./generate-manifest";
-import createEnhanceMiddleware from "./enhance-middleware";
 import {
   SharedConfig,
   ModuleFederationConfig,
   ModuleFederationConfigNormalized,
+  Shared,
 } from "./types";
+import { ConfigError } from "./utils/errors";
 
 declare global {
   var __METRO_FEDERATION_CONFIG: ModuleFederationConfigNormalized;
@@ -22,7 +23,7 @@ const ASYNC_REQUIRE_HOST = "mf:async-require-host";
 const ASYNC_REQUIRE_REMOTE = "mf:async-require-remote";
 
 const MANIFEST_FILENAME = "mf-manifest.json";
-const DEFAULT_ENTRY_FILENAME = "remoteEntry.js";
+const DEFAULT_ENTRY_FILENAME = "remoteEntry.bundle";
 
 function getSharedString(options: ModuleFederationConfigNormalized) {
   const shared = Object.keys(options.shared).reduce((acc, name) => {
@@ -40,6 +41,15 @@ function getSharedString(options: ModuleFederationConfigNormalized) {
   return sharedString;
 }
 
+function getEarlySharedDeps(shared: Shared) {
+  return Object.keys(shared).filter((name) => {
+    if (name === "react") return true;
+    if (name === "react-native") return true;
+    if (name.startsWith("react-native/")) return true;
+    return false;
+  });
+}
+
 function getInitHostModule(options: ModuleFederationConfigNormalized) {
   const initHostPath = require.resolve("./runtime/init-host.js");
   let initHostModule = fs.readFileSync(initHostPath, "utf-8");
@@ -47,7 +57,7 @@ function getInitHostModule(options: ModuleFederationConfigNormalized) {
   const sharedString = getSharedString(options);
 
   // must be loaded synchronously at all times
-  const earlySharedDeps = ["react", "react-native"];
+  const earlySharedDeps = getEarlySharedDeps(options.shared);
 
   // Replace placeholders with actual values
   initHostModule = initHostModule
@@ -109,16 +119,7 @@ function getRemoteModule(name: string) {
 
 function createMFRuntimeNodeModules(projectNodeModulesPath: string) {
   const mfMetroPath = path.join(projectNodeModulesPath, ".mf-metro");
-
-  if (!fs.existsSync(mfMetroPath)) {
-    fs.mkdirSync(mfMetroPath, { recursive: true });
-  }
-
-  const sharedPath = path.join(mfMetroPath, "shared");
-  if (!fs.existsSync(sharedPath)) {
-    fs.mkdirSync(sharedPath, { recursive: true });
-  }
-
+  fs.mkdirSync(mfMetroPath, { recursive: true });
   return mfMetroPath;
 }
 
@@ -164,7 +165,7 @@ function getRemoteEntryModule(options: ModuleFederationConfigNormalized) {
   let remoteEntryModule = fs.readFileSync(remoteEntryTemplatePath, "utf-8");
 
   const sharedString = getSharedString(options);
-  const earlySharedDeps = ["react", "react-native"];
+  const earlySharedDeps = getEarlySharedDeps(options.shared);
 
   const exposes = options.exposes || {};
 
@@ -254,6 +255,18 @@ function getRemoteModulePath(name: string, outputDir: string) {
   return remoteModulePath;
 }
 
+function stubSharedModules(
+  options: ModuleFederationConfigNormalized,
+  outputDir: string
+) {
+  const sharedDir = path.join(outputDir, "shared");
+  fs.mkdirSync(sharedDir, { recursive: true });
+  Object.keys(options.shared).forEach((sharedName) => {
+    const sharedFilePath = getSharedPath(sharedName, outputDir);
+    fs.writeFileSync(sharedFilePath, `// shared/${sharedName} stub`, "utf-8");
+  });
+}
+
 function replaceModule(from: RegExp, to: string) {
   return (resolved: Resolution): Resolution => {
     if (resolved.type === "sourceFile" && from.test(resolved.filePath)) {
@@ -261,6 +274,46 @@ function replaceModule(from: RegExp, to: string) {
     }
     return resolved;
   };
+}
+
+function createBabelTransformer({
+  proxiedBabelTrasnsformerPath,
+  mfConfig,
+  mfMetroPath,
+}: {
+  proxiedBabelTrasnsformerPath: string;
+  mfConfig: ModuleFederationConfigNormalized;
+  mfMetroPath: string;
+}) {
+  const babelTransformerPath = path.join(mfMetroPath, "babel-transformer.js");
+
+  const babelTransformerTemplate = fs.readFileSync(
+    require.resolve("./runtime/babel-transformer.js"),
+    "utf-8"
+  );
+
+  const babelTransformer = babelTransformerTemplate
+    .replaceAll("__BABEL_TRANSFORMER_PATH__", proxiedBabelTrasnsformerPath)
+    .replaceAll("__MF_CONFIG__", JSON.stringify(mfConfig));
+
+  fs.writeFileSync(babelTransformerPath, babelTransformer, "utf-8");
+
+  return babelTransformerPath;
+}
+
+function replaceExtension(filepath: string, extension: string) {
+  const { dir, name } = path.parse(filepath);
+  return path.format({ dir, name, ext: extension });
+}
+
+function validateOptions(options: ModuleFederationConfigNormalized) {
+  // validate filename
+  if (!options.filename.endsWith(".bundle")) {
+    throw new ConfigError(
+      `Invalid filename: ${options.filename}. ` +
+        "Filename must end with .bundle extension."
+    );
+  }
 }
 
 function normalizeOptions(
@@ -301,12 +354,17 @@ function withModuleFederation(
 
   const options = normalizeOptions(federationOptions);
 
+  validateOptions(options);
+
   const projectNodeModulesPath = path.resolve(
     config.projectRoot,
     "node_modules"
   );
 
   const mfMetroPath = createMFRuntimeNodeModules(projectNodeModulesPath);
+
+  // create stubs for shared modules for watchman
+  stubSharedModules(options, mfMetroPath);
 
   // auto-inject 'metro-core-plugin' MF runtime plugin
   options.plugins = [
@@ -320,11 +378,13 @@ function withModuleFederation(
     ? createInitHostVirtualModule(options, mfMetroPath)
     : null;
 
-  let remoteEntryPath: string | undefined,
+  let remoteEntryFilename: string | undefined,
+    remoteEntryPath: string | undefined,
     remoteHMRSetupPath: string | undefined;
 
   if (isRemote) {
-    remoteEntryPath = path.join(mfMetroPath, options.filename);
+    remoteEntryFilename = replaceExtension(options.filename, ".js");
+    remoteEntryPath = path.join(mfMetroPath, remoteEntryFilename);
     fs.writeFileSync(remoteEntryPath, getRemoteEntryModule(options));
 
     remoteHMRSetupPath = path.join(mfMetroPath, "remote-hmr.js");
@@ -339,6 +399,12 @@ function withModuleFederation(
     __dirname,
     "../async-require-remote.js"
   );
+
+  const babelTransformerPath = createBabelTransformer({
+    proxiedBabelTrasnsformerPath: config.transformer.babelTransformerPath,
+    mfMetroPath,
+    mfConfig: options,
+  });
 
   const manifestPath = path.join(mfMetroPath, MANIFEST_FILENAME);
   const manifest = generateManifest(options);
@@ -367,6 +433,7 @@ function withModuleFederation(
     transformer: {
       ...config.transformer,
       globalPrefix: options.name,
+      babelTransformerPath: babelTransformerPath,
     },
     resolver: {
       ...config.resolver,
@@ -399,7 +466,7 @@ function withModuleFederation(
         // virtual entrypoint to create MF containers
         // MF options.filename is provided as a name only and will be requested from the root of project
         // so the filename mini.js becomes ./mini.js and we need to match exactly that
-        if (moduleName === `./${options.filename}`) {
+        if (moduleName === `./${remoteEntryFilename}`) {
           return { type: "sourceFile", filePath: remoteEntryPath as string };
         }
 
@@ -463,10 +530,25 @@ function withModuleFederation(
     },
     server: {
       ...config.server,
-      enhanceMiddleware: createEnhanceMiddleware(
-        MANIFEST_FILENAME,
-        manifestPath
-      ),
+      rewriteRequestUrl(url) {
+        const { pathname } = new URL(url, "protocol://host");
+        // rewrite /mini.bundle -> /mini.js.bundle
+        if (pathname.startsWith(`/${options.filename}`)) {
+          const target = replaceExtension(options.filename, ".js.bundle");
+          return url.replace(options.filename, target);
+        }
+        // rewrite /mf-manifest.json -> /[metro-project]/node_modules/.mf-metro/mf-manifest.json
+        if (pathname.startsWith(`/${MANIFEST_FILENAME}`)) {
+          const root = config.projectRoot;
+          const target = manifestPath.replace(root, "[metro-project]");
+          return url.replace(MANIFEST_FILENAME, target);
+        }
+        // pass through to original rewriteRequestUrl
+        if (config.server.rewriteRequestUrl) {
+          return config.server.rewriteRequestUrl(url);
+        }
+        return url;
+      },
     },
   };
 }
