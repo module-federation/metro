@@ -18,9 +18,8 @@ declare global {
 }
 
 const INIT_HOST = "mf:init-host";
+const ASYNC_REQUIRE = "mf:async-require";
 const REMOTE_MODULE_REGISTRY = "mf:remote-module-registry";
-const ASYNC_REQUIRE_HOST = "mf:async-require-host";
-const ASYNC_REQUIRE_REMOTE = "mf:async-require-remote";
 
 const MANIFEST_FILENAME = "mf-manifest.json";
 const DEFAULT_ENTRY_FILENAME = "remoteEntry.bundle";
@@ -346,14 +345,7 @@ function withModuleFederation(
     fs.writeFileSync(remoteHMRSetupPath, getRemoteHMRSetupModule());
   }
 
-  const asyncRequireHostPath = path.resolve(
-    __dirname,
-    "../async-require-host.js"
-  );
-  const asyncRequireRemotePath = path.resolve(
-    __dirname,
-    "../async-require-remote.js"
-  );
+  const asyncRequirePath = path.resolve(__dirname, "../async-require.js");
 
   const manifestPath = path.join(mfMetroPath, MANIFEST_FILENAME);
   const manifest = generateManifest(options);
@@ -392,14 +384,9 @@ function withModuleFederation(
           return { type: "sourceFile", filePath: initHostPath as string };
         }
 
-        // virtual module: async-require-host
-        if (moduleName === ASYNC_REQUIRE_HOST) {
-          return { type: "sourceFile", filePath: asyncRequireHostPath };
-        }
-
-        // virtual module: async-require-remote
-        if (moduleName === ASYNC_REQUIRE_REMOTE) {
-          return { type: "sourceFile", filePath: asyncRequireRemotePath };
+        // virtual module: async-require
+        if (moduleName === ASYNC_REQUIRE) {
+          return { type: "sourceFile", filePath: asyncRequirePath };
         }
 
         // virtual module: remote-module-registry

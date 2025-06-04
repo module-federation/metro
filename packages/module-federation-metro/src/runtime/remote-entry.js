@@ -1,4 +1,4 @@
-import "mf:async-require-remote";
+import "mf:async-require";
 
 import { loadSharedToRegistry } from "mf:remote-module-registry";
 import { init as runtimeInit } from "@module-federation/runtime";
