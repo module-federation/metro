@@ -267,6 +267,18 @@ function stubSharedModules(
   });
 }
 
+function stubRemoteModules(
+  options: ModuleFederationConfigNormalized,
+  outputDir: string
+) {
+  const remotesDir = path.join(outputDir, "remotes");
+  fs.mkdirSync(remotesDir, { recursive: true });
+  Object.keys(options.remotes).forEach((remoteName) => {
+    const remoteFilePath = getSharedPath(remoteName, outputDir);
+    fs.writeFileSync(remoteFilePath, `// remotes/${remoteName} stub`, "utf-8");
+  });
+}
+
 function replaceModule(from: RegExp, to: string) {
   return (resolved: Resolution): Resolution => {
     if (resolved.type === "sourceFile" && from.test(resolved.filePath)) {
@@ -363,8 +375,9 @@ function withModuleFederation(
 
   const mfMetroPath = createMFRuntimeNodeModules(projectNodeModulesPath);
 
-  // create stubs for shared modules for watchman
+  // create stubs for shared and remote modules for watchman
   stubSharedModules(options, mfMetroPath);
+  stubRemoteModules(options, mfMetroPath);
 
   // auto-inject 'metro-core-plugin' MF runtime plugin
   options.plugins = [
