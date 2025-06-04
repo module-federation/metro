@@ -1,4 +1,10 @@
-import type { MixedOutput, Module, ReadOnlyGraph } from "metro";
+import path from "node:path";
+import type {
+  MixedOutput,
+  Module,
+  ReadOnlyGraph,
+  SerializerOptions,
+} from "metro";
 import type { SerializerConfigT } from "metro-config";
 import baseJSBundle from "metro/src/DeltaBundler/Serializers/baseJSBundle";
 import bundleToString from "metro/src/lib/bundleToString";
@@ -12,6 +18,14 @@ const newline = /\r\n?|\n|\u2028|\u2029/g;
 
 function countLines(string: string): number {
   return (string.match(newline) || []).length + 1;
+}
+
+function getFederationSharedDependenciesNamespace() {
+  return `globalThis.__METRO_FEDERATION__[__METRO_GLOBAL_PREFIX__].dependencies.shared`;
+}
+
+function getFederationRemotesDependenciesNamespace() {
+  return `globalThis.__METRO_FEDERATION__[__METRO_GLOBAL_PREFIX__].dependencies.remotes`;
 }
 
 function getEarlyShared(shared: string[]): Module<MixedOutput> {
@@ -99,28 +113,48 @@ function getSyncSharedModules(
   return Array.from(syncSharedModules);
 }
 
+function isProjectSource(entryPoint: string, projectRoot: string) {
+  const relativePath = path.relative(projectRoot, entryPoint);
+  return (
+    !relativePath.startsWith("..") && !relativePath.startsWith("node_modules")
+  );
+}
+
+function getBundleCode(
+  entryPoint: string,
+  preModules: readonly Module<MixedOutput>[],
+  graph: ReadOnlyGraph<MixedOutput>,
+  options: SerializerOptions<MixedOutput>
+) {
+  const { code } = bundleToString(
+    baseJSBundle(entryPoint, preModules, graph, options)
+  );
+  return code;
+}
+
 const getModuleFederationSerializer: (
   mfConfig: ModuleFederationConfigNormalized
 ) => CustomSerializer = (mfConfig) => {
   return async (entryPoint, preModules, graph, options) => {
-    const syncRemoteModules = getSyncRemoteModules(graph, mfConfig.remotes);
-    const syncSharedModules = getSyncSharedModules(graph, mfConfig.shared);
+    // main entrypoints always have runModule set to true
+    if (options.runModule === true) {
+      const syncRemoteModules = getSyncRemoteModules(graph, mfConfig.remotes);
+      const syncSharedModules = getSyncSharedModules(graph, mfConfig.shared);
 
-    const earlyShared = getEarlyShared(syncSharedModules);
-    const earlyRemotes = getEarlyRemotes(syncRemoteModules);
+      const earlyShared = getEarlyShared(syncSharedModules);
+      const earlyRemotes = getEarlyRemotes(syncRemoteModules);
 
-    const finalPreModules = [earlyShared, earlyRemotes];
-    if (options.modulesOnly === false) {
-      finalPreModules.push(...preModules);
+      const finalPreModules = [earlyShared, earlyRemotes, ...preModules];
+      return getBundleCode(entryPoint, finalPreModules, graph, options);
     }
 
-    const finalOptions = { ...options, modulesOnly: false };
+    return getBundleCode(entryPoint, preModules, graph, options);
 
-    const { code: bundle } = bundleToString(
-      baseJSBundle(entryPoint, finalPreModules, graph, finalOptions)
-    );
+    if (!isProjectSource(entryPoint, options.projectRoot)) {
+      return getBundleCode(entryPoint, preModules, graph, options);
+    }
 
-    return bundle;
+    return getBundleCode(entryPoint, preModules, graph, options);
   };
 };
 
