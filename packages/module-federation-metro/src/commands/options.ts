@@ -32,7 +32,6 @@ const options = [
       "Specifies the maximum number of workers the worker-pool " +
       "will spawn for transforming files. This defaults to the number of the " +
       "cores available on your machine.",
-    parse: (workers: string): number => Number(workers),
   },
   {
     name: "--sourcemap-output <string>",

@@ -5,6 +5,18 @@
   "author": "",
   "main": "./index.js",
   "types": "./types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./types/index.d.ts",
+      "default": "./index.js"
+    },
+    "./babel/*": "./babel/*.js",
+    "./bootstrap": "./bootstrap/index.js",
+    "./commands": "./commands/index.js",
+    "./async-require-host": "./async-require-host.js",
+    "./async-require-remote": "./async-require-remote.js",
+    "./runtime-plugin": "./runtime-plugin.js"
+  },
   "peerDependencies": {
     "react-native": ">=0.79.0"
   },
