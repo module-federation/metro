@@ -44,7 +44,10 @@ function createProductionLoadBundleAsyncWrapper() {
 
 function createFederatedDependenciesLoadBundleAsyncWrapper() {
   function getBundleId(urlPath) {
-    return urlPath.split("?")[0].slice(1);
+    // strip the query params
+    const [bundlePath] = urlPath.split("?");
+    // remove the leading slash and the bundle extension
+    return bundlePath.slice(1).replace(".bundle", "");
   }
 
   function getDependencies(bundleId) {
@@ -63,20 +66,19 @@ function createFederatedDependenciesLoadBundleAsyncWrapper() {
     global[`${__METRO_GLOBAL_PREFIX__ ?? ""}__loadBundleAsync`];
 
   return async (bundlePath) => {
-    const { shared, remotes } = getDependencies(getBundleId(bundlePath));
-
     // resolve the remote bundle path based on the remote location
     const result = await originalLoadBundleAsync(bundlePath);
 
     // at this point the code in the bundle has been evaluated
     // but not yet executed through metroRequire
+    const { shared, remotes } = getDependencies(getBundleId(bundlePath));
 
-    if (shared) {
+    if (shared.length > 0) {
       // load shared used synchronously in the bundle
       await Promise.all(shared.map(loadSharedToRegistry));
     }
 
-    if (remotes) {
+    if (remotes.length > 0) {
       // load remotes used synchronously in the bundle
       await Promise.all(remotes.map(loadRemoteToRegistry));
     }
