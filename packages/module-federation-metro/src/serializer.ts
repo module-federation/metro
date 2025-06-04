@@ -20,28 +20,30 @@ function countLines(string: string): number {
   return (string.match(newline) || []).length + 1;
 }
 
-function getFederationSharedDependenciesNamespace() {
-  return `globalThis.__METRO_FEDERATION__[__METRO_GLOBAL_PREFIX__].dependencies.shared`;
+function getFederationSharedDependenciesNamespace(scope: string) {
+  return `globalThis.__METRO_FEDERATION__["${scope}"].dependencies.shared`;
 }
 
-function getFederationRemotesDependenciesNamespace() {
-  return `globalThis.__METRO_FEDERATION__[__METRO_GLOBAL_PREFIX__].dependencies.remotes`;
+function getFederationRemotesDependenciesNamespace(scope: string) {
+  return `globalThis.__METRO_FEDERATION__["${scope}"].dependencies.remotes`;
 }
 
 function getRequiredSharedDependencies(
   shared: string[],
-  entry: string
+  entry: string,
+  scope: string
 ): Module<MixedOutput> {
-  const namespace = getFederationSharedDependenciesNamespace();
+  const namespace = getFederationSharedDependenciesNamespace(scope);
   const code = `${namespace}["${entry}"]=${JSON.stringify(shared)};`;
   return generateVirtualModule("__required_shared__", code);
 }
 
 function getRequiredRemotesDependencies(
   remotes: string[],
-  entry: string
+  entry: string,
+  scope: string
 ): Module<MixedOutput> {
-  const namespace = getFederationRemotesDependenciesNamespace();
+  const namespace = getFederationRemotesDependenciesNamespace(scope);
   const code = `${namespace}["${entry}"]=${JSON.stringify(remotes)};`;
   return generateVirtualModule("__required_remotes__", code);
 }
@@ -138,6 +140,12 @@ function isProjectSource(entryPoint: string, projectRoot: string) {
   );
 }
 
+function getBundlePath(entryPoint: string, projectRoot: string) {
+  const relativePath = path.relative(projectRoot, entryPoint);
+  const { dir, name } = path.parse(relativePath);
+  return path.format({ dir, name, ext: "" });
+}
+
 function getBundleCode(
   entryPoint: string,
   preModules: readonly Module<MixedOutput>[],
@@ -171,18 +179,17 @@ const getModuleFederationSerializer: (
       return getBundleCode(entryPoint, preModules, graph, options);
     }
 
-    const bundlePath = path.relative(options.projectRoot, entryPoint);
-    console.log(">>>>", bundlePath);
-    console.log(">>>>", bundlePath);
-    console.log(">>>>", bundlePath);
+    const bundlePath = getBundlePath(entryPoint, options.projectRoot);
 
     const earlyShared = getRequiredSharedDependencies(
       syncSharedModules,
-      bundlePath
+      bundlePath,
+      mfConfig.name
     );
     const earlyRemotes = getRequiredRemotesDependencies(
       syncRemoteModules,
-      bundlePath
+      bundlePath,
+      mfConfig.name
     );
 
     const finalPreModules = [earlyShared, earlyRemotes];
