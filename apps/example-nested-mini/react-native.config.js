@@ -12,9 +12,9 @@ async function zephyrWrapper(...args) {
 
   const context = args[1].root;
 
-  const bundleFederatedRemote = commands[0]['func'];
+  const bundleFederatedRemote = commands.bundleFederatedRemote;
 
-  const loadMetroConfig = commands[1];
+  const loadMetroConfig = commands.loadMetroConfig;
 
   await loadMetroConfig(args[1], {
     maxWorkers: args[2].maxWorkers,
