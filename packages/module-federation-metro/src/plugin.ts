@@ -237,6 +237,24 @@ function getSharedPath(name: string, dir: string) {
   return path.join(sharedDir, `${sharedName}.js`);
 }
 
+function createRemoteModule(name: string, outputDir: string) {
+  const remoteModule = getRemoteModule(name);
+  const remoteFilePath = getRemoteModulePath(name, outputDir);
+  fs.mkdirSync(path.dirname(remoteFilePath), { recursive: true });
+  fs.writeFileSync(remoteFilePath, remoteModule, "utf-8");
+  return remoteFilePath;
+}
+
+function getRemoteModulePath(name: string, outputDir: string) {
+  const remoteModuleName = name.replaceAll("/", "_");
+  const remoteModulePath = path.join(
+    outputDir,
+    "remote",
+    `${remoteModuleName}.js`
+  );
+  return remoteModulePath;
+}
+
 function stubSharedModules(
   options: ModuleFederationConfigNormalized,
   outputDir: string
@@ -468,6 +486,14 @@ function withModuleFederation(
             return { type: "sourceFile", filePath: sharedPath };
           } else {
             return context.resolveRequest(context, moduleName, platform);
+          }
+        }
+
+        // remote modules
+        for (const remoteName of Object.keys(options.remotes)) {
+          if (moduleName.startsWith(remoteName + "/")) {
+            const remotePath = createRemoteModule(moduleName, mfMetroPath);
+            return { type: "sourceFile", filePath: remotePath };
           }
         }
 

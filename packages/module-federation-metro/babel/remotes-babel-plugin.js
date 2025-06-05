@@ -21,13 +21,23 @@ function getWrappedRemoteImport(importName) {
     t.stringLiteral("mf:remote-module-registry"),
   ]);
 
-  // .loadAndGetRemote(importName)
-  const loadAndGetRemoteCall = t.callExpression(
-    t.memberExpression(requireCall, t.identifier("loadAndGetRemote")),
+  // .loadRemoteToRegistry('mini/button')
+  const loadCall = t.callExpression(
+    t.memberExpression(requireCall, t.identifier("loadRemoteToRegistry")),
     [importArg]
   );
 
-  return loadAndGetRemoteCall;
+  // import('mini/button')
+  const importCall = t.callExpression(t.import(), [importArg]);
+  importCall.__wasTransformed = true;
+
+  // .then(() => import('mini/button'))
+  const thenCall = t.callExpression(
+    t.memberExpression(loadCall, t.identifier("then")),
+    [t.arrowFunctionExpression([], importCall)]
+  );
+
+  return thenCall;
 }
 
 function moduleFederationRemotesBabelPlugin() {
@@ -35,6 +45,10 @@ function moduleFederationRemotesBabelPlugin() {
     name: "module-federation-remotes-babel-plugin",
     visitor: {
       CallExpression(path, state) {
+        if (path.node.__wasTransformed) {
+          return;
+        }
+
         if (isRemoteImport(path, state.opts)) {
           const wrappedImport = getWrappedRemoteImport(
             path.node.arguments[0].value
