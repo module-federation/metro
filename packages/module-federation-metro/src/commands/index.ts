@@ -2,6 +2,7 @@ export {
   default as bundleFederatedHost,
   bundleFederatedHostOptions,
 } from "./bundle-host";
+export { default as loadMetroConfig } from "./utils/loadMetroConfig";
 
 export {
   default as bundleFederatedRemote,

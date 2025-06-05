@@ -1,5 +1,6 @@
 const commands = require('module-federation-metro/commands');
 const path = require('path');
+const zephyr = require('zephyr-metro-plugin');
 
 async function zephyrWrapper(...args) {
   // before build
@@ -15,9 +16,23 @@ async function zephyrWrapper(...args) {
     config: args[2].config,
   });
 
-  console.log('======loadMetroConfig======', rawConfig);
+  const mfConfig = global.__METRO_FEDERATION_CONFIG;
 
-  await bundle(...args);
+  console.log('======mfConfig======', mfConfig);
+
+  const isDev = args[0][0]['mode'];
+  const platform = args[0][0]['platform'];
+
+  const context = args[1].root;
+
+  await zephyr.zephyrCommandWrapper({
+    platform,
+    mode: isDev ? 'development' : 'production',
+    context,
+    remotes: mfConfig.remotes,
+  });
+
+  // await bundle(...args);
   console.log('======after build======');
 }
 
