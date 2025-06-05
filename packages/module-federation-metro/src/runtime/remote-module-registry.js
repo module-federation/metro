@@ -16,16 +16,6 @@ function cloneModule(module, target) {
   });
 }
 
-export async function loadAndGetShared(id) {
-  await loadSharedToRegistry(id);
-  return getModuleFromRegistry(id);
-}
-
-export async function loadAndGetRemote(id) {
-  await loadRemoteToRegistry(id);
-  return getModuleFromRegistry(id);
-}
-
 export async function loadRemoteToRegistry(id) {
   const promise = loading[id];
   if (promise) {
