@@ -16,6 +16,10 @@ export class VirtualModuleManager {
     private forceWriteFileSystem: boolean
   ) {}
 
+  registerVirtualModule(filePath: string, generator: () => string) {
+    this.virtualModules.set(filePath, generator());
+  }
+
   getMiddleware() {
     return (middleware: any, metroServer: MetroServer) => {
       const server = connect();
