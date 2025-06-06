@@ -40,12 +40,10 @@ const MetroCorePlugin: () => FederationRuntimePlugin = () => ({
   name: "metro-core-plugin",
   loadEntry: async ({ remoteInfo }) => {
     const { entry, entryGlobalName } = remoteInfo;
-    const loadBundleAsyncGlobalKey = `${
-      __METRO_GLOBAL_PREFIX__ ?? ""
-    }__loadBundleAsync`;
 
-    // @ts-ignore
-    const __loadBundleAsync = global[loadBundleAsyncGlobalKey];
+    const __loadBundleAsync =
+      // @ts-expect-error dynamic key access on global object
+      global[`${__METRO_GLOBAL_PREFIX__ ?? ""}__loadBundleAsync`];
 
     const loadBundleAsync =
       __loadBundleAsync as typeof global.__loadBundleAsync;

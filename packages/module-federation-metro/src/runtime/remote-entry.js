@@ -1,4 +1,4 @@
-import "mf:async-require-remote";
+import "mf:async-require";
 
 import { loadSharedToRegistry } from "mf:remote-module-registry";
 import { init as runtimeInit } from "@module-federation/runtime";
@@ -7,7 +7,6 @@ __PLUGINS__;
 
 const usedRemotes = __REMOTES__;
 const usedShared = __SHARED__;
-const earlyShared = __EARLY_SHARED__;
 
 const exposesMap = __EXPOSES_MAP__;
 
@@ -55,7 +54,7 @@ async function init(shared = {}, initScope = []) {
   );
 
   // load early shared deps
-  earlyShared.forEach(loadSharedToRegistry);
+  __EARLY_SHARED__.forEach(loadSharedToRegistry);
 
   // setup HMR client after the initializing sync shared deps
   if (__DEV__ && !hmrInitialized) {
@@ -72,6 +71,12 @@ async function init(shared = {}, initScope = []) {
 
 global.__METRO_FEDERATION__[__NAME__] =
   global.__METRO_FEDERATION__[__NAME__] || {};
+
+global.__METRO_FEDERATION__[__NAME__].dependencies = global
+  .__METRO_FEDERATION__[__NAME__].dependencies || {
+  shared: {},
+  remotes: {},
+};
 
 global.__METRO_FEDERATION__[__NAME__].get = get;
 global.__METRO_FEDERATION__[__NAME__].init = init;
