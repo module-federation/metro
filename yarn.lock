@@ -7863,9 +7863,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nested-mini@workspace:apps/example-nested-mini":
+"nestedMini@workspace:apps/example-nested-mini":
   version: 0.0.0-use.local
-  resolution: "nested-mini@workspace:apps/example-nested-mini"
+  resolution: "nestedMini@workspace:apps/example-nested-mini"
   dependencies:
     "@babel/core": "npm:^7.25.2"
     "@babel/preset-env": "npm:^7.25.3"
@@ -10706,41 +10706,45 @@ __metadata:
 
 "zephyr-metro-plugin@file:/Users/denisbelocerkovec/Developer/zephyr/zephyr-packages/libs/zephyr-metro-plugin::locator=host%40workspace%3Aapps%2Fexample-host":
   version: 0.0.1
-  resolution: "zephyr-metro-plugin@file:/Users/denisbelocerkovec/Developer/zephyr/zephyr-packages/libs/zephyr-metro-plugin#/Users/denisbelocerkovec/Developer/zephyr/zephyr-packages/libs/zephyr-metro-plugin::hash=10ee61&locator=host%40workspace%3Aapps%2Fexample-host"
+  resolution: "zephyr-metro-plugin@file:/Users/denisbelocerkovec/Developer/zephyr/zephyr-packages/libs/zephyr-metro-plugin#/Users/denisbelocerkovec/Developer/zephyr/zephyr-packages/libs/zephyr-metro-plugin::hash=fdcd35&locator=host%40workspace%3Aapps%2Fexample-host"
   dependencies:
+    metro-config: "npm:^0.82.4"
     zephyr-agent: "workspace:*"
     zephyr-xpack-internal: "workspace:*"
-  checksum: 10c0/03f81513e6479ee5fd9bde492960540115957d33666876594e7c37a5120e697c8d66df9ffff94510727c8b4d59cc7829c9c58054d30236edf4063b8c299cdd3d
+  checksum: 10c0/956e2350bbe038cb1f2229c86ebf91cc08221ae89ac25d94178b8e18f7babe63901eddb4dbce153d79875f06084e26b08253486c525e4302c3765d8e0e311fd3
   languageName: node
   linkType: hard
 
 "zephyr-metro-plugin@file:/Users/denisbelocerkovec/Developer/zephyr/zephyr-packages/libs/zephyr-metro-plugin::locator=mini%40workspace%3Aapps%2Fexample-mini":
   version: 0.0.1
-  resolution: "zephyr-metro-plugin@file:/Users/denisbelocerkovec/Developer/zephyr/zephyr-packages/libs/zephyr-metro-plugin#/Users/denisbelocerkovec/Developer/zephyr/zephyr-packages/libs/zephyr-metro-plugin::hash=10ee61&locator=mini%40workspace%3Aapps%2Fexample-mini"
+  resolution: "zephyr-metro-plugin@file:/Users/denisbelocerkovec/Developer/zephyr/zephyr-packages/libs/zephyr-metro-plugin#/Users/denisbelocerkovec/Developer/zephyr/zephyr-packages/libs/zephyr-metro-plugin::hash=fdcd35&locator=mini%40workspace%3Aapps%2Fexample-mini"
   dependencies:
+    metro-config: "npm:^0.82.4"
     zephyr-agent: "workspace:*"
     zephyr-xpack-internal: "workspace:*"
-  checksum: 10c0/03f81513e6479ee5fd9bde492960540115957d33666876594e7c37a5120e697c8d66df9ffff94510727c8b4d59cc7829c9c58054d30236edf4063b8c299cdd3d
+  checksum: 10c0/956e2350bbe038cb1f2229c86ebf91cc08221ae89ac25d94178b8e18f7babe63901eddb4dbce153d79875f06084e26b08253486c525e4302c3765d8e0e311fd3
   languageName: node
   linkType: hard
 
-"zephyr-metro-plugin@file:/Users/denisbelocerkovec/Developer/zephyr/zephyr-packages/libs/zephyr-metro-plugin::locator=nested-mini%40workspace%3Aapps%2Fexample-nested-mini":
+"zephyr-metro-plugin@file:/Users/denisbelocerkovec/Developer/zephyr/zephyr-packages/libs/zephyr-metro-plugin::locator=nestedMini%40workspace%3Aapps%2Fexample-nested-mini":
   version: 0.0.1
-  resolution: "zephyr-metro-plugin@file:/Users/denisbelocerkovec/Developer/zephyr/zephyr-packages/libs/zephyr-metro-plugin#/Users/denisbelocerkovec/Developer/zephyr/zephyr-packages/libs/zephyr-metro-plugin::hash=10ee61&locator=nested-mini%40workspace%3Aapps%2Fexample-nested-mini"
+  resolution: "zephyr-metro-plugin@file:/Users/denisbelocerkovec/Developer/zephyr/zephyr-packages/libs/zephyr-metro-plugin#/Users/denisbelocerkovec/Developer/zephyr/zephyr-packages/libs/zephyr-metro-plugin::hash=fdcd35&locator=nestedMini%40workspace%3Aapps%2Fexample-nested-mini"
   dependencies:
+    metro-config: "npm:^0.82.4"
     zephyr-agent: "workspace:*"
     zephyr-xpack-internal: "workspace:*"
-  checksum: 10c0/03f81513e6479ee5fd9bde492960540115957d33666876594e7c37a5120e697c8d66df9ffff94510727c8b4d59cc7829c9c58054d30236edf4063b8c299cdd3d
+  checksum: 10c0/956e2350bbe038cb1f2229c86ebf91cc08221ae89ac25d94178b8e18f7babe63901eddb4dbce153d79875f06084e26b08253486c525e4302c3765d8e0e311fd3
   languageName: node
   linkType: hard
 
 "zephyr-metro-plugin@file:/Users/denisbelocerkovec/Developer/zephyr/zephyr-packages/libs/zephyr-metro-plugin::locator=showcase-mini%40workspace%3Aapps%2Fshowcase-mini":
   version: 0.0.1
-  resolution: "zephyr-metro-plugin@file:/Users/denisbelocerkovec/Developer/zephyr/zephyr-packages/libs/zephyr-metro-plugin#/Users/denisbelocerkovec/Developer/zephyr/zephyr-packages/libs/zephyr-metro-plugin::hash=10ee61&locator=showcase-mini%40workspace%3Aapps%2Fshowcase-mini"
+  resolution: "zephyr-metro-plugin@file:/Users/denisbelocerkovec/Developer/zephyr/zephyr-packages/libs/zephyr-metro-plugin#/Users/denisbelocerkovec/Developer/zephyr/zephyr-packages/libs/zephyr-metro-plugin::hash=fdcd35&locator=showcase-mini%40workspace%3Aapps%2Fshowcase-mini"
   dependencies:
+    metro-config: "npm:^0.82.4"
     zephyr-agent: "workspace:*"
     zephyr-xpack-internal: "workspace:*"
-  checksum: 10c0/03f81513e6479ee5fd9bde492960540115957d33666876594e7c37a5120e697c8d66df9ffff94510727c8b4d59cc7829c9c58054d30236edf4063b8c299cdd3d
+  checksum: 10c0/956e2350bbe038cb1f2229c86ebf91cc08221ae89ac25d94178b8e18f7babe63901eddb4dbce153d79875f06084e26b08253486c525e4302c3765d8e0e311fd3
   languageName: node
   linkType: hard
 
