@@ -1,7 +1,7 @@
+import { promises as fs } from "node:fs";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
 import chalk from "chalk";
-import { promises as fs } from "fs";
 import { mergeConfig } from "metro";
 import Server from "metro/src/Server";
 import type { RequestOptions, OutputOptions } from "metro/src/shared/types";
@@ -239,6 +239,9 @@ async function bundleFederatedRemote(
   });
 
   const server = new Server(config);
+  // setup enhance middleware to trigger virtual modules setup
+  config.server.enhanceMiddleware(server.processRequest, server);
+
   const resolver = await createResolver(server, args.platform);
 
   const outputDir = args.output
