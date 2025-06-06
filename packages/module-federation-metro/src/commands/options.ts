@@ -67,6 +67,10 @@ const options = [
     description: "Path to the CLI configuration file",
     parse: (val: string): string => path.resolve(val),
   },
+  {
+    name: "--output <string>",
+    description: "Output directory for the bundle",
+  },
 ];
 
 export default options;
