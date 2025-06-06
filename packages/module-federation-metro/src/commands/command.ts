@@ -239,8 +239,7 @@ async function bundleFederatedRemote(
   const server = new Server(config);
   const resolver = await createResolver(server, args.platform);
 
-  // TODO: make this configurable
-  const outputDir = path.resolve(config.projectRoot, "dist");
+  const outputDir = path.resolve(path.join(args.output, args.platform));
 
   const containerModule: ModuleDescriptor = {
     [federationConfig.filename]: {

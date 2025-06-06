@@ -11,9 +11,8 @@
     "test": "jest",
     "build:ios": "react-native bundle-mf-remote --platform ios",
     "build:android": "react-native bundle-mf-remote --platform android",
-    "serve": "serve dist -p 8082",
-    "serve:ios": "yarn build:ios && yarn serve",
-    "serve:android": "yarn build:android && yarn serve",
+    "serve:ios": "yarn build:ios && serve dist/ios -p 8082",
+    "serve:android": "yarn build:android && serve dist/android -p 8082",
     "adbreverse": "adb reverse tcp:8082 tcp:8082"
   },
   "dependencies": {
