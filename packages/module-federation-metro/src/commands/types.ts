@@ -28,5 +28,5 @@ export type BundleFederatedRemoteArgs = {
   assetCatalogDest?: string;
   resetCache?: boolean;
   config?: string;
-  output: string;
+  output?: string;
 };

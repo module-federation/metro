@@ -70,8 +70,7 @@ const options = [
   {
     name: "--output <string>",
     description: "Output directory for the bundle",
-    default: "dist"
-  }
+  },
 ];
 
 export default options;
