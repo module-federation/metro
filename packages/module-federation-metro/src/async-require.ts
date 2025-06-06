@@ -29,6 +29,14 @@ function getBundleId(urlPath: string) {
   return bundlePath.slice(1).replace(".bundle", "");
 }
 
+function isUrl(url: string) {
+  return url.match(/^https?:\/\//);
+}
+
+function isSameOrigin(url: string, origin?: string) {
+  return origin && url.startsWith(origin);
+}
+
 // prefix the bundle path with the public path
 // e.g. /a/b.bundle -> http://host:8081/a/b.bundle
 function getBundlePath(bundlePath: string, bundleOrigin?: string) {
@@ -38,7 +46,7 @@ function getBundlePath(bundlePath: string, bundleOrigin?: string) {
   }
   // don't modify fully qualified urls
   // e.g. when loading container modules
-  if (bundlePath.match(/^https?:\/\//)) {
+  if (isUrl(bundlePath)) {
     return bundlePath;
   }
   // don't modify the path if we don't know the bundle origin
@@ -63,14 +71,18 @@ export function buildLoadBundleAsyncWrapper() {
       __METRO_GLOBAL_PREFIX__
     ] as FederationScope;
 
-    // resolve the remote bundle path based on the remote location
-    const remoteBundlePath = getBundlePath(originalBundlePath, scope.location);
-    const result = await loadBundleAsync(remoteBundlePath);
+    const bundlePath = getBundlePath(originalBundlePath, scope.location);
+    const result = await loadBundleAsync(bundlePath);
+
+    // when the origin is not the same, it means we are loading a remote container
+    // we can return early since dependencies are processed differently for entry bundles
+    if (!isSameOrigin(bundlePath, scope.location)) {
+      return result;
+    }
 
     // at this point the code in the bundle has been evaluated
     // but not yet executed through metroRequire
     const bundleId = getBundleId(originalBundlePath);
-
     const shared = scope.dependencies.shared[bundleId];
     const remotes = scope.dependencies.remotes[bundleId];
 
