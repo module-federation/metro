@@ -33,10 +33,9 @@ async function zephyrWrapper(...args) {
   await zephyrMetroPlugin.beforeBuild();
 
   const res = await bundleFederatedRemote(...args);
-  console.log('======after build======');
 
   zephyrMetroPlugin.afterBuild();
-  // console.log('bundleFederatedRemote res', res);
+  console.log('bundleFederatedRemote res', global.__METRO_FEDERATION_CONFIG);
   return res;
 }
 

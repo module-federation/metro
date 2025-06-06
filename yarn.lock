@@ -1938,14 +1938,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@module-federation/automatic-vendor-federation@npm:^1.2.1":
-  version: 1.2.1
-  resolution: "@module-federation/automatic-vendor-federation@npm:1.2.1"
-  dependencies:
-    find-package-json: "npm:^1.2.0"
+"@module-federation/automatic-vendor-federation@npm:1.0.0":
+  version: 1.0.0
+  resolution: "@module-federation/automatic-vendor-federation@npm:1.0.0"
   peerDependencies:
     webpack: ^5.0.0-beta.16
-  checksum: 10c0/7d6e8e5701b9bf24e1406ddd40a2bc7b91ad94b229db302bfa39248f39a425a705566a07b7be4b49868aa2a67553ef273e315827b6f9c234595757e6999051db
+  checksum: 10c0/0db01e615f2b6554c017b2f3bda789203cb2bdf98d15eded5026769326ea367181182f168ad9d1264fe11f4d2734c28c54951bf2b991e32af89e37fb38bc43aa
   languageName: node
   linkType: hard
 
@@ -2838,13 +2836,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/jest@npm:^29.5.13":
-  version: 29.5.14
-  resolution: "@types/jest@npm:29.5.14"
+"@types/jest@npm:29.5.12":
+  version: 29.5.12
+  resolution: "@types/jest@npm:29.5.12"
   dependencies:
     expect: "npm:^29.0.0"
     pretty-format: "npm:^29.0.0"
-  checksum: 10c0/18e0712d818890db8a8dab3d91e9ea9f7f19e3f83c2e50b312f557017dc81466207a71f3ed79cf4428e813ba939954fa26ffa0a9a7f153181ba174581b1c2aed
+  checksum: 10c0/25fc8e4c611fa6c4421e631432e9f0a6865a8cb07c9815ec9ac90d630271cad773b2ee5fe08066f7b95bebd18bb967f8ce05d018ee9ab0430f9dfd1d84665b6f
   languageName: node
   linkType: hard
 
@@ -4083,13 +4081,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ci-info@npm:^4.1.0":
-  version: 4.2.0
-  resolution: "ci-info@npm:4.2.0"
-  checksum: 10c0/37a2f4b6a213a5cf835890eb0241f0d5b022f6cfefde58a69e9af8e3a0e71e06d6ad7754b0d4efb9cd2613e58a7a33996d71b56b0d04242722e86666f3f3d058
-  languageName: node
-  linkType: hard
-
 "cjs-module-lexer@npm:^1.0.0":
   version: 1.4.3
   resolution: "cjs-module-lexer@npm:1.4.3"
@@ -5249,107 +5240,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"example-host@workspace:apps/example-host":
-  version: 0.0.0-use.local
-  resolution: "example-host@workspace:apps/example-host"
-  dependencies:
-    "@babel/core": "npm:^7.25.2"
-    "@babel/preset-env": "npm:^7.25.3"
-    "@babel/runtime": "npm:^7.25.0"
-    "@module-federation/runtime": "npm:^0.11.4"
-    "@react-native-community/cli": "npm:18.0.0"
-    "@react-native-community/cli-platform-android": "npm:18.0.0"
-    "@react-native-community/cli-platform-ios": "npm:18.0.0"
-    "@react-native/babel-preset": "npm:0.79.0"
-    "@react-native/eslint-config": "npm:0.79.0"
-    "@react-native/metro-config": "npm:0.79.0"
-    "@react-native/typescript-config": "npm:0.79.0"
-    "@types/jest": "npm:^29.5.13"
-    "@types/lodash": "npm:^4"
-    "@types/react": "npm:^19.0.0"
-    "@types/react-test-renderer": "npm:^19.0.0"
-    eslint: "npm:^8.19.0"
-    jest: "npm:^29.6.3"
-    lodash: "npm:4.16.6"
-    module-federation-metro: "workspace:*"
-    nodemon: "npm:^3.1.9"
-    prettier: "npm:2.8.8"
-    react: "npm:19.0.0"
-    react-native: "npm:0.79.0"
-    react-test-renderer: "npm:19.0.0"
-    typescript: "npm:5.0.4"
-    zephyr-metro-plugin: /Users/denisbelocerkovec/Developer/zephyr/zephyr-packages/libs/zephyr-metro-plugin
-  languageName: unknown
-  linkType: soft
-
-"example-mini@workspace:apps/example-mini":
-  version: 0.0.0-use.local
-  resolution: "example-mini@workspace:apps/example-mini"
-  dependencies:
-    "@babel/core": "npm:^7.25.2"
-    "@babel/preset-env": "npm:^7.25.3"
-    "@babel/runtime": "npm:^7.25.0"
-    "@module-federation/runtime": "npm:^0.11.4"
-    "@react-native-community/cli": "npm:18.0.0"
-    "@react-native-community/cli-platform-android": "npm:18.0.0"
-    "@react-native-community/cli-platform-ios": "npm:18.0.0"
-    "@react-native/babel-preset": "npm:0.79.0"
-    "@react-native/eslint-config": "npm:0.79.0"
-    "@react-native/metro-config": "npm:0.79.0"
-    "@react-native/typescript-config": "npm:0.79.0"
-    "@types/jest": "npm:^29.5.13"
-    "@types/lodash": "npm:^4"
-    "@types/react": "npm:^19.0.0"
-    "@types/react-test-renderer": "npm:^19.0.0"
-    eslint: "npm:^8.19.0"
-    jest: "npm:^29.6.3"
-    lodash: "npm:^4.17.21"
-    module-federation-metro: "workspace:*"
-    nodemon: "npm:^3.1.9"
-    prettier: "npm:2.8.8"
-    react: "npm:19.0.0"
-    react-native: "npm:0.79.0"
-    react-test-renderer: "npm:19.0.0"
-    serve: "npm:^14.2.4"
-    typescript: "npm:5.0.4"
-    zephyr-metro-plugin: /Users/denisbelocerkovec/Developer/zephyr/zephyr-packages/libs/zephyr-metro-plugin
-  languageName: unknown
-  linkType: soft
-
-"example-nested-mini@workspace:apps/example-nested-mini":
-  version: 0.0.0-use.local
-  resolution: "example-nested-mini@workspace:apps/example-nested-mini"
-  dependencies:
-    "@babel/core": "npm:^7.25.2"
-    "@babel/preset-env": "npm:^7.25.3"
-    "@babel/runtime": "npm:^7.25.0"
-    "@module-federation/runtime": "npm:^0.11.4"
-    "@react-native-community/cli": "npm:18.0.0"
-    "@react-native-community/cli-platform-android": "npm:18.0.0"
-    "@react-native-community/cli-platform-ios": "npm:18.0.0"
-    "@react-native/babel-preset": "npm:0.79.0"
-    "@react-native/eslint-config": "npm:0.79.0"
-    "@react-native/metro-config": "npm:0.79.0"
-    "@react-native/typescript-config": "npm:0.79.0"
-    "@types/jest": "npm:^29.5.13"
-    "@types/lodash": "npm:^4"
-    "@types/react": "npm:^19.0.0"
-    "@types/react-test-renderer": "npm:^19.0.0"
-    eslint: "npm:^8.19.0"
-    jest: "npm:^29.6.3"
-    lodash: "npm:4.16.6"
-    module-federation-metro: "workspace:*"
-    nodemon: "npm:^3.1.9"
-    prettier: "npm:2.8.8"
-    react: "npm:19.0.0"
-    react-native: "npm:0.79.0"
-    react-test-renderer: "npm:19.0.0"
-    serve: "npm:^14.2.4"
-    typescript: "npm:5.0.4"
-    zephyr-metro-plugin: /Users/denisbelocerkovec/Developer/zephyr/zephyr-packages/libs/zephyr-metro-plugin
-  languageName: unknown
-  linkType: soft
-
 "execa@npm:^5.0.0, execa@npm:^5.1.1":
   version: 5.1.1
   resolution: "execa@npm:5.1.1"
@@ -5499,13 +5389,6 @@ __metadata:
     statuses: "npm:~1.5.0"
     unpipe: "npm:~1.0.0"
   checksum: 10c0/6a96e1f5caab085628c11d9fdceb82ba608d5e426c6913d4d918409baa271037a47f28fbba73279e8ad614f0b8fa71ea791d265e408d760793829edd8c2f4584
-  languageName: node
-  linkType: hard
-
-"find-package-json@npm:^1.2.0":
-  version: 1.2.0
-  resolution: "find-package-json@npm:1.2.0"
-  checksum: 10c0/85d6c97afb9f8f0deb0d344a1c4eb8027347cf4d61666c28d3ac3f913e916684441218682b3dd6f8ad570e5d43c96a7db521f70183d70df559d07e1f99cdc635
   languageName: node
   linkType: hard
 
@@ -5975,6 +5858,39 @@ __metadata:
   languageName: node
   linkType: hard
 
+"host@workspace:apps/example-host":
+  version: 0.0.0-use.local
+  resolution: "host@workspace:apps/example-host"
+  dependencies:
+    "@babel/core": "npm:^7.25.2"
+    "@babel/preset-env": "npm:^7.25.3"
+    "@babel/runtime": "npm:^7.25.0"
+    "@module-federation/runtime": "npm:^0.11.4"
+    "@react-native-community/cli": "npm:18.0.0"
+    "@react-native-community/cli-platform-android": "npm:18.0.0"
+    "@react-native-community/cli-platform-ios": "npm:18.0.0"
+    "@react-native/babel-preset": "npm:0.79.0"
+    "@react-native/eslint-config": "npm:0.79.0"
+    "@react-native/metro-config": "npm:0.79.0"
+    "@react-native/typescript-config": "npm:0.79.0"
+    "@types/jest": "npm:^29.5.13"
+    "@types/lodash": "npm:^4"
+    "@types/react": "npm:^19.0.0"
+    "@types/react-test-renderer": "npm:^19.0.0"
+    eslint: "npm:^8.19.0"
+    jest: "npm:^29.6.3"
+    lodash: "npm:4.16.6"
+    module-federation-metro: "workspace:*"
+    nodemon: "npm:^3.1.9"
+    prettier: "npm:2.8.8"
+    react: "npm:19.0.0"
+    react-native: "npm:0.79.0"
+    react-test-renderer: "npm:19.0.0"
+    typescript: "npm:5.0.4"
+    zephyr-metro-plugin: /Users/denisbelocerkovec/Developer/zephyr/zephyr-packages/libs/zephyr-metro-plugin
+  languageName: unknown
+  linkType: soft
+
 "html-escaper@npm:^2.0.0":
   version: 2.0.2
   resolution: "html-escaper@npm:2.0.2"
@@ -6247,14 +6163,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"is-ci@npm:^4.1.0":
-  version: 4.1.0
-  resolution: "is-ci@npm:4.1.0"
+"is-ci@npm:3.0.1":
+  version: 3.0.1
+  resolution: "is-ci@npm:3.0.1"
   dependencies:
-    ci-info: "npm:^4.1.0"
+    ci-info: "npm:^3.2.0"
   bin:
     is-ci: bin.js
-  checksum: 10c0/c58e733d21f8d7e6ba3d70686124004576b369b4a02a37c4783159ed5a668b3a9e4b359efa955e4a675bd021eca7305010c45a1e646bf77cce14b08808eda88d
+  checksum: 10c0/0e81caa62f4520d4088a5bef6d6337d773828a88610346c4b1119fb50c842587ed8bef1e5d9a656835a599e7209405b5761ddf2339668f2d0f4e889a92fe6051
   languageName: node
   linkType: hard
 
@@ -7840,6 +7756,40 @@ __metadata:
   languageName: node
   linkType: hard
 
+"mini@workspace:apps/example-mini":
+  version: 0.0.0-use.local
+  resolution: "mini@workspace:apps/example-mini"
+  dependencies:
+    "@babel/core": "npm:^7.25.2"
+    "@babel/preset-env": "npm:^7.25.3"
+    "@babel/runtime": "npm:^7.25.0"
+    "@module-federation/runtime": "npm:^0.11.4"
+    "@react-native-community/cli": "npm:18.0.0"
+    "@react-native-community/cli-platform-android": "npm:18.0.0"
+    "@react-native-community/cli-platform-ios": "npm:18.0.0"
+    "@react-native/babel-preset": "npm:0.79.0"
+    "@react-native/eslint-config": "npm:0.79.0"
+    "@react-native/metro-config": "npm:0.79.0"
+    "@react-native/typescript-config": "npm:0.79.0"
+    "@types/jest": "npm:^29.5.13"
+    "@types/lodash": "npm:^4"
+    "@types/react": "npm:^19.0.0"
+    "@types/react-test-renderer": "npm:^19.0.0"
+    eslint: "npm:^8.19.0"
+    jest: "npm:^29.6.3"
+    lodash: "npm:^4.17.21"
+    module-federation-metro: "workspace:*"
+    nodemon: "npm:^3.1.9"
+    prettier: "npm:2.8.8"
+    react: "npm:19.0.0"
+    react-native: "npm:0.79.0"
+    react-test-renderer: "npm:19.0.0"
+    serve: "npm:^14.2.4"
+    typescript: "npm:5.0.4"
+    zephyr-metro-plugin: /Users/denisbelocerkovec/Developer/zephyr/zephyr-packages/libs/zephyr-metro-plugin
+  languageName: unknown
+  linkType: soft
+
 "minimatch@npm:3.1.2, minimatch@npm:^3.0.4, minimatch@npm:^3.0.5, minimatch@npm:^3.1.1, minimatch@npm:^3.1.2":
   version: 3.1.2
   resolution: "minimatch@npm:3.1.2"
@@ -8025,6 +7975,40 @@ __metadata:
   checksum: 10c0/3e677139c7fb7628a6f36335bf11a885a62c21d5390204590a1a214a5631fcbe5ea74ef6a610b60afe84b4d975cbe0566a23f20ee17c77c73e74b80032108dea
   languageName: node
   linkType: hard
+
+"nested-mini@workspace:apps/example-nested-mini":
+  version: 0.0.0-use.local
+  resolution: "nested-mini@workspace:apps/example-nested-mini"
+  dependencies:
+    "@babel/core": "npm:^7.25.2"
+    "@babel/preset-env": "npm:^7.25.3"
+    "@babel/runtime": "npm:^7.25.0"
+    "@module-federation/runtime": "npm:^0.11.4"
+    "@react-native-community/cli": "npm:18.0.0"
+    "@react-native-community/cli-platform-android": "npm:18.0.0"
+    "@react-native-community/cli-platform-ios": "npm:18.0.0"
+    "@react-native/babel-preset": "npm:0.79.0"
+    "@react-native/eslint-config": "npm:0.79.0"
+    "@react-native/metro-config": "npm:0.79.0"
+    "@react-native/typescript-config": "npm:0.79.0"
+    "@types/jest": "npm:^29.5.13"
+    "@types/lodash": "npm:^4"
+    "@types/react": "npm:^19.0.0"
+    "@types/react-test-renderer": "npm:^19.0.0"
+    eslint: "npm:^8.19.0"
+    jest: "npm:^29.6.3"
+    lodash: "npm:4.16.6"
+    module-federation-metro: "workspace:*"
+    nodemon: "npm:^3.1.9"
+    prettier: "npm:2.8.8"
+    react: "npm:19.0.0"
+    react-native: "npm:0.79.0"
+    react-test-renderer: "npm:19.0.0"
+    serve: "npm:^14.2.4"
+    typescript: "npm:5.0.4"
+    zephyr-metro-plugin: /Users/denisbelocerkovec/Developer/zephyr/zephyr-packages/libs/zephyr-metro-plugin
+  languageName: unknown
+  linkType: soft
 
 "nocache@npm:^3.0.1":
   version: 3.0.4
@@ -10163,17 +10147,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tslib@npm:^1.8.1":
-  version: 1.14.1
-  resolution: "tslib@npm:1.14.1"
-  checksum: 10c0/69ae09c49eea644bc5ebe1bca4fa4cc2c82b7b3e02f43b84bd891504edf66dbc6b2ec0eef31a957042de2269139e4acff911e6d186a258fb14069cd7f6febce2
-  languageName: node
-  linkType: hard
-
-"tslib@npm:^2.3.0, tslib@npm:^2.8.1":
-  version: 2.8.1
-  resolution: "tslib@npm:2.8.1"
-  checksum: 10c0/9c4759110a19c53f992d9aae23aac5ced636e99887b51b9e61def52611732872ff7668757d4e4c61f19691e36f4da981cd9485e869b4a7408d689f6bf1f14e62
+"tslib@npm:2.6.2":
+  version: 2.6.2
+  resolution: "tslib@npm:2.6.2"
+  checksum: 10c0/e03a8a4271152c8b26604ed45535954c0a45296e32445b4b87f8a5abdb2421f40b59b4ca437c4346af0f28179780d604094eb64546bee2019d903d01c6c19bdb
   languageName: node
   linkType: hard
 
@@ -10944,86 +10921,83 @@ __metadata:
   languageName: node
   linkType: hard
 
-"zephyr-agent@npm:0.0.50":
-  version: 0.0.50
-  resolution: "zephyr-agent@npm:0.0.50"
+"zephyr-agent@portal:/Users/denisbelocerkovec/Developer/zephyr/zephyr-packages/libs/zephyr-agent::locator=metro-mf%40workspace%3A.":
+  version: 0.0.0-use.local
+  resolution: "zephyr-agent@portal:/Users/denisbelocerkovec/Developer/zephyr/zephyr-packages/libs/zephyr-agent::locator=metro-mf%40workspace%3A."
   dependencies:
     axios: "npm:^1.9.0"
     axios-retry: "npm:^4.5.0"
     cloudflare: "npm:^3.4.0"
     debug: "npm:^4.3.4"
     git-url-parse: "npm:^15.0.0"
-    is-ci: "npm:^4.1.0"
+    is-ci: "catalog:plugin-shared"
     jose: "npm:^5.10.0"
     node-persist: "npm:^4.0.1"
     open: "npm:^10.1.0"
     proper-lockfile: "npm:^4.1.2"
     socket.io-client: "npm:^4.7.5"
-    tslib: "npm:^2.8.1"
+    tslib: "catalog:typescript"
     uuid: "npm:^8.3.2"
-    zephyr-edge-contract: "npm:0.0.50"
-  checksum: 10c0/c72fc034ae45576015877d201785914eaf53a50e8d23a4557c26e870c58607eb9a2ba77393e591c262ad8baec6da6c463c77439d6fbeba5db1f0b7111c8eacc9
+    zephyr-edge-contract: "workspace:*"
   languageName: node
-  linkType: hard
+  linkType: soft
 
-"zephyr-edge-contract@npm:0.0.50":
-  version: 0.0.50
-  resolution: "zephyr-edge-contract@npm:0.0.50"
+"zephyr-edge-contract@portal:/Users/denisbelocerkovec/Developer/zephyr/zephyr-packages/libs/zephyr-edge-contract::locator=metro-mf%40workspace%3A.":
+  version: 0.0.0-use.local
+  resolution: "zephyr-edge-contract@portal:/Users/denisbelocerkovec/Developer/zephyr/zephyr-packages/libs/zephyr-edge-contract::locator=metro-mf%40workspace%3A."
   dependencies:
-    tslib: "npm:^2.8.1"
-  checksum: 10c0/ba86428e051ce6ba7154e8fe5ae5b4903ef69316b5f4e4559df8072808808d0216e105e65e25b39c36af71f30464f0b4a735d917190c6356b3412c8bd438ed2f
+    tslib: "catalog:typescript"
   languageName: node
-  linkType: hard
+  linkType: soft
 
-"zephyr-metro-plugin@file:/Users/denisbelocerkovec/Developer/zephyr/zephyr-packages/libs/zephyr-metro-plugin::locator=example-host%40workspace%3Aapps%2Fexample-host":
+"zephyr-metro-plugin@file:/Users/denisbelocerkovec/Developer/zephyr/zephyr-packages/libs/zephyr-metro-plugin::locator=host%40workspace%3Aapps%2Fexample-host":
   version: 0.0.1
-  resolution: "zephyr-metro-plugin@file:/Users/denisbelocerkovec/Developer/zephyr/zephyr-packages/libs/zephyr-metro-plugin#/Users/denisbelocerkovec/Developer/zephyr/zephyr-packages/libs/zephyr-metro-plugin::hash=506112&locator=example-host%40workspace%3Aapps%2Fexample-host"
+  resolution: "zephyr-metro-plugin@file:/Users/denisbelocerkovec/Developer/zephyr/zephyr-packages/libs/zephyr-metro-plugin#/Users/denisbelocerkovec/Developer/zephyr/zephyr-packages/libs/zephyr-metro-plugin::hash=10ee61&locator=host%40workspace%3Aapps%2Fexample-host"
   dependencies:
-    zephyr-agent: "npm:0.0.50"
-    zephyr-xpack-internal: "npm:0.0.50"
-  checksum: 10c0/487454aa8ce9ed7c1148cbc3e2e9a9efc617dc7d08afcbdd286330be2aac9e99e1acf9f4978d556195e2776f3afec24fee5e77ffc4959481a10fea8e1f77af11
+    zephyr-agent: "workspace:*"
+    zephyr-xpack-internal: "workspace:*"
+  checksum: 10c0/03f81513e6479ee5fd9bde492960540115957d33666876594e7c37a5120e697c8d66df9ffff94510727c8b4d59cc7829c9c58054d30236edf4063b8c299cdd3d
   languageName: node
   linkType: hard
 
-"zephyr-metro-plugin@file:/Users/denisbelocerkovec/Developer/zephyr/zephyr-packages/libs/zephyr-metro-plugin::locator=example-mini%40workspace%3Aapps%2Fexample-mini":
+"zephyr-metro-plugin@file:/Users/denisbelocerkovec/Developer/zephyr/zephyr-packages/libs/zephyr-metro-plugin::locator=mini%40workspace%3Aapps%2Fexample-mini":
   version: 0.0.1
-  resolution: "zephyr-metro-plugin@file:/Users/denisbelocerkovec/Developer/zephyr/zephyr-packages/libs/zephyr-metro-plugin#/Users/denisbelocerkovec/Developer/zephyr/zephyr-packages/libs/zephyr-metro-plugin::hash=506112&locator=example-mini%40workspace%3Aapps%2Fexample-mini"
+  resolution: "zephyr-metro-plugin@file:/Users/denisbelocerkovec/Developer/zephyr/zephyr-packages/libs/zephyr-metro-plugin#/Users/denisbelocerkovec/Developer/zephyr/zephyr-packages/libs/zephyr-metro-plugin::hash=10ee61&locator=mini%40workspace%3Aapps%2Fexample-mini"
   dependencies:
-    zephyr-agent: "npm:0.0.50"
-    zephyr-xpack-internal: "npm:0.0.50"
-  checksum: 10c0/487454aa8ce9ed7c1148cbc3e2e9a9efc617dc7d08afcbdd286330be2aac9e99e1acf9f4978d556195e2776f3afec24fee5e77ffc4959481a10fea8e1f77af11
+    zephyr-agent: "workspace:*"
+    zephyr-xpack-internal: "workspace:*"
+  checksum: 10c0/03f81513e6479ee5fd9bde492960540115957d33666876594e7c37a5120e697c8d66df9ffff94510727c8b4d59cc7829c9c58054d30236edf4063b8c299cdd3d
   languageName: node
   linkType: hard
 
-"zephyr-metro-plugin@file:/Users/denisbelocerkovec/Developer/zephyr/zephyr-packages/libs/zephyr-metro-plugin::locator=example-nested-mini%40workspace%3Aapps%2Fexample-nested-mini":
+"zephyr-metro-plugin@file:/Users/denisbelocerkovec/Developer/zephyr/zephyr-packages/libs/zephyr-metro-plugin::locator=nested-mini%40workspace%3Aapps%2Fexample-nested-mini":
   version: 0.0.1
-  resolution: "zephyr-metro-plugin@file:/Users/denisbelocerkovec/Developer/zephyr/zephyr-packages/libs/zephyr-metro-plugin#/Users/denisbelocerkovec/Developer/zephyr/zephyr-packages/libs/zephyr-metro-plugin::hash=506112&locator=example-nested-mini%40workspace%3Aapps%2Fexample-nested-mini"
+  resolution: "zephyr-metro-plugin@file:/Users/denisbelocerkovec/Developer/zephyr/zephyr-packages/libs/zephyr-metro-plugin#/Users/denisbelocerkovec/Developer/zephyr/zephyr-packages/libs/zephyr-metro-plugin::hash=10ee61&locator=nested-mini%40workspace%3Aapps%2Fexample-nested-mini"
   dependencies:
-    zephyr-agent: "npm:0.0.50"
-    zephyr-xpack-internal: "npm:0.0.50"
-  checksum: 10c0/487454aa8ce9ed7c1148cbc3e2e9a9efc617dc7d08afcbdd286330be2aac9e99e1acf9f4978d556195e2776f3afec24fee5e77ffc4959481a10fea8e1f77af11
+    zephyr-agent: "workspace:*"
+    zephyr-xpack-internal: "workspace:*"
+  checksum: 10c0/03f81513e6479ee5fd9bde492960540115957d33666876594e7c37a5120e697c8d66df9ffff94510727c8b4d59cc7829c9c58054d30236edf4063b8c299cdd3d
   languageName: node
   linkType: hard
 
 "zephyr-metro-plugin@file:/Users/denisbelocerkovec/Developer/zephyr/zephyr-packages/libs/zephyr-metro-plugin::locator=showcase-mini%40workspace%3Aapps%2Fshowcase-mini":
   version: 0.0.1
-  resolution: "zephyr-metro-plugin@file:/Users/denisbelocerkovec/Developer/zephyr/zephyr-packages/libs/zephyr-metro-plugin#/Users/denisbelocerkovec/Developer/zephyr/zephyr-packages/libs/zephyr-metro-plugin::hash=506112&locator=showcase-mini%40workspace%3Aapps%2Fshowcase-mini"
+  resolution: "zephyr-metro-plugin@file:/Users/denisbelocerkovec/Developer/zephyr/zephyr-packages/libs/zephyr-metro-plugin#/Users/denisbelocerkovec/Developer/zephyr/zephyr-packages/libs/zephyr-metro-plugin::hash=10ee61&locator=showcase-mini%40workspace%3Aapps%2Fshowcase-mini"
   dependencies:
-    zephyr-agent: "npm:0.0.50"
-    zephyr-xpack-internal: "npm:0.0.50"
-  checksum: 10c0/487454aa8ce9ed7c1148cbc3e2e9a9efc617dc7d08afcbdd286330be2aac9e99e1acf9f4978d556195e2776f3afec24fee5e77ffc4959481a10fea8e1f77af11
+    zephyr-agent: "workspace:*"
+    zephyr-xpack-internal: "workspace:*"
+  checksum: 10c0/03f81513e6479ee5fd9bde492960540115957d33666876594e7c37a5120e697c8d66df9ffff94510727c8b4d59cc7829c9c58054d30236edf4063b8c299cdd3d
   languageName: node
   linkType: hard
 
-"zephyr-xpack-internal@npm:0.0.50":
-  version: 0.0.50
-  resolution: "zephyr-xpack-internal@npm:0.0.50"
+"zephyr-xpack-internal@portal:/Users/denisbelocerkovec/Developer/zephyr/zephyr-packages/libs/zephyr-xpack-internal::locator=metro-mf%40workspace%3A.":
+  version: 0.0.0-use.local
+  resolution: "zephyr-xpack-internal@portal:/Users/denisbelocerkovec/Developer/zephyr/zephyr-packages/libs/zephyr-xpack-internal::locator=metro-mf%40workspace%3A."
   dependencies:
-    "@module-federation/automatic-vendor-federation": "npm:^1.2.1"
-    is-ci: "npm:^4.1.0"
-    tslib: "npm:^2.8.1"
-    zephyr-agent: "npm:0.0.50"
-    zephyr-edge-contract: "npm:0.0.50"
-  checksum: 10c0/ad9d1b21bb380f639e46071cc9b9ead6e8b6b830bca6b60764b45aa44e0dc95b00394d9bf26f13e44c91b859e9b060f02fa3010d6f67d4fee825acfa847ca818
+    "@module-federation/automatic-vendor-federation": "catalog:module-federation"
+    is-ci: "catalog:plugin-shared"
+    tslib: "catalog:typescript"
+    zephyr-agent: "workspace:*"
+    zephyr-edge-contract: "workspace:*"
   languageName: node
-  linkType: hard
+  linkType: soft
