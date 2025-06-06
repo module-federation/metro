@@ -16,6 +16,8 @@ import {
   BundleFederatedRemoteConfig,
 } from "./types";
 
+const DEFAULT_OUTPUT = "dist";
+
 declare global {
   var __METRO_FEDERATION_CONFIG: ModuleFederationConfigNormalized;
   var __METRO_FEDERATION_REMOTE_ENTRY_PATH: string | undefined;
@@ -241,7 +243,10 @@ async function bundleFederatedRemote(
 
   const outputDir = args.output
     ? path.resolve(path.join(args.output, args.platform))
-    : path.resolve(config.projectRoot, path.join("dist", args.platform));
+    : path.resolve(
+        config.projectRoot,
+        path.join(DEFAULT_OUTPUT, args.platform)
+      );
 
   const containerModule: ModuleDescriptor = {
     [federationConfig.filename]: {
