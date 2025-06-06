@@ -2,6 +2,7 @@ const path = require('path');
 const {getDefaultConfig, mergeConfig} = require('@react-native/metro-config');
 
 const {withModuleFederation} = require('module-federation-metro');
+const {withZephyr} = require('zephyr-metro-plugin');
 
 /**
  * Metro configuration
@@ -17,10 +18,9 @@ const config = {
   ],
 };
 
-module.exports = withModuleFederation(
-  mergeConfig(getDefaultConfig(__dirname), config),
-  {
-    name: 'nested-mini',
+async function getConfig() {
+  const zephyrConfig = await withZephyr()({
+    name: 'nestedMini',
     filename: 'nestedMini.bundle',
     exposes: {
       './nestedMiniInfo': './src/nested-mini-info.tsx',
@@ -57,5 +57,12 @@ module.exports = withModuleFederation(
       },
     },
     shareStrategy: 'version-first',
-  },
-);
+  });
+
+  return withModuleFederation(
+    mergeConfig(getDefaultConfig(__dirname), config),
+    zephyrConfig,
+  );
+}
+
+module.exports = getConfig();

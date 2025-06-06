@@ -1,51 +1,23 @@
 const commands = require('module-federation-metro/commands');
 const path = require('path');
-const {ZephyrMetroPlugin} = require('zephyr-metro-plugin');
-
-async function zephyrWrapper(...args) {
-  // before build
-  console.log('======before======');
-  console.log('zephyrWrapper', args);
-
-  const isDev = args[0][0]['mode'];
-  const platform = args[0][0]['platform'];
-
-  const context = args[1].root;
-
-  const bundleFederatedRemote = commands[0]['func'];
-
-  const loadMetroConfig = commands[1];
-
-  await loadMetroConfig(args[1], {
-    maxWorkers: args[2].maxWorkers,
-    resetCache: args[2].resetCache,
-    config: args[2].config,
-  });
-
-  const zephyrMetroPlugin = new ZephyrMetroPlugin({
-    platform,
-    mode: isDev ? 'development' : 'production',
-    context,
-    outDir: 'dist',
-    mfConfig: global.__METRO_FEDERATION_CONFIG,
-  });
-
-  await zephyrMetroPlugin.beforeBuild();
-
-  const res = await bundleFederatedRemote(...args);
-  console.log('======after build======');
-
-  zephyrMetroPlugin.afterBuild();
-  // console.log('bundleFederatedRemote res', res);
-  return res;
-}
+const {zephyrCommandWrapper} = require('zephyr-metro-plugin');
+const {updateManifest} = require('module-federation-metro');
 
 const zephyrCommand = {
   name: 'bundle',
   description:
     'Bundles a Module Federation remote, including its container entry and all exposed modules for consumption by host applications',
-  // @ts-ignore
-  func: zephyrWrapper,
+  func: zephyrCommandWrapper(
+    commands.bundleFederatedRemote,
+    commands.loadMetroConfig,
+    global.__METRO_FEDERATION_CONFIG,
+    () => {
+      updateManifest(
+        global.__METRO_FEDERATION_MANIFEST_PATH,
+        global.__METRO_FEDERATION_CONFIG,
+      );
+    },
+  ),
   options: [
     {
       name: '--platform <string>',

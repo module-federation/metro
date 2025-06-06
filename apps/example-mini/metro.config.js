@@ -2,6 +2,7 @@ const path = require('path');
 const {getDefaultConfig, mergeConfig} = require('@react-native/metro-config');
 
 const {withModuleFederation} = require('module-federation-metro');
+const {withZephyr} = require('zephyr-metro-plugin');
 
 /**
  * Metro configuration
@@ -17,9 +18,8 @@ const config = {
   ],
 };
 
-module.exports = withModuleFederation(
-  mergeConfig(getDefaultConfig(__dirname), config),
-  {
+async function getConfig() {
+  const zephyrConfig = await withZephyr()({
     name: 'mini',
     filename: 'mini.bundle',
     exposes: {
@@ -54,5 +54,12 @@ module.exports = withModuleFederation(
       },
     },
     shareStrategy: 'version-first',
-  },
-);
+  });
+
+  return withModuleFederation(
+    mergeConfig(getDefaultConfig(__dirname), config),
+    zephyrConfig,
+  );
+}
+
+module.exports = getConfig();
