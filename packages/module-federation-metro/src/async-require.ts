@@ -3,7 +3,7 @@ declare global {
 }
 
 interface FederationScope {
-  location: string;
+  location?: string;
   dependencies: {
     shared: Record<string, string[]>;
     remotes: Record<string, string[]>;
@@ -31,17 +31,22 @@ function getBundleId(urlPath: string) {
 
 // prefix the bundle path with the public path
 // e.g. /a/b.bundle -> http://host:8081/a/b.bundle
-function getBundlePath(bundlePath: string, entryUrl: string) {
-  // don't prefix the path in development
+function getBundlePath(bundlePath: string, bundleOrigin?: string) {
+  // don't modify the path in development
   if (process.env.NODE_ENV !== "production") {
     return bundlePath;
   }
-  // don't prefix fully qualified urls
+  // don't modify fully qualified urls
   // e.g. when loading container modules
   if (bundlePath.match(/^https?:\/\//)) {
     return bundlePath;
   }
-  return joinComponents(getPublicPath(entryUrl), bundlePath);
+  // don't modify the path if we don't know the bundle origin
+  // e.g. when loading host split bundles
+  if (!bundleOrigin) {
+    return bundlePath;
+  }
+  return joinComponents(getPublicPath(bundleOrigin), bundlePath);
 }
 
 export function buildLoadBundleAsyncWrapper() {
