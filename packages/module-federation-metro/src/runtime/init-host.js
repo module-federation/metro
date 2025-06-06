@@ -36,8 +36,11 @@ global.__METRO_FEDERATION__[__NAME__].__shareInit = Promise.all(
     from: "build",
     initScope: [],
   })
-)
-  .then(() => Promise.all(Object.keys(usedShared).map(loadSharedToRegistry)))
-  .then(() => Promise.all(__EARLY_REMOTES__.map(loadRemoteToRegistry)));
+).then(() =>
+  Promise.all([
+    ...Object.keys(usedShared).map(loadSharedToRegistry),
+    ...__EARLY_REMOTES__.map(loadRemoteToRegistry),
+  ])
+);
 
 __EARLY_SHARED__.forEach(loadSharedToRegistry);

@@ -76,15 +76,18 @@ function createFederatedDependenciesLoadBundleAsyncWrapper() {
     // but not yet executed through metroRequire
     const { shared, remotes } = getDependencies(getBundleId(bundlePath));
 
+    const promises = [];
     if (shared && shared.length > 0) {
       // load shared used synchronously in the bundle
-      await Promise.all(shared.map(loadSharedToRegistry));
+      promises.push(...shared.map(loadSharedToRegistry));
     }
 
     if (remotes && remotes.length > 0) {
       // load remotes used synchronously in the bundle
-      await Promise.all(remotes.map(loadRemoteToRegistry));
+      promises.push(...remotes.map(loadRemoteToRegistry));
     }
+
+    await Promise.all(promises);
 
     return result;
   };
