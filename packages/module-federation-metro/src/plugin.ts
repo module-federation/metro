@@ -104,7 +104,7 @@ function getRemoteModule(name: string) {
 
 function createMFRuntimeNodeModules(projectNodeModulesPath: string) {
   const mfMetroPath = path.join(projectNodeModulesPath, ".mf-metro");
-  fs.rmSync(mfMetroPath, { recursive: true });
+  fs.rmSync(mfMetroPath, { recursive: true, force: true });
   fs.mkdirSync(mfMetroPath, { recursive: true });
   return mfMetroPath;
 }
