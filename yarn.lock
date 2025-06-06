@@ -4198,7 +4198,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"connect@npm:^3.6.5, connect@npm:^3.7.0":
+"connect@npm:^3.6.5":
   version: 3.7.0
   resolution: "connect@npm:3.7.0"
   dependencies:
@@ -7647,7 +7647,6 @@ __metadata:
     "@module-federation/runtime": "npm:^0.11.4"
     "@types/connect": "npm:^3"
     "@types/node": "npm:^20.0.0"
-    connect: "npm:^3.7.0"
     metro: "npm:^0.82.1"
     metro-config: "npm:^0.82.1"
     metro-resolver: "npm:^0.82.1"

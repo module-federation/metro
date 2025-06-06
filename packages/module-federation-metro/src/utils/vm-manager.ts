@@ -1,21 +1,18 @@
 import fs from "node:fs";
 import path from "node:path";
-import connect from "connect";
 import type MetroServer from "metro/src/Server";
 import type { FileSystem } from "metro-file-map";
 import type { GetTransformOptions, MetroConfig } from "metro-config";
 
 type Bundler = ReturnType<ReturnType<MetroServer["getBundler"]>["getBundler"]>;
 
-const isRadonIDE = "REACT_NATIVE_IDE_LIB_PATH" in process.env;
-
 export class VirtualModuleManager {
-  private enabled: Promise<boolean> | false = false;
+  private setupFinished: Promise<boolean> | null = null;
   private virtualModules: Map<string, string> = new Map();
 
   constructor(
     private metroConfig: MetroConfig,
-    private forceWriteFileSystem: boolean
+    private options: { forceWriteFileSystem?: boolean } = {}
   ) {}
 
   registerVirtualModule(filePath: string, generator: () => string) {
@@ -26,7 +23,7 @@ export class VirtualModuleManager {
     }
 
     this.virtualModules.set(filePath, moduleCode);
-    if (this.forceWriteFileSystem) {
+    if (this.options.forceWriteFileSystem) {
       fs.mkdirSync(path.dirname(filePath), { recursive: true });
       fs.writeFileSync(filePath, moduleCode);
     }
@@ -34,51 +31,37 @@ export class VirtualModuleManager {
 
   getMiddleware() {
     return (middleware: any, metroServer: MetroServer) => {
-      const server = connect();
       const bundler = metroServer.getBundler().getBundler();
 
-      if (!this.forceWriteFileSystem && !isRadonIDE) {
-        this.setup(bundler);
-
-        server.use(async (_, __, next) => {
-          // Wait until the bundler patching has completed
-          await this.enabled;
-          next();
-        });
-      }
+      this.setup(bundler);
 
       const originalMiddleware = this.metroConfig.server?.enhanceMiddleware;
       return originalMiddleware
-        ? server.use(originalMiddleware(middleware, metroServer))
-        : server.use(middleware);
+        ? originalMiddleware(middleware, metroServer)
+        : middleware;
     };
   }
 
   getTransformOptions(): GetTransformOptions {
-    return async (entryPoints, transformOptions, getDependenciesOf) => {
-      if (this.enabled) {
-        await this.enabled;
+    return async (...args) => {
+      if (this.setupFinished === null) {
+        throw new Error("Expected virtual module setup to be finished");
       }
 
-      // We need to write to the file system if virtual modules are not possible and/or we are building for production
-      // const writeToFileSystem = !this.enabled || !transformOptions.dev;
+      await this.setupFinished;
 
       const originalGetTransformOptions =
         this.metroConfig.transformer?.getTransformOptions;
 
-      return Object.assign(
-        {},
-        await originalGetTransformOptions?.(
-          entryPoints,
-          transformOptions,
-          getDependenciesOf
-        )
-      );
+      if (originalGetTransformOptions) {
+        return originalGetTransformOptions(...args);
+      }
+      return {};
     };
   }
 
-  private setup(bundler: Bundler) {
-    this.enabled = (async () => {
+  setup(bundler: Bundler) {
+    this.setupFinished = (async () => {
       const graph = await bundler.getDependencyGraph();
       // @ts-expect-error incomplete types
       this.ensureFileSystemPatched(graph._fileSystem);

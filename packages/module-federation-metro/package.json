@@ -16,9 +16,6 @@
     "./commands": "./commands/index.js",
     "./runtime-plugin": "./runtime-plugin.js"
   },
-  "dependencies": {
-    "connect": "^3.7.0"
-  },
   "peerDependencies": {
     "react-native": ">=0.79.0"
   },
