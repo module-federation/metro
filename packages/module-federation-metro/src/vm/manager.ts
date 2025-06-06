@@ -1,7 +1,9 @@
+import fs from "node:fs";
+import path from "node:path";
 import connect from "connect";
 import type MetroServer from "metro/src/Server";
 import type { FileSystem } from "metro-file-map";
-import { GetTransformOptions, MetroConfig } from "metro-config";
+import type { GetTransformOptions, MetroConfig } from "metro-config";
 
 type Bundler = ReturnType<ReturnType<MetroServer["getBundler"]>["getBundler"]>;
 
@@ -17,7 +19,17 @@ export class VirtualModuleManager {
   ) {}
 
   registerVirtualModule(filePath: string, generator: () => string) {
-    this.virtualModules.set(filePath, generator());
+    const moduleCode = generator();
+    // skip when the module code is the same
+    if (this.virtualModules.get(filePath) === moduleCode) {
+      return;
+    }
+
+    this.virtualModules.set(filePath, moduleCode);
+    if (this.forceWriteFileSystem) {
+      fs.mkdirSync(path.dirname(filePath), { recursive: true });
+      fs.writeFileSync(filePath, moduleCode);
+    }
   }
 
   getMiddleware() {

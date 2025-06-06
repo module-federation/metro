@@ -353,11 +353,14 @@ function withModuleFederation(
     serializer: {
       ...config.serializer,
       customSerializer: getModuleFederationSerializer(options),
-      getModulesRunBeforeMainModule: () => (isHost ? [initHostPath] : []),
-      getRunModuleStatement: (moduleId: number | string) =>
-        `${options.name}__r(${JSON.stringify(moduleId)});`,
+      getModulesRunBeforeMainModule: () => {
+        return isHost ? [initHostPath] : [];
+      },
+      getRunModuleStatement: (moduleId: number | string) => {
+        return `${options.name}__r(${JSON.stringify(moduleId)});`;
+      },
       getPolyfills: (options) => {
-        return isHost ? config.serializer?.getPolyfills?.(options) : [];
+        return isHost ? config.serializer.getPolyfills(options) : [];
       },
     },
     transformer: {
