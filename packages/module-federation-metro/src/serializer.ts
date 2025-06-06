@@ -1,25 +1,12 @@
 import path from "node:path";
-import type {
-  MixedOutput,
-  Module,
-  ReadOnlyGraph,
-  SerializerOptions,
-} from "metro";
+import type { Module, ReadOnlyGraph, SerializerOptions } from "metro";
 import type { SerializerConfigT } from "metro-config";
 import baseJSBundle from "metro/src/DeltaBundler/Serializers/baseJSBundle";
 import bundleToString from "metro/src/lib/bundleToString";
 import CountingSet from "metro/src/lib/CountingSet";
-
 import type { ModuleFederationConfigNormalized, Shared } from "./types";
 
 type CustomSerializer = SerializerConfigT["customSerializer"];
-
-const newline = /\r\n?|\n|\u2028|\u2029/g;
-
-function countLines(string: string): number {
-  return (string.match(newline) || []).length + 1;
-}
-
 function getFederationSharedDependenciesNamespace(scope: string) {
   return `globalThis.__METRO_FEDERATION__["${scope}"].dependencies.shared`;
 }
@@ -28,11 +15,7 @@ function getFederationRemotesDependenciesNamespace(scope: string) {
   return `globalThis.__METRO_FEDERATION__["${scope}"].dependencies.remotes`;
 }
 
-function getSyncShared(
-  shared: string[],
-  entry: string,
-  scope: string
-): Module<MixedOutput> {
+function getSyncShared(shared: string[], entry: string, scope: string): Module {
   const namespace = getFederationSharedDependenciesNamespace(scope);
   const code = `${namespace}["${entry}"]=${JSON.stringify(shared)};`;
   return generateVirtualModule("__required_shared__", code);
@@ -42,26 +25,23 @@ function getSyncRemotes(
   remotes: string[],
   entry: string,
   scope: string
-): Module<MixedOutput> {
+): Module {
   const namespace = getFederationRemotesDependenciesNamespace(scope);
   const code = `${namespace}["${entry}"]=${JSON.stringify(remotes)};`;
   return generateVirtualModule("__required_remotes__", code);
 }
 
-function getEarlyShared(shared: string[]): Module<MixedOutput> {
+function getEarlyShared(shared: string[]): Module {
   const code = `var __EARLY_SHARED__=${JSON.stringify(shared)};`;
   return generateVirtualModule("__early_shared__", code);
 }
 
-function getEarlyRemotes(remotes: string[]): Module<MixedOutput> {
+function getEarlyRemotes(remotes: string[]): Module {
   const code = `var __EARLY_REMOTES__=${JSON.stringify(remotes)};`;
   return generateVirtualModule("__early_remotes__", code);
 }
 
-function generateVirtualModule(
-  name: string,
-  code: string
-): Module<MixedOutput> {
+function generateVirtualModule(name: string, code: string): Module {
   return {
     dependencies: new Map(),
     getSource: (): Buffer => Buffer.from(code),
@@ -73,7 +53,7 @@ function generateVirtualModule(
         data: {
           code,
           // @ts-ignore
-          lineCount: countLines(code),
+          lineCount: 1,
           map: [],
         },
       },
@@ -82,7 +62,7 @@ function generateVirtualModule(
 }
 
 function collectSyncRemoteModules(
-  graph: ReadOnlyGraph<MixedOutput>,
+  graph: ReadOnlyGraph,
   _remotes: Record<string, string>
 ) {
   const remotes = new Set(Object.keys(_remotes));
@@ -105,10 +85,7 @@ function collectSyncRemoteModules(
   return Array.from(syncRemoteModules);
 }
 
-function collectSyncSharedModules(
-  graph: ReadOnlyGraph<MixedOutput>,
-  _shared: Shared
-) {
+function collectSyncSharedModules(graph: ReadOnlyGraph, _shared: Shared) {
   const sharedImports = new Set(
     Object.keys(_shared).map((sharedName) => {
       return _shared[sharedName].import || sharedName;
@@ -148,9 +125,9 @@ function getBundlePath(entryPoint: string, projectRoot: string) {
 
 function getBundleCode(
   entryPoint: string,
-  preModules: readonly Module<MixedOutput>[],
-  graph: ReadOnlyGraph<MixedOutput>,
-  options: SerializerOptions<MixedOutput>
+  preModules: readonly Module[],
+  graph: ReadOnlyGraph,
+  options: SerializerOptions
 ) {
   const { code } = bundleToString(
     baseJSBundle(entryPoint, preModules, graph, options)
