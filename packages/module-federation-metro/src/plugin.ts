@@ -311,7 +311,7 @@ function withModuleFederation(
 
   validateOptions(options);
 
-  const vmManager = new VirtualModuleManager(config, false);
+  const vmManager = new VirtualModuleManager(config);
 
   const projectNodeModulesPath = path.resolve(
     config.projectRoot,
