@@ -35,10 +35,6 @@ function moduleFederationSharedBabelPlugin() {
     name: "module-federation-shared-babel-plugin",
     visitor: {
       CallExpression(path, state) {
-        if (path.node.__wasTransformed) {
-          return;
-        }
-
         if (isSharedImport(path, state.opts)) {
           const wrappedImport = getWrappedSharedImport(
             path.node.arguments[0].value
