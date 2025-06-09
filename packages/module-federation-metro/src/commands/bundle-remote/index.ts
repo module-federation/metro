@@ -383,3 +383,5 @@ async function bundleFederatedRemote(
 }
 
 export default bundleFederatedRemote;
+
+export { default as bundleFederatedRemoteOptions } from "./options";

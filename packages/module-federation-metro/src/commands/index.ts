@@ -1,8 +1,19 @@
-export { default as bundleFederatedRemote } from "./command";
+export {
+  default as bundleFederatedHost,
+  bundleFederatedHostOptions,
+} from "./bundle-host";
 
-export { default as bundleFederatedRemoteOptions } from "./options";
+export {
+  default as bundleFederatedRemote,
+  bundleFederatedRemoteOptions,
+} from "./bundle-remote";
+
+export type {
+  BundleFederatedHostArgs,
+  BundleFederatedHostConfig,
+} from "./bundle-host/types";
 
 export type {
   BundleFederatedRemoteArgs,
   BundleFederatedRemoteConfig,
-} from "./types";
+} from "./bundle-remote/types";

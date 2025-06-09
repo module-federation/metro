@@ -1,20 +1,11 @@
-import type { ConfigT } from "metro-config";
 import Server from "metro/src/Server";
 import type { RequestOptions } from "metro/src/shared/types";
+import { getCommunityCliPlugin } from "../utils/getCommunityPlugin";
 import loadMetroConfig from "../utils/loadMetroConfig";
-import { BundleFederatedHostArgs, BundleFederatedHostConfig } from "./types";
-import { CLIError } from "../../utils/errors";
-
-interface CommunityCliPlugin {
-  unstable_buildBundleWithConfig: (
-    args: BundleFederatedHostArgs,
-    config: ConfigT,
-    buildBundle: (
-      server: Server,
-      requestOpts: RequestOptions
-    ) => Promise<{ code: string; map: string }>
-  ) => Promise<void>;
-}
+import type {
+  BundleFederatedHostArgs,
+  BundleFederatedHostConfig,
+} from "./types";
 
 async function bundleFederatedHost(
   _argv: Array<string>,
@@ -27,16 +18,7 @@ async function bundleFederatedHost(
     config: args.config,
   });
 
-  let communityCliPlugin: CommunityCliPlugin;
-  try {
-    const communityCliPluginPath = require.resolve(
-      "@react-native/community-cli-plugin",
-      { paths: [cfg.reactNativePath] }
-    );
-    communityCliPlugin = require(communityCliPluginPath);
-  } catch {
-    throw new CLIError("Community CLI plugin is not installed.");
-  }
+  const communityCliPlugin = getCommunityCliPlugin(cfg.reactNativePath);
 
   const buildBundleWithConfig =
     communityCliPlugin.unstable_buildBundleWithConfig;
@@ -57,3 +39,5 @@ async function bundleFederatedHost(
 }
 
 export default bundleFederatedHost;
+
+export { default as bundleFederatedHostOptions } from "./options";
