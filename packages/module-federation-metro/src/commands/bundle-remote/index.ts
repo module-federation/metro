@@ -5,12 +5,12 @@ import chalk from "chalk";
 import { mergeConfig } from "metro";
 import Server from "metro/src/Server";
 import type { RequestOptions, OutputOptions } from "metro/src/shared/types";
-import type { ModuleFederationConfigNormalized } from "../types";
-import loadMetroConfig from "./utils/loadMetroConfig";
-import relativizeSerializedMap from "./utils/relativizeSerializedMap";
-import { CLIError } from "../utils/errors";
-import { createResolver } from "./utils/createResolver";
-import { createModulePathRemapper } from "./utils/createModulePathRemapper";
+import type { ModuleFederationConfigNormalized } from "../../types";
+import { CLIError } from "../../utils/errors";
+import loadMetroConfig from "../utils/loadMetroConfig";
+import relativizeSerializedMap from "../utils/relativizeSerializedMap";
+import { createResolver } from "../utils/createResolver";
+import { createModulePathRemapper } from "../utils/createModulePathRemapper";
 import {
   BundleFederatedRemoteArgs,
   BundleFederatedRemoteConfig,
