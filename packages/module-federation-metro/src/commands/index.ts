@@ -8,12 +8,6 @@ export {
   bundleFederatedRemoteOptions,
 } from "./bundle-remote";
 
-export type {
-  BundleFederatedHostArgs,
-  BundleFederatedHostConfig,
-} from "./bundle-host/types";
-
-export type {
-  BundleFederatedRemoteArgs,
-  BundleFederatedRemoteConfig,
-} from "./bundle-remote/types";
+export type { BundleFederatedHostArgs } from "./bundle-host/types";
+export type { BundleFederatedRemoteArgs } from "./bundle-remote/types";
+export type { Config } from "./types";

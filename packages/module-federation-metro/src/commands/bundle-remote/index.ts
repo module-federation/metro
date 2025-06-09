@@ -7,14 +7,12 @@ import Server from "metro/src/Server";
 import type { RequestOptions, OutputOptions } from "metro/src/shared/types";
 import type { ModuleFederationConfigNormalized } from "../../types";
 import { CLIError } from "../../utils/errors";
+import { Config } from "../types";
 import loadMetroConfig from "../utils/loadMetroConfig";
 import relativizeSerializedMap from "../utils/relativizeSerializedMap";
 import { createResolver } from "../utils/createResolver";
 import { createModulePathRemapper } from "../utils/createModulePathRemapper";
-import {
-  BundleFederatedRemoteArgs,
-  BundleFederatedRemoteConfig,
-} from "./types";
+import { BundleFederatedRemoteArgs } from "./types";
 
 const DEFAULT_OUTPUT = "dist";
 
@@ -135,7 +133,7 @@ function getSaveBundleOpts(
 
 async function bundleFederatedRemote(
   _argv: Array<string>,
-  cfg: BundleFederatedRemoteConfig,
+  cfg: Config,
   args: BundleFederatedRemoteArgs
 ): Promise<void> {
   const rawConfig = await loadMetroConfig(cfg, {

@@ -1,15 +1,13 @@
 import Server from "metro/src/Server";
 import type { RequestOptions } from "metro/src/shared/types";
+import type { Config } from "../types";
 import { getCommunityCliPlugin } from "../utils/getCommunityPlugin";
 import loadMetroConfig from "../utils/loadMetroConfig";
-import type {
-  BundleFederatedHostArgs,
-  BundleFederatedHostConfig,
-} from "./types";
+import type { BundleFederatedHostArgs } from "./types";
 
 async function bundleFederatedHost(
   _argv: Array<string>,
-  cfg: BundleFederatedHostConfig,
+  cfg: Config,
   args: BundleFederatedHostArgs
 ): Promise<void> {
   const config = await loadMetroConfig(cfg, {
