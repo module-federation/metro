@@ -245,15 +245,9 @@ function createManifest(
   return manifestPath;
 }
 
-function createRemoteEntry(
-  options: ModuleFederationConfigNormalized,
-  mfMetroPath: string
-) {
-  const remoteEntryFilename = replaceExtension(options.filename, ".js");
-  const remoteEntryPath = path.join(mfMetroPath, remoteEntryFilename);
-  const remoteEntryModule = getRemoteEntryModule(options);
+function stubRemoteEntry(remoteEntryPath: string) {
+  const remoteEntryModule = "// remote entry stub";
   fs.writeFileSync(remoteEntryPath, remoteEntryModule, "utf-8");
-  return remoteEntryPath;
 }
 
 function replaceExtension(filepath: string, extension: string) {
@@ -326,9 +320,12 @@ function withModuleFederation(
     ...options.plugins,
   ].map((plugin) => path.relative(mfMetroPath, plugin));
 
-  const initHostPath = path.join(mfMetroPath, "init-host.js");
-  const registryPath = path.join(mfMetroPath, "remote-module-registry.js");
-  const remoteHMRSetupPath = path.join(mfMetroPath, "remote-hmr.js");
+  const initHostPath = path.resolve(mfMetroPath, "init-host.js");
+  const registryPath = path.resolve(mfMetroPath, "remote-module-registry.js");
+
+  const remoteEntryFilename = replaceExtension(options.filename, ".js");
+  const remoteEntryPath = path.resolve(mfMetroPath, remoteEntryFilename);
+  const remoteHMRSetupPath = path.resolve(mfMetroPath, "remote-hmr.js");
 
   const asyncRequirePath = path.resolve(__dirname, "../async-require.js");
 
@@ -341,7 +338,8 @@ function withModuleFederation(
   const manifestPath = createManifest(options, mfMetroPath);
 
   // remote entry is an entrypoint so it needs to be in the filesystem
-  const remoteEntryPath = createRemoteEntry(options, mfMetroPath);
+  // we create a stub on the filesystem and then redirect to a virtual module
+  stubRemoteEntry(remoteEntryPath);
 
   // pass data to bundle-mf-remote command
   global.__METRO_FEDERATION_CONFIG = options;
@@ -405,6 +403,11 @@ function withModuleFederation(
         // MF options.filename is provided as a name only and will be requested from the root of project
         // so the filename mini.js becomes ./mini.js and we need to match exactly that
         if (moduleName === `./${path.basename(remoteEntryPath)}`) {
+          const remoteEntryGenerator = () => getRemoteEntryModule(options);
+          vmManager.registerVirtualModule(
+            remoteEntryPath,
+            remoteEntryGenerator
+          );
           return { type: "sourceFile", filePath: remoteEntryPath as string };
         }
 
