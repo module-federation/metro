@@ -258,10 +258,8 @@ function replaceExtension(filepath: string, extension: string) {
 
 function isUsingMFCommands() {
   const command = process.argv[2];
-  if (command === "bundle-mf-host" || command === "bundle-mf-remote") {
-    return true;
-  }
-  return false;
+  const allowedCommands = ["start", "bundle-mf-host", "bundle-mf-remote"];
+  return allowedCommands.includes(command);
 }
 
 function validateOptions(options: ModuleFederationConfigNormalized) {
