@@ -10,8 +10,6 @@ interface Command {
   options: {
     name: string;
     description: string;
-    default?: any;
-    parse?: (val: any) => any;
   }[];
 }
 
@@ -19,7 +17,7 @@ interface CommunityCliPlugin {
   bundleCommand: Command;
   startCommand: Command;
   unstable_buildBundleWithConfig: (
-    args: any,
+    args: unknown,
     config: ConfigT,
     bundleImpl: {
       build: (
