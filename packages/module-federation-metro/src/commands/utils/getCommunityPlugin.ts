@@ -3,9 +3,21 @@ import type Server from "metro/src/Server";
 import type { OutputOptions, RequestOptions } from "metro/src/shared/types";
 import { CLIError } from "../../utils/errors";
 
+interface Command {
+  name: string;
+  description: string;
+  func: () => Promise<void>;
+  options: {
+    name: string;
+    description: string;
+    default?: any;
+    parse?: (val: any) => any;
+  }[];
+}
+
 interface CommunityCliPlugin {
-  bundleCommand: any;
-  startCommand: any;
+  bundleCommand: Command;
+  startCommand: Command;
   unstable_buildBundleWithConfig: (
     args: any,
     config: ConfigT,
