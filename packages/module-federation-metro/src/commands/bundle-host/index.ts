@@ -4,6 +4,7 @@ import type { Config } from "../types";
 import { getCommunityCliPlugin } from "../utils/getCommunityPlugin";
 import loadMetroConfig from "../utils/loadMetroConfig";
 import type { BundleFederatedHostArgs } from "./types";
+import { saveBundleAndMap } from "../utils/saveBundleAndMap";
 
 async function bundleFederatedHost(
   _argv: Array<string>,
@@ -21,10 +22,8 @@ async function bundleFederatedHost(
   const buildBundleWithConfig =
     communityCliPlugin.unstable_buildBundleWithConfig;
 
-  return buildBundleWithConfig(
-    args,
-    config,
-    (server: Server, requestOpts: RequestOptions) => {
+  return buildBundleWithConfig(args, config, {
+    build: (server: Server, requestOpts: RequestOptions) => {
       // setup enhance middleware to trigger virtual modules setup
       config.server.enhanceMiddleware(server.processRequest, server);
       return server.build({
@@ -32,8 +31,10 @@ async function bundleFederatedHost(
         ...requestOpts,
         bundleType: "bundle",
       });
-    }
-  );
+    },
+    save: saveBundleAndMap,
+    formatName: "bundle",
+  });
 }
 
 export default bundleFederatedHost;

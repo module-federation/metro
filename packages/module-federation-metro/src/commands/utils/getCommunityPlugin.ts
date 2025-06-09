@@ -1,6 +1,6 @@
 import type { ConfigT } from "metro-config";
 import type Server from "metro/src/Server";
-import type { RequestOptions } from "metro/src/shared/types";
+import type { OutputOptions, RequestOptions } from "metro/src/shared/types";
 import { CLIError } from "../../utils/errors";
 
 interface CommunityCliPlugin {
@@ -9,10 +9,18 @@ interface CommunityCliPlugin {
   unstable_buildBundleWithConfig: (
     args: any,
     config: ConfigT,
-    buildBundle: (
-      server: Server,
-      requestOpts: RequestOptions
-    ) => Promise<{ code: string; map: string }>
+    bundleImpl: {
+      build: (
+        server: Server,
+        requestOpts: RequestOptions
+      ) => Promise<{ code: string; map: string }>;
+      save: (
+        bundle: { code: string; map: string },
+        options: OutputOptions,
+        log: (msg: string) => void
+      ) => Promise<void>;
+      formatName: "bundle";
+    }
   ) => Promise<void>;
 }
 
