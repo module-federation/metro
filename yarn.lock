@@ -2427,23 +2427,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rnef/cli@npm:^0.7.18":
-  version: 0.7.18
-  resolution: "@rnef/cli@npm:0.7.18"
-  dependencies:
-    "@react-native-community/cli-config": "npm:^18.0.0"
-    "@rnef/config": "npm:^0.7.18"
-    "@rnef/tools": "npm:^0.7.18"
-    adm-zip: "npm:^0.5.16"
-    commander: "npm:^12.1.0"
-    tar: "npm:^7.4.3"
-    tslib: "npm:^2.3.0"
-  bin:
-    rnef: dist/src/bin.js
-  checksum: 10c0/c2dcf0047fc0bfeabd47ddc7e622019ea487078c333093362156acb1ea7f3582f88274dddae680ae494c6c8d3afb54990e9af74c08e0730effbfaf08b797b22e
-  languageName: node
-  linkType: hard
-
 "@rnef/cli@npm:^0.7.20":
   version: 0.7.20
   resolution: "@rnef/cli@npm:0.7.20"
@@ -2487,18 +2470,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rnef/platform-android@npm:^0.7.18":
-  version: 0.7.18
-  resolution: "@rnef/platform-android@npm:0.7.18"
-  dependencies:
-    "@react-native-community/cli-config-android": "npm:^18.0.0"
-    "@rnef/tools": "npm:^0.7.18"
-    adm-zip: "npm:^0.5.16"
-    tslib: "npm:^2.3.0"
-  checksum: 10c0/101671f551b7ab6b689eac107ef3fd0e06332b7d680a3eb5a93482c9393521a5f15970d337d0038f75262947168b0f9650a0b58ba3cbf4c0c8d324af09959267
-  languageName: node
-  linkType: hard
-
 "@rnef/platform-android@npm:^0.7.20":
   version: 0.7.20
   resolution: "@rnef/platform-android@npm:0.7.20"
@@ -2508,22 +2479,6 @@ __metadata:
     adm-zip: "npm:^0.5.16"
     tslib: "npm:^2.3.0"
   checksum: 10c0/86d7c8b9a2c1f11bc6c28eb44a17aea672b640dc99068093237b76306ac2dfa6d848f9cb6614c02ab4192cbb4f72e012d4fcebc668da9fb315f94a3bf57fd331
-  languageName: node
-  linkType: hard
-
-"@rnef/platform-apple-helpers@npm:^0.7.18":
-  version: 0.7.18
-  resolution: "@rnef/platform-apple-helpers@npm:0.7.18"
-  dependencies:
-    "@react-native-community/cli-config": "npm:^18.0.0"
-    "@react-native-community/cli-config-apple": "npm:^18.0.0"
-    "@rnef/tools": "npm:^0.7.18"
-    "@types/adm-zip": "npm:^0.5.7"
-    adm-zip: "npm:^0.5.16"
-    fast-glob: "npm:^3.3.2"
-    fast-xml-parser: "npm:^4.5.0"
-    tslib: "npm:^2.3.0"
-  checksum: 10c0/44f85f16966ec28fe429e80f7531232f82fae94288f7933c8e736d43a7e5b40e74c12dbef13fb442c05ddcc73679b1f07f01376189a71af288094448bce02e70
   languageName: node
   linkType: hard
 
@@ -2543,19 +2498,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rnef/platform-ios@npm:^0.7.18":
-  version: 0.7.18
-  resolution: "@rnef/platform-ios@npm:0.7.18"
-  dependencies:
-    "@react-native-community/cli-config-apple": "npm:^18.0.0"
-    "@react-native-community/cli-types": "npm:^18.0.0"
-    "@rnef/platform-apple-helpers": "npm:^0.7.18"
-    "@rnef/tools": "npm:^0.7.18"
-    tslib: "npm:^2.3.0"
-  checksum: 10c0/0ca6f23220b8fe13bec2f17149e215122704ac43b666b323756d4f833694ded670965430bd29baf82386ef5578b1095d00157a8fa0b4f7eecbf595c3e0f0b0ea
-  languageName: node
-  linkType: hard
-
 "@rnef/platform-ios@npm:^0.7.20":
   version: 0.7.20
   resolution: "@rnef/platform-ios@npm:0.7.20"
@@ -2569,13 +2511,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rnef/plugin-metro@npm:0.7.18":
-  version: 0.7.18
-  resolution: "@rnef/plugin-metro@npm:0.7.18"
+"@rnef/plugin-metro@npm:0.7.20":
+  version: 0.7.20
+  resolution: "@rnef/plugin-metro@npm:0.7.20"
   dependencies:
     "@react-native-community/cli-server-api": "npm:^18.0.0"
     "@react-native/dev-middleware": "npm:^0.79.1"
-    "@rnef/tools": "npm:^0.7.18"
+    "@rnef/tools": "npm:^0.7.20"
     metro: "npm:^0.82.1"
     metro-config: "npm:^0.82.1"
     metro-core: "npm:^0.82.1"
@@ -2583,17 +2525,17 @@ __metadata:
     tslib: "npm:^2.3.0"
   peerDependencies:
     "@react-native/community-cli-plugin": "*"
-  checksum: 10c0/04ee58b620c6832c406c6188463a1d3d5f768f3c3aabe19d97f940f2a263e4b69110a0d3d1326da19662a8bd98ec0751c3158e8de970f3fb501fc369014db169
+  checksum: 10c0/fa20172b857009422991efc9e8442beedc2c36603f5a762dede57bf0ed17c93a3b8728d680b9d0d6d7788533bb09420d481efb3affb3bbf659ad4e1b485a0700
   languageName: node
   linkType: hard
 
-"@rnef/plugin-metro@patch:@rnef/plugin-metro@npm%3A0.7.18#~/.yarn/patches/@rnef-plugin-metro-npm-0.7.18-cb2976474f.patch":
-  version: 0.7.18
-  resolution: "@rnef/plugin-metro@patch:@rnef/plugin-metro@npm%3A0.7.18#~/.yarn/patches/@rnef-plugin-metro-npm-0.7.18-cb2976474f.patch::version=0.7.18&hash=658173"
+"@rnef/plugin-metro@patch:@rnef/plugin-metro@npm%3A0.7.20#~/.yarn/patches/@rnef-plugin-metro-npm-0.7.20-f8db692ffa.patch":
+  version: 0.7.20
+  resolution: "@rnef/plugin-metro@patch:@rnef/plugin-metro@npm%3A0.7.20#~/.yarn/patches/@rnef-plugin-metro-npm-0.7.20-f8db692ffa.patch::version=0.7.20&hash=658173"
   dependencies:
     "@react-native-community/cli-server-api": "npm:^18.0.0"
     "@react-native/dev-middleware": "npm:^0.79.1"
-    "@rnef/tools": "npm:^0.7.18"
+    "@rnef/tools": "npm:^0.7.20"
     metro: "npm:^0.82.1"
     metro-config: "npm:^0.82.1"
     metro-core: "npm:^0.82.1"
@@ -2601,7 +2543,7 @@ __metadata:
     tslib: "npm:^2.3.0"
   peerDependencies:
     "@react-native/community-cli-plugin": "*"
-  checksum: 10c0/736c5d167f3f9202625e00bb599eb45ae23a1dba3cb9fdf2584911e1b29df65aaed810cf57a527ca69145ebb7c2f199c41189e7c7ee53141d9cdcb927cb33bd9
+  checksum: 10c0/db8dae718297219d8c72b407025c955646467628bf78815d7c9283d77342f9105e7d6e205890c61bbec507871c140a8ea7904b44f8b733953018921d7d75e3f7
   languageName: node
   linkType: hard
 
@@ -8902,10 +8844,10 @@ __metadata:
     "@react-native/eslint-config": "npm:0.79.0"
     "@react-native/metro-config": "npm:0.79.0"
     "@react-native/typescript-config": "npm:0.79.0"
-    "@rnef/cli": "npm:^0.7.18"
-    "@rnef/platform-android": "npm:^0.7.18"
-    "@rnef/platform-ios": "npm:^0.7.18"
-    "@rnef/plugin-metro": "npm:^0.7.18"
+    "@rnef/cli": "npm:^0.7.20"
+    "@rnef/platform-android": "npm:^0.7.20"
+    "@rnef/platform-ios": "npm:^0.7.20"
+    "@rnef/plugin-metro": "npm:^0.7.20"
     "@types/jest": "npm:^29.5.13"
     "@types/lodash": "npm:^4"
     "@types/react": "npm:^19.0.0"
@@ -8937,10 +8879,10 @@ __metadata:
     "@react-native/eslint-config": "npm:0.79.0"
     "@react-native/metro-config": "npm:0.79.0"
     "@react-native/typescript-config": "npm:0.79.0"
-    "@rnef/cli": "npm:^0.7.18"
-    "@rnef/platform-android": "npm:^0.7.18"
-    "@rnef/platform-ios": "npm:^0.7.18"
-    "@rnef/plugin-metro": "npm:^0.7.18"
+    "@rnef/cli": "npm:^0.7.20"
+    "@rnef/platform-android": "npm:^0.7.20"
+    "@rnef/platform-ios": "npm:^0.7.20"
+    "@rnef/plugin-metro": "npm:^0.7.20"
     "@types/jest": "npm:^29.5.13"
     "@types/lodash": "npm:^4"
     "@types/react": "npm:^19.0.0"
