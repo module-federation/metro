@@ -9,6 +9,7 @@
     "dev": "nodemon --config ../../nodemon.json --exec yarn start",
     "start": "rnef start --reset-cache --client-logs",
     "test": "jest",
+    "pods": "(cd ios && bundle install && bundle exec pod install)",
     "build:ios": "react-native bundle-mf-remote --platform ios",
     "build:android": "react-native bundle-mf-remote --platform android",
     "serve:ios": "yarn build:ios && serve dist/ios -p 8083",
