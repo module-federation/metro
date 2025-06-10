@@ -317,8 +317,10 @@ function validateOptions(options: ModuleFederationConfigNormalized) {
 }
 
 function normalizeOptions(
-  options: ModuleFederationConfig
+  options: ModuleFederationConfig,
+  config: ConfigT
 ): ModuleFederationConfigNormalized {
+  const pkg = require(path.join(config.projectRoot, "package.json"));
   const filename = options.filename ?? DEFAULT_ENTRY_FILENAME;
 
   // force all shared modules in host to be eager
@@ -328,6 +330,16 @@ function normalizeOptions(
       shared[sharedName].eager = true;
     });
   }
+
+  // default requiredVersion
+  Object.keys(shared).forEach((sharedName) => {
+    if (!shared[sharedName].requiredVersion) {
+      shared[sharedName].requiredVersion =
+        pkg.dependencies?.[sharedName] ||
+        pkg.devDependencies?.[sharedName] ||
+        "*";
+    }
+  });
 
   // this is different from the default share strategy in mf-core
   // it makes more sense to have loaded-first as default on mobile
@@ -352,7 +364,7 @@ function withModuleFederation(
   const isHost = !federationOptions.exposes;
   const isRemote = !isHost;
 
-  const options = normalizeOptions(federationOptions);
+  const options = normalizeOptions(federationOptions, config);
 
   validateOptions(options);
 
