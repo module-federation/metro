@@ -1,5 +1,6 @@
 import path from "node:path";
 import fs from "node:fs";
+import chalk from "chalk";
 import type { ConfigT } from "metro-config";
 import type { Resolution } from "metro-resolver";
 import generateManifest from "./generate-manifest";
@@ -255,6 +256,12 @@ function replaceExtension(filepath: string, extension: string) {
   return path.format({ dir, name, ext: extension });
 }
 
+function isUsingMFCommands() {
+  const command = process.argv[2];
+  const allowedCommands = ["start", "bundle-mf-host", "bundle-mf-remote"];
+  return allowedCommands.includes(command);
+}
+
 function validateOptions(options: ModuleFederationConfigNormalized) {
   // validate filename
   if (!options.filename.endsWith(".bundle")) {
@@ -298,6 +305,22 @@ function withModuleFederation(
   config: ConfigT,
   federationOptions: ModuleFederationConfig
 ): ConfigT {
+  if (!isUsingMFCommands()) {
+    console.warn(
+      chalk.yellow(
+        "Warning: Module Federation build is disabled for this command.\n"
+      ) +
+        chalk.yellow(
+          "To enable Module Federation, please use one of the dedicated bundle commands:\n"
+        ) +
+        ` ${chalk.dim("•")} bundle-mf-host` +
+        chalk.dim(" - for bundling a host application\n") +
+        ` ${chalk.dim("•")} bundle-mf-remote` +
+        chalk.dim(" - for bundling a remote application\n")
+    );
+    return config;
+  }
+
   const isHost = !federationOptions.exposes;
   const isRemote = !isHost;
 

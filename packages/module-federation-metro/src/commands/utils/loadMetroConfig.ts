@@ -1,13 +1,10 @@
 import path from "node:path";
 import type { ConfigT, InputConfigT, YargArguments } from "metro-config";
 import { loadConfig, mergeConfig, resolveConfig } from "metro-config";
-import { BundleFederatedRemoteConfig } from "../types";
+import type { Config } from "../types";
 import { CLIError } from "../../utils/errors";
 
-function getOverrideConfig(
-  cfg: BundleFederatedRemoteConfig,
-  config: ConfigT
-): InputConfigT {
+function getOverrideConfig(cfg: Config, config: ConfigT): InputConfigT {
   const resolver: Partial<ConfigT["resolver"]> = {
     platforms: [...Object.keys(cfg.platforms), "native"],
   };
@@ -28,7 +25,7 @@ function getOverrideConfig(
 }
 
 export default async function loadMetroConfig(
-  cfg: BundleFederatedRemoteConfig,
+  cfg: Config,
   options: YargArguments = {}
 ): Promise<ConfigT> {
   const cwd = cfg.root;

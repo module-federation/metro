@@ -1,8 +1,12 @@
 import fs from "node:fs";
 import path from "node:path";
 import type MetroServer from "metro/src/Server";
+import type {
+  GetTransformOptions,
+  MetroConfig,
+  Middleware,
+} from "metro-config";
 import type { FileSystem } from "metro-file-map";
-import type { GetTransformOptions, MetroConfig } from "metro-config";
 
 type Bundler = ReturnType<ReturnType<MetroServer["getBundler"]>["getBundler"]>;
 
@@ -30,7 +34,7 @@ export class VirtualModuleManager {
   }
 
   getMiddleware() {
-    return (middleware: any, metroServer: MetroServer) => {
+    return (middleware: Middleware, metroServer: MetroServer) => {
       const bundler = metroServer.getBundler().getBundler();
 
       this.setup(bundler);
