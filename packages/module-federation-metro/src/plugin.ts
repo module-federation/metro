@@ -320,26 +320,9 @@ function normalizeOptions(
   options: ModuleFederationConfig,
   config: ConfigT
 ): ModuleFederationConfigNormalized {
-  const pkg = require(path.join(config.projectRoot, "package.json"));
   const filename = options.filename ?? DEFAULT_ENTRY_FILENAME;
 
-  // force all shared modules in host to be eager
-  const shared = options.shared ?? {};
-  if (!options.exposes) {
-    Object.keys(shared).forEach((sharedName) => {
-      shared[sharedName].eager = true;
-    });
-  }
-
-  // default requiredVersion
-  Object.keys(shared).forEach((sharedName) => {
-    if (!shared[sharedName].requiredVersion) {
-      shared[sharedName].requiredVersion =
-        pkg.dependencies?.[sharedName] ||
-        pkg.devDependencies?.[sharedName] ||
-        "*";
-    }
-  });
+  const shared = getShared(options, config);
 
   // this is different from the default share strategy in mf-core
   // it makes more sense to have loaded-first as default on mobile
@@ -355,6 +338,28 @@ function normalizeOptions(
     shareStrategy,
     plugins: options.plugins ?? [],
   };
+}
+
+function getShared(options: ModuleFederationConfig, config: ConfigT): Shared {
+  const pkg = require(path.join(config.projectRoot, "package.json"));
+  const shared = options.shared ?? {};
+
+  // force all shared modules in host to be eager
+  if (!options.exposes) {
+    Object.keys(shared).forEach((sharedName) => {
+      shared[sharedName].eager = true;
+    });
+  }
+
+  // default requiredVersion
+  Object.keys(shared).forEach((sharedName) => {
+    if (!shared[sharedName].requiredVersion) {
+      shared[sharedName].requiredVersion =
+        pkg.dependencies?.[sharedName] || pkg.devDependencies?.[sharedName];
+    }
+  });
+
+  return shared;
 }
 
 function withModuleFederation(
