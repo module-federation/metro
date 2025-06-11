@@ -340,7 +340,7 @@ function normalizeOptions(
   };
 }
 
-function getShared(options: ModuleFederationConfig, config: ConfigT): Shared {
+function getNormalizedShared(options: ModuleFederationConfig, config: ConfigT): Shared {
   const pkg = require(path.join(config.projectRoot, "package.json"));
   const shared = options.shared ?? {};
 
