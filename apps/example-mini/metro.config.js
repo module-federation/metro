@@ -1,7 +1,14 @@
 const path = require('path');
+const fs = require('fs');
 const {getDefaultConfig, mergeConfig} = require('@react-native/metro-config');
 
 const {withModuleFederation} = require('module-federation-metro');
+
+// Create a custom directory for the manifest
+const manifestDir = path.resolve(__dirname, 'node_modules', '.manifest');
+fs.mkdirSync(manifestDir, {
+  recursive: true,
+});
 
 /**
  * Metro configuration
@@ -53,5 +60,9 @@ module.exports = withModuleFederation(
       },
     },
     shareStrategy: 'version-first',
+    manifest: {
+      fileName: 'manifest.json',
+      filePath: manifestDir,
+    },
   },
 );

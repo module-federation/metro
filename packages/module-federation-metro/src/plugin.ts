@@ -6,6 +6,7 @@ import type { Resolution } from "metro-resolver";
 import generateManifest from "./generate-manifest";
 import { getModuleFederationSerializer } from "./serializer";
 import {
+  Shared,
   SharedConfig,
   ModuleFederationConfig,
   ModuleFederationConfigNormalized,
@@ -236,11 +237,11 @@ function createBabelTransformer({
   return babelTransformerPath;
 }
 
-function createManifest(
-  options: ModuleFederationConfigNormalized,
-  mfMetroPath: string
-) {
-  const manifestPath = path.join(mfMetroPath, MANIFEST_FILENAME);
+function createManifest(options: ModuleFederationConfigNormalized) {
+  const manifestPath = path.join(
+    options.manifest.filePath,
+    options.manifest.fileName
+  );
   const manifest = generateManifest(options);
   fs.writeFileSync(manifestPath, JSON.stringify(manifest, undefined, 2));
   return manifestPath;
@@ -274,7 +275,8 @@ function validateOptions(options: ModuleFederationConfigNormalized) {
 
 function normalizeOptions(
   options: ModuleFederationConfig,
-  config: ConfigT
+  config: ConfigT,
+  mfMetroPath: string
 ): ModuleFederationConfigNormalized {
   const filename = options.filename ?? DEFAULT_ENTRY_FILENAME;
 
@@ -293,6 +295,10 @@ function normalizeOptions(
     shared,
     shareStrategy,
     plugins: options.plugins ?? [],
+    manifest: {
+      filePath: options.manifest?.filePath ?? mfMetroPath,
+      fileName: options.manifest?.fileName ?? MANIFEST_FILENAME,
+    },
   };
 }
 
@@ -344,18 +350,18 @@ function withModuleFederation(
   const isHost = !federationOptions.exposes;
   const isRemote = !isHost;
 
-  const options = normalizeOptions(federationOptions, config);
-
-  validateOptions(options);
-
-  const vmManager = new VirtualModuleManager(config);
-
   const projectNodeModulesPath = path.resolve(
     config.projectRoot,
     "node_modules"
   );
 
   const mfMetroPath = createMFRuntimeNodeModules(projectNodeModulesPath);
+
+  const options = normalizeOptions(federationOptions, config, mfMetroPath);
+
+  validateOptions(options);
+
+  const vmManager = new VirtualModuleManager(config);
 
   // auto-inject 'metro-core-plugin' MF runtime plugin
   options.plugins = [
@@ -378,7 +384,7 @@ function withModuleFederation(
     mfConfig: options,
   });
 
-  const manifestPath = createManifest(options, mfMetroPath);
+  const manifestPath = createManifest(options);
 
   // remote entry is an entrypoint so it needs to be in the filesystem
   // we create a stub on the filesystem and then redirect to a virtual module
@@ -523,10 +529,10 @@ function withModuleFederation(
           return url.replace(options.filename, target);
         }
         // rewrite /mf-manifest.json -> /[metro-project]/node_modules/.mf-metro/mf-manifest.json
-        if (pathname.startsWith(`/${MANIFEST_FILENAME}`)) {
+        if (pathname.startsWith(`/${options.manifest.fileName}`)) {
           const root = config.projectRoot;
           const target = manifestPath.replace(root, "[metro-project]");
-          return url.replace(MANIFEST_FILENAME, target);
+          return url.replace(options.manifest.fileName, target);
         }
         // pass through to original rewriteRequestUrl
         if (config.server.rewriteRequestUrl) {

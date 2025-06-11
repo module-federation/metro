@@ -23,7 +23,7 @@ module.exports = withModuleFederation(
   {
     name: 'MFExampleHost',
     remotes: {
-      mini: 'mini@http://localhost:8082/mf-manifest.json',
+      mini: 'mini@http://localhost:8082/manifest.json',
       nestedMini: 'nestedMini@http://localhost:8083/mf-manifest.json',
     },
     shared: {

@@ -26,7 +26,7 @@ module.exports = withModuleFederation(
       './nestedMiniInfo': './src/nested-mini-info.tsx',
     },
     remotes: {
-      mini: 'mini@http://localhost:8082/mf-manifest.json',
+      mini: 'mini@http://localhost:8082/manifest.json',
     },
     shared: {
       react: {

@@ -8,6 +8,11 @@ export interface SharedConfig {
 
 export type Shared = Record<string, SharedConfig>;
 
+export type ManifestConfig = {
+  filePath?: string;
+  fileName?: string;
+};
+
 export interface ModuleFederationConfig {
   name: string;
   filename?: string;
@@ -16,6 +21,8 @@ export interface ModuleFederationConfig {
   shared?: Shared;
   shareStrategy?: "loaded-first" | "version-first";
   plugins?: string[];
+  manifest?: ManifestConfig;
 }
 
-export type ModuleFederationConfigNormalized = Required<ModuleFederationConfig>;
+export type ModuleFederationConfigNormalized =
+  Required<ModuleFederationConfig> & { manifest: Required<ManifestConfig> };
