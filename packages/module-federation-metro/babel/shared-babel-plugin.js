@@ -1,7 +1,7 @@
 const t = require("@babel/types");
 
 function getSharedRegExp(shared) {
-  return new RegExp(`^(${Object.keys(shared).join("|")})\/`);
+  return new RegExp(`^(${Object.keys(shared).join("|")})$`);
 }
 
 function isSharedImport(path, options) {
