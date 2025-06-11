@@ -10952,49 +10952,45 @@ __metadata:
 
 "zephyr-metro-plugin@file:../../../Developer/zephyr-packages/libs/zephyr-metro-plugin::locator=host%40workspace%3Aapps%2Fexample-host":
   version: 0.0.1
-  resolution: "zephyr-metro-plugin@file:../../../Developer/zephyr-packages/libs/zephyr-metro-plugin#../../../Developer/zephyr-packages/libs/zephyr-metro-plugin::hash=d31afd&locator=host%40workspace%3Aapps%2Fexample-host"
+  resolution: "zephyr-metro-plugin@file:../../../Developer/zephyr-packages/libs/zephyr-metro-plugin#../../../Developer/zephyr-packages/libs/zephyr-metro-plugin::hash=b03a61&locator=host%40workspace%3Aapps%2Fexample-host"
   dependencies:
     metro-config: "npm:^0.82.4"
     zephyr-agent: "workspace:*"
-    zephyr-edge-contract: "workspace:*"
     zephyr-xpack-internal: "workspace:*"
-  checksum: 10c0/8c1eb5c3a63884263811f515f8e22dab76dc0b9c6ac2075da64d85772e018b3d02df04c5bfcfb783aefaf6cb5921d078e063b301cd185249f8a6d4a5d947674c
+  checksum: 10c0/03d1a9e34540140acd64cbf26a842540bee115600472fdcfdde25ba080dd136e40d26689ff72137c48888f7958d0c1af014d1cad4a89ef38bc7bae21022ab565
   languageName: node
   linkType: hard
 
 "zephyr-metro-plugin@file:../../../Developer/zephyr-packages/libs/zephyr-metro-plugin::locator=mini%40workspace%3Aapps%2Fexample-mini":
   version: 0.0.1
-  resolution: "zephyr-metro-plugin@file:../../../Developer/zephyr-packages/libs/zephyr-metro-plugin#../../../Developer/zephyr-packages/libs/zephyr-metro-plugin::hash=d31afd&locator=mini%40workspace%3Aapps%2Fexample-mini"
+  resolution: "zephyr-metro-plugin@file:../../../Developer/zephyr-packages/libs/zephyr-metro-plugin#../../../Developer/zephyr-packages/libs/zephyr-metro-plugin::hash=b03a61&locator=mini%40workspace%3Aapps%2Fexample-mini"
   dependencies:
     metro-config: "npm:^0.82.4"
     zephyr-agent: "workspace:*"
-    zephyr-edge-contract: "workspace:*"
     zephyr-xpack-internal: "workspace:*"
-  checksum: 10c0/8c1eb5c3a63884263811f515f8e22dab76dc0b9c6ac2075da64d85772e018b3d02df04c5bfcfb783aefaf6cb5921d078e063b301cd185249f8a6d4a5d947674c
+  checksum: 10c0/03d1a9e34540140acd64cbf26a842540bee115600472fdcfdde25ba080dd136e40d26689ff72137c48888f7958d0c1af014d1cad4a89ef38bc7bae21022ab565
   languageName: node
   linkType: hard
 
 "zephyr-metro-plugin@file:../../../Developer/zephyr-packages/libs/zephyr-metro-plugin::locator=nestedMini%40workspace%3Aapps%2Fexample-nested-mini":
   version: 0.0.1
-  resolution: "zephyr-metro-plugin@file:../../../Developer/zephyr-packages/libs/zephyr-metro-plugin#../../../Developer/zephyr-packages/libs/zephyr-metro-plugin::hash=d31afd&locator=nestedMini%40workspace%3Aapps%2Fexample-nested-mini"
+  resolution: "zephyr-metro-plugin@file:../../../Developer/zephyr-packages/libs/zephyr-metro-plugin#../../../Developer/zephyr-packages/libs/zephyr-metro-plugin::hash=b03a61&locator=nestedMini%40workspace%3Aapps%2Fexample-nested-mini"
   dependencies:
     metro-config: "npm:^0.82.4"
     zephyr-agent: "workspace:*"
-    zephyr-edge-contract: "workspace:*"
     zephyr-xpack-internal: "workspace:*"
-  checksum: 10c0/8c1eb5c3a63884263811f515f8e22dab76dc0b9c6ac2075da64d85772e018b3d02df04c5bfcfb783aefaf6cb5921d078e063b301cd185249f8a6d4a5d947674c
+  checksum: 10c0/03d1a9e34540140acd64cbf26a842540bee115600472fdcfdde25ba080dd136e40d26689ff72137c48888f7958d0c1af014d1cad4a89ef38bc7bae21022ab565
   languageName: node
   linkType: hard
 
 "zephyr-metro-plugin@file:../../../Developer/zephyr-packages/libs/zephyr-metro-plugin::locator=showcase-mini%40workspace%3Aapps%2Fshowcase-mini":
   version: 0.0.1
-  resolution: "zephyr-metro-plugin@file:../../../Developer/zephyr-packages/libs/zephyr-metro-plugin#../../../Developer/zephyr-packages/libs/zephyr-metro-plugin::hash=d31afd&locator=showcase-mini%40workspace%3Aapps%2Fshowcase-mini"
+  resolution: "zephyr-metro-plugin@file:../../../Developer/zephyr-packages/libs/zephyr-metro-plugin#../../../Developer/zephyr-packages/libs/zephyr-metro-plugin::hash=b03a61&locator=showcase-mini%40workspace%3Aapps%2Fshowcase-mini"
   dependencies:
     metro-config: "npm:^0.82.4"
     zephyr-agent: "workspace:*"
-    zephyr-edge-contract: "workspace:*"
     zephyr-xpack-internal: "workspace:*"
-  checksum: 10c0/8c1eb5c3a63884263811f515f8e22dab76dc0b9c6ac2075da64d85772e018b3d02df04c5bfcfb783aefaf6cb5921d078e063b301cd185249f8a6d4a5d947674c
+  checksum: 10c0/03d1a9e34540140acd64cbf26a842540bee115600472fdcfdde25ba080dd136e40d26689ff72137c48888f7958d0c1af014d1cad4a89ef38bc7bae21022ab565
   languageName: node
   linkType: hard
 
