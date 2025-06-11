@@ -18,50 +18,58 @@ const config = {
   ],
 };
 
+const mfConfig = {
+  name: 'nestedMini',
+  filename: 'nestedMini.bundle',
+  exposes: {
+    './nestedMiniInfo': './src/nested-mini-info.tsx',
+  },
+  remotes: {
+    mini: 'mini@http://localhost:8082/mf-manifest.json',
+  },
+  shared: {
+    react: {
+      singleton: true,
+      eager: false,
+      requiredVersion: '19.0.0',
+      version: '19.0.0',
+      import: false,
+    },
+    'react-native': {
+      singleton: true,
+      eager: false,
+      requiredVersion: '0.79.0',
+      version: '0.79.0',
+      import: false,
+    },
+    'react-native/Libraries/Network/RCTNetworking': {
+      singleton: true,
+      eager: false,
+      requiredVersion: '0.79.0',
+      version: '0.79.0',
+    },
+    lodash: {
+      singleton: false,
+      eager: false,
+      requiredVersion: '4.16.6',
+      version: '4.16.6',
+    },
+  },
+  shareStrategy: 'version-first',
+};
+
 async function getConfig() {
-  const zephyrConfig = await withZephyr()({
-    name: 'nestedMini',
-    filename: 'nestedMini.bundle',
-    exposes: {
-      './nestedMiniInfo': './src/nested-mini-info.tsx',
-    },
-    remotes: {
-      mini: 'mini@http://localhost:8082/mf-manifest.json',
-    },
-    shared: {
-      react: {
-        singleton: true,
-        eager: false,
-        requiredVersion: '19.0.0',
-        version: '19.0.0',
-        import: false,
-      },
-      'react-native': {
-        singleton: true,
-        eager: false,
-        requiredVersion: '0.79.0',
-        version: '0.79.0',
-        import: false,
-      },
-      'react-native/Libraries/Network/RCTNetworking': {
-        singleton: true,
-        eager: false,
-        requiredVersion: '0.79.0',
-        version: '0.79.0',
-      },
-      lodash: {
-        singleton: false,
-        eager: false,
-        requiredVersion: '4.16.6',
-        version: '4.16.6',
-      },
-    },
-    shareStrategy: 'version-first',
-  });
+  if (process.env.ZC) {
+    const zephyrConfig = await withZephyr()(mfConfig);
+    return withModuleFederation(
+      mergeConfig(getDefaultConfig(__dirname), config),
+      zephyrConfig,
+    );
+  }
 
   return withModuleFederation(
     mergeConfig(getDefaultConfig(__dirname), config),
-    zephyrConfig,
+    mfConfig,
   );
 }
 
