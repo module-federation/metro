@@ -322,7 +322,7 @@ function normalizeOptions(
 ): ModuleFederationConfigNormalized {
   const filename = options.filename ?? DEFAULT_ENTRY_FILENAME;
 
-  const shared = getShared(options, config);
+  const shared = getNormalizedShared(options, config);
 
   // this is different from the default share strategy in mf-core
   // it makes more sense to have loaded-first as default on mobile
@@ -340,7 +340,10 @@ function normalizeOptions(
   };
 }
 
-function getNormalizedShared(options: ModuleFederationConfig, config: ConfigT): Shared {
+function getNormalizedShared(
+  options: ModuleFederationConfig,
+  config: ConfigT
+): Shared {
   const pkg = require(path.join(config.projectRoot, "package.json"));
   const shared = options.shared ?? {};
 
