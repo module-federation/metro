@@ -6,6 +6,7 @@ import type { Resolution } from "metro-resolver";
 import generateManifest from "./generate-manifest";
 import { getModuleFederationSerializer } from "./serializer";
 import {
+  Shared,
   SharedConfig,
   ModuleFederationConfig,
   ModuleFederationConfigNormalized,
@@ -215,10 +216,12 @@ function createBabelTransformer({
   proxiedBabelTrasnsformerPath,
   mfConfig,
   mfMetroPath,
+  blacklistedPaths,
 }: {
   proxiedBabelTrasnsformerPath: string;
   mfConfig: ModuleFederationConfigNormalized;
   mfMetroPath: string;
+  blacklistedPaths: string[];
 }) {
   const babelTransformerPath = path.join(mfMetroPath, "babel-transformer.js");
 
@@ -229,7 +232,9 @@ function createBabelTransformer({
 
   const babelTransformer = babelTransformerTemplate
     .replaceAll("__BABEL_TRANSFORMER_PATH__", proxiedBabelTrasnsformerPath)
-    .replaceAll("__MF_CONFIG__", JSON.stringify(mfConfig));
+    .replaceAll("__REMOTES__", JSON.stringify(mfConfig.remotes))
+    .replaceAll("__SHARED__", JSON.stringify(mfConfig.shared))
+    .replaceAll("__BLACKLISTED_PATHS__", JSON.stringify(blacklistedPaths));
 
   fs.writeFileSync(babelTransformerPath, babelTransformer, "utf-8");
 
@@ -376,6 +381,7 @@ function withModuleFederation(
     proxiedBabelTrasnsformerPath: config.transformer.babelTransformerPath,
     mfMetroPath,
     mfConfig: options,
+    blacklistedPaths: [initHostPath, remoteEntryPath],
   });
 
   const manifestPath = createManifest(options, mfMetroPath);

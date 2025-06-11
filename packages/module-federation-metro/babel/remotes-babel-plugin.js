@@ -35,6 +35,10 @@ function moduleFederationRemotesBabelPlugin() {
     name: "module-federation-remotes-babel-plugin",
     visitor: {
       CallExpression(path, state) {
+        if (state.opts.blacklistedPaths.includes(state.filename)) {
+          return;
+        }
+
         if (isRemoteImport(path, state.opts)) {
           const wrappedImport = getWrappedRemoteImport(
             path.node.arguments[0].value

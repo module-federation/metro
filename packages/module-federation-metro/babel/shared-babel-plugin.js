@@ -1,7 +1,7 @@
 const t = require("@babel/types");
 
 function getSharedRegExp(shared) {
-  return new RegExp(`^(${Object.keys(shared).join("|")})\/`);
+  return new RegExp(`^(${Object.keys(shared).join("|")})$`);
 }
 
 function isSharedImport(path, options) {
@@ -35,6 +35,10 @@ function moduleFederationSharedBabelPlugin() {
     name: "module-federation-shared-babel-plugin",
     visitor: {
       CallExpression(path, state) {
+        if (state.opts.blacklistedPaths.includes(state.filename)) {
+          return;
+        }
+
         if (isSharedImport(path, state.opts)) {
           const wrappedImport = getWrappedSharedImport(
             path.node.arguments[0].value
