@@ -72,7 +72,11 @@ export function buildLoadBundleAsyncWrapper() {
     ] as FederationScope;
 
     const bundlePath = getBundlePath(originalBundlePath, scope.location);
-    const result = await loadBundleAsync(bundlePath);
+
+    // ../../node_modules/ -> ..%2F..%2Fnode_modules/ so that it's not automatically sanitized
+    const encodedBundlePath = bundlePath.replaceAll("../", "..%2F");
+
+    const result = await loadBundleAsync(encodedBundlePath);
 
     // when the origin is not the same, it means we are loading a remote container
     // we can return early since dependencies are processed differently for entry bundles
