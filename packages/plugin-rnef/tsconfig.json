@@ -19,6 +19,12 @@
       ],
       "metro/src/lib/relativizeSourceMap": [
         "../module-federation-metro/vendor/metro/relativizeSourceMap"
+      ],
+      "metro/src/lib/bundleToString": [
+        "../module-federation-metro/vendor/metro/bundleToString"
+      ],
+      "metro/src/DeltaBundler/Serializers/baseJSBundle": [
+        "../module-federation-metro/vendor/metro/baseJSBundle"
       ]
     }
   },
