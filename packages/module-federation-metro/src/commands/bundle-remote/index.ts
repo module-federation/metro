@@ -198,7 +198,8 @@ async function bundleFederatedRemote(
   });
 
   const server = new Server(config);
-  // setup enhance middleware to trigger virtual modules setup
+
+  // hack: setup enhance middleware to trigger virtual modules setup
   config.server.enhanceMiddleware(server.processRequest, server);
 
   const resolver = await createResolver(server, args.platform);
@@ -217,6 +218,12 @@ async function bundleFederatedRemote(
       isContainerModule: true,
     },
   };
+
+  // hack: resolve the container entry to register it as a virtual module
+  resolver.resolve({
+    from: config.projectRoot,
+    to: `./${path.basename(containerEntryFilepath)}`,
+  });
 
   const exposedModules = Object.entries(federationConfig.exposes)
     .map(([moduleName, moduleFilepath]) => [
@@ -241,10 +248,10 @@ async function bundleFederatedRemote(
       return !sharedConfig.eager && sharedConfig.import !== false;
     })
     .reduce((acc, [moduleName]) => {
-      const inputFilepath = resolver.resolve(
-        containerEntryFilepath,
-        moduleName
-      );
+      const inputFilepath = resolver.resolve({
+        from: containerEntryFilepath,
+        to: moduleName,
+      });
       acc[moduleName] = {
         moduleInputFilepath: inputFilepath,
         moduleOutputDir: path.resolve(outputDir, "shared"),
