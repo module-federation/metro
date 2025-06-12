@@ -511,7 +511,7 @@ function withModuleFederation(
           const res = context.resolveRequest(context, moduleName, platform);
           const from =
             /react-native\/Libraries\/Core\/Devtools\/getDevServer\.js$/;
-          const to = path.resolve(__dirname, "../getDevServer.js");
+          const to = path.resolve(__dirname, "./modules/getDevServer.js");
           return replaceModule(from, to)(res);
         }
 
