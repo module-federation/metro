@@ -18,7 +18,7 @@ export async function createResolver(server: Server, platform: string | null) {
   const bundler = server.getBundler().getBundler();
   const depGraph = await bundler.getDependencyGraph();
 
-  const resolve = (from: string, to: string) => {
+  const resolve = ({ from, to }: { from: string; to: string }) => {
     const config = { name: to, data: { asyncType: null, key: to, locs: [] } };
     const options = { assumeFlatNodeModules: false };
     const res = depGraph.resolveDependency(from, config, platform, {}, options);

@@ -1,10 +1,12 @@
 import path from "node:path";
 import fs from "node:fs";
+import chalk from "chalk";
 import type { ConfigT } from "metro-config";
 import type { Resolution } from "metro-resolver";
 import generateManifest from "./generate-manifest";
 import { getModuleFederationSerializer } from "./serializer";
 import {
+  Shared,
   SharedConfig,
   ModuleFederationConfig,
   ModuleFederationConfigNormalized,
@@ -215,10 +217,12 @@ function createBabelTransformer({
   proxiedBabelTrasnsformerPath,
   mfConfig,
   mfMetroPath,
+  blacklistedPaths,
 }: {
   proxiedBabelTrasnsformerPath: string;
   mfConfig: ModuleFederationConfigNormalized;
   mfMetroPath: string;
+  blacklistedPaths: string[];
 }) {
   const babelTransformerPath = path.join(mfMetroPath, "babel-transformer.js");
 
@@ -229,7 +233,9 @@ function createBabelTransformer({
 
   const babelTransformer = babelTransformerTemplate
     .replaceAll("__BABEL_TRANSFORMER_PATH__", proxiedBabelTrasnsformerPath)
-    .replaceAll("__MF_CONFIG__", JSON.stringify(mfConfig));
+    .replaceAll("__REMOTES__", JSON.stringify(mfConfig.remotes))
+    .replaceAll("__SHARED__", JSON.stringify(mfConfig.shared))
+    .replaceAll("__BLACKLISTED_PATHS__", JSON.stringify(blacklistedPaths));
 
   fs.writeFileSync(babelTransformerPath, babelTransformer, "utf-8");
 
@@ -256,6 +262,12 @@ function replaceExtension(filepath: string, extension: string) {
   return path.format({ dir, name, ext: extension });
 }
 
+function isUsingMFCommands() {
+  const command = process.argv[2];
+  const allowedCommands = ["start", "bundle-mf-host", "bundle-mf-remote"];
+  return allowedCommands.includes(command);
+}
+
 function validateOptions(options: ModuleFederationConfigNormalized) {
   // validate filename
   if (!options.filename.endsWith(".bundle")) {
@@ -267,17 +279,12 @@ function validateOptions(options: ModuleFederationConfigNormalized) {
 }
 
 function normalizeOptions(
-  options: ModuleFederationConfig
+  options: ModuleFederationConfig,
+  config: ConfigT
 ): ModuleFederationConfigNormalized {
   const filename = options.filename ?? DEFAULT_ENTRY_FILENAME;
 
-  // force all shared modules in host to be eager
-  const shared = options.shared ?? {};
-  if (!options.exposes) {
-    Object.keys(shared).forEach((sharedName) => {
-      shared[sharedName].eager = true;
-    });
-  }
+  const shared = getNormalizedShared(options, config);
 
   // this is different from the default share strategy in mf-core
   // it makes more sense to have loaded-first as default on mobile
@@ -295,14 +302,55 @@ function normalizeOptions(
   };
 }
 
+function getNormalizedShared(
+  options: ModuleFederationConfig,
+  config: ConfigT
+): Shared {
+  const pkg = require(path.join(config.projectRoot, "package.json"));
+  const shared = options.shared ?? {};
+
+  // force all shared modules in host to be eager
+  if (!options.exposes) {
+    Object.keys(shared).forEach((sharedName) => {
+      shared[sharedName].eager = true;
+    });
+  }
+
+  // default requiredVersion
+  Object.keys(shared).forEach((sharedName) => {
+    if (!shared[sharedName].requiredVersion) {
+      shared[sharedName].requiredVersion =
+        pkg.dependencies?.[sharedName] || pkg.devDependencies?.[sharedName];
+    }
+  });
+
+  return shared;
+}
+
 function withModuleFederation(
   config: ConfigT,
   federationOptions: ModuleFederationConfig
 ): ConfigT {
+  if (!isUsingMFCommands()) {
+    console.warn(
+      chalk.yellow(
+        "Warning: Module Federation build is disabled for this command.\n"
+      ) +
+        chalk.yellow(
+          "To enable Module Federation, please use one of the dedicated bundle commands:\n"
+        ) +
+        ` ${chalk.dim("•")} bundle-mf-host` +
+        chalk.dim(" - for bundling a host application\n") +
+        ` ${chalk.dim("•")} bundle-mf-remote` +
+        chalk.dim(" - for bundling a remote application\n")
+    );
+    return config;
+  }
+
   const isHost = !federationOptions.exposes;
   const isRemote = !isHost;
 
-  const options = normalizeOptions(federationOptions);
+  const options = normalizeOptions(federationOptions, config);
 
   validateOptions(options);
 
@@ -334,6 +382,7 @@ function withModuleFederation(
     proxiedBabelTrasnsformerPath: config.transformer.babelTransformerPath,
     mfMetroPath,
     mfConfig: options,
+    blacklistedPaths: [initHostPath, remoteEntryPath],
   });
 
   const manifestPath = createManifest(options, mfMetroPath);

@@ -5,16 +5,15 @@ import chalk from "chalk";
 import { mergeConfig } from "metro";
 import Server from "metro/src/Server";
 import type { RequestOptions, OutputOptions } from "metro/src/shared/types";
-import type { ModuleFederationConfigNormalized } from "../types";
-import loadMetroConfig from "./utils/loadMetroConfig";
-import relativizeSerializedMap from "./utils/relativizeSerializedMap";
-import { CLIError } from "../utils/errors";
-import { createResolver } from "./utils/createResolver";
-import { createModulePathRemapper } from "./utils/createModulePathRemapper";
-import {
-  BundleFederatedRemoteArgs,
-  BundleFederatedRemoteConfig,
-} from "./types";
+import type { ModuleFederationConfigNormalized } from "../../types";
+import { CLIError } from "../../utils/errors";
+import { Config } from "../types";
+import { createResolver } from "../utils/createResolver";
+import { createModulePathRemapper } from "../utils/createModulePathRemapper";
+import loadMetroConfig from "../utils/loadMetroConfig";
+import { saveBundleAndMap } from "../utils/saveBundleAndMap";
+
+import { BundleFederatedRemoteArgs } from "./types";
 
 const DEFAULT_OUTPUT = "dist";
 
@@ -47,46 +46,6 @@ async function buildBundle(server: Server, requestOpts: BundleRequestOptions) {
   });
 
   return bundle;
-}
-
-async function saveBundleAndMap(
-  bundle: { code: string; map: string },
-  options: OutputOptions,
-  log: (msg: string) => void
-) {
-  const {
-    bundleOutput,
-    bundleEncoding: encoding,
-    sourcemapOutput,
-    sourcemapSourcesRoot,
-  } = options;
-
-  const writeFns = [];
-
-  writeFns.push(async () => {
-    log(`Writing bundle output to:\n${chalk.dim(bundleOutput)}`);
-    await fs.writeFile(bundleOutput, bundle.code, encoding);
-    log("Done writing bundle output");
-  });
-
-  if (sourcemapOutput) {
-    let { map } = bundle;
-    if (sourcemapSourcesRoot != null) {
-      log("Start relativating source map");
-
-      map = relativizeSerializedMap(map, sourcemapSourcesRoot);
-      log("Finished relativating");
-    }
-
-    writeFns.push(async () => {
-      log(`Writing sourcemap output to:\n${chalk.dim(sourcemapOutput)}`);
-      await fs.writeFile(sourcemapOutput, map);
-      log("Done writing sourcemap output");
-    });
-  }
-
-  // Wait until everything is written to disk.
-  await Promise.all(writeFns.map((cb) => cb()));
 }
 
 function getRequestOpts(
@@ -135,7 +94,7 @@ function getSaveBundleOpts(
 
 async function bundleFederatedRemote(
   _argv: Array<string>,
-  cfg: BundleFederatedRemoteConfig,
+  cfg: Config,
   args: BundleFederatedRemoteArgs
 ): Promise<void> {
   const rawConfig = await loadMetroConfig(cfg, {
@@ -239,7 +198,8 @@ async function bundleFederatedRemote(
   });
 
   const server = new Server(config);
-  // setup enhance middleware to trigger virtual modules setup
+
+  // hack: setup enhance middleware to trigger virtual modules setup
   config.server.enhanceMiddleware(server.processRequest, server);
 
   const resolver = await createResolver(server, args.platform);
@@ -258,6 +218,12 @@ async function bundleFederatedRemote(
       isContainerModule: true,
     },
   };
+
+  // hack: resolve the container entry to register it as a virtual module
+  resolver.resolve({
+    from: config.projectRoot,
+    to: `./${path.basename(containerEntryFilepath)}`,
+  });
 
   const exposedModules = Object.entries(federationConfig.exposes)
     .map(([moduleName, moduleFilepath]) => [
@@ -282,10 +248,10 @@ async function bundleFederatedRemote(
       return !sharedConfig.eager && sharedConfig.import !== false;
     })
     .reduce((acc, [moduleName]) => {
-      const inputFilepath = resolver.resolve(
-        containerEntryFilepath,
-        moduleName
-      );
+      const inputFilepath = resolver.resolve({
+        from: containerEntryFilepath,
+        to: moduleName,
+      });
       acc[moduleName] = {
         moduleInputFilepath: inputFilepath,
         moduleOutputDir: path.resolve(outputDir, "shared"),
@@ -383,3 +349,5 @@ async function bundleFederatedRemote(
 }
 
 export default bundleFederatedRemote;
+
+export { default as bundleFederatedRemoteOptions } from "./options";

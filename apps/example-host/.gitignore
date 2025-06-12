@@ -73,3 +73,9 @@ yarn-error.log
 !.yarn/releases
 !.yarn/sdks
 !.yarn/versions
+
+# build artifacts
+dist/
+
+# RNEF
+.rnef

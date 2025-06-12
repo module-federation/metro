@@ -1,7 +1,19 @@
 const {
+  bundleFederatedHost,
+  bundleFederatedHostOptions,
+} = require("./commands");
+
+const {
   bundleFederatedRemote,
   bundleFederatedRemoteOptions,
 } = require("./commands");
+
+const bundleMFHostCommand = {
+  name: "bundle-mf-host",
+  description: "Bundles a Module Federation host",
+  func: bundleFederatedHost,
+  options: bundleFederatedHostOptions,
+};
 
 const bundleMFRemoteCommand = {
   name: "bundle-mf-remote",
@@ -11,4 +23,4 @@ const bundleMFRemoteCommand = {
   options: bundleFederatedRemoteOptions,
 };
 
-module.exports = { commands: [bundleMFRemoteCommand] };
+module.exports = { commands: [bundleMFHostCommand, bundleMFRemoteCommand] };
