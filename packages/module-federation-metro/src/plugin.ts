@@ -511,23 +511,20 @@ function withModuleFederation(
         }
 
         // replace getDevServer module in remote with our own implementation
-        if (isRemote && moduleName.includes("getDevServer.js")) {
+        if (isRemote && moduleName.endsWith("getDevServer")) {
           const res = context.resolveRequest(context, moduleName, platform);
           const from =
             /react-native\/Libraries\/Core\/Devtools\/getDevServer\.js$/;
-          const to = path.resolve(__dirname, "./modules/getDevServer.js");
+          const to = path.resolve(__dirname, "./modules/getDevServer.ts");
           return replaceModule(from, to)(res);
         }
 
-        // replace HMRClient module with HMRClientProdShim when using bundle commands
-        if (isUsingMFBundleCommand() && moduleName.endsWith("HMRClient.js")) {
+        // replace HMRClient module with HMRClientShim when using bundle commands
+        if (isUsingMFBundleCommand() && moduleName.endsWith("HMRClient")) {
           const res = context.resolveRequest(context, moduleName, platform);
-          // @ts-ignore
-          const prodShimPath = res.filePath.replace(
-            "HMRClient.js",
-            "HMRClientProdShim.js"
-          );
-          return { type: "sourceFile", filePath: prodShimPath };
+          const from = /react-native\/Libraries\/Utilities\/HMRClient\.js$/;
+          const to = path.resolve(__dirname, "./modules/HMRClientShim.ts");
+          return replaceModule(from, to)(res);
         }
 
         return context.resolveRequest(context, moduleName, platform);
