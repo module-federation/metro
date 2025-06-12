@@ -11046,6 +11046,34 @@ __metadata:
   languageName: node
   linkType: hard
 
+"zephyr-metro-plugin@file:../../../Developer/zephyr-packages/libs/zephyr-metro-plugin::locator=zephyr-metro-rnef-plugin%40workspace%3Apackages%2Fplugin-rnef-zephyr":
+  version: 0.0.1
+  resolution: "zephyr-metro-plugin@file:../../../Developer/zephyr-packages/libs/zephyr-metro-plugin#../../../Developer/zephyr-packages/libs/zephyr-metro-plugin::hash=b03a61&locator=zephyr-metro-rnef-plugin%40workspace%3Apackages%2Fplugin-rnef-zephyr"
+  dependencies:
+    metro-config: "npm:^0.82.4"
+    zephyr-agent: "workspace:*"
+    zephyr-xpack-internal: "workspace:*"
+  checksum: 10c0/03d1a9e34540140acd64cbf26a842540bee115600472fdcfdde25ba080dd136e40d26689ff72137c48888f7958d0c1af014d1cad4a89ef38bc7bae21022ab565
+  languageName: node
+  linkType: hard
+
+"zephyr-metro-rnef-plugin@workspace:packages/plugin-rnef-zephyr":
+  version: 0.0.0-use.local
+  resolution: "zephyr-metro-rnef-plugin@workspace:packages/plugin-rnef-zephyr"
+  dependencies:
+    "@rnef/config": "npm:^0.7.18"
+    "@rnef/tools": "npm:^0.7.18"
+    "@types/node": "npm:^20.0.0"
+    module-federation-metro: "workspace:*"
+    typescript: "npm:5.0.4"
+    zephyr-metro-plugin: ../../../Developer/zephyr-packages/libs/zephyr-metro-plugin
+  peerDependencies:
+    "@rnef/tools": ^0.7.18
+    module-federation-metro: "workspace:*"
+    zephyr-metro-plugin: "*"
+  languageName: unknown
+  linkType: soft
+
 "zephyr-xpack-internal@portal:../Developer/zephyr-packages/libs/zephyr-xpack-internal::locator=metro-mf%40workspace%3A.":
   version: 0.0.0-use.local
   resolution: "zephyr-xpack-internal@portal:../Developer/zephyr-packages/libs/zephyr-xpack-internal::locator=metro-mf%40workspace%3A."
