@@ -13,7 +13,6 @@ import {
 } from "./types";
 import { ConfigError } from "./utils/errors";
 import { VirtualModuleManager } from "./utils/vm-manager";
-import { createManifest } from "./utils/create-manifest";
 
 declare global {
   var __METRO_FEDERATION_CONFIG: ModuleFederationConfigNormalized;
