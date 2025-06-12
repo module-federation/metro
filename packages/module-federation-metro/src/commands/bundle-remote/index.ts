@@ -241,10 +241,10 @@ async function bundleFederatedRemote(
       return !sharedConfig.eager && sharedConfig.import !== false;
     })
     .reduce((acc, [moduleName]) => {
-      const inputFilepath = resolver.resolve(
-        containerEntryFilepath,
-        moduleName
-      );
+      const inputFilepath = resolver.resolve({
+        from: containerEntryFilepath,
+        to: moduleName,
+      });
       acc[moduleName] = {
         moduleInputFilepath: inputFilepath,
         moduleOutputDir: path.resolve(outputDir, "shared"),
