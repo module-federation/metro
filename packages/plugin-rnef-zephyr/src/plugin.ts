@@ -1,6 +1,6 @@
 import type { PluginApi, PluginOutput } from "@rnef/config";
 import { color, logger, outro } from "@rnef/tools";
-import { updateManifest } from "module-federation-metro";
+import metroFederation from "module-federation-metro";
 import commands from "module-federation-metro/commands";
 import type {
   BundleFederatedHostArgs,
@@ -37,7 +37,7 @@ export const zephyrMetroRNEFPlugin =
           commands.bundleFederatedHost,
           commands.loadMetroConfig,
           () => {
-            updateManifest(
+            metroFederation.updateManifest(
               global.__METRO_FEDERATION_MANIFEST_PATH!,
               global.__METRO_FEDERATION_CONFIG
             );
@@ -74,7 +74,7 @@ export const zephyrMetroRNEFPlugin =
           commands.bundleFederatedRemote,
           commands.loadMetroConfig,
           () => {
-            updateManifest(
+            metroFederation.updateManifest(
               global.__METRO_FEDERATION_MANIFEST_PATH!,
               global.__METRO_FEDERATION_CONFIG
             );
