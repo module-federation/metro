@@ -261,9 +261,13 @@ function replaceExtension(filepath: string, extension: string) {
   return path.format({ dir, name, ext: extension });
 }
 
-function isUsingMFCommands() {
-  const command = process.argv[2];
+function isUsingMFCommand(command = process.argv[2]) {
   const allowedCommands = ["start", "bundle-mf-host", "bundle-mf-remote"];
+  return allowedCommands.includes(command);
+}
+
+function isUsingMFBundleCommand(command = process.argv[2]) {
+  const allowedCommands = ["bundle-mf-host", "bundle-mf-remote"];
   return allowedCommands.includes(command);
 }
 
@@ -330,7 +334,7 @@ function withModuleFederation(
   config: ConfigT,
   federationOptions: ModuleFederationConfig
 ): ConfigT {
-  if (!isUsingMFCommands()) {
+  if (!isUsingMFCommand()) {
     console.warn(
       chalk.yellow(
         "Warning: Module Federation build is disabled for this command.\n"
@@ -507,12 +511,23 @@ function withModuleFederation(
         }
 
         // replace getDevServer module in remote with our own implementation
-        if (isRemote && moduleName.includes("getDevServer")) {
+        if (isRemote && moduleName.includes("getDevServer.js")) {
           const res = context.resolveRequest(context, moduleName, platform);
           const from =
             /react-native\/Libraries\/Core\/Devtools\/getDevServer\.js$/;
           const to = path.resolve(__dirname, "./modules/getDevServer.js");
           return replaceModule(from, to)(res);
+        }
+
+        // replace HMRClient module with HMRClientProdShim when using bundle commands
+        if (isUsingMFBundleCommand() && moduleName.endsWith("HMRClient.js")) {
+          const res = context.resolveRequest(context, moduleName, platform);
+          // @ts-ignore
+          const prodShimPath = res.filePath.replace(
+            "HMRClient.js",
+            "HMRClientProdShim.js"
+          );
+          return { type: "sourceFile", filePath: prodShimPath };
         }
 
         return context.resolveRequest(context, moduleName, platform);
