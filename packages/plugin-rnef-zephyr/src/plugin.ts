@@ -18,7 +18,7 @@ export const zephyrMetroRNEFPlugin =
     // Register the bundle-mf-host command
     api.registerCommand({
       name: "bundle-mf-host",
-      description: "Bundles a Module Federation host",
+      description: "Bundles a Module Federation host with Zephyr Cloud",
       action: async (args: BundleFederatedHostArgs) => {
         const commandConfig = {
           root: api.getProjectRoot(),
@@ -30,7 +30,7 @@ export const zephyrMetroRNEFPlugin =
         logger.info(
           `Bundling Module Federation host for platform ${color.cyan(
             args.platform
-          )}`
+          )} with Zephyr Cloud`
         );
 
         let bundleZephyrHostCommand = await createZephyrCommand(
@@ -44,7 +44,7 @@ export const zephyrMetroRNEFPlugin =
           }
         );
 
-        await bundleZephyrHostCommand([], commandConfig, args);
+        await bundleZephyrHostCommand([{ ...args }], commandConfig, args);
         logger.info("Bundle artifacts available at ...");
         outro(`Success 🎉.`);
       },
@@ -54,8 +54,7 @@ export const zephyrMetroRNEFPlugin =
     // Register the bundle-mf-remote command
     api.registerCommand({
       name: "bundle-mf-remote",
-      description:
-        "Bundles a Module Federation remote, including its container entry and all exposed modules for consumption by host applications with Zephyr Cloud",
+      description: "Bundles a Module Federation remote with Zephyr Cloud",
       action: async (args: BundleFederatedRemoteArgs) => {
         const commandConfig = {
           root: api.getProjectRoot(),
@@ -81,7 +80,7 @@ export const zephyrMetroRNEFPlugin =
           }
         );
 
-        await bundleZephyrRemoteCommand([], commandConfig, args);
+        await bundleZephyrRemoteCommand([{ ...args }], commandConfig, args);
         logger.info("Bundle artifacts available at ...");
         outro(`Success 🎉.`);
       },
