@@ -4,6 +4,9 @@ inputs:
   app_name:
     description: 'Name of the app to test'
     required: true
+  github_token:
+    description: 'GitHub token for authentication'
+    required: true
 
 runs:
   using: "composite"
@@ -72,6 +75,12 @@ runs:
         yarn workspace ${{ inputs.app_name }} e2e:prepare:android &
       shell: bash
 
+    - uses: callstackincubator/android@v1
+      with:
+        github-token: ${{ inputs.github_token }}
+        variant: 'Release'
+        working-directory: './apps/example-host'
+
     - name: Run Android E2E Tests
       uses: reactivecircus/android-emulator-runner@v2
       with:
@@ -84,7 +93,8 @@ runs:
         disable-animations: true
         emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
         script: |
-          yarn workspace ${{ inputs.app_name }} android:release
+          # TODO: Remove
+          # yarn workspace ${{ inputs.app_name }} android:release
           yarn workspace ${{ inputs.app_name }} adbreverse
           yarn workspace ${{ inputs.app_name }} e2e:run
 
