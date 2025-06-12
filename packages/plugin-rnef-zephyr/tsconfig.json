@@ -18,13 +18,13 @@
         "../../external/metro/packages/metro-source-map/types/source-map.d.ts"
       ],
       "metro/src/lib/relativizeSourceMap": [
-        "../module-federation-metro/vendor/metro/relativizeSourceMap"
+        "../module-federation-metro/src/types/metro/relativizeSourceMap"
       ],
       "metro/src/lib/bundleToString": [
-        "../module-federation-metro/vendor/metro/bundleToString"
+        "../module-federation-metro/src/types/metro/bundleToString"
       ],
       "metro/src/DeltaBundler/Serializers/baseJSBundle": [
-        "../module-federation-metro/vendor/metro/baseJSBundle"
+        "../module-federation-metro/src/types/metro/baseJSBundle"
       ]
     }
   },
