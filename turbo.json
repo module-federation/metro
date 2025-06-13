@@ -14,7 +14,8 @@
     },
     "typecheck": {
       "dependsOn": ["^typecheck"],
-      "cache": true
+      "cache": true,
+      "outputs": []
     }
   }
 }
