@@ -1,8 +1,8 @@
 import path from 'node:path';
 import type { ConfigT, InputConfigT, YargArguments } from 'metro-config';
 import { loadConfig, mergeConfig, resolveConfig } from 'metro-config';
-import { CLIError } from '../../utils/errors';
-import type { Config } from '../types';
+import { CLIError } from '../../utils/errors.js';
+import type { Config } from '../types.js';
 
 function getOverrideConfig(cfg: Config, config: ConfigT): InputConfigT {
   const resolver: Partial<ConfigT['resolver']> = {
