@@ -33,10 +33,6 @@
     "enabled": true,
     "rules": {
       "recommended": true,
-      "complexity": {
-        "noBannedTypes": "off",
-        "noForEach": "off"
-      },
       "correctness": {
         "noUnusedImports": "error",
         "noUnusedVariables": "error"

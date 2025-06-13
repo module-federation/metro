@@ -37,11 +37,11 @@ function getSharedString(options: ModuleFederationConfigNormalized) {
   );
 
   let sharedString = JSON.stringify(shared);
-  Object.keys(options.shared).forEach((name) => {
+  for (const name of Object.keys(options.shared)) {
     const sharedConfig = options.shared[name];
     const entry = createSharedModuleEntry(name, sharedConfig);
     sharedString = sharedString.replaceAll(`"__SHARED_${name}__"`, entry);
-  });
+  }
 
   return sharedString;
 }
@@ -132,7 +132,7 @@ function generateRuntimePlugins(runtimePlugins: string[]) {
 
 function generateRemotes(remotes: Record<string, string> = {}) {
   const remotesEntries: string[] = [];
-  Object.entries(remotes).forEach(([remoteAlias, remoteEntry]) => {
+  for (const [remoteAlias, remoteEntry] of Object.entries(remotes)) {
     const remoteEntryParts = remoteEntry.split('@');
     const remoteName = remoteEntryParts[0];
     const remoteEntryUrl = remoteEntryParts.slice(1).join('@');
@@ -146,7 +146,7 @@ function generateRemotes(remotes: Record<string, string> = {}) {
           type: "var" 
        }`
     );
-  });
+  }
 
   return `[${remotesEntries.join(',\n')}]`;
 }
@@ -317,18 +317,18 @@ function getNormalizedShared(
 
   // force all shared modules in host to be eager
   if (!options.exposes) {
-    Object.keys(shared).forEach((sharedName) => {
+    for (const sharedName of Object.keys(shared)) {
       shared[sharedName].eager = true;
-    });
+    }
   }
 
   // default requiredVersion
-  Object.keys(shared).forEach((sharedName) => {
+  for (const sharedName of Object.keys(shared)) {
     if (!shared[sharedName].requiredVersion) {
       shared[sharedName].requiredVersion =
         pkg.dependencies?.[sharedName] || pkg.devDependencies?.[sharedName];
     }
-  });
+  }
 
   return shared;
 }
