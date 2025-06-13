@@ -1,5 +1,5 @@
 import type { Manifest, StatsAssets } from '@module-federation/sdk';
-import type { ModuleFederationConfigNormalized } from './types';
+import type { ModuleFederationConfigNormalized } from './types.js';
 
 export default function generateManifest(
   config: ModuleFederationConfigNormalized

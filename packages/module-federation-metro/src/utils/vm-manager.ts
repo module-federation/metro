@@ -105,12 +105,13 @@ export class VirtualModuleManager {
     const transformFile = bundler.transformFile.bind(bundler);
 
     bundler.transformFile = async (filePath, transformOptions, fileBuffer) => {
+      let buffer = fileBuffer;
       const virtualModule = this.virtualModules.get(filePath);
 
       if (virtualModule) {
-        fileBuffer = Buffer.from(virtualModule);
+        buffer = Buffer.from(virtualModule);
       }
-      return transformFile(filePath, transformOptions, fileBuffer);
+      return transformFile(filePath, transformOptions, buffer);
     };
     bundler.transformFile.__vm__patched = true;
   }

@@ -3,16 +3,16 @@ import path from 'node:path';
 import chalk from 'chalk';
 import type { ConfigT } from 'metro-config';
 import type { Resolution } from 'metro-resolver';
-import generateManifest from './generate-manifest';
-import { getModuleFederationSerializer } from './serializer';
+import generateManifest from './generate-manifest.js';
+import { getModuleFederationSerializer } from './serializer.js';
 import type {
   ModuleFederationConfig,
   ModuleFederationConfigNormalized,
   Shared,
   SharedConfig,
-} from './types';
-import { ConfigError } from './utils/errors';
-import { VirtualModuleManager } from './utils/vm-manager';
+} from './types.js';
+import { ConfigError } from './utils/errors.js';
+import { VirtualModuleManager } from './utils/vm-manager.js';
 
 declare global {
   var __METRO_FEDERATION_CONFIG: ModuleFederationConfigNormalized;
@@ -85,8 +85,8 @@ function createSharedModuleEntry(name: string, options: SharedConfig) {
       requiredVersion: options.requiredVersion,
     },
     get: options.eager
-      ? `__GET_SYNC_PLACEHOLDER__`
-      : `__GET_ASYNC_PLACEHOLDER__`,
+      ? '__GET_SYNC_PLACEHOLDER__'
+      : '__GET_ASYNC_PLACEHOLDER__',
   };
 
   const templateString = JSON.stringify(template);
@@ -481,9 +481,8 @@ function withModuleFederation(
           if (sharedModule && sharedModule.import === false) {
             const sharedPath = getSharedPath(moduleName, mfMetroPath);
             return { type: 'sourceFile', filePath: sharedPath };
-          } else {
-            return context.resolveRequest(context, moduleName, platform);
           }
+          return context.resolveRequest(context, moduleName, platform);
         }
 
         // remote modules

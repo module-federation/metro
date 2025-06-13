@@ -4,7 +4,7 @@ import type { SerializerConfigT } from 'metro-config';
 import baseJSBundle from 'metro/src/DeltaBundler/Serializers/baseJSBundle';
 import CountingSet from 'metro/src/lib/CountingSet';
 import bundleToString from 'metro/src/lib/bundleToString';
-import type { ModuleFederationConfigNormalized, Shared } from './types';
+import type { ModuleFederationConfigNormalized, Shared } from './types.js';
 
 type CustomSerializer = SerializerConfigT['customSerializer'];
 function getFederationSharedDependenciesNamespace(scope: string) {

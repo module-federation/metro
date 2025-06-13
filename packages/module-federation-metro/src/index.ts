@@ -1,1 +1,1 @@
-export { withModuleFederation } from './plugin';
+export { withModuleFederation } from './plugin.js';
