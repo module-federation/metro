@@ -8,10 +8,10 @@ import type { OutputOptions, RequestOptions } from 'metro/src/shared/types';
 import type { ModuleFederationConfigNormalized } from '../../types.js';
 import { CLIError } from '../../utils/errors.js';
 import type { Config } from '../types.js';
-import { createModulePathRemapper } from '../utils/createModulePathRemapper.js';
-import { createResolver } from '../utils/createResolver.js';
-import loadMetroConfig from '../utils/loadMetroConfig.js';
-import { saveBundleAndMap } from '../utils/saveBundleAndMap.js';
+import { createModulePathRemapper } from '../utils/create-module-path-remapper.js';
+import { createResolver } from '../utils/create-resolver.js';
+import loadMetroConfig from '../utils/load-metro-config.js';
+import { saveBundleAndMap } from '../utils/save-bundle-and-map.js';
 
 import type { BundleFederatedRemoteArgs } from './types.js';
 

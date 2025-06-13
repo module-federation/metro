@@ -1,9 +1,9 @@
 import Server from 'metro/src/Server';
 import type { RequestOptions } from 'metro/src/shared/types';
 import type { Config } from '../types.js';
-import { getCommunityCliPlugin } from '../utils/getCommunityPlugin.js';
-import loadMetroConfig from '../utils/loadMetroConfig.js';
-import { saveBundleAndMap } from '../utils/saveBundleAndMap.js';
+import { getCommunityCliPlugin } from '../utils/get-community-plugin.js';
+import loadMetroConfig from '../utils/load-metro-config.js';
+import { saveBundleAndMap } from '../utils/save-bundle-and-map.js';
 import type { BundleFederatedHostArgs } from './types.js';
 
 async function bundleFederatedHost(
