@@ -26,14 +26,14 @@
   "author": "Jakub Romanczyk <jakub.romanczyk@callstack.com>",
   "license": "MIT",
   "scripts": {
-    "build": "tsc",
-    "dev": "tsc --watch"
+    "build": "tsc -b ./tsconfig.build.json -f",
+    "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
     "@rnef/config": "^0.7.18",
     "@rnef/tools": "^0.7.18",
     "@types/node": "^20.0.0",
-    "typescript": "5.0.4"
+    "typescript": "^5.8.3"
   },
   "peerDependencies": {
     "@rnef/tools": "^0.7.18",
