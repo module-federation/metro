@@ -2,25 +2,6 @@
   "extends": "../../tsconfig.base.json",
   "include": ["src"],
   "compilerOptions": {
-    "rootDir": "src",
-    "paths": {
-      "metro": ["../../external/metro/packages/metro/types"],
-      "metro/src/*": ["../../external/metro/packages/metro/types/*"],
-      "metro-*": ["../../external/metro/packages/metro-*/types"],
-      "metro-source-map": [
-        "../../external/metro/packages/metro-source-map/types/source-map.d.ts"
-      ],
-      "metro/src/DeltaBundler/Serializers/baseJSBundle": [
-        "./src/types/metro/baseJSBundle"
-      ],
-      "metro/src/lib/bundleToString": ["./src/types/metro/bundleToString"],
-      "metro/src/lib/getAppendScripts": ["./src/types/metro/getAppendScripts"],
-      "metro/src/DeltaBundler/Serializers/helpers/processModules": [
-        "./src/types/metro/processModules"
-      ],
-      "metro/src/lib/relativizeSourceMap": [
-        "./src/types/metro/relativizeSourceMap"
-      ]
-    }
+    "rootDir": "src"
   }
 }

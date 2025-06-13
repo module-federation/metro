@@ -5,10 +5,5 @@
     "outDir": "dist",
     "sourceMap": false,
     "declarationMap": false
-  },
-  "references": [
-    {
-      "path": "../module-federation-metro"
-    }
-  ]
+  }
 }

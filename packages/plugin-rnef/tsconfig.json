@@ -3,10 +3,5 @@
   "include": ["src"],
   "compilerOptions": {
     "rootDir": "src"
-  },
-  "references": [
-    {
-      "path": "../module-federation-metro"
-    }
-  ]
+  }
 }
