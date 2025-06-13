@@ -25,3 +25,6 @@ packages/*/dist
 
 # RNEF
 apps/*/.rnef
+
+# TypeScript build cache
+*.tsbuildinfo
