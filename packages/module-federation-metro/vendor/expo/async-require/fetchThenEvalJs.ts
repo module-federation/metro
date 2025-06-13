@@ -18,9 +18,7 @@ export function fetchThenEvalAsync(url: string): Promise<void> {
       headers.get('Content-Type')!.includes('application/json')
     ) {
       // Errors are returned as JSON.
-      throw new Error(
-        JSON.parse(body).message || `Unknown error fetching '${url}'`
-      );
+      throw new Error(JSON.parse(body).message || `Unknown error fetching '${url}'`);
     }
 
     if (status === 200) {

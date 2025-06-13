@@ -60,19 +60,11 @@ export function fetchThenEvalAsync(
         event = ev;
       }
 
-      const errorType =
-        event && (event.type === 'load' ? 'missing' : event.type);
+      const errorType = event && (event.type === 'load' ? 'missing' : event.type);
       // @ts-expect-error
       const realSrc = event?.target?.src;
 
-      error.message =
-        'Loading module ' +
-        url +
-        ' failed.\n(' +
-        errorType +
-        ': ' +
-        realSrc +
-        ')';
+      error.message = 'Loading module ' + url + ' failed.\n(' + errorType + ': ' + realSrc + ')';
       error.type = errorType;
       error.request = realSrc;
 
