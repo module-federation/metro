@@ -1,13 +1,9 @@
 {
+  "extends": "../../tsconfig.base.json",
+  "include": ["src"],
   "compilerOptions": {
-    "target": "ES2022",
-    "module": "commonjs",
-    "esModuleInterop": true,
-    "strict": true,
-    "jsx": "react-native",
-    "allowSyntheticDefaultImports": true,
-    "forceConsistentCasingInFileNames": true,
-    "resolveJsonModule": true,
+    "rootDir": "src",
+    "outDir": "dist",
     "paths": {
       "metro": ["../../external/metro/packages/metro/types"],
       "metro/src/*": ["../../external/metro/packages/metro/types/*"],
@@ -16,15 +12,15 @@
         "../../external/metro/packages/metro-source-map/types/source-map.d.ts"
       ],
       "metro/src/DeltaBundler/Serializers/baseJSBundle": [
-        "./vendor/metro/baseJSBundle"
+        "./src/types/metro/baseJSBundle"
       ],
-      "metro/src/lib/bundleToString": ["./vendor/metro/bundleToString"],
-      "metro/src/lib/getAppendScripts": ["./vendor/metro/getAppendScripts"],
+      "metro/src/lib/bundleToString": ["./src/types/metro/bundleToString"],
+      "metro/src/lib/getAppendScripts": ["./src/types/metro/getAppendScripts"],
       "metro/src/DeltaBundler/Serializers/helpers/processModules": [
-        "./vendor/metro/processModules"
+        "./src/types/metro/processModules"
       ],
       "metro/src/lib/relativizeSourceMap": [
-        "./vendor/metro/relativizeSourceMap"
+        "./src/types/metro/relativizeSourceMap"
       ]
     }
   }

@@ -16,6 +16,9 @@
     "./commands": "./commands/index.js",
     "./runtime-plugin": "./runtime-plugin.js"
   },
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
   "peerDependencies": {
     "react-native": ">=0.79.0"
   },

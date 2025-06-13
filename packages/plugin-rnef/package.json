@@ -27,7 +27,8 @@
   "license": "MIT",
   "scripts": {
     "build": "tsc",
-    "dev": "tsc --watch"
+    "dev": "tsc --watch",
+    "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
     "@rnef/config": "^0.7.18",

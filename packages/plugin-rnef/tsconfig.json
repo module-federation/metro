@@ -1,27 +1,13 @@
 {
-  "compilerOptions": {
-    "target": "ES2022",
-    "module": "nodeNext",
-    "moduleResolution": "nodeNext",
-    "esModuleInterop": true,
-    "strict": true,
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
-    "outDir": "./dist",
-    "rootDir": "./src",
-    "declaration": true,
-    "paths": {
-      "metro": ["../../external/metro/packages/metro/types"],
-      "metro/src/*": ["../../external/metro/packages/metro/types/*"],
-      "metro-*": ["../../external/metro/packages/metro-*/types"],
-      "metro-source-map": [
-        "../../external/metro/packages/metro-source-map/types/source-map.d.ts"
-      ],
-      "metro/src/lib/relativizeSourceMap": [
-        "../module-federation-metro/vendor/metro/relativizeSourceMap"
-      ]
-    }
-  },
+  "extends": "../../tsconfig.base.json",
   "include": ["src"],
-  "exclude": ["node_modules", "dist", "**/__tests__"]
+  "compilerOptions": {
+    "rootDir": "src",
+    "outDir": "dist"
+  },
+  "references": [
+    {
+      "path": "../module-federation-metro"
+    }
+  ]
 }

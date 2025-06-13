@@ -11,7 +11,8 @@
   },
   "scripts": {
     "dev": "turbo dev --filter=showcase-host --filter=showcase-mini",
-    "dev:example": "turbo dev --filter=example-host --filter=example-mini --filter=example-nested-mini"
+    "dev:example": "turbo dev --filter=example-host --filter=example-mini --filter=example-nested-mini",
+    "typecheck": "yarn workspaces foreach -At run typecheck"
   },
   "resolutions": {
     "buck-worker-tool": "portal:./external/metro/packages/buck-worker-tool",

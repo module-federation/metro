@@ -4,17 +4,18 @@
     "moduleResolution": "NodeNext",
     "target": "ES2021",
     "esModuleInterop": true,
-    "outDir": "dist",
     "declaration": true,
     "isolatedModules": true,
     "sourceMap": true,
     "declarationMap": true,
     "composite": true,
     "forceConsistentCasingInFileNames": true,
+    "jsx": "react-native",
     "allowJs": true,
-    "checkJs": true,
+    "checkJs": false,
     "strict": true,
     "skipLibCheck": true,
-    "noUnusedLocals": true
+    "noUnusedLocals": true,
+    "resolveJsonModule": true
   }
 }
