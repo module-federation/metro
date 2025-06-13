@@ -1952,7 +1952,7 @@ __metadata:
     "@rnef/config": "npm:^0.7.18"
     "@rnef/tools": "npm:^0.7.18"
     "@types/node": "npm:^20.0.0"
-    typescript: "npm:5.0.4"
+    typescript: "npm:^5.8.3"
   peerDependencies:
     "@rnef/tools": ^0.7.18
     module-federation-metro: "workspace:*"
@@ -7450,7 +7450,7 @@ __metadata:
     metro-source-map: "npm:^0.82.1"
     react-native: "npm:0.79.0"
     ts-node: "npm:^10.9.2"
-    typescript: "npm:5.0.4"
+    typescript: "npm:^5.8.3"
   peerDependencies:
     react-native: ">=0.79.0"
   languageName: unknown
@@ -9683,6 +9683,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"typescript@npm:^5.8.3":
+  version: 5.8.3
+  resolution: "typescript@npm:5.8.3"
+  bin:
+    tsc: bin/tsc
+    tsserver: bin/tsserver
+  checksum: 10c0/5f8bb01196e542e64d44db3d16ee0e4063ce4f3e3966df6005f2588e86d91c03e1fb131c2581baf0fb65ee79669eea6e161cd448178986587e9f6844446dbb48
+  languageName: node
+  linkType: hard
+
 "typescript@patch:typescript@npm%3A5.0.4#optional!builtin<compat/typescript>":
   version: 5.0.4
   resolution: "typescript@patch:typescript@npm%3A5.0.4#optional!builtin<compat/typescript>::version=5.0.4&hash=b5f058"
@@ -9690,6 +9700,16 @@ __metadata:
     tsc: bin/tsc
     tsserver: bin/tsserver
   checksum: 10c0/c3f7b80577bddf6fab202a7925131ac733bfc414aec298c2404afcddc7a6f242cfa8395cf2d48192265052e11a7577c27f6e5fac8d8fe6a6602023c83d6b3292
+  languageName: node
+  linkType: hard
+
+"typescript@patch:typescript@npm%3A^5.8.3#optional!builtin<compat/typescript>":
+  version: 5.8.3
+  resolution: "typescript@patch:typescript@npm%3A5.8.3#optional!builtin<compat/typescript>::version=5.8.3&hash=5786d5"
+  bin:
+    tsc: bin/tsc
+    tsserver: bin/tsserver
+  checksum: 10c0/39117e346ff8ebd87ae1510b3a77d5d92dae5a89bde588c747d25da5c146603a99c8ee588c7ef80faaf123d89ed46f6dbd918d534d641083177d5fac38b8a1cb
   languageName: node
   linkType: hard
 
