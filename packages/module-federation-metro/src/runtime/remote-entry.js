@@ -33,7 +33,7 @@ async function init(shared = {}, initScope = []) {
     shareStrategy,
   });
   // handling circular init calls
-  var initToken = initTokens[shareScopeName];
+  let initToken = initTokens[shareScopeName];
   if (!initToken) {
     initToken = initTokens[shareScopeName] = {
       from: name,

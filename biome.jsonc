@@ -100,11 +100,12 @@
       }
     },
     {
-      "include": [
-        "packages/module-federation-metro/src/runtime/**",
-        "packages/module-federation-metro/src/modules/**"
-      ],
-      "linter": { "enabled": false }
+      "include": ["packages/module-federation-metro/src/modules/**"],
+      "linter": {
+        "rules": {
+          "style": { "useFilenamingConvention": "off" }
+        }
+      }
     }
   ]
 }
