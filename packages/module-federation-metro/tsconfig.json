@@ -3,7 +3,6 @@
   "include": ["src"],
   "compilerOptions": {
     "rootDir": "src",
-    "outDir": "dist",
     "paths": {
       "metro": ["../../external/metro/packages/metro/types"],
       "metro/src/*": ["../../external/metro/packages/metro/types/*"],

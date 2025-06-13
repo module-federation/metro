@@ -17,6 +17,8 @@
     "./runtime-plugin": "./runtime-plugin.js"
   },
   "scripts": {
+    "build": "tsc -b ./tsconfig.build.json",
+    "build:force": "tsc -b ./tsconfig.build.json --force",
     "typecheck": "tsc --noEmit"
   },
   "peerDependencies": {

@@ -1,1 +1,1 @@
-export { withModuleFederation } from "../src/index";
+export * from "../src/index";

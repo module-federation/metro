@@ -1,6 +1,7 @@
 import type { FederationRuntimePlugin } from "@module-federation/runtime";
 
 declare global {
+  var __DEV__: boolean;
   var __METRO_GLOBAL_PREFIX__: string;
   var __METRO_FEDERATION__: Record<string, any> & {
     [key: string]: { __shareInit: Promise<void> };
