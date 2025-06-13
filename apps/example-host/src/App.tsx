@@ -24,7 +24,7 @@ function App(): React.JSX.Element {
     import('lodash').then((lodash) => {
       setLodashVersion(lodash.VERSION);
     });
-  }, [setLodashVersion]);
+  }, []);
 
   return (
     <View style={styles.backgroundStyle}>

@@ -5,15 +5,15 @@ import chalk from 'chalk';
 import { mergeConfig } from 'metro';
 import Server from 'metro/src/Server';
 import type { OutputOptions, RequestOptions } from 'metro/src/shared/types';
-import type { ModuleFederationConfigNormalized } from '../../types';
-import { CLIError } from '../../utils/errors';
-import type { Config } from '../types';
-import { createModulePathRemapper } from '../utils/createModulePathRemapper';
-import { createResolver } from '../utils/createResolver';
-import loadMetroConfig from '../utils/loadMetroConfig';
-import { saveBundleAndMap } from '../utils/saveBundleAndMap';
+import type { ModuleFederationConfigNormalized } from '../../types.js';
+import { CLIError } from '../../utils/errors.js';
+import type { Config } from '../types.js';
+import { createModulePathRemapper } from '../utils/createModulePathRemapper.js';
+import { createResolver } from '../utils/createResolver.js';
+import loadMetroConfig from '../utils/loadMetroConfig.js';
+import { saveBundleAndMap } from '../utils/saveBundleAndMap.js';
 
-import type { BundleFederatedRemoteArgs } from './types';
+import type { BundleFederatedRemoteArgs } from './types.js';
 
 const DEFAULT_OUTPUT = 'dist';
 
@@ -350,4 +350,4 @@ async function bundleFederatedRemote(
 
 export default bundleFederatedRemote;
 
-export { default as bundleFederatedRemoteOptions } from './options';
+export { default as bundleFederatedRemoteOptions } from './options.js';
