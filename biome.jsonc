@@ -8,10 +8,7 @@
   },
   "files": {
     "ignoreUnknown": false,
-    "ignore": [
-      "external/metro/**",
-      "packages/module-federation-metro/vendor/**"
-    ]
+    "ignore": ["external/metro/**"]
   },
   "formatter": {
     "enabled": true,
@@ -62,7 +59,7 @@
       "semicolons": "always",
       "arrowParentheses": "always",
       "bracketSameLine": false,
-      "quoteStyle": "double",
+      "quoteStyle": "single",
       "attributePosition": "auto",
       "bracketSpacing": true
     }
