@@ -26,8 +26,7 @@
   "author": "Jakub Romanczyk <jakub.romanczyk@callstack.com>",
   "license": "MIT",
   "scripts": {
-    "build": "tsc",
-    "dev": "tsc --watch",
+    "build": "tsc -b ./tsconfig.build.json -f",
     "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
