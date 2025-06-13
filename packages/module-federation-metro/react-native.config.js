@@ -1,12 +1,12 @@
 const {
   bundleFederatedHost,
   bundleFederatedHostOptions,
-} = require('./commands');
+} = require('./commands/index.js');
 
 const {
   bundleFederatedRemote,
   bundleFederatedRemoteOptions,
-} = require('./commands');
+} = require('./commands/index.js');
 
 const bundleMFHostCommand = {
   name: 'bundle-mf-host',
