@@ -8,7 +8,10 @@
   },
   "files": {
     "ignoreUnknown": false,
-    "ignore": ["external/metro/**"]
+    "ignore": [
+      "external/metro/**",
+      "packages/module-federation-metro/vendor/**"
+    ]
   },
   "formatter": {
     "enabled": true,
