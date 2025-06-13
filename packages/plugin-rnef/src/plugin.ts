@@ -29,7 +29,7 @@ export const pluginMetroModuleFederation =
 
         await commands.bundleFederatedHost([], commandConfig, args);
         logger.info('Bundle artifacts available at ...');
-        outro(`Success 🎉.`);
+        outro('Success 🎉.');
       },
       options: commands.bundleFederatedHostOptions,
     });
@@ -55,7 +55,7 @@ export const pluginMetroModuleFederation =
 
         await commands.bundleFederatedRemote([], commandConfig, args);
         logger.info('Bundle artifacts available at ...');
-        outro(`Success 🎉.`);
+        outro('Success 🎉.');
       },
       options: commands.bundleFederatedRemoteOptions,
     });
