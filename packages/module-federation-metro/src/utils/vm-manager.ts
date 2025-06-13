@@ -1,16 +1,16 @@
-import fs from "node:fs";
-import path from "node:path";
-import type MetroServer from "metro/src/Server";
+import fs from 'node:fs';
+import path from 'node:path';
 import type {
   MetroConfig,
   ServerConfigT,
   TransformerConfigT,
-} from "metro-config";
-import type { FileSystem } from "metro-file-map";
+} from 'metro-config';
+import type { FileSystem } from 'metro-file-map';
+import type MetroServer from 'metro/src/Server';
 
-type EnhanceMiddleware = ServerConfigT["enhanceMiddleware"];
-type GetTransformOptions = TransformerConfigT["getTransformOptions"];
-type Bundler = ReturnType<ReturnType<MetroServer["getBundler"]>["getBundler"]>;
+type EnhanceMiddleware = ServerConfigT['enhanceMiddleware'];
+type GetTransformOptions = TransformerConfigT['getTransformOptions'];
+type Bundler = ReturnType<ReturnType<MetroServer['getBundler']>['getBundler']>;
 
 export class VirtualModuleManager {
   private setupFinished: Promise<boolean> | null = null;
@@ -51,7 +51,7 @@ export class VirtualModuleManager {
   getTransformOptions(): GetTransformOptions {
     return async (...args) => {
       if (this.setupFinished === null) {
-        throw new Error("Expected virtual module setup to be finished");
+        throw new Error('Expected virtual module setup to be finished');
       }
 
       await this.setupFinished;
@@ -102,16 +102,10 @@ export class VirtualModuleManager {
     if (bundler.transformFile.__vm__patched) {
       return;
     }
-
-    const manager = this;
     const transformFile = bundler.transformFile.bind(bundler);
 
-    bundler.transformFile = async function (
-      filePath,
-      transformOptions,
-      fileBuffer
-    ) {
-      const virtualModule = manager.virtualModules.get(filePath);
+    bundler.transformFile = async (filePath, transformOptions, fileBuffer) => {
+      const virtualModule = this.virtualModules.get(filePath);
 
       if (virtualModule) {
         fileBuffer = Buffer.from(virtualModule);

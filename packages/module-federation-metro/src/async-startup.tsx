@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 declare global {
   var __METRO_FEDERATION__: Record<string, any> & {

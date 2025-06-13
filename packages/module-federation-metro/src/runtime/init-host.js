@@ -1,15 +1,15 @@
 import {
   loadRemoteToRegistry,
   loadSharedToRegistry,
-} from "mf:remote-module-registry";
-import { init } from "@module-federation/runtime";
+} from 'mf:remote-module-registry';
+import { init } from '@module-federation/runtime';
 
 __PLUGINS__;
 
 const usedRemotes = __REMOTES__;
 const usedShared = __SHARED__;
 
-const shareScopeName = "default";
+const shareScopeName = 'default';
 const shareStrategy = __SHARE_STRATEGY__;
 
 const initRes = init({
@@ -33,7 +33,7 @@ global.__METRO_FEDERATION__[__NAME__].dependencies = global
 global.__METRO_FEDERATION__[__NAME__].__shareInit = Promise.all(
   initRes.initializeSharing(shareScopeName, {
     strategy: shareStrategy,
-    from: "build",
+    from: 'build',
     initScope: [],
   })
 ).then(() =>

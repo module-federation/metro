@@ -1,1 +1,1 @@
-export { default } from "react-native/Libraries/Utilities/HMRClientProdShim";
+export { default } from 'react-native/Libraries/Utilities/HMRClientProdShim';

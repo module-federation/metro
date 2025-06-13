@@ -1,17 +1,17 @@
-import React, {useRef, useState} from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  Image,
-  ActivityIndicator,
-  Pressable,
-} from 'react-native';
 import type LottieView from 'lottie-react-native';
+import React, { useRef, useState } from 'react';
+import {
+  ActivityIndicator,
+  Image,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 
+import Card from './Card';
 // @ts-ignore
 import gradientBg from './aura.png';
-import Card from './Card';
 
 // @ts-ignore
 const Button = React.lazy(() => import('mini/button'));
@@ -47,10 +47,12 @@ function App(): React.JSX.Element {
           {!shouldLoadRemote ? (
             <Pressable
               style={styles.defaultButton}
-              onPress={() => setShouldLoadRemote(true)}>
+              onPress={() => setShouldLoadRemote(true)}
+            >
               <Text
                 testID="load-remote-button"
-                style={styles.defaultButtonText}>
+                style={styles.defaultButtonText}
+              >
                 Load Remote Component
               </Text>
             </Pressable>
@@ -60,7 +62,8 @@ function App(): React.JSX.Element {
                 <View style={styles.loadingContainer}>
                   <ActivityIndicator size="large" color="#8b5cf6" />
                 </View>
-              }>
+              }
+            >
               <Button
                 onPress={() =>
                   setTimeout(() => animationRef.current?.play(), 1000)

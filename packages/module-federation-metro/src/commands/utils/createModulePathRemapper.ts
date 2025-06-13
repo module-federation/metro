@@ -1,4 +1,4 @@
-import type { Resolution } from "metro-resolver";
+import type { Resolution } from 'metro-resolver';
 
 export function createModulePathRemapper() {
   const mappings = new Map<string, string>();
@@ -16,7 +16,7 @@ export function createModulePathRemapper() {
       reverseMappings.delete(overridePath);
     },
     remap(resolved: Resolution): Resolution {
-      if (!("filePath" in resolved)) return resolved;
+      if (!('filePath' in resolved)) return resolved;
       if (!mappings.has(resolved.filePath)) return resolved;
       const overridePath = mappings.get(resolved.filePath)!;
       return { filePath: overridePath, type: resolved.type };

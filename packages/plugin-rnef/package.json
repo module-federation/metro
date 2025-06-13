@@ -4,21 +4,14 @@
   "type": "module",
   "private": true,
   "description": "Metro Module Federation plugin for React Native Enterprise Framework (RNEF)",
-  "keywords": [
-    "rnef",
-    "module-federation",
-    "metro",
-    "react-native"
-  ],
+  "keywords": ["rnef", "module-federation", "metro", "react-native"],
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
     "types": "./dist/index.d.ts",
     "import": "./dist/index.js"
   },
-  "files": [
-    "dist"
-  ],
+  "files": ["dist"],
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org/"

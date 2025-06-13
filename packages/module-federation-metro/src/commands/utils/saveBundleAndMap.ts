@@ -1,8 +1,8 @@
-import chalk from "chalk";
-import { promises as fs } from "node:fs";
-import type { OutputOptions } from "metro/src/shared/types";
-import relativizeSourceMapInline from "metro/src/lib/relativizeSourceMap";
-import type { MixedSourceMap } from "metro-source-map";
+import { promises as fs } from 'node:fs';
+import chalk from 'chalk';
+import type { MixedSourceMap } from 'metro-source-map';
+import relativizeSourceMapInline from 'metro/src/lib/relativizeSourceMap';
+import type { OutputOptions } from 'metro/src/shared/types';
 
 function relativizeSerializedMap(
   map: string,
@@ -30,22 +30,22 @@ export async function saveBundleAndMap(
   writeFns.push(async () => {
     log(`Writing bundle output to:\n${chalk.dim(bundleOutput)}`);
     await fs.writeFile(bundleOutput, bundle.code, encoding);
-    log("Done writing bundle output");
+    log('Done writing bundle output');
   });
 
   if (sourcemapOutput) {
     let { map } = bundle;
     if (sourcemapSourcesRoot != null) {
-      log("Start relativating source map");
+      log('Start relativating source map');
 
       map = relativizeSerializedMap(map, sourcemapSourcesRoot);
-      log("Finished relativating");
+      log('Finished relativating');
     }
 
     writeFns.push(async () => {
       log(`Writing sourcemap output to:\n${chalk.dim(sourcemapOutput)}`);
       await fs.writeFile(sourcemapOutput, map);
-      log("Done writing sourcemap output");
+      log('Done writing sourcemap output');
     });
   }
 

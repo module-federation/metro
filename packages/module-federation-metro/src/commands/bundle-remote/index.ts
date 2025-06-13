@@ -1,21 +1,21 @@
-import { promises as fs } from "node:fs";
-import path from "node:path";
-import { pathToFileURL } from "node:url";
-import chalk from "chalk";
-import { mergeConfig } from "metro";
-import Server from "metro/src/Server";
-import type { RequestOptions, OutputOptions } from "metro/src/shared/types";
-import type { ModuleFederationConfigNormalized } from "../../types";
-import { CLIError } from "../../utils/errors";
-import { Config } from "../types";
-import { createResolver } from "../utils/createResolver";
-import { createModulePathRemapper } from "../utils/createModulePathRemapper";
-import loadMetroConfig from "../utils/loadMetroConfig";
-import { saveBundleAndMap } from "../utils/saveBundleAndMap";
+import { promises as fs } from 'node:fs';
+import path from 'node:path';
+import { pathToFileURL } from 'node:url';
+import chalk from 'chalk';
+import { mergeConfig } from 'metro';
+import Server from 'metro/src/Server';
+import type { OutputOptions, RequestOptions } from 'metro/src/shared/types';
+import type { ModuleFederationConfigNormalized } from '../../types';
+import { CLIError } from '../../utils/errors';
+import type { Config } from '../types';
+import { createModulePathRemapper } from '../utils/createModulePathRemapper';
+import { createResolver } from '../utils/createResolver';
+import loadMetroConfig from '../utils/loadMetroConfig';
+import { saveBundleAndMap } from '../utils/saveBundleAndMap';
 
-import { BundleFederatedRemoteArgs } from "./types";
+import type { BundleFederatedRemoteArgs } from './types';
 
-const DEFAULT_OUTPUT = "dist";
+const DEFAULT_OUTPUT = 'dist';
 
 declare global {
   var __METRO_FEDERATION_CONFIG: ModuleFederationConfigNormalized;
@@ -42,7 +42,7 @@ async function buildBundle(server: Server, requestOpts: BundleRequestOptions) {
   const bundle = await server.build({
     ...Server.DEFAULT_BUNDLE_OPTIONS,
     ...requestOpts,
-    bundleType: "bundle",
+    bundleType: 'bundle',
   });
 
   return bundle;
@@ -109,14 +109,14 @@ async function bundleFederatedRemote(
   const federationConfig = global.__METRO_FEDERATION_CONFIG;
   if (!federationConfig) {
     logger.error(
-      `${chalk.red("error")} Module Federation configuration is missing.`
+      `${chalk.red('error')} Module Federation configuration is missing.`
     );
     logger.info(
       "Import the plugin 'withModuleFederation' " +
         "from 'module-federation-metro' package " +
-        "and wrap your final Metro config with it."
+        'and wrap your final Metro config with it.'
     );
-    throw new CLIError("Bundling failed");
+    throw new CLIError('Bundling failed');
   }
 
   // TODO: pass this without globals
@@ -124,27 +124,27 @@ async function bundleFederatedRemote(
   const containerEntryFilepath = global.__METRO_FEDERATION_REMOTE_ENTRY_PATH;
   if (!containerEntryFilepath) {
     logger.error(
-      `${chalk.red("error")} Cannot determine the container entry file path.`
+      `${chalk.red('error')} Cannot determine the container entry file path.`
     );
     logger.info(
-      "To bundle a container, you need to expose at least one module " +
-        "in your Module Federation configuration."
+      'To bundle a container, you need to expose at least one module ' +
+        'in your Module Federation configuration.'
     );
-    throw new CLIError("Bundling failed");
+    throw new CLIError('Bundling failed');
   }
 
   const manifestFilepath = global.__METRO_FEDERATION_MANIFEST_PATH;
   if (!manifestFilepath) {
     logger.error(
-      `${chalk.red("error")} Cannot determine the manifest file path.`
+      `${chalk.red('error')} Cannot determine the manifest file path.`
     );
-    throw new CLIError("Bundling failed");
+    throw new CLIError('Bundling failed');
   }
 
   if (rawConfig.resolver.platforms.indexOf(args.platform) === -1) {
     logger.error(
-      `${chalk.red("error")}: Invalid platform ${
-        args.platform ? `"${chalk.bold(args.platform)}" ` : ""
+      `${chalk.red('error')}: Invalid platform ${
+        args.platform ? `"${chalk.bold(args.platform)}" ` : ''
       }selected.`
     );
 
@@ -152,22 +152,22 @@ async function bundleFederatedRemote(
       `Available platforms are: ${rawConfig.resolver.platforms
         .map((x) => `"${chalk.bold(x)}"`)
         .join(
-          ", "
+          ', '
         )}. If you are trying to bundle for an out-of-tree platform, it may not be installed.`
     );
 
-    throw new CLIError("Bundling failed");
+    throw new CLIError('Bundling failed');
   }
 
   if (process.env.METRO_FEDERATION_DEV) {
     // Don't set global NODE_ENV to production inside the monorepo
     // because it breaks Metro's babel-register ad hoc transforms
     // when building with args.dev === false
-    process.env.NODE_ENV = "development";
+    process.env.NODE_ENV = 'development';
   } else {
     // This is used by a bazillion of npm modules we don't control so we don't
     // have other choice than defining it as an env variable here.
-    process.env.NODE_ENV = args.dev ? "development" : "production";
+    process.env.NODE_ENV = args.dev ? 'development' : 'production';
   }
 
   // wrap the resolveRequest with our own remapper
@@ -236,7 +236,7 @@ async function bundleFederatedRemote(
           config.projectRoot,
           moduleInputFilepath
         ),
-        moduleOutputDir: path.resolve(outputDir, "exposed"),
+        moduleOutputDir: path.resolve(outputDir, 'exposed'),
         isContainerModule: false,
       };
       return acc;
@@ -254,7 +254,7 @@ async function bundleFederatedRemote(
       });
       acc[moduleName] = {
         moduleInputFilepath: inputFilepath,
-        moduleOutputDir: path.resolve(outputDir, "shared"),
+        moduleOutputDir: path.resolve(outputDir, 'shared'),
         isContainerModule: false,
       };
       return acc;
@@ -311,7 +311,7 @@ async function bundleFederatedRemote(
 
   try {
     logger.info(
-      `${chalk.blue("Processing remote container and exposed modules")}`
+      `${chalk.blue('Processing remote container and exposed modules')}`
     );
 
     for (const { requestOpts, saveBundleOpts, targetDir } of requests) {
@@ -336,8 +336,8 @@ async function bundleFederatedRemote(
       // );
     }
 
-    logger.info(`${chalk.blue("Processing manifest")}`);
-    const manifestOutputFilepath = path.resolve(outputDir, "mf-manifest.json");
+    logger.info(`${chalk.blue('Processing manifest')}`);
+    const manifestOutputFilepath = path.resolve(outputDir, 'mf-manifest.json');
     await fs.copyFile(manifestFilepath, manifestOutputFilepath);
     logger.info(
       `Done writing MF Manifest to:\n${chalk.dim(manifestOutputFilepath)}`
@@ -350,4 +350,4 @@ async function bundleFederatedRemote(
 
 export default bundleFederatedRemote;
 
-export { default as bundleFederatedRemoteOptions } from "./options";
+export { default as bundleFederatedRemoteOptions } from './options';

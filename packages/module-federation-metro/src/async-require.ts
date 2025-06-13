@@ -13,20 +13,20 @@ interface FederationScope {
 // join two paths
 // e.g. /a/b/ + /c/d -> /a/b/c/d
 function joinComponents(prefix: string, suffix: string) {
-  return prefix.replace(/\/+$/, "") + "/" + suffix.replace(/^\/+/, "");
+  return prefix.replace(/\/+$/, '') + '/' + suffix.replace(/^\/+/, '');
 }
 
 // get the public path from the url
 // e.g. http://host:8081/a/b.bundle -> http://host:8081/a
 function getPublicPath(url: string) {
-  return url.split("/").slice(0, -1).join("/");
+  return url.split('/').slice(0, -1).join('/');
 }
 
 // get bundle id from the url path
 // e.g. /a/b.bundle?platform=ios -> a/b
 function getBundleId(urlPath: string) {
-  const [bundlePath] = urlPath.split("?");
-  return bundlePath.slice(1).replace(".bundle", "");
+  const [bundlePath] = urlPath.split('?');
+  return bundlePath.slice(1).replace('.bundle', '');
 }
 
 function isUrl(url: string) {
@@ -41,7 +41,7 @@ function isSameOrigin(url: string, origin?: string) {
 // e.g. /a/b.bundle -> http://host:8081/a/b.bundle
 function getBundlePath(bundlePath: string, bundleOrigin?: string) {
   // don't modify the path in development
-  if (process.env.NODE_ENV !== "production") {
+  if (process.env.NODE_ENV !== 'production') {
     return bundlePath;
   }
   // don't modify fully qualified urls
@@ -58,11 +58,11 @@ function getBundlePath(bundlePath: string, bundleOrigin?: string) {
 }
 
 export function buildLoadBundleAsyncWrapper() {
-  const registry = require("mf:remote-module-registry");
+  const registry = require('mf:remote-module-registry');
 
   const __loadBundleAsync =
     // @ts-expect-error dynamic key access on global object
-    global[`${__METRO_GLOBAL_PREFIX__ ?? ""}__loadBundleAsync`];
+    global[`${__METRO_GLOBAL_PREFIX__ ?? ''}__loadBundleAsync`];
 
   const loadBundleAsync = __loadBundleAsync as typeof global.__loadBundleAsync;
 
@@ -74,7 +74,7 @@ export function buildLoadBundleAsyncWrapper() {
     const bundlePath = getBundlePath(originalBundlePath, scope.location);
 
     // ../../node_modules/ -> ..%2F..%2Fnode_modules/ so that it's not automatically sanitized
-    const encodedBundlePath = bundlePath.replaceAll("../", "..%2F");
+    const encodedBundlePath = bundlePath.replaceAll('../', '..%2F');
 
     const result = await loadBundleAsync(encodedBundlePath);
 

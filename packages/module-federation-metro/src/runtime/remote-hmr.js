@@ -3,7 +3,7 @@ function parseUrl(url) {
   const match = url.match(urlPattern);
 
   if (!match) {
-    throw new Error("Invalid URL: " + url);
+    throw new Error('Invalid URL: ' + url);
   }
 
   const [, origin, scheme, host, port, path] = match;
@@ -11,8 +11,8 @@ function parseUrl(url) {
 }
 
 export function setup() {
-  const HMRClient = require("react-native/Libraries/Utilities/HMRClient");
-  const platform = require("react-native").Platform.OS;
+  const HMRClient = require('react-native/Libraries/Utilities/HMRClient');
+  const platform = require('react-native').Platform.OS;
   const { scheme, host, port, path } = parseUrl(
     global.__METRO_FEDERATION__[__METRO_GLOBAL_PREFIX__].location
   );

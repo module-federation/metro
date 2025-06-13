@@ -2,10 +2,7 @@
   "name": "metro-mf",
   "packageManager": "yarn@4.8.1",
   "private": true,
-  "workspaces": [
-    "packages/*",
-    "apps/*"
-  ],
+  "workspaces": ["packages/*", "apps/*"],
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
     "turbo": "^2.5.0"

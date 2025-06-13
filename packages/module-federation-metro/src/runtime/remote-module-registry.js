@@ -2,7 +2,7 @@ import {
   loadRemote,
   loadShare,
   loadShareSync,
-} from "@module-federation/runtime";
+} from '@module-federation/runtime';
 
 const registry = {};
 const loading = {};

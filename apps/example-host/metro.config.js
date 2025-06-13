@@ -1,7 +1,7 @@
 const path = require('path');
-const {getDefaultConfig, mergeConfig} = require('@react-native/metro-config');
+const { getDefaultConfig, mergeConfig } = require('@react-native/metro-config');
 
-const {withModuleFederation} = require('module-federation-metro');
+const { withModuleFederation } = require('module-federation-metro');
 
 /**
  * Metro configuration
@@ -54,5 +54,5 @@ module.exports = withModuleFederation(
     },
     shareStrategy: 'loaded-first',
     plugins: [path.resolve(__dirname, './runtime-plugin.ts')],
-  },
+  }
 );

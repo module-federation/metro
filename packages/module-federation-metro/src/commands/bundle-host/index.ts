@@ -1,10 +1,10 @@
-import Server from "metro/src/Server";
-import type { RequestOptions } from "metro/src/shared/types";
-import type { Config } from "../types";
-import { getCommunityCliPlugin } from "../utils/getCommunityPlugin";
-import loadMetroConfig from "../utils/loadMetroConfig";
-import type { BundleFederatedHostArgs } from "./types";
-import { saveBundleAndMap } from "../utils/saveBundleAndMap";
+import Server from 'metro/src/Server';
+import type { RequestOptions } from 'metro/src/shared/types';
+import type { Config } from '../types';
+import { getCommunityCliPlugin } from '../utils/getCommunityPlugin';
+import loadMetroConfig from '../utils/loadMetroConfig';
+import { saveBundleAndMap } from '../utils/saveBundleAndMap';
+import type { BundleFederatedHostArgs } from './types';
 
 async function bundleFederatedHost(
   _argv: Array<string>,
@@ -29,14 +29,14 @@ async function bundleFederatedHost(
       return server.build({
         ...Server.DEFAULT_BUNDLE_OPTIONS,
         ...requestOpts,
-        bundleType: "bundle",
+        bundleType: 'bundle',
       });
     },
     save: saveBundleAndMap,
-    formatName: "bundle",
+    formatName: 'bundle',
   });
 }
 
 export default bundleFederatedHost;
 
-export { default as bundleFederatedHostOptions } from "./options";
+export { default as bundleFederatedHostOptions } from './options';

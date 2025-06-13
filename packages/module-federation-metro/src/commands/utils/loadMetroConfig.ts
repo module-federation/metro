@@ -1,12 +1,12 @@
-import path from "node:path";
-import type { ConfigT, InputConfigT, YargArguments } from "metro-config";
-import { loadConfig, mergeConfig, resolveConfig } from "metro-config";
-import type { Config } from "../types";
-import { CLIError } from "../../utils/errors";
+import path from 'node:path';
+import type { ConfigT, InputConfigT, YargArguments } from 'metro-config';
+import { loadConfig, mergeConfig, resolveConfig } from 'metro-config';
+import { CLIError } from '../../utils/errors';
+import type { Config } from '../types';
 
 function getOverrideConfig(cfg: Config, config: ConfigT): InputConfigT {
-  const resolver: Partial<ConfigT["resolver"]> = {
-    platforms: [...Object.keys(cfg.platforms), "native"],
+  const resolver: Partial<ConfigT['resolver']> = {
+    platforms: [...Object.keys(cfg.platforms), 'native'],
   };
 
   return {
@@ -16,7 +16,7 @@ function getOverrideConfig(cfg: Config, config: ConfigT): InputConfigT {
         ...(config.serializer?.getModulesRunBeforeMainModule?.(entryFilePath) ||
           []),
         require.resolve(
-          path.join(cfg.reactNativePath, "Libraries/Core/InitializeCore"),
+          path.join(cfg.reactNativePath, 'Libraries/Core/InitializeCore'),
           { paths: [cfg.root] }
         ),
       ],

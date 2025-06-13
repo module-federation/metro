@@ -21,27 +21,35 @@ export function fetchAsync(
   let dataListener: Subscriber | null = null;
   let completeListener: Subscriber | null = null;
   let responseListener: Subscriber | null = null;
-  return new Promise<{ body: string; status: number; headers: Record<string, string> }>(
-    (resolve, reject) => {
-      const addListener = Networking.addListener.bind(Networking) as (
-        event: string,
-        callback: (props: [string, any, any]) => any
-      ) => Subscriber;
-      dataListener = addListener('didReceiveNetworkData', ([requestId, response]) => {
+  return new Promise<{
+    body: string;
+    status: number;
+    headers: Record<string, string>;
+  }>((resolve, reject) => {
+    const addListener = Networking.addListener.bind(Networking) as (
+      event: string,
+      callback: (props: [string, any, any]) => any
+    ) => Subscriber;
+    dataListener = addListener(
+      'didReceiveNetworkData',
+      ([requestId, response]) => {
         if (requestId === id) {
           responseText = response;
         }
-      });
-      responseListener = addListener(
-        'didReceiveNetworkResponse',
-        ([requestId, status, responseHeaders]) => {
-          if (requestId === id) {
-            statusCode = status;
-            headers = responseHeaders;
-          }
+      }
+    );
+    responseListener = addListener(
+      'didReceiveNetworkResponse',
+      ([requestId, status, responseHeaders]) => {
+        if (requestId === id) {
+          statusCode = status;
+          headers = responseHeaders;
         }
-      );
-      completeListener = addListener('didCompleteNetworkResponse', ([requestId, error]) => {
+      }
+    );
+    completeListener = addListener(
+      'didCompleteNetworkResponse',
+      ([requestId, error]) => {
         if (requestId === id) {
           if (error) {
             reject(error);
@@ -49,25 +57,25 @@ export function fetchAsync(
             resolve({ body: responseText!, status: statusCode!, headers });
           }
         }
-      });
-      (Networking.sendRequest as any)(
-        'GET',
-        'asyncRequest',
-        url,
-        {
-          'expo-platform': process.env.EXPO_OS,
-        },
-        '',
-        'text',
-        false,
-        0,
-        (requestId: string) => {
-          id = requestId;
-        },
-        true
-      );
-    }
-  ).finally(() => {
+      }
+    );
+    (Networking.sendRequest as any)(
+      'GET',
+      'asyncRequest',
+      url,
+      {
+        'expo-platform': process.env.EXPO_OS,
+      },
+      '',
+      'text',
+      false,
+      0,
+      (requestId: string) => {
+        id = requestId;
+      },
+      true
+    );
+  }).finally(() => {
     dataListener?.remove();
     completeListener?.remove();
     responseListener?.remove();

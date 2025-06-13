@@ -1,12 +1,12 @@
-import path from "node:path";
-import type { Module, ReadOnlyGraph, SerializerOptions } from "metro";
-import type { SerializerConfigT } from "metro-config";
-import baseJSBundle from "metro/src/DeltaBundler/Serializers/baseJSBundle";
-import bundleToString from "metro/src/lib/bundleToString";
-import CountingSet from "metro/src/lib/CountingSet";
-import type { ModuleFederationConfigNormalized, Shared } from "./types";
+import path from 'node:path';
+import type { Module, ReadOnlyGraph, SerializerOptions } from 'metro';
+import type { SerializerConfigT } from 'metro-config';
+import baseJSBundle from 'metro/src/DeltaBundler/Serializers/baseJSBundle';
+import CountingSet from 'metro/src/lib/CountingSet';
+import bundleToString from 'metro/src/lib/bundleToString';
+import type { ModuleFederationConfigNormalized, Shared } from './types';
 
-type CustomSerializer = SerializerConfigT["customSerializer"];
+type CustomSerializer = SerializerConfigT['customSerializer'];
 function getFederationSharedDependenciesNamespace(scope: string) {
   return `globalThis.__METRO_FEDERATION__["${scope}"].dependencies.shared`;
 }
@@ -18,7 +18,7 @@ function getFederationRemotesDependenciesNamespace(scope: string) {
 function getSyncShared(shared: string[], entry: string, scope: string): Module {
   const namespace = getFederationSharedDependenciesNamespace(scope);
   const code = `${namespace}["${entry}"]=${JSON.stringify(shared)};`;
-  return generateVirtualModule("__required_shared__", code);
+  return generateVirtualModule('__required_shared__', code);
 }
 
 function getSyncRemotes(
@@ -28,17 +28,17 @@ function getSyncRemotes(
 ): Module {
   const namespace = getFederationRemotesDependenciesNamespace(scope);
   const code = `${namespace}["${entry}"]=${JSON.stringify(remotes)};`;
-  return generateVirtualModule("__required_remotes__", code);
+  return generateVirtualModule('__required_remotes__', code);
 }
 
 function getEarlyShared(shared: string[]): Module {
   const code = `var __EARLY_SHARED__=${JSON.stringify(shared)};`;
-  return generateVirtualModule("__early_shared__", code);
+  return generateVirtualModule('__early_shared__', code);
 }
 
 function getEarlyRemotes(remotes: string[]): Module {
   const code = `var __EARLY_REMOTES__=${JSON.stringify(remotes)};`;
-  return generateVirtualModule("__early_remotes__", code);
+  return generateVirtualModule('__early_remotes__', code);
 }
 
 function generateVirtualModule(name: string, code: string): Module {
@@ -49,7 +49,7 @@ function generateVirtualModule(name: string, code: string): Module {
     path: name,
     output: [
       {
-        type: "js/script/virtual",
+        type: 'js/script/virtual',
         data: {
           code,
           // @ts-ignore
@@ -74,7 +74,7 @@ function collectSyncRemoteModules(
         continue;
       }
       // remotes always follow format of <remoteName>/<exposedModule>
-      const remoteCandidate = dependency.data.name.split("/")[0];
+      const remoteCandidate = dependency.data.name.split('/')[0];
       const isValidCandidate =
         remoteCandidate.length < dependency.data.name.length;
       if (isValidCandidate && remotes.has(remoteCandidate)) {
@@ -92,14 +92,14 @@ function collectSyncSharedModules(graph: ReadOnlyGraph, _shared: Shared) {
     })
   );
   // always include `react` and `react-native`
-  const syncSharedModules = new Set<string>(["react", "react-native"]);
+  const syncSharedModules = new Set<string>(['react', 'react-native']);
   for (const [, module] of graph.dependencies) {
     for (const dependency of module.dependencies.values()) {
       // null means it's a sync dependency
       if (dependency.data.data.asyncType !== null) {
         continue;
       }
-      if (module.path.endsWith("init-host.js")) {
+      if (module.path.endsWith('init-host.js')) {
         continue;
       }
       if (sharedImports.has(dependency.data.name)) {
@@ -113,14 +113,14 @@ function collectSyncSharedModules(graph: ReadOnlyGraph, _shared: Shared) {
 function isProjectSource(entryPoint: string, projectRoot: string) {
   const relativePath = path.relative(projectRoot, entryPoint);
   return (
-    !relativePath.startsWith("..") && !relativePath.startsWith("node_modules")
+    !relativePath.startsWith('..') && !relativePath.startsWith('node_modules')
   );
 }
 
 function getBundlePath(entryPoint: string, projectRoot: string) {
   const relativePath = path.relative(projectRoot, entryPoint);
   const { dir, name } = path.parse(relativePath);
-  return path.format({ dir, name, ext: "" });
+  return path.format({ dir, name, ext: '' });
 }
 
 function getBundleCode(

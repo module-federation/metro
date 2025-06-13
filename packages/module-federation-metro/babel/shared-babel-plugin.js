@@ -1,7 +1,7 @@
-const t = require("@babel/types");
+const t = require('@babel/types');
 
 function getSharedRegExp(shared) {
-  return new RegExp(`^(${Object.keys(shared).join("|")})$`);
+  return new RegExp(`^(${Object.keys(shared).join('|')})$`);
 }
 
 function isSharedImport(path, options) {
@@ -17,13 +17,13 @@ function getWrappedSharedImport(importName) {
   const importArg = t.stringLiteral(importName);
 
   // require('mf:remote-module-registry')
-  const requireCall = t.callExpression(t.identifier("require"), [
-    t.stringLiteral("mf:remote-module-registry"),
+  const requireCall = t.callExpression(t.identifier('require'), [
+    t.stringLiteral('mf:remote-module-registry'),
   ]);
 
   // .loadAndGetShared(importName)
   const loadAndGetSharedCall = t.callExpression(
-    t.memberExpression(requireCall, t.identifier("loadAndGetShared")),
+    t.memberExpression(requireCall, t.identifier('loadAndGetShared')),
     [importArg]
   );
 
@@ -32,7 +32,7 @@ function getWrappedSharedImport(importName) {
 
 function moduleFederationSharedBabelPlugin() {
   return {
-    name: "module-federation-shared-babel-plugin",
+    name: 'module-federation-shared-babel-plugin',
     visitor: {
       CallExpression(path, state) {
         if (state.opts.blacklistedPaths.includes(state.filename)) {

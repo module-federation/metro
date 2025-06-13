@@ -1,7 +1,7 @@
-import "mf:async-require";
+import 'mf:async-require';
 
-import { loadSharedToRegistry } from "mf:remote-module-registry";
-import { init as runtimeInit } from "@module-federation/runtime";
+import { loadSharedToRegistry } from 'mf:remote-module-registry';
+import { init as runtimeInit } from '@module-federation/runtime';
 
 __PLUGINS__;
 
@@ -18,7 +18,7 @@ function get(moduleName) {
 }
 
 const initTokens = {};
-const shareScopeName = "default";
+const shareScopeName = 'default';
 const shareStrategy = __SHARE_STRATEGY__;
 const name = __NAME__;
 
@@ -48,7 +48,7 @@ async function init(shared = {}, initScope = []) {
   await Promise.all(
     initRes.initializeSharing(shareScopeName, {
       strategy: shareStrategy,
-      from: "build",
+      from: 'build',
       initScope,
     })
   );
@@ -58,7 +58,7 @@ async function init(shared = {}, initScope = []) {
 
   // setup HMR client after the initializing sync shared deps
   if (__DEV__ && !hmrInitialized) {
-    const hmr = require("mf:remote-hmr");
+    const hmr = require('mf:remote-hmr');
     hmr.setup();
     hmrInitialized = true;
   }

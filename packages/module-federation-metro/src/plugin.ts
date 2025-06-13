@@ -1,18 +1,18 @@
-import path from "node:path";
-import fs from "node:fs";
-import chalk from "chalk";
-import type { ConfigT } from "metro-config";
-import type { Resolution } from "metro-resolver";
-import generateManifest from "./generate-manifest";
-import { getModuleFederationSerializer } from "./serializer";
-import {
-  Shared,
-  SharedConfig,
+import fs from 'node:fs';
+import path from 'node:path';
+import chalk from 'chalk';
+import type { ConfigT } from 'metro-config';
+import type { Resolution } from 'metro-resolver';
+import generateManifest from './generate-manifest';
+import { getModuleFederationSerializer } from './serializer';
+import type {
   ModuleFederationConfig,
   ModuleFederationConfigNormalized,
-} from "./types";
-import { ConfigError } from "./utils/errors";
-import { VirtualModuleManager } from "./utils/vm-manager";
+  Shared,
+  SharedConfig,
+} from './types';
+import { ConfigError } from './utils/errors';
+import { VirtualModuleManager } from './utils/vm-manager';
 
 declare global {
   var __METRO_FEDERATION_CONFIG: ModuleFederationConfigNormalized;
@@ -20,18 +20,21 @@ declare global {
   var __METRO_FEDERATION_MANIFEST_PATH: string | undefined;
 }
 
-const INIT_HOST = "mf:init-host";
-const ASYNC_REQUIRE = "mf:async-require";
-const REMOTE_MODULE_REGISTRY = "mf:remote-module-registry";
+const INIT_HOST = 'mf:init-host';
+const ASYNC_REQUIRE = 'mf:async-require';
+const REMOTE_MODULE_REGISTRY = 'mf:remote-module-registry';
 
-const MANIFEST_FILENAME = "mf-manifest.json";
-const DEFAULT_ENTRY_FILENAME = "remoteEntry.bundle";
+const MANIFEST_FILENAME = 'mf-manifest.json';
+const DEFAULT_ENTRY_FILENAME = 'remoteEntry.bundle';
 
 function getSharedString(options: ModuleFederationConfigNormalized) {
-  const shared = Object.keys(options.shared).reduce((acc, name) => {
-    acc[name] = `__SHARED_${name}__`;
-    return acc;
-  }, {} as Record<string, string>);
+  const shared = Object.keys(options.shared).reduce(
+    (acc, name) => {
+      acc[name] = `__SHARED_${name}__`;
+      return acc;
+    },
+    {} as Record<string, string>
+  );
 
   let sharedString = JSON.stringify(shared);
   Object.keys(options.shared).forEach((name) => {
@@ -44,29 +47,29 @@ function getSharedString(options: ModuleFederationConfigNormalized) {
 }
 
 function getInitHostModule(options: ModuleFederationConfigNormalized) {
-  const initHostPath = require.resolve("./runtime/init-host.js");
-  let initHostModule = fs.readFileSync(initHostPath, "utf-8");
+  const initHostPath = require.resolve('./runtime/init-host.js');
+  let initHostModule = fs.readFileSync(initHostPath, 'utf-8');
 
   const sharedString = getSharedString(options);
 
   // Replace placeholders with actual values
   initHostModule = initHostModule
-    .replaceAll("__NAME__", JSON.stringify(options.name))
-    .replaceAll("__REMOTES__", generateRemotes(options.remotes))
-    .replaceAll("__SHARED__", sharedString)
-    .replaceAll("__PLUGINS__", generateRuntimePlugins(options.plugins))
-    .replaceAll("__SHARE_STRATEGY__", JSON.stringify(options.shareStrategy));
+    .replaceAll('__NAME__', JSON.stringify(options.name))
+    .replaceAll('__REMOTES__', generateRemotes(options.remotes))
+    .replaceAll('__SHARED__', sharedString)
+    .replaceAll('__PLUGINS__', generateRuntimePlugins(options.plugins))
+    .replaceAll('__SHARE_STRATEGY__', JSON.stringify(options.shareStrategy));
 
   return initHostModule;
 }
 
 function getRemoteModuleRegistryModule() {
-  const registryPath = require.resolve("./runtime/remote-module-registry.js");
-  let registryModule = fs.readFileSync(registryPath, "utf-8");
+  const registryPath = require.resolve('./runtime/remote-module-registry.js');
+  let registryModule = fs.readFileSync(registryPath, 'utf-8');
 
   registryModule = registryModule.replaceAll(
-    "__EARLY_MODULE_TEST__",
-    "/^react(-native(\\/|$)|$)/"
+    '__EARLY_MODULE_TEST__',
+    '/^react(-native(\\/|$)|$)/'
   );
 
   return registryModule;
@@ -75,7 +78,7 @@ function getRemoteModuleRegistryModule() {
 function createSharedModuleEntry(name: string, options: SharedConfig) {
   const template = {
     version: options.version,
-    scope: "default",
+    scope: 'default',
     shareConfig: {
       singleton: options.singleton,
       eager: options.eager,
@@ -97,15 +100,15 @@ function createSharedModuleEntry(name: string, options: SharedConfig) {
 }
 
 function getRemoteModule(name: string) {
-  const remoteTemplatePath = require.resolve("./runtime/remote-module.js");
+  const remoteTemplatePath = require.resolve('./runtime/remote-module.js');
 
   return fs
-    .readFileSync(remoteTemplatePath, "utf-8")
-    .replaceAll("__MODULE_ID__", `"${name}"`);
+    .readFileSync(remoteTemplatePath, 'utf-8')
+    .replaceAll('__MODULE_ID__', `"${name}"`);
 }
 
 function createMFRuntimeNodeModules(projectNodeModulesPath: string) {
-  const mfMetroPath = path.join(projectNodeModulesPath, ".mf-metro");
+  const mfMetroPath = path.join(projectNodeModulesPath, '.mf-metro');
   fs.rmSync(mfMetroPath, { recursive: true, force: true });
   fs.mkdirSync(mfMetroPath, { recursive: true });
   return mfMetroPath;
@@ -121,8 +124,8 @@ function generateRuntimePlugins(runtimePlugins: string[]) {
     pluginImports.push(`import ${pluginName} from "${plugin}";`);
   });
 
-  const imports = pluginImports.join("\n");
-  const plugins = `const plugins = [${pluginNames.join(", ")}];`;
+  const imports = pluginImports.join('\n');
+  const plugins = `const plugins = [${pluginNames.join(', ')}];`;
 
   return `${imports}\n${plugins}`;
 }
@@ -130,9 +133,9 @@ function generateRuntimePlugins(runtimePlugins: string[]) {
 function generateRemotes(remotes: Record<string, string> = {}) {
   const remotesEntries: string[] = [];
   Object.entries(remotes).forEach(([remoteAlias, remoteEntry]) => {
-    const remoteEntryParts = remoteEntry.split("@");
+    const remoteEntryParts = remoteEntry.split('@');
     const remoteName = remoteEntryParts[0];
-    const remoteEntryUrl = remoteEntryParts.slice(1).join("@");
+    const remoteEntryUrl = remoteEntryParts.slice(1).join('@');
 
     remotesEntries.push(
       `{ 
@@ -145,12 +148,12 @@ function generateRemotes(remotes: Record<string, string> = {}) {
     );
   });
 
-  return `[${remotesEntries.join(",\n")}]`;
+  return `[${remotesEntries.join(',\n')}]`;
 }
 
 function getRemoteEntryModule(options: ModuleFederationConfigNormalized) {
-  const remoteEntryTemplatePath = require.resolve("./runtime/remote-entry.js");
-  let remoteEntryModule = fs.readFileSync(remoteEntryTemplatePath, "utf-8");
+  const remoteEntryTemplatePath = require.resolve('./runtime/remote-entry.js');
+  const remoteEntryModule = fs.readFileSync(remoteEntryTemplatePath, 'utf-8');
 
   const sharedString = getSharedString(options);
 
@@ -158,7 +161,7 @@ function getRemoteEntryModule(options: ModuleFederationConfigNormalized) {
 
   const exposesString = Object.keys(exposes)
     .map((key) => {
-      const importName = path.relative(".", exposes[key]);
+      const importName = path.relative('.', exposes[key]);
       const importPath = `../../${importName}`;
 
       return `"${key}": async () => {
@@ -166,38 +169,38 @@ function getRemoteEntryModule(options: ModuleFederationConfigNormalized) {
           return module;
         }`;
     })
-    .join(",");
+    .join(',');
 
   return remoteEntryModule
-    .replaceAll("__PLUGINS__", generateRuntimePlugins(options.plugins))
-    .replaceAll("__SHARED__", sharedString)
-    .replaceAll("__REMOTES__", generateRemotes(options.remotes))
-    .replaceAll("__EXPOSES_MAP__", `{${exposesString}}`)
-    .replaceAll("__NAME__", `"${options.name}"`)
-    .replaceAll("__SHARE_STRATEGY__", JSON.stringify(options.shareStrategy));
+    .replaceAll('__PLUGINS__', generateRuntimePlugins(options.plugins))
+    .replaceAll('__SHARED__', sharedString)
+    .replaceAll('__REMOTES__', generateRemotes(options.remotes))
+    .replaceAll('__EXPOSES_MAP__', `{${exposesString}}`)
+    .replaceAll('__NAME__', `"${options.name}"`)
+    .replaceAll('__SHARE_STRATEGY__', JSON.stringify(options.shareStrategy));
 }
 
 function getRemoteHMRSetupModule() {
-  const remoteHMRSetupTemplatePath = require.resolve("./runtime/remote-hmr.js");
-  let remoteHMRSetupModule = fs.readFileSync(
+  const remoteHMRSetupTemplatePath = require.resolve('./runtime/remote-hmr.js');
+  const remoteHMRSetupModule = fs.readFileSync(
     remoteHMRSetupTemplatePath,
-    "utf-8"
+    'utf-8'
   );
 
   return remoteHMRSetupModule;
 }
 
 function getSharedPath(name: string, dir: string) {
-  const sharedName = name.replaceAll("/", "_");
-  const sharedDir = path.join(dir, "shared");
+  const sharedName = name.replaceAll('/', '_');
+  const sharedDir = path.join(dir, 'shared');
   return path.join(sharedDir, `${sharedName}.js`);
 }
 
 function getRemoteModulePath(name: string, outputDir: string) {
-  const remoteModuleName = name.replaceAll("/", "_");
+  const remoteModuleName = name.replaceAll('/', '_');
   const remoteModulePath = path.join(
     outputDir,
-    "remote",
+    'remote',
     `${remoteModuleName}.js`
   );
   return remoteModulePath;
@@ -205,8 +208,8 @@ function getRemoteModulePath(name: string, outputDir: string) {
 
 function replaceModule(from: RegExp, to: string) {
   return (resolved: Resolution): Resolution => {
-    if (resolved.type === "sourceFile" && from.test(resolved.filePath)) {
-      return { type: "sourceFile", filePath: to };
+    if (resolved.type === 'sourceFile' && from.test(resolved.filePath)) {
+      return { type: 'sourceFile', filePath: to };
     }
     return resolved;
   };
@@ -223,20 +226,20 @@ function createBabelTransformer({
   mfMetroPath: string;
   blacklistedPaths: string[];
 }) {
-  const babelTransformerPath = path.join(mfMetroPath, "babel-transformer.js");
+  const babelTransformerPath = path.join(mfMetroPath, 'babel-transformer.js');
 
   const babelTransformerTemplate = fs.readFileSync(
-    require.resolve("./runtime/babel-transformer.js"),
-    "utf-8"
+    require.resolve('./runtime/babel-transformer.js'),
+    'utf-8'
   );
 
   const babelTransformer = babelTransformerTemplate
-    .replaceAll("__BABEL_TRANSFORMER_PATH__", proxiedBabelTrasnsformerPath)
-    .replaceAll("__REMOTES__", JSON.stringify(mfConfig.remotes))
-    .replaceAll("__SHARED__", JSON.stringify(mfConfig.shared))
-    .replaceAll("__BLACKLISTED_PATHS__", JSON.stringify(blacklistedPaths));
+    .replaceAll('__BABEL_TRANSFORMER_PATH__', proxiedBabelTrasnsformerPath)
+    .replaceAll('__REMOTES__', JSON.stringify(mfConfig.remotes))
+    .replaceAll('__SHARED__', JSON.stringify(mfConfig.shared))
+    .replaceAll('__BLACKLISTED_PATHS__', JSON.stringify(blacklistedPaths));
 
-  fs.writeFileSync(babelTransformerPath, babelTransformer, "utf-8");
+  fs.writeFileSync(babelTransformerPath, babelTransformer, 'utf-8');
 
   return babelTransformerPath;
 }
@@ -252,8 +255,8 @@ function createManifest(
 }
 
 function stubRemoteEntry(remoteEntryPath: string) {
-  const remoteEntryModule = "// remote entry stub";
-  fs.writeFileSync(remoteEntryPath, remoteEntryModule, "utf-8");
+  const remoteEntryModule = '// remote entry stub';
+  fs.writeFileSync(remoteEntryPath, remoteEntryModule, 'utf-8');
 }
 
 function replaceExtension(filepath: string, extension: string) {
@@ -262,21 +265,21 @@ function replaceExtension(filepath: string, extension: string) {
 }
 
 function isUsingMFCommand(command = process.argv[2]) {
-  const allowedCommands = ["start", "bundle-mf-host", "bundle-mf-remote"];
+  const allowedCommands = ['start', 'bundle-mf-host', 'bundle-mf-remote'];
   return allowedCommands.includes(command);
 }
 
 function isUsingMFBundleCommand(command = process.argv[2]) {
-  const allowedCommands = ["bundle-mf-host", "bundle-mf-remote"];
+  const allowedCommands = ['bundle-mf-host', 'bundle-mf-remote'];
   return allowedCommands.includes(command);
 }
 
 function validateOptions(options: ModuleFederationConfigNormalized) {
   // validate filename
-  if (!options.filename.endsWith(".bundle")) {
+  if (!options.filename.endsWith('.bundle')) {
     throw new ConfigError(
       `Invalid filename: ${options.filename}. ` +
-        "Filename must end with .bundle extension."
+        'Filename must end with .bundle extension.'
     );
   }
 }
@@ -292,7 +295,7 @@ function normalizeOptions(
   // this is different from the default share strategy in mf-core
   // it makes more sense to have loaded-first as default on mobile
   // in order to avoid longer TTI upon app startup
-  const shareStrategy = options.shareStrategy ?? "loaded-first";
+  const shareStrategy = options.shareStrategy ?? 'loaded-first';
 
   return {
     name: options.name,
@@ -309,7 +312,7 @@ function getNormalizedShared(
   options: ModuleFederationConfig,
   config: ConfigT
 ): Shared {
-  const pkg = require(path.join(config.projectRoot, "package.json"));
+  const pkg = require(path.join(config.projectRoot, 'package.json'));
   const shared = options.shared ?? {};
 
   // force all shared modules in host to be eager
@@ -337,15 +340,15 @@ function withModuleFederation(
   if (!isUsingMFCommand()) {
     console.warn(
       chalk.yellow(
-        "Warning: Module Federation build is disabled for this command.\n"
+        'Warning: Module Federation build is disabled for this command.\n'
       ) +
         chalk.yellow(
-          "To enable Module Federation, please use one of the dedicated bundle commands:\n"
+          'To enable Module Federation, please use one of the dedicated bundle commands:\n'
         ) +
-        ` ${chalk.dim("•")} bundle-mf-host` +
-        chalk.dim(" - for bundling a host application\n") +
-        ` ${chalk.dim("•")} bundle-mf-remote` +
-        chalk.dim(" - for bundling a remote application\n")
+        ` ${chalk.dim('•')} bundle-mf-host` +
+        chalk.dim(' - for bundling a host application\n') +
+        ` ${chalk.dim('•')} bundle-mf-remote` +
+        chalk.dim(' - for bundling a remote application\n')
     );
     return config;
   }
@@ -361,25 +364,25 @@ function withModuleFederation(
 
   const projectNodeModulesPath = path.resolve(
     config.projectRoot,
-    "node_modules"
+    'node_modules'
   );
 
   const mfMetroPath = createMFRuntimeNodeModules(projectNodeModulesPath);
 
   // auto-inject 'metro-core-plugin' MF runtime plugin
   options.plugins = [
-    require.resolve("../runtime-plugin.js"),
+    require.resolve('../runtime-plugin.js'),
     ...options.plugins,
   ].map((plugin) => path.relative(mfMetroPath, plugin));
 
-  const initHostPath = path.resolve(mfMetroPath, "init-host.js");
-  const registryPath = path.resolve(mfMetroPath, "remote-module-registry.js");
+  const initHostPath = path.resolve(mfMetroPath, 'init-host.js');
+  const registryPath = path.resolve(mfMetroPath, 'remote-module-registry.js');
 
-  const remoteEntryFilename = replaceExtension(options.filename, ".js");
+  const remoteEntryFilename = replaceExtension(options.filename, '.js');
   const remoteEntryPath = path.resolve(mfMetroPath, remoteEntryFilename);
-  const remoteHMRSetupPath = path.resolve(mfMetroPath, "remote-hmr.js");
+  const remoteHMRSetupPath = path.resolve(mfMetroPath, 'remote-hmr.js');
 
-  const asyncRequirePath = path.resolve(__dirname, "../async-require.js");
+  const asyncRequirePath = path.resolve(__dirname, '../async-require.js');
 
   const babelTransformerPath = createBabelTransformer({
     proxiedBabelTrasnsformerPath: config.transformer.babelTransformerPath,
@@ -427,29 +430,29 @@ function withModuleFederation(
         if (moduleName === INIT_HOST) {
           const initHostGenerator = () => getInitHostModule(options);
           vmManager.registerVirtualModule(initHostPath, initHostGenerator);
-          return { type: "sourceFile", filePath: initHostPath as string };
+          return { type: 'sourceFile', filePath: initHostPath as string };
         }
 
         // virtual module: async-require
         if (moduleName === ASYNC_REQUIRE) {
-          return { type: "sourceFile", filePath: asyncRequirePath };
+          return { type: 'sourceFile', filePath: asyncRequirePath };
         }
 
         // virtual module: remote-module-registry
         if (moduleName === REMOTE_MODULE_REGISTRY) {
           const registryGenerator = () => getRemoteModuleRegistryModule();
           vmManager.registerVirtualModule(registryPath, registryGenerator);
-          return { type: "sourceFile", filePath: registryPath };
+          return { type: 'sourceFile', filePath: registryPath };
         }
 
         // virtual module: remote-hmr
-        if (moduleName === "mf:remote-hmr") {
+        if (moduleName === 'mf:remote-hmr') {
           const remoteHMRSetupGenerator = () => getRemoteHMRSetupModule();
           vmManager.registerVirtualModule(
             remoteHMRSetupPath,
             remoteHMRSetupGenerator
           );
-          return { type: "sourceFile", filePath: remoteHMRSetupPath as string };
+          return { type: 'sourceFile', filePath: remoteHMRSetupPath as string };
         }
 
         // virtual entrypoint to create MF containers
@@ -461,7 +464,7 @@ function withModuleFederation(
             remoteEntryPath,
             remoteEntryGenerator
           );
-          return { type: "sourceFile", filePath: remoteEntryPath as string };
+          return { type: 'sourceFile', filePath: remoteEntryPath as string };
         }
 
         // shared modules handling in init-host.js
@@ -477,7 +480,7 @@ function withModuleFederation(
           // import: false means that the module is marked as external
           if (sharedModule && sharedModule.import === false) {
             const sharedPath = getSharedPath(moduleName, mfMetroPath);
-            return { type: "sourceFile", filePath: sharedPath };
+            return { type: 'sourceFile', filePath: sharedPath };
           } else {
             return context.resolveRequest(context, moduleName, platform);
           }
@@ -485,11 +488,11 @@ function withModuleFederation(
 
         // remote modules
         for (const remoteName of Object.keys(options.remotes)) {
-          if (moduleName.startsWith(remoteName + "/")) {
+          if (moduleName.startsWith(remoteName + '/')) {
             const remotePath = getRemoteModulePath(moduleName, mfMetroPath);
             const remoteGenerator = () => getRemoteModule(moduleName);
             vmManager.registerVirtualModule(remotePath, remoteGenerator);
-            return { type: "sourceFile", filePath: remotePath };
+            return { type: 'sourceFile', filePath: remotePath };
           }
         }
 
@@ -501,7 +504,7 @@ function withModuleFederation(
             const sharedPath = getSharedPath(moduleName, mfMetroPath);
             const sharedGenerator = () => getRemoteModule(moduleName);
             vmManager.registerVirtualModule(sharedPath, sharedGenerator);
-            return { type: "sourceFile", filePath: sharedPath };
+            return { type: 'sourceFile', filePath: sharedPath };
           }
           // TODO: module deep import
           // if (importName.endsWith("/") && moduleName.startsWith(importName)) {
@@ -511,19 +514,19 @@ function withModuleFederation(
         }
 
         // replace getDevServer module in remote with our own implementation
-        if (isRemote && moduleName.endsWith("getDevServer")) {
+        if (isRemote && moduleName.endsWith('getDevServer')) {
           const res = context.resolveRequest(context, moduleName, platform);
           const from =
             /react-native\/Libraries\/Core\/Devtools\/getDevServer\.js$/;
-          const to = path.resolve(__dirname, "./modules/getDevServer.ts");
+          const to = path.resolve(__dirname, './modules/getDevServer.ts');
           return replaceModule(from, to)(res);
         }
 
         // replace HMRClient module with HMRClientShim when using bundle commands
-        if (isUsingMFBundleCommand() && moduleName.endsWith("HMRClient")) {
+        if (isUsingMFBundleCommand() && moduleName.endsWith('HMRClient')) {
           const res = context.resolveRequest(context, moduleName, platform);
           const from = /react-native\/Libraries\/Utilities\/HMRClient\.js$/;
-          const to = path.resolve(__dirname, "./modules/HMRClientShim.ts");
+          const to = path.resolve(__dirname, './modules/HMRClientShim.ts');
           return replaceModule(from, to)(res);
         }
 
@@ -534,16 +537,16 @@ function withModuleFederation(
       ...config.server,
       enhanceMiddleware: vmManager.getMiddleware(),
       rewriteRequestUrl(url) {
-        const { pathname } = new URL(url, "protocol://host");
+        const { pathname } = new URL(url, 'protocol://host');
         // rewrite /mini.bundle -> /mini.js.bundle
         if (pathname.startsWith(`/${options.filename}`)) {
-          const target = replaceExtension(options.filename, ".js.bundle");
+          const target = replaceExtension(options.filename, '.js.bundle');
           return url.replace(options.filename, target);
         }
         // rewrite /mf-manifest.json -> /[metro-project]/node_modules/.mf-metro/mf-manifest.json
         if (pathname.startsWith(`/${MANIFEST_FILENAME}`)) {
           const root = config.projectRoot;
-          const target = manifestPath.replace(root, "[metro-project]");
+          const target = manifestPath.replace(root, '[metro-project]');
           return url.replace(MANIFEST_FILENAME, target);
         }
         // pass through to original rewriteRequestUrl
