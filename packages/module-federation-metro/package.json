@@ -12,15 +12,13 @@
       "dev": "./dev/index.js",
       "default": "./dist/index.js"
     },
-    "./async-require": "./async-require.js",
     "./babel/*": "./babel/*.js",
     "./bootstrap": "./bootstrap/index.js",
     "./commands": {
       "types": "./dist/commands/index.d.ts",
       "dev": "./dev/commands.js",
       "default": "./dist/commands/index.js"
-    },
-    "./runtime-plugin": "./runtime-plugin.js"
+    }
   },
   "scripts": {
     "typecheck": "tsc --noEmit"
