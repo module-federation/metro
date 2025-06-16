@@ -1,0 +1,24 @@
+diff --git a/dist/src/lib/commands/run/createRun.js b/dist/src/lib/commands/run/createRun.js
+index cd24550487e93d23848499a51fc4350d460ba799..c4aa11c85d6a1724fe6e717cc2c9b8d32e0dbfe4 100644
+--- a/dist/src/lib/commands/run/createRun.js
++++ b/dist/src/lib/commands/run/createRun.js
+@@ -105,6 +105,7 @@ export const createRun = async ({ platformName, projectConfig, args, projectRoot
+     }
+     loader.stop('Found available devices and simulators.');
+     const device = await selectDevice(devices, args);
++    console.log('Using device:', device);
+     if (device) {
+         if (device.type !== deviceOrSimulator) {
+             throw new RnefError(`Selected device "${device.name}" is not a ${deviceOrSimulator}. 
+@@ -148,9 +149,11 @@ ${devices
+     }
+     else {
+         const bootedDevices = devices.filter(({ state, type }) => state === 'Booted' && type === deviceOrSimulator);
++        console.log('Booted devices:', bootedDevices);
+         if (bootedDevices.length === 0) {
+             // fallback to present all devices when no device is selected
+             if (isInteractive()) {
++                console.log('Interactive mode with no booted devices found.');
+                 const simulator = await promptForDeviceSelection(devices.filter(({ type }) => type === deviceOrSimulator), platformName);
+                 bootedDevices.push(simulator);
+                 cacheRecentDevice(simulator, platformName);
