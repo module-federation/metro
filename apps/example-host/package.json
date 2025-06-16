@@ -5,7 +5,7 @@
   "scripts": {
     "android": "rnef run:android",
     "ios": "rnef run:ios",
-    "android:release": "rnef run:android --variant 'Release' --destination=\"simulator\"",
+    "android:release": "rnef run:android --variant 'Release'",
     "ios:release": "rnef run:ios --configuration 'Release' --destination=\"simulator\"",
     "lint": "eslint .",
     "dev": "nodemon --config ../../nodemon.json --exec yarn start",
