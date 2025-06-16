@@ -70,6 +70,7 @@ runs:
         working-directory: './apps/example-host'
 
     - name: Shutdown all iOS simulators
+      shell: bash
       run: |
         xcrun simctl shutdown all
 
