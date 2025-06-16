@@ -1,7 +1,3 @@
-declare global {
-  var __loadBundleAsync: (entry: string) => Promise<void>;
-}
-
 interface FederationScope {
   location?: string;
   dependencies: {
@@ -115,5 +111,6 @@ if (!process.env.EXPO_OS) {
   require('../../vendor/expo/async-require');
 }
 
+// @ts-expect-error dynamic key access on global object
 global[`${__METRO_GLOBAL_PREFIX__}__loadBundleAsync`] =
   buildLoadBundleAsyncWrapper();
