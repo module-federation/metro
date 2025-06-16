@@ -1,1 +1,1 @@
-module.exports = require('./src/runtime-plugin');
+module.exports = require('./src/mf-plugin');

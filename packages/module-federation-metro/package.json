@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "description": "Module Federation for Metro bundler",
   "author": "",
+  "type": "module",
   "main": "./index.js",
   "types": "./types/index.d.ts",
   "exports": {
