@@ -94,7 +94,7 @@ runs:
         emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
         script: |
           # TODO: Remove
-          # yarn workspace ${{ inputs.app_name }} android:release
+          yarn workspace ${{ inputs.app_name }} android:release
           yarn workspace ${{ inputs.app_name }} adbreverse
           yarn workspace ${{ inputs.app_name }} e2e:run
 
