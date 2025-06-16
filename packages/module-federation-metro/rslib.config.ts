@@ -1,9 +1,28 @@
 import { defineConfig } from '@rslib/core';
 
+const externalizeMetroImports = (request: string) => {
+  return /^metro/.test(request) ? 'node-commonjs ' + request : undefined;
+};
+
 export default defineConfig({
   lib: [
-    { format: 'esm', syntax: 'es2021', bundle: false, dts: { bundle: false } },
-    { format: 'cjs', syntax: 'es2021', bundle: false },
+    {
+      format: 'esm',
+      syntax: 'es2021',
+      bundle: false,
+      dts: {
+        bundle: false,
+      },
+      output: {
+        externals: ({ request }, callback) =>
+          callback(undefined, externalizeMetroImports(request!)),
+      },
+    },
+    {
+      format: 'cjs',
+      syntax: 'es2021',
+      bundle: false,
+    },
   ],
   source: {
     entry: {
