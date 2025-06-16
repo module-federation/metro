@@ -3,16 +3,16 @@
   "packageManager": "yarn@4.8.1",
   "private": true,
   "workspaces": ["packages/*", "apps/*"],
-  "devDependencies": {
-    "@biomejs/biome": "^1.9.4",
-    "turbo": "^2.5.0"
-  },
   "scripts": {
     "dev": "turbo dev --filter=showcase-host --filter=showcase-mini --ui=tui",
     "dev:example": "turbo dev --filter=example-host --filter=example-mini --filter=example-nested-mini --ui=tui",
     "lint": "biome check --write",
     "lint:ci": "biome check",
     "typecheck": "turbo typecheck"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^1.9.4",
+    "turbo": "^2.5.0"
   },
   "resolutions": {
     "buck-worker-tool": "portal:./external/metro/packages/buck-worker-tool",
