@@ -69,10 +69,13 @@ runs:
         configuration: 'Release'
         working-directory: './apps/example-host'
 
+    - name: Shutdown all iOS simulators
+      run: |
+        xcrun simctl shutdown all
+
     - name: Run iOS E2E Tests
       run: |
         yarn workspace ${{ inputs.app_name }} e2e:prepare:ios &
-        # TODO: Remove
         yarn workspace ${{ inputs.app_name }} ios:release
         yarn workspace ${{ inputs.app_name }} e2e:run
       shell: bash
