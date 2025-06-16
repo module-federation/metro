@@ -64,7 +64,7 @@ runs:
     - name: Local RNEF Setup
       shell: bash
       run: |
-        RNEF_PATH="${{ inputs.app_name }}/.rnef/cache"
+        RNEF_PATH="apps/${{ inputs.app_name }}/.rnef/cache"
         mkdir -p $RNEF_PATH
         echo "{\"githubToken\": \"${{ inputs.github_token }}\"}" > "$RNEF_PATH/project.json"
 
