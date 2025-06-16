@@ -79,6 +79,11 @@ runs:
       run: |
         yarn workspace ${{ inputs.app_name }} e2e:prepare:ios &
 
+    - name: Debug
+      shell: bash
+      run: |
+        xcrun simctl list
+
     - name: Run iOS E2E Tests
       run: |
         yarn workspace ${{ inputs.app_name }} ios:release
