@@ -1,7 +1,7 @@
-import type { ConfigT } from "metro-config";
-import type Server from "metro/src/Server";
-import type { OutputOptions, RequestOptions } from "metro/src/shared/types";
-import { CLIError } from "../../utils/errors";
+import type { ConfigT } from 'metro-config';
+import type Server from 'metro/src/Server';
+import type { OutputOptions, RequestOptions } from 'metro/src/shared/types';
+import { CLIError } from '../../utils/errors';
 
 interface Command {
   name: string;
@@ -29,7 +29,7 @@ interface CommunityCliPlugin {
         options: OutputOptions,
         log: (msg: string) => void
       ) => Promise<void>;
-      formatName: "bundle";
+      formatName: 'bundle';
     }
   ) => Promise<void>;
 }
@@ -38,12 +38,12 @@ export function getCommunityCliPlugin(reactNativePath?: string) {
   let communityCliPlugin: CommunityCliPlugin;
   try {
     const communityCliPluginPath = require.resolve(
-      "@react-native/community-cli-plugin",
-      { paths: [reactNativePath ?? require.resolve("react-native")] }
+      '@react-native/community-cli-plugin',
+      { paths: [reactNativePath ?? require.resolve('react-native')] }
     );
     communityCliPlugin = require(communityCliPluginPath);
   } catch {
-    throw new CLIError("Community CLI plugin is not installed.");
+    throw new CLIError('Community CLI plugin is not installed.');
   }
   return communityCliPlugin;
 }

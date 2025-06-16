@@ -1,4 +1,4 @@
-import { getCommunityCliPlugin } from "../utils/getCommunityPlugin";
+import { getCommunityCliPlugin } from '../utils/get-community-plugin';
 
 const communityCliPlugin = getCommunityCliPlugin();
 const options = communityCliPlugin.bundleCommand.options;

@@ -10,13 +10,13 @@ export type BundleFederatedHostArgs = {
   platform: string;
   dev: boolean;
   bundleOutput: string;
-  bundleEncoding?: "utf8" | "utf16le" | "ascii";
+  bundleEncoding?: 'utf8' | 'utf16le' | 'ascii';
   maxWorkers?: number;
   sourcemapOutput?: string;
   sourcemapSourcesRoot?: string;
   sourcemapUseAbsolutePath: boolean;
   verbose: boolean;
-  unstableTransformProfile: "hermes-stable" | "hermes-canary" | "default";
+  unstableTransformProfile: 'hermes-stable' | 'hermes-canary' | 'default';
   indexedRamBundle?: boolean;
   resolverOptions?: Array<string>;
 };

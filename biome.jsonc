@@ -8,7 +8,10 @@
   },
   "files": {
     "ignoreUnknown": false,
-    "ignore": ["external/metro/**"]
+    "ignore": [
+      "external/metro/**",
+      "packages/module-federation-metro/vendor/**"
+    ]
   },
   "formatter": {
     "enabled": true,
@@ -30,10 +33,6 @@
     "enabled": true,
     "rules": {
       "recommended": true,
-      "complexity": {
-        "noBannedTypes": "off",
-        "noForEach": "off"
-      },
       "correctness": {
         "noUnusedImports": "error",
         "noUnusedVariables": "error"
@@ -43,13 +42,10 @@
         "useTemplate": "off"
       },
       "suspicious": {
-        "noControlCharactersInRegex": "off",
-        "noExplicitAny": "off",
-        "noFallthroughSwitchClause": "off",
-        "noConfusingVoidType": "off"
+        "noExplicitAny": "off"
       }
     },
-    "ignore": ["templates/*", "tests/metro-compat/**/__tests__/**"]
+    "ignore": []
   },
   "javascript": {
     "formatter": {
@@ -69,16 +65,15 @@
       "include": ["packages/**/*"],
       "linter": {
         "rules": {
-          "correctness": {
-            "useImportExtensions": {
+          "style": {
+            "useFilenamingConvention": {
               "level": "error",
               "options": {
-                "suggestedExtensions": {
-                  "ts": {
-                    "module": "js",
-                    "component": "js"
-                  }
-                }
+                "strictCase": true,
+                "requireAscii": true,
+                "filenameCases": [
+                  "kebab-case"
+                ]
               }
             }
           }
@@ -87,11 +82,26 @@
     },
     {
       "include": ["**/*.d.ts"],
-      "linter": { "rules": { "style": { "noVar": "off" } } }
+      "linter": {
+        "rules": {
+          "style": {
+            "noVar": "off",
+            "useFilenamingConvention": "off"
+          }
+        }
+      }
     },
     {
-      "include": ["packages/module-federation-metro/src/runtime/**"],
-      "linter": { "enabled": false }
+      "include": [
+        "packages/module-federation-metro/src/modules/**"
+      ],
+      "linter": {
+        "rules": {
+          "style": {
+            "useFilenamingConvention": "off"
+          }
+        }
+      }
     }
   ]
 }

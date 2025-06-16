@@ -1,5 +1,5 @@
-import type { Manifest, StatsAssets } from "@module-federation/sdk";
-import type { ModuleFederationConfigNormalized } from "./types";
+import type { Manifest, StatsAssets } from '@module-federation/sdk';
+import type { ModuleFederationConfigNormalized } from './types';
 
 export default function generateManifest(
   config: ModuleFederationConfigNormalized
@@ -16,45 +16,45 @@ export default function generateManifest(
 
 function generateMetaData(
   config: ModuleFederationConfigNormalized
-): Manifest["metaData"] {
+): Manifest['metaData'] {
   return {
     name: config.name,
-    type: "app",
+    type: 'app',
     buildInfo: {
-      buildVersion: "1.0.0",
+      buildVersion: '1.0.0',
       buildName: config.name,
     },
     remoteEntry: {
       name: config.filename,
-      path: "",
-      type: "global",
+      path: '',
+      type: 'global',
     },
     types: {
-      path: "",
-      name: "",
-      api: "",
-      zip: "",
+      path: '',
+      name: '',
+      api: '',
+      zip: '',
     },
     globalName: config.name,
-    pluginVersion: "",
-    publicPath: "auto",
+    pluginVersion: '',
+    publicPath: 'auto',
   };
 }
 
 function generateRemotes(
   config: ModuleFederationConfigNormalized
-): Manifest["remotes"] {
+): Manifest['remotes'] {
   return Object.keys(config.remotes).map((remote) => ({
     federationContainerName: config.remotes[remote],
     moduleName: remote,
     alias: remote,
-    entry: "*",
+    entry: '*',
   }));
 }
 
 function generateShared(
   config: ModuleFederationConfigNormalized
-): Manifest["shared"] {
+): Manifest['shared'] {
   return Object.keys(config.shared).map((sharedName) => {
     const assets = getEmptyAssets();
 
@@ -70,7 +70,7 @@ function generateShared(
       version: config.shared[sharedName].version,
       requiredVersion: config.shared[sharedName].requiredVersion,
       singleton: config.shared[sharedName].singleton,
-      hash: "",
+      hash: '',
       assets,
     };
   });
@@ -78,9 +78,9 @@ function generateShared(
 
 function generateExposes(
   config: ModuleFederationConfigNormalized
-): Manifest["exposes"] {
+): Manifest['exposes'] {
   return Object.keys(config.exposes).map((expose) => {
-    const formatKey = expose.replace("./", "");
+    const formatKey = expose.replace('./', '');
     const assets = getEmptyAssets();
 
     assets.js.sync.push(config.exposes[expose]);

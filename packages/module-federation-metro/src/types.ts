@@ -14,7 +14,7 @@ export interface ModuleFederationConfig {
   remotes?: Record<string, string>;
   exposes?: Record<string, string>;
   shared?: Shared;
-  shareStrategy?: "loaded-first" | "version-first";
+  shareStrategy?: 'loaded-first' | 'version-first';
   plugins?: string[];
 }
 

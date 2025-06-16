@@ -1,16 +1,16 @@
 import LottieView from 'lottie-react-native';
-import React, {Ref} from 'react';
-import {StyleSheet, useWindowDimensions, View} from 'react-native';
+import type { Ref } from 'react';
+import { StyleSheet, View, useWindowDimensions } from 'react-native';
 
 type Props = {
   ref: Ref<LottieView>;
 };
 
-export default function Confetti({ref}: Props) {
-  const {width, height} = useWindowDimensions();
+export default function Confetti({ ref }: Props) {
+  const { width, height } = useWindowDimensions();
 
   return (
-    <View pointerEvents="none" style={[styles.container, {width, height}]}>
+    <View pointerEvents="none" style={[styles.container, { width, height }]}>
       <LottieView
         ref={ref}
         source={require('./confetti-asset.json')}

@@ -1,6 +1,6 @@
+import { VERSION } from 'lodash';
 import React from 'react';
-import {View} from 'react-native';
-import {VERSION} from 'lodash';
+import { View } from 'react-native';
 
 // @ts-ignore
 const Info = React.lazy(() => import('mini/info'));

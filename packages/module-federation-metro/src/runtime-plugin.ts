@@ -1,4 +1,4 @@
-import type { FederationRuntimePlugin } from "@module-federation/runtime";
+import type { FederationRuntimePlugin } from '@module-federation/runtime';
 
 declare global {
   var __DEV__: boolean;
@@ -13,17 +13,17 @@ declare global {
 const getQueryParams = () => {
   const isFuseboxEnabled = !!global.__FUSEBOX_HAS_FULL_CONSOLE_SUPPORT__;
   const queryParams: Record<string, string> = {
-    platform: require("react-native").Platform.OS,
-    dev: "true",
-    lazy: "true",
-    minify: "false",
-    runModule: "true",
-    modulesOnly: "false",
+    platform: require('react-native').Platform.OS,
+    dev: 'true',
+    lazy: 'true',
+    minify: 'false',
+    runModule: 'true',
+    modulesOnly: 'false',
   };
 
   if (isFuseboxEnabled) {
-    queryParams.excludeSource = "true";
-    queryParams.sourcePaths = "url-server";
+    queryParams.excludeSource = 'true';
+    queryParams.sourcePaths = 'url-server';
   }
 
   return new URLSearchParams(queryParams);
@@ -37,19 +37,19 @@ const buildUrlForEntryBundle = (entry: string) => {
 };
 
 const MetroCorePlugin: () => FederationRuntimePlugin = () => ({
-  name: "metro-core-plugin",
+  name: 'metro-core-plugin',
   loadEntry: async ({ remoteInfo }) => {
     const { entry, entryGlobalName } = remoteInfo;
 
     const __loadBundleAsync =
       // @ts-expect-error dynamic key access on global object
-      global[`${__METRO_GLOBAL_PREFIX__ ?? ""}__loadBundleAsync`];
+      global[`${__METRO_GLOBAL_PREFIX__ ?? ''}__loadBundleAsync`];
 
     const loadBundleAsync =
       __loadBundleAsync as typeof global.__loadBundleAsync;
 
     if (!loadBundleAsync) {
-      throw new Error("loadBundleAsync is not defined");
+      throw new Error('loadBundleAsync is not defined');
     }
 
     try {

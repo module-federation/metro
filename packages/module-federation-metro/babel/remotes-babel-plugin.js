@@ -1,7 +1,7 @@
-const t = require("@babel/types");
+const t = require('@babel/types');
 
 function getRemotesRegExp(remotes) {
-  return new RegExp(`^(${Object.keys(remotes).join("|")})\/`);
+  return new RegExp(`^(${Object.keys(remotes).join('|')})\/`);
 }
 
 function isRemoteImport(path, options) {
@@ -17,13 +17,13 @@ function getWrappedRemoteImport(importName) {
   const importArg = t.stringLiteral(importName);
 
   // require('mf:remote-module-registry')
-  const requireCall = t.callExpression(t.identifier("require"), [
-    t.stringLiteral("mf:remote-module-registry"),
+  const requireCall = t.callExpression(t.identifier('require'), [
+    t.stringLiteral('mf:remote-module-registry'),
   ]);
 
   // .loadAndGetRemote(importName)
   const loadAndGetRemoteCall = t.callExpression(
-    t.memberExpression(requireCall, t.identifier("loadAndGetRemote")),
+    t.memberExpression(requireCall, t.identifier('loadAndGetRemote')),
     [importArg]
   );
 
@@ -32,7 +32,7 @@ function getWrappedRemoteImport(importName) {
 
 function moduleFederationRemotesBabelPlugin() {
   return {
-    name: "module-federation-remotes-babel-plugin",
+    name: 'module-federation-remotes-babel-plugin',
     visitor: {
       CallExpression(path, state) {
         if (state.opts.blacklistedPaths.includes(state.filename)) {

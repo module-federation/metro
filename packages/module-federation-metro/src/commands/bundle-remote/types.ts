@@ -3,7 +3,7 @@ export type BundleFederatedRemoteArgs = {
   platform: string;
   dev: boolean;
   minify?: boolean;
-  bundleEncoding?: "utf8" | "utf16le" | "ascii";
+  bundleEncoding?: 'utf8' | 'utf16le' | 'ascii';
   maxWorkers?: string;
   sourcemapOutput?: string;
   sourcemapSourcesRoot?: string;

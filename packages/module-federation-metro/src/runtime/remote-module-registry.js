@@ -2,7 +2,7 @@ import {
   loadRemote,
   loadShare,
   loadShareSync,
-} from "@module-federation/runtime";
+} from '@module-federation/runtime';
 
 const registry = {};
 const loading = {};
@@ -10,10 +10,10 @@ const loading = {};
 const earlyModuleTest = __EARLY_MODULE_TEST__;
 
 function cloneModule(module, target) {
-  Object.getOwnPropertyNames(module).forEach((key) => {
+  for (const key of Object.getOwnPropertyNames(module)) {
     const descriptor = Object.getOwnPropertyDescriptor(module, key);
     Object.defineProperty(target, key, descriptor);
-  });
+  }
 }
 
 export async function loadAndGetShared(id) {
@@ -43,9 +43,8 @@ export async function loadRemoteToRegistry(id) {
 export function loadSharedToRegistry(id) {
   if (earlyModuleTest.test(id)) {
     return loadSharedToRegistrySync(id);
-  } else {
-    return loadSharedToRegistryAsync(id);
   }
+  return loadSharedToRegistryAsync(id);
 }
 
 export async function loadSharedToRegistryAsync(id) {
