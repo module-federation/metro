@@ -23,6 +23,7 @@
     "./bootstrap": "./bootstrap/index.js"
   },
   "scripts": {
+    "build": "rslib build",
     "typecheck": "tsc --noEmit"
   },
   "peerDependencies": {
