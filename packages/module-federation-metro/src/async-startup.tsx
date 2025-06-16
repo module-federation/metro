@@ -1,6 +1,7 @@
 import React from 'react';
 
 declare global {
+  var __METRO_GLOBAL_PREFIX__: string;
   var __METRO_FEDERATION__: Record<string, any> & {
     [key: string]: { __shareInit: Promise<void> };
   };

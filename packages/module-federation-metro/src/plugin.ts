@@ -370,9 +370,10 @@ function withModuleFederation(
   const mfMetroPath = createMFRuntimeNodeModules(projectNodeModulesPath);
 
   // auto-inject 'metro-core-plugin' MF runtime plugin
-  options.plugins = [require.resolve('./mf-plugin.js'), ...options.plugins].map(
-    (plugin) => path.relative(mfMetroPath, plugin)
-  );
+  options.plugins = [
+    require.resolve('./modules/metroCorePlugin.ts'),
+    ...options.plugins,
+  ].map((plugin) => path.relative(mfMetroPath, plugin));
 
   const initHostPath = path.resolve(mfMetroPath, 'init-host.js');
   const registryPath = path.resolve(mfMetroPath, 'remote-module-registry.js');

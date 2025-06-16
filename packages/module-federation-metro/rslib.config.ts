@@ -17,6 +17,13 @@ export default defineConfig({
         externals: ({ request }, callback) =>
           callback(undefined, externalizeMetroImports(request!)),
       },
+      shims: {
+        esm: {
+          __dirname: true,
+          __filename: true,
+          require: true,
+        },
+      },
     },
     {
       format: 'cjs',
