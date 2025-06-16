@@ -7,7 +7,7 @@ if (!process.env.EXPO_OS) {
   require('./vendor/expo/async-require');
 }
 
-const { buildLoadBundleAsyncWrapper } = require('./src/async-require');
+const { buildLoadBundleAsyncWrapper } = require('./src/modules/asyncRequire');
 
 // wrapper for loading federated dependencies
 global[`${__METRO_GLOBAL_PREFIX__}__loadBundleAsync`] =
