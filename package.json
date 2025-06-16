@@ -2,7 +2,6 @@
   "name": "metro-mf",
   "packageManager": "pnpm@10.12.1",
   "private": true,
-  "workspaces": ["packages/*", "apps/*"],
   "scripts": {
     "dev": "turbo dev --filter=showcase-host --filter=showcase-mini --ui=tui",
     "dev:example": "turbo dev --filter=example-host --filter=example-mini --filter=example-nested-mini --ui=tui",
