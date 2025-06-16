@@ -27,13 +27,21 @@
     "build": "rslib build",
     "typecheck": "tsc --noEmit"
   },
+  "dependencies": {
+    "chalk": "^5.4.1",
+    "@module-federation/runtime": "0.11.4",
+    "@module-federation/sdk": "0.11.4"
+  },
   "peerDependencies": {
     "metro": "^0.82.1",
+    "metro-config": "^0.82.1",
+    "metro-resolver": "^0.82.1",
+    "metro-source-map": "^0.82.1",
     "react-native": ">=0.79.0"
   },
   "devDependencies": {
-    "@module-federation/runtime": "0.11.4",
     "@rslib/core": "^0.10.0",
+    "@types/react": "^19.0.0",
     "@types/node": "^20.0.0",
     "metro": "^0.82.1",
     "metro-config": "^0.82.1",
