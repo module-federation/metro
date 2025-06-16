@@ -7904,6 +7904,7 @@ __metadata:
     ts-node: "npm:^10.9.2"
     typescript: "npm:^5.8.3"
   peerDependencies:
+    metro: ^0.82.1
     react-native: ">=0.79.0"
   languageName: unknown
   linkType: soft

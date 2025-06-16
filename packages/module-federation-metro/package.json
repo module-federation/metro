@@ -20,6 +20,7 @@
     "typecheck": "tsc --noEmit"
   },
   "peerDependencies": {
+    "metro": "^0.82.1",
     "react-native": ">=0.79.0"
   },
   "devDependencies": {
