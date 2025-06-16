@@ -1,6 +1,6 @@
 {
   "name": "metro-mf",
-  "packageManager": "yarn@4.8.1",
+  "packageManager": "pnpm@10.12.1",
   "private": true,
   "workspaces": ["packages/*", "apps/*"],
   "scripts": {
@@ -13,29 +13,5 @@
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
     "turbo": "^2.5.0"
-  },
-  "resolutions": {
-    "buck-worker-tool": "portal:./external/metro/packages/buck-worker-tool",
-    "metro": "portal:./external/metro/packages/metro",
-    "metro-babel-register": "portal:./external/metro/packages/metro-babel-register",
-    "metro-babel-transformer": "portal:./external/metro/packages/metro-babel-transformer",
-    "metro-cache": "portal:./external/metro/packages/metro-cache",
-    "metro-cache-key": "portal:./external/metro/packages/metro-cache-key",
-    "metro-config": "portal:./external/metro/packages/metro-config",
-    "metro-core": "portal:./external/metro/packages/metro-core",
-    "metro-file-map": "portal:./external/metro/packages/metro-file-map",
-    "metro-memory-fs": "portal:./external/metro/packages/metro-memory-fs",
-    "metro-minify-terser": "portal:./external/metro/packages/metro-minify-terser",
-    "metro-resolver": "portal:./external/metro/packages/metro-resolver",
-    "metro-runtime": "portal:./external/metro/packages/metro-runtime",
-    "metro-source-map": "portal:./external/metro/packages/metro-source-map",
-    "metro-symbolicate": "portal:./external/metro/packages/metro-symbolicate",
-    "metro-transform-plugins": "portal:./external/metro/packages/metro-transform-plugins",
-    "metro-transform-worker": "portal:./external/metro/packages/metro-transform-worker",
-    "ob1": "portal:./external/metro/packages/ob1",
-    "@module-federation/runtime-core@npm:0.11.4": "patch:@module-federation/runtime-core@npm%3A0.11.4#~/.yarn/patches/@module-federation-runtime-core-npm-0.11.4-46a703d27e.patch",
-    "@react-native/community-cli-plugin@npm:0.79.0": "patch:@react-native/community-cli-plugin@npm%3A0.79.0#~/.yarn/patches/@react-native-community-cli-plugin-npm-0.79.0-d467a2c1a8.patch",
-    "react-native": "patch:react-native@npm%3A0.79.0#~/.yarn/patches/react-native-npm-0.79.0-3bd84ed11a.patch",
-    "@rnef/plugin-metro": "patch:@rnef/plugin-metro@npm%3A0.7.20#~/.yarn/patches/@rnef-plugin-metro-npm-0.7.20-f8db692ffa.patch"
   }
 }

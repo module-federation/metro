@@ -1,0 +1,28 @@
+packages:
+  - packages/*
+  - apps/*
+
+overrides:
+  buck-worker-tool: ./external/metro/packages/buck-worker-tool
+  metro: ./external/metro/packages/metro
+  metro-babel-register: ./external/metro/packages/metro-babel-register
+  metro-babel-transformer: ./external/metro/packages/metro-babel-transformer
+  metro-cache: ./external/metro/packages/metro-cache
+  metro-cache-key: ./external/metro/packages/metro-cache-key
+  metro-config: ./external/metro/packages/metro-config
+  metro-core: ./external/metro/packages/metro-core
+  metro-file-map: ./external/metro/packages/metro-file-map
+  metro-memory-fs: ./external/metro/packages/metro-memory-fs
+  metro-minify-terser: ./external/metro/packages/metro-minify-terser
+  metro-resolver: ./external/metro/packages/metro-resolver
+  metro-runtime: ./external/metro/packages/metro-runtime
+  metro-source-map: ./external/metro/packages/metro-source-map
+  metro-symbolicate: ./external/metro/packages/metro-symbolicate
+  metro-transform-plugins: ./external/metro/packages/metro-transform-plugins
+  metro-transform-worker: ./external/metro/packages/metro-transform-worker
+  ob1: ./external/metro/packages/ob1
+
+patchedDependencies:
+  '@react-native/community-cli-plugin': patches/@react-native__community-cli-plugin.patch
+  react-native: patches/react-native.patch
+  '@rnef/plugin-metro': patches/@rnef__plugin-metro.patch
