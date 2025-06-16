@@ -2591,7 +2591,7 @@ __metadata:
 
 "@rnef/platform-apple-helpers@patch:@rnef/platform-apple-helpers@npm%3A0.7.20#~/.yarn/patches/@rnef-platform-apple-helpers-npm-0.7.20-4932d15c7b.patch":
   version: 0.7.20
-  resolution: "@rnef/platform-apple-helpers@patch:@rnef/platform-apple-helpers@npm%3A0.7.20#~/.yarn/patches/@rnef-platform-apple-helpers-npm-0.7.20-4932d15c7b.patch::version=0.7.20&hash=a327b9"
+  resolution: "@rnef/platform-apple-helpers@patch:@rnef/platform-apple-helpers@npm%3A0.7.20#~/.yarn/patches/@rnef-platform-apple-helpers-npm-0.7.20-4932d15c7b.patch::version=0.7.20&hash=9f1757"
   dependencies:
     "@react-native-community/cli-config": "npm:^18.0.0"
     "@react-native-community/cli-config-apple": "npm:^18.0.0"
@@ -2601,7 +2601,7 @@ __metadata:
     fast-glob: "npm:^3.3.2"
     fast-xml-parser: "npm:^4.5.0"
     tslib: "npm:^2.3.0"
-  checksum: 10c0/3ec92b4b4a59cbad03db591c41a9625d0dbdb1cba8ef114d55d06116199918434bde9d260788446408329f8a4ef118a6bd66dca10caf24857dc8a420991401b7
+  checksum: 10c0/00e979291e1d5ac6f32b94a3e2b94428cb485e7a518a8964a415623bda84d025783de003ccdbb120edefd2951c5fa09ee2a4ca14aa30f23e140c55bd624f4792
   languageName: node
   linkType: hard
 

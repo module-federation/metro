@@ -10,3 +10,15 @@ index cd24550487e93d23848499a51fc4350d460ba799..c620ba8d116987b8475baf628550d940
          if (bootedDevices.length === 0) {
              // fallback to present all devices when no device is selected
              if (isInteractive()) {
+diff --git a/dist/src/lib/commands/run/runOnSimulator.js b/dist/src/lib/commands/run/runOnSimulator.js
+index c4012b1ca5876e6830606047063b727c98bd7c91..15d4a6b0a20e858246118f1c341145a59a2804a1 100644
+--- a/dist/src/lib/commands/run/runOnSimulator.js
++++ b/dist/src/lib/commands/run/runOnSimulator.js
+@@ -44,6 +44,7 @@ async function bootSimulator(selectedSimulator) {
+         await spawn('xcrun', ['simctl', 'boot', selectedSimulator.udid]);
+     }
+     catch (error) {
++        console.log(error);
+         if (
+         // It may happen on GitHub Actions when the simulator is already booted,
+         // even though the simctl returns its state as Shutdown
