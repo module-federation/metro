@@ -10,15 +10,17 @@
     ".": {
       "types": "./dist/index.d.ts",
       "dev": "./dev/index.js",
+      "import": "./dist/index.mjs",
       "default": "./dist/index.js"
     },
-    "./babel/*": "./babel/*.js",
-    "./bootstrap": "./bootstrap/index.js",
     "./commands": {
       "types": "./dist/commands/index.d.ts",
       "dev": "./dev/commands.js",
+      "import": "./dist/commands/index.mjs",
       "default": "./dist/commands/index.js"
-    }
+    },
+    "./babel/*": "./babel/*.js",
+    "./bootstrap": "./bootstrap/index.js"
   },
   "scripts": {
     "typecheck": "tsc --noEmit"
