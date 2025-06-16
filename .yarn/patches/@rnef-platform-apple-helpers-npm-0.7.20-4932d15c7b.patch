@@ -15,6 +15,7 @@ index cd24550487e93d23848499a51fc4350d460ba799..c4aa11c85d6a1724fe6e717cc2c9b8d3
      else {
          const bootedDevices = devices.filter(({ state, type }) => state === 'Booted' && type === deviceOrSimulator);
 +        console.log('Booted devices:', bootedDevices);
++        console.log('Available devices:', devices);
          if (bootedDevices.length === 0) {
              // fallback to present all devices when no device is selected
              if (isInteractive()) {
