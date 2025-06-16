@@ -9,7 +9,8 @@
   "types": "./dist/index.d.ts",
   "exports": {
     "types": "./dist/index.d.ts",
-    "import": "./dist/index.js"
+    "require": "./dist/index.cjs",
+    "default": "./dist/index.js"
   },
   "files": ["dist"],
   "publishConfig": {
@@ -19,7 +20,7 @@
   "author": "Jakub Romanczyk <jakub.romanczyk@callstack.com>",
   "license": "MIT",
   "scripts": {
-    "build": "tsc -b ./tsconfig.build.json -f",
+    "build": "rslib build",
     "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
