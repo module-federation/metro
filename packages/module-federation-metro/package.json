@@ -3,18 +3,23 @@
   "version": "0.0.1",
   "description": "Module Federation for Metro bundler",
   "author": "",
-  "type": "module",
-  "main": "./index.js",
-  "types": "./types/index.d.ts",
+  "type": "commonjs",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "types": "./types/index.d.ts",
-      "default": "./index.js"
+      "types": "./dist/index.d.ts",
+      "dev": "./dev/index.js",
+      "default": "./dist/index.js"
     },
     "./async-require": "./async-require.js",
     "./babel/*": "./babel/*.js",
     "./bootstrap": "./bootstrap/index.js",
-    "./commands": "./commands/index.js",
+    "./commands": {
+      "types": "./dist/commands/index.d.ts",
+      "dev": "./dev/commands.js",
+      "default": "./dist/commands/index.js"
+    },
     "./runtime-plugin": "./runtime-plugin.js"
   },
   "scripts": {
