@@ -1,0 +1,45 @@
+{
+  "compilerOptions": {
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "target": "ES2021",
+    "esModuleInterop": true,
+    "declaration": true,
+    "isolatedModules": true,
+    "sourceMap": true,
+    "declarationMap": true,
+    "composite": false,
+    "forceConsistentCasingInFileNames": true,
+    "jsx": "react-native",
+    "allowJs": false,
+    "checkJs": false,
+    "strict": true,
+    "skipLibCheck": true,
+    "noUnusedLocals": true,
+    "resolveJsonModule": true,
+    "allowSyntheticDefaultImports": true,
+    "paths": {
+      "metro": ["./external/metro/packages/metro/types"],
+      "metro/src/*": ["./external/metro/packages/metro/types/*"],
+      "metro-*": ["./external/metro/packages/metro-*/types"],
+      "metro-source-map": [
+        "./external/metro/packages/metro-source-map/types/source-map.d.ts"
+      ],
+      "metro/src/DeltaBundler/Serializers/baseJSBundle": [
+        "./packages/module-federation-metro/src/types/metro/baseJSBundle"
+      ],
+      "metro/src/lib/bundleToString": [
+        "./packages/module-federation-metro/src/types/metro/bundleToString"
+      ],
+      "metro/src/lib/getAppendScripts": [
+        "./packages/module-federation-metro/src/types/metro/getAppendScripts"
+      ],
+      "metro/src/DeltaBundler/Serializers/helpers/processModules": [
+        "./packages/module-federation-metro/src/types/metro/processModules"
+      ],
+      "metro/src/lib/relativizeSourceMap": [
+        "./packages/module-federation-metro/src/types/metro/relativizeSourceMap"
+      ]
+    }
+  }
+}

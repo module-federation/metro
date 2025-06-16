@@ -7,11 +7,15 @@
     "apps/*"
   ],
   "devDependencies": {
+    "@biomejs/biome": "^1.9.4",
     "turbo": "^2.5.0"
   },
   "scripts": {
-    "dev": "turbo dev --filter=showcase-host --filter=showcase-mini",
-    "dev:example": "turbo dev --filter=example-host --filter=example-mini --filter=example-nested-mini"
+    "dev": "turbo dev --filter=showcase-host --filter=showcase-mini --ui=tui",
+    "dev:example": "turbo dev --filter=example-host --filter=example-mini --filter=example-nested-mini --ui=tui",
+    "lint": "biome check --write",
+    "lint:ci": "biome check",
+    "typecheck": "turbo typecheck"
   },
   "resolutions": {
     "buck-worker-tool": "portal:./external/metro/packages/buck-worker-tool",

@@ -57,7 +57,7 @@ const MetroCorePlugin: () => FederationRuntimePlugin = () => ({
       await loadBundleAsync(entryUrl);
 
       if (!global.__METRO_FEDERATION__[entryGlobalName]) {
-        throw new Error();
+        throw new Error(`Remote entry ${entryGlobalName} failed to register.`);
       }
 
       global.__METRO_FEDERATION__[entryGlobalName].location = entryUrl;
