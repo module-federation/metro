@@ -1,6 +1,6 @@
 import type { PluginApi, PluginOutput } from '@rnef/config';
 import { color, logger, outro } from '@rnef/tools';
-import commands from 'module-federation-metro/commands';
+import * as commands from 'module-federation-metro/commands';
 
 interface PluginConfig {
   platforms?: Record<string, object>;
