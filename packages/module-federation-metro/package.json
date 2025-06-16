@@ -22,6 +22,7 @@
     "./babel/*": "./babel/*.js",
     "./bootstrap": "./bootstrap/index.js"
   },
+  "files": ["dist", "babel", "bootstrap"],
   "scripts": {
     "build": "rslib build",
     "typecheck": "tsc --noEmit"
