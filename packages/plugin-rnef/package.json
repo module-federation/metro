@@ -23,15 +23,16 @@
     "build": "rslib build",
     "typecheck": "tsc --noEmit"
   },
+  "peerDependencies": {
+    "@rnef/tools": "^0.7.18",
+    "module-federation-metro": "workspace:*"
+  },
   "devDependencies": {
     "@rnef/config": "^0.7.18",
     "@rnef/tools": "^0.7.18",
     "@rslib/core": "^0.10.0",
     "@types/node": "^20.0.0",
+    "module-federation-metro": "workspace:*",
     "typescript": "^5.8.3"
-  },
-  "peerDependencies": {
-    "@rnef/tools": "^0.7.18",
-    "module-federation-metro": "workspace:*"
   }
 }

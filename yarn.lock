@@ -2150,6 +2150,7 @@ __metadata:
     "@rnef/tools": "npm:^0.7.18"
     "@rslib/core": "npm:^0.10.0"
     "@types/node": "npm:^20.0.0"
+    module-federation-metro: "workspace:*"
     typescript: "npm:^5.8.3"
   peerDependencies:
     "@rnef/tools": ^0.7.18
