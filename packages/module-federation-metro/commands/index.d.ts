@@ -1,2 +1,2 @@
-import * as commands from '../src/commands/index.js';
+import * as commands from '../src/commands/index';
 export = commands;

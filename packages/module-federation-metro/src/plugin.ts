@@ -3,16 +3,16 @@ import path from 'node:path';
 import chalk from 'chalk';
 import type { ConfigT } from 'metro-config';
 import type { Resolution } from 'metro-resolver';
-import generateManifest from './generate-manifest.js';
-import { getModuleFederationSerializer } from './serializer.js';
+import generateManifest from './generate-manifest';
+import { getModuleFederationSerializer } from './serializer';
 import type {
   ModuleFederationConfig,
   ModuleFederationConfigNormalized,
   Shared,
   SharedConfig,
-} from './types.js';
-import { ConfigError } from './utils/errors.js';
-import { VirtualModuleManager } from './utils/vm-manager.js';
+} from './types';
+import { ConfigError } from './utils/errors';
+import { VirtualModuleManager } from './utils/vm-manager';
 
 declare global {
   var __METRO_FEDERATION_CONFIG: ModuleFederationConfigNormalized;

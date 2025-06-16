@@ -1,1 +1,1 @@
-module.exports = require('../src/async-startup.js');
+module.exports = require('../src/async-startup');

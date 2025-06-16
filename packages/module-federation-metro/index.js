@@ -6,4 +6,4 @@ try {
   });
 } catch {}
 
-module.exports = require('./src/index.js');
+module.exports = require('./src/index');

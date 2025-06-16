@@ -1,13 +1,13 @@
 export {
   default as bundleFederatedHost,
   bundleFederatedHostOptions,
-} from './bundle-host/index.js';
+} from './bundle-host/index';
 
 export {
   default as bundleFederatedRemote,
   bundleFederatedRemoteOptions,
-} from './bundle-remote/index.js';
+} from './bundle-remote/index';
 
-export type { BundleFederatedHostArgs } from './bundle-host/types.js';
-export type { BundleFederatedRemoteArgs } from './bundle-remote/types.js';
-export type { Config } from './types.js';
+export type { BundleFederatedHostArgs } from './bundle-host/types';
+export type { BundleFederatedRemoteArgs } from './bundle-remote/types';
+export type { Config } from './types';

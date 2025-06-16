@@ -1,1 +1,1 @@
-export { withAsyncStartup } from '../src/async-startup.js';
+export { withAsyncStartup } from '../src/async-startup';

@@ -1,7 +1,7 @@
 import type { ConfigT } from 'metro-config';
 import type Server from 'metro/src/Server';
 import type { OutputOptions, RequestOptions } from 'metro/src/shared/types';
-import { CLIError } from '../../utils/errors.js';
+import { CLIError } from '../../utils/errors';
 
 interface Command {
   name: string;

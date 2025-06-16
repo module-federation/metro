@@ -65,26 +65,15 @@
       "include": ["packages/**/*"],
       "linter": {
         "rules": {
-          "correctness": {
-            "useImportExtensions": {
-              "level": "error",
-              "options": {
-                "suggestedExtensions": {
-                  "ts": {
-                    "module": "js",
-                    "component": "js"
-                  }
-                }
-              }
-            }
-          },
           "style": {
             "useFilenamingConvention": {
               "level": "error",
               "options": {
                 "strictCase": true,
                 "requireAscii": true,
-                "filenameCases": ["kebab-case"]
+                "filenameCases": [
+                  "kebab-case"
+                ]
               }
             }
           }
@@ -95,15 +84,22 @@
       "include": ["**/*.d.ts"],
       "linter": {
         "rules": {
-          "style": { "noVar": "off", "useFilenamingConvention": "off" }
+          "style": {
+            "noVar": "off",
+            "useFilenamingConvention": "off"
+          }
         }
       }
     },
     {
-      "include": ["packages/module-federation-metro/src/modules/**"],
+      "include": [
+        "packages/module-federation-metro/src/modules/**"
+      ],
       "linter": {
         "rules": {
-          "style": { "useFilenamingConvention": "off" }
+          "style": {
+            "useFilenamingConvention": "off"
+          }
         }
       }
     }

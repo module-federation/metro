@@ -1,1 +1,1 @@
-module.exports = require('./src/runtime-plugin.js');
+module.exports = require('./src/runtime-plugin');
