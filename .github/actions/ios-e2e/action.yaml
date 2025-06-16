@@ -61,13 +61,20 @@ runs:
         echo "${HOME}/.maestro/bin" >> $GITHUB_PATH
       shell: bash
 
+    - name: Local RNEF Setup
+      shell: bash
+      run: |
+        RNEF_PATH="${{ inputs.app_name }}/.rnef/cache"
+        mkdir -p $RNEF_PATH
+        echo "{\"githubToken\": \"${{ inputs.github_token }}\"}" > "$RNEF_PATH/project.json"
+
     - uses: callstackincubator/ios@v1
       with:
         github-token: ${{ inputs.github_token }}
         destination: 'simulator'
         scheme: 'MFExampleHost'
         configuration: 'Release'
-        working-directory: './apps/example-host'
+        working-directory: './apps/${{ inputs.app_name}}'
 
     - name: Shutdown all iOS simulators
       shell: bash
@@ -86,7 +93,7 @@ runs:
 
     - name: Run iOS E2E Tests
       run: |
-        yarn workspace ${{ inputs.app_name }} ios:release --verbose
+        yarn workspace ${{ inputs.app_name }} ios:release
         yarn workspace ${{ inputs.app_name }} e2e:run
       shell: bash
 

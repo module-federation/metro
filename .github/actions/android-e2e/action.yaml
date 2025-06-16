@@ -70,6 +70,13 @@ runs:
         echo "${HOME}/.maestro/bin" >> $GITHUB_PATH
       shell: bash
 
+    - name: Local RNEF Setup
+      shell: bash
+      run: |
+        RNEF_PATH="${{ inputs.app_name }}/.rnef/cache"
+        mkdir -p $RNEF_PATH
+        echo "{\"githubToken\": \"${{ inputs.github_token }}\"}" > "$RNEF_PATH/project.json"
+
     - name: E2E Prepare Script
       run: |
         yarn workspace ${{ inputs.app_name }} e2e:prepare:android &
@@ -79,7 +86,7 @@ runs:
       with:
         github-token: ${{ inputs.github_token }}
         variant: 'Release'
-        working-directory: './apps/example-host'
+        working-directory: './apps/${{ inputs.app_name}}'
 
     - name: Run Android E2E Tests
       uses: reactivecircus/android-emulator-runner@v2
