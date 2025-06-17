@@ -28,6 +28,3 @@ apps/*/.rnef
 
 # TypeScript build cache
 *.tsbuildinfo
-
-# .vscode
-.vscode
