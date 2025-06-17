@@ -38,9 +38,9 @@ export const pluginMetroModuleFederation =
       options: [
         ...commands.bundleFederatedHostOptions,
         {
-          name: "--config-cmd [string]",
+          name: '--config-cmd [string]',
           description:
-            "[Internal] A hack for Xcode build script pointing to wrong bundle command that recognizes this flag. Do not use.",
+            '[Internal] A hack for Xcode build script pointing to wrong bundle command that recognizes this flag. Do not use.',
         },
       ],
     });
