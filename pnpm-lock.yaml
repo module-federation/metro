@@ -510,9 +510,6 @@ importers:
         specifier: link:../../external/metro/packages/metro-source-map
         version: link:../../external/metro/packages/metro-source-map
     devDependencies:
-      '@babel/types':
-        specifier: ^7.25.0
-        version: 7.27.6
       '@rslib/core':
         specifier: ^0.10.0
         version: 0.10.0(typescript@5.8.3)
