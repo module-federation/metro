@@ -10,12 +10,14 @@
     "build": {
       "dependsOn": ["^build"],
       "cache": true,
-      "outputs": ["dist"]
+      "outputs": ["dist"],
+      "outputLogs": "errors-only"
     },
     "typecheck": {
       "dependsOn": ["^typecheck"],
       "cache": true,
-      "outputs": []
+      "outputs": [],
+      "outputLogs": "errors-only"
     }
   }
 }
