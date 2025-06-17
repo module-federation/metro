@@ -29,7 +29,7 @@ patchedDependencies:
     hash: 75f51e7c8d17d568b7e880ce4f6b75eb97060fe4fc28cf079bac3b25292d3607
     path: patches/@module-federation__runtime-core@0.11.4.patch
   '@react-native/community-cli-plugin':
-    hash: e60339fdfa2568418e753c9cfeb219ea24ce69e08e8437cdf615421441b1ecf0
+    hash: 445cc837d2f72ab42efc5a3f98e1906b366b2f99b0930b1fa11c9569c4bddd62
     path: patches/@react-native__community-cli-plugin.patch
   '@rnef/plugin-metro':
     hash: 9eaf43b02d5f0d8d8433452a7e745e18784a15565529a2e3565d1787b14c2366
@@ -99,7 +99,7 @@ importers:
         version: 0.7.24(typescript@5.0.4)
       '@rnef/plugin-metro':
         specifier: ^0.7.20
-        version: 0.7.24(patch_hash=9eaf43b02d5f0d8d8433452a7e745e18784a15565529a2e3565d1787b14c2366)(@react-native/community-cli-plugin@0.79.0(patch_hash=e60339fdfa2568418e753c9cfeb219ea24ce69e08e8437cdf615421441b1ecf0))
+        version: 0.7.24(patch_hash=9eaf43b02d5f0d8d8433452a7e745e18784a15565529a2e3565d1787b14c2366)(@react-native/community-cli-plugin@0.79.0(patch_hash=445cc837d2f72ab42efc5a3f98e1906b366b2f99b0930b1fa11c9569c4bddd62))
       '@types/jest':
         specifier: ^29.5.13
         version: 29.5.14
@@ -184,7 +184,7 @@ importers:
         version: 0.7.24(typescript@5.0.4)
       '@rnef/plugin-metro':
         specifier: ^0.7.20
-        version: 0.7.24(patch_hash=9eaf43b02d5f0d8d8433452a7e745e18784a15565529a2e3565d1787b14c2366)(@react-native/community-cli-plugin@0.79.0(patch_hash=e60339fdfa2568418e753c9cfeb219ea24ce69e08e8437cdf615421441b1ecf0))
+        version: 0.7.24(patch_hash=9eaf43b02d5f0d8d8433452a7e745e18784a15565529a2e3565d1787b14c2366)(@react-native/community-cli-plugin@0.79.0(patch_hash=445cc837d2f72ab42efc5a3f98e1906b366b2f99b0930b1fa11c9569c4bddd62))
       '@types/jest':
         specifier: ^29.5.13
         version: 29.5.14
@@ -272,7 +272,7 @@ importers:
         version: 0.7.24(typescript@5.0.4)
       '@rnef/plugin-metro':
         specifier: ^0.7.20
-        version: 0.7.24(patch_hash=9eaf43b02d5f0d8d8433452a7e745e18784a15565529a2e3565d1787b14c2366)(@react-native/community-cli-plugin@0.79.0(patch_hash=e60339fdfa2568418e753c9cfeb219ea24ce69e08e8437cdf615421441b1ecf0))
+        version: 0.7.24(patch_hash=9eaf43b02d5f0d8d8433452a7e745e18784a15565529a2e3565d1787b14c2366)(@react-native/community-cli-plugin@0.79.0(patch_hash=445cc837d2f72ab42efc5a3f98e1906b366b2f99b0930b1fa11c9569c4bddd62))
       '@types/jest':
         specifier: ^29.5.13
         version: 29.5.14
@@ -363,7 +363,7 @@ importers:
         version: 0.7.24(typescript@5.0.4)
       '@rnef/plugin-metro':
         specifier: ^0.7.20
-        version: 0.7.24(patch_hash=9eaf43b02d5f0d8d8433452a7e745e18784a15565529a2e3565d1787b14c2366)(@react-native/community-cli-plugin@0.79.0(patch_hash=e60339fdfa2568418e753c9cfeb219ea24ce69e08e8437cdf615421441b1ecf0))
+        version: 0.7.24(patch_hash=9eaf43b02d5f0d8d8433452a7e745e18784a15565529a2e3565d1787b14c2366)(@react-native/community-cli-plugin@0.79.0(patch_hash=445cc837d2f72ab42efc5a3f98e1906b366b2f99b0930b1fa11c9569c4bddd62))
       '@types/jest':
         specifier: ^29.5.13
         version: 29.5.14
@@ -451,7 +451,7 @@ importers:
         version: 0.7.24(typescript@5.0.4)
       '@rnef/plugin-metro':
         specifier: ^0.7.20
-        version: 0.7.24(patch_hash=9eaf43b02d5f0d8d8433452a7e745e18784a15565529a2e3565d1787b14c2366)(@react-native/community-cli-plugin@0.79.0(patch_hash=e60339fdfa2568418e753c9cfeb219ea24ce69e08e8437cdf615421441b1ecf0))
+        version: 0.7.24(patch_hash=9eaf43b02d5f0d8d8433452a7e745e18784a15565529a2e3565d1787b14c2366)(@react-native/community-cli-plugin@0.79.0(patch_hash=445cc837d2f72ab42efc5a3f98e1906b366b2f99b0930b1fa11c9569c4bddd62))
       '@types/jest':
         specifier: ^29.5.13
         version: 29.5.14
@@ -5714,7 +5714,7 @@ snapshots:
       nullthrows: 1.1.1
       yargs: 17.7.2
 
-  '@react-native/community-cli-plugin@0.79.0(patch_hash=e60339fdfa2568418e753c9cfeb219ea24ce69e08e8437cdf615421441b1ecf0)':
+  '@react-native/community-cli-plugin@0.79.0(patch_hash=445cc837d2f72ab42efc5a3f98e1906b366b2f99b0930b1fa11c9569c4bddd62)':
     dependencies:
       '@react-native/dev-middleware': 0.79.0
       chalk: 4.1.2
@@ -5885,10 +5885,10 @@ snapshots:
       - supports-color
       - typescript
 
-  '@rnef/plugin-metro@0.7.24(patch_hash=9eaf43b02d5f0d8d8433452a7e745e18784a15565529a2e3565d1787b14c2366)(@react-native/community-cli-plugin@0.79.0(patch_hash=e60339fdfa2568418e753c9cfeb219ea24ce69e08e8437cdf615421441b1ecf0))':
+  '@rnef/plugin-metro@0.7.24(patch_hash=9eaf43b02d5f0d8d8433452a7e745e18784a15565529a2e3565d1787b14c2366)(@react-native/community-cli-plugin@0.79.0(patch_hash=445cc837d2f72ab42efc5a3f98e1906b366b2f99b0930b1fa11c9569c4bddd62))':
     dependencies:
       '@react-native-community/cli-server-api': 18.0.0
-      '@react-native/community-cli-plugin': 0.79.0(patch_hash=e60339fdfa2568418e753c9cfeb219ea24ce69e08e8437cdf615421441b1ecf0)
+      '@react-native/community-cli-plugin': 0.79.0(patch_hash=445cc837d2f72ab42efc5a3f98e1906b366b2f99b0930b1fa11c9569c4bddd62)
       '@react-native/dev-middleware': 0.79.3
       '@rnef/tools': 0.7.24
       metro: link:external/metro/packages/metro
@@ -8302,7 +8302,7 @@ snapshots:
       '@jest/create-cache-key-function': 29.7.0
       '@react-native/assets-registry': 0.79.0
       '@react-native/codegen': 0.79.0(@babel/core@7.27.4)
-      '@react-native/community-cli-plugin': 0.79.0(patch_hash=e60339fdfa2568418e753c9cfeb219ea24ce69e08e8437cdf615421441b1ecf0)
+      '@react-native/community-cli-plugin': 0.79.0(patch_hash=445cc837d2f72ab42efc5a3f98e1906b366b2f99b0930b1fa11c9569c4bddd62)
       '@react-native/gradle-plugin': 0.79.0
       '@react-native/js-polyfills': 0.79.0
       '@react-native/normalize-colors': 0.79.0
