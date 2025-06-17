@@ -1,12 +1,14 @@
-export {
-  default as bundleFederatedHost,
-  bundleFederatedHostOptions,
-} from './bundle-host';
-
-export {
-  default as bundleFederatedRemote,
+import bundleFederatedHost, { bundleFederatedHostOptions } from './bundle-host';
+import bundleFederatedRemote, {
   bundleFederatedRemoteOptions,
 } from './bundle-remote';
+
+export default {
+  bundleFederatedHost,
+  bundleFederatedHostOptions,
+  bundleFederatedRemote,
+  bundleFederatedRemoteOptions,
+};
 
 export type { BundleFederatedHostArgs } from './bundle-host/types';
 export type { BundleFederatedRemoteArgs } from './bundle-remote/types';

@@ -1,6 +1,10 @@
 import type { PluginApi, PluginOutput } from '@rnef/config';
 import { color, logger, outro } from '@rnef/tools';
 import commands from 'module-federation-metro/commands';
+import type {
+  BundleFederatedHostArgs,
+  BundleFederatedRemoteArgs,
+} from 'module-federation-metro/commands';
 
 interface PluginConfig {
   platforms?: Record<string, object>;
@@ -13,7 +17,7 @@ export const pluginMetroModuleFederation =
     api.registerCommand({
       name: 'bundle-mf-host',
       description: 'Bundles a Module Federation host',
-      action: async (args: commands.BundleFederatedHostArgs) => {
+      action: async (args: BundleFederatedHostArgs) => {
         const commandConfig = {
           root: api.getProjectRoot(),
           platforms: api.getPlatforms(),
@@ -39,7 +43,7 @@ export const pluginMetroModuleFederation =
       name: 'bundle-mf-remote',
       description:
         'Bundles a Module Federation remote, including its container entry and all exposed modules for consumption by host applications',
-      action: async (args: commands.BundleFederatedRemoteArgs) => {
+      action: async (args: BundleFederatedRemoteArgs) => {
         const commandConfig = {
           root: api.getProjectRoot(),
           platforms: api.getPlatforms(),

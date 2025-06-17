@@ -71,9 +71,7 @@
               "options": {
                 "strictCase": true,
                 "requireAscii": true,
-                "filenameCases": [
-                  "kebab-case"
-                ]
+                "filenameCases": ["kebab-case"]
               }
             }
           }
@@ -92,9 +90,7 @@
       }
     },
     {
-      "include": [
-        "packages/module-federation-metro/src/modules/**"
-      ],
+      "include": ["packages/module-federation-metro/src/modules/**"],
       "linter": {
         "rules": {
           "style": {

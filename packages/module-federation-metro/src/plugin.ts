@@ -371,7 +371,7 @@ function withModuleFederation(
 
   // auto-inject 'metro-core-plugin' MF runtime plugin
   options.plugins = [
-    require.resolve('../runtime-plugin.js'),
+    require.resolve('./modules/metroCorePlugin.ts'),
     ...options.plugins,
   ].map((plugin) => path.relative(mfMetroPath, plugin));
 
@@ -382,7 +382,7 @@ function withModuleFederation(
   const remoteEntryPath = path.resolve(mfMetroPath, remoteEntryFilename);
   const remoteHMRSetupPath = path.resolve(mfMetroPath, 'remote-hmr.js');
 
-  const asyncRequirePath = path.resolve(__dirname, '../async-require.js');
+  const asyncRequirePath = path.resolve(__dirname, './modules/asyncRequire.ts');
 
   const babelTransformerPath = createBabelTransformer({
     proxiedBabelTrasnsformerPath: config.transformer.babelTransformerPath,

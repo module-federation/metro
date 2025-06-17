@@ -9,7 +9,8 @@
   "types": "./dist/index.d.ts",
   "exports": {
     "types": "./dist/index.d.ts",
-    "import": "./dist/index.js"
+    "require": "./dist/index.cjs",
+    "default": "./dist/index.js"
   },
   "files": ["dist"],
   "publishConfig": {
@@ -19,17 +20,19 @@
   "author": "Jakub Romanczyk <jakub.romanczyk@callstack.com>",
   "license": "MIT",
   "scripts": {
-    "build": "tsc -b ./tsconfig.build.json -f",
+    "build": "rslib build",
     "typecheck": "tsc --noEmit"
-  },
-  "devDependencies": {
-    "@rnef/config": "^0.7.18",
-    "@rnef/tools": "^0.7.18",
-    "@types/node": "^20.0.0",
-    "typescript": "^5.8.3"
   },
   "peerDependencies": {
     "@rnef/tools": "^0.7.18",
     "module-federation-metro": "workspace:*"
+  },
+  "devDependencies": {
+    "@rnef/config": "^0.7.18",
+    "@rnef/tools": "^0.7.18",
+    "@rslib/core": "^0.10.0",
+    "@types/node": "^20.0.0",
+    "module-federation-metro": "workspace:*",
+    "typescript": "^5.8.3"
   }
 }

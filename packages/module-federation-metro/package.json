@@ -3,27 +3,37 @@
   "version": "0.0.1",
   "description": "Module Federation for Metro bundler",
   "author": "",
-  "main": "./index.js",
-  "types": "./types/index.d.ts",
+  "type": "commonjs",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "types": "./types/index.d.ts",
-      "default": "./index.js"
+      "types": "./dist/index.d.ts",
+      "dev": "./dev/index.js",
+      "import": "./dist/index.mjs",
+      "default": "./dist/index.js"
     },
-    "./async-require": "./async-require.js",
+    "./commands": {
+      "types": "./dist/commands/index.d.ts",
+      "dev": "./dev/commands.js",
+      "import": "./dist/commands/index.mjs",
+      "default": "./dist/commands/index.js"
+    },
     "./babel/*": "./babel/*.js",
-    "./bootstrap": "./bootstrap/index.js",
-    "./commands": "./commands/index.js",
-    "./runtime-plugin": "./runtime-plugin.js"
+    "./bootstrap": "./bootstrap/index.js"
   },
+  "files": ["dist", "babel", "bootstrap"],
   "scripts": {
+    "build": "rslib build",
     "typecheck": "tsc --noEmit"
   },
   "peerDependencies": {
+    "metro": "^0.82.1",
     "react-native": ">=0.79.0"
   },
   "devDependencies": {
     "@module-federation/runtime": "^0.11.4",
+    "@rslib/core": "^0.10.0",
     "@types/node": "^20.0.0",
     "metro": "^0.82.1",
     "metro-config": "^0.82.1",
