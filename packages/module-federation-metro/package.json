@@ -20,7 +20,14 @@
       "default": "./dist/commands/index.js"
     },
     "./babel/*": "./babel/*.js",
-    "./bootstrap": "./bootstrap/index.js"
+    "./bootstrap": {
+      "dev": "./src/modules/bootstrap.ts",
+      "default": "./dist/modules/bootstrap.ts"
+    },
+    "./runtime-plugin": {
+      "dev": "./src/modules/metroCorePlugin.ts",
+      "default": "./dist/modules/metroCorePlugin.ts"
+    }
   },
   "files": ["dist", "babel", "bootstrap"],
   "scripts": {
