@@ -1,9 +1,11 @@
+const { default: commands } = require('module-federation-metro/commands');
+
 const {
   bundleFederatedHost,
   bundleFederatedHostOptions,
   bundleFederatedRemote,
   bundleFederatedRemoteOptions,
-} = require('./commands');
+} = commands;
 
 const bundleMFHostCommand = {
   name: 'bundle-mf-host',
@@ -20,4 +22,4 @@ const bundleMFRemoteCommand = {
   options: bundleFederatedRemoteOptions,
 };
 
-module.exports = { commands: [bundleMFHostCommand, bundleMFRemoteCommand] };
+module.exports = { bundleMFHostCommand, bundleMFRemoteCommand };
