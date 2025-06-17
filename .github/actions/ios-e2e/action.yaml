@@ -1,4 +1,5 @@
 name: iOS E2E Tests
+description: "Runs iOS E2E tests"
 
 inputs:
   app_name:
@@ -35,6 +36,10 @@ runs:
     - name: Install Metro dependencies
       working-directory: external/metro
       run: yarn set version 1.22.22 && yarn install
+      shell: bash
+
+    - name: Build packages
+      run: pnpm build
       shell: bash
 
     - name: Cache Pods
