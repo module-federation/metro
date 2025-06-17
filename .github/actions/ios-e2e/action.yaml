@@ -76,11 +76,6 @@ runs:
         configuration: 'Release'
         working-directory: './apps/${{ inputs.app_name}}'
 
-    - name: Shutdown all iOS simulators
-      shell: bash
-      run: |
-        xcrun simctl shutdown all
-
     - name: E2E Prepare Script
       shell: bash
       run: |
