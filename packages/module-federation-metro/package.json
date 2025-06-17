@@ -20,9 +20,9 @@
       "default": "./dist/commands/index.js"
     },
     "./babel/*": "./babel/*.js",
-    "./bootstrap": {
-      "dev": "./src/modules/bootstrap.ts",
-      "default": "./dist/modules/bootstrap.ts"
+    "./async-startup": {
+      "dev": "./src/modules/asyncStartup.ts",
+      "default": "./dist/modules/asyncStartup.ts"
     },
     "./runtime-plugin": {
       "dev": "./src/modules/metroCorePlugin.ts",
