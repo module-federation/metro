@@ -28,6 +28,8 @@ overrides:
 
 publicHoistPattern:
 - "@babel/runtime"
+- "@react-native/gradle-plugin"
+- "@react-native/codegen"
 
 patchedDependencies:
   '@react-native/community-cli-plugin': patches/@react-native__community-cli-plugin.patch
