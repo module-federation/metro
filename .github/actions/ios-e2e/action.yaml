@@ -1,11 +1,12 @@
 name: iOS E2E Tests
+description: "Runs iOS E2E tests"
 
 inputs:
   app_name:
-    description: 'Name of the app to test'
+    description: "Name of the app to test"
     required: true
   github_token:
-    description: 'GitHub token for authentication'
+    description: "GitHub token for authentication"
     required: true
 
 runs:
@@ -31,13 +32,13 @@ runs:
       run: corepack enable
       shell: bash
 
-    - name: Install dependencies
-      run: yarn install
-      shell: bash
-
     - name: Install Metro dependencies
       working-directory: external/metro
       run: yarn set version 1.22.22 && yarn install
+      shell: bash
+
+    - name: Install dependencies
+      run: pnpm install
       shell: bash
 
     - name: Cache Pods
@@ -49,7 +50,7 @@ runs:
           ${{ runner.os }}-pods-
 
     - name: Install Pods
-      run: yarn pods
+      run: pnpm pods
       working-directory: apps/${{ inputs.app_name }}
       shell: bash
 
@@ -71,20 +72,20 @@ runs:
     - uses: callstackincubator/ios@v1
       with:
         github-token: ${{ inputs.github_token }}
-        destination: 'simulator'
-        scheme: 'MFExampleHost'
-        configuration: 'Release'
-        working-directory: './apps/${{ inputs.app_name}}'
+        destination: "simulator"
+        scheme: "MFExampleHost"
+        configuration: "Release"
+        working-directory: "./apps/${{ inputs.app_name}}"
 
     - name: E2E Prepare Script
       shell: bash
       run: |
-        yarn workspace ${{ inputs.app_name }} e2e:prepare:ios &
+        pnpm --filter ${{ inputs.app_name }} e2e:prepare:ios
 
     - name: Run iOS E2E Tests
       run: |
-        yarn workspace ${{ inputs.app_name }} ios:release
-        yarn workspace ${{ inputs.app_name }} e2e:run
+        pnpm --filter ${{ inputs.app_name }} ios:release
+        pnpm --filter ${{ inputs.app_name }} e2e:run
       shell: bash
 
     - name: Upload Maestro Logs on Failure
@@ -93,4 +94,3 @@ runs:
       with:
         name: maestro-logs-ios-${{ inputs.app_name }}
         path: ~/.maestro/tests/
-

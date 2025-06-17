@@ -16,6 +16,9 @@ npm start
 
 # OR using Yarn
 yarn start
+
+# OR using pnpm
+pnpm start
 ```
 
 ## Step 2: Build and run your app
@@ -30,6 +33,9 @@ npm run android
 
 # OR using Yarn
 yarn android
+
+# OR using pnpm
+pnpm android
 ```
 
 ### iOS
@@ -56,6 +62,9 @@ npm run ios
 
 # OR using Yarn
 yarn ios
+
+# OR using pnpm
+pnpm ios
 ```
 
 If everything is set up correctly, you should see your new app running in the Android Emulator, iOS Simulator, or your connected device.

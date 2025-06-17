@@ -1,4 +1,7 @@
-const t = require('@babel/types');
+// reuse `@babel/types` from `metro`
+const metroPath = require.resolve('metro');
+const babelTypesPath = require.resolve('@babel/types', { paths: [metroPath] });
+const t = require(babelTypesPath);
 
 function getRemotesRegExp(remotes) {
   return new RegExp(`^(${Object.keys(remotes).join('|')})\/`);

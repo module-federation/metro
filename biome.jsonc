@@ -23,7 +23,7 @@
     "lineWidth": 80,
     "attributePosition": "auto",
     "bracketSpacing": true,
-    "ignore": ["yarn.lock"]
+    "ignore": ["pnpm-lock.yaml"]
   },
   "organizeImports": {
     "enabled": true,
