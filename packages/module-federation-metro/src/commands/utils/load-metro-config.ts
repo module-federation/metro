@@ -5,6 +5,8 @@ import { CLIError } from '../../utils/errors';
 import type { Config } from '../types';
 
 function getOverrideConfig(cfg: Config, config: ConfigT): InputConfigT {
+  // create alias for path - seems like a bug in rslib
+  const nodePath = path;
   const resolver: Partial<ConfigT['resolver']> = {
     platforms: [...Object.keys(cfg.platforms), 'native'],
   };
@@ -16,7 +18,7 @@ function getOverrideConfig(cfg: Config, config: ConfigT): InputConfigT {
         ...(config.serializer?.getModulesRunBeforeMainModule?.(entryFilePath) ||
           []),
         require.resolve(
-          path.join(cfg.reactNativePath, 'Libraries/Core/InitializeCore'),
+          nodePath.join(cfg.reactNativePath, 'Libraries/Core/InitializeCore'),
           { paths: [cfg.root] }
         ),
       ],
