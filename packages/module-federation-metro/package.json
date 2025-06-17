@@ -20,7 +20,7 @@
       "default": "./dist/commands/index.js"
     },
     "./babel/*": "./babel/*.js",
-    "./async-startup": {
+    "./bootstrap": {
       "dev": "./src/modules/asyncStartup.ts",
       "default": "./dist/modules/asyncStartup.ts"
     },
