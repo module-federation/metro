@@ -2,7 +2,7 @@ name: Android E2E Tests
 
 inputs:
   app_name:
-    description: 'Name of the app to test'
+    description: "Name of the app to test"
     required: true
 
 runs:
@@ -13,7 +13,7 @@ runs:
       with:
         submodules: true
         clean: true
-      
+
     - name: Setup KVM (Required for Android Emulator)
       run: |
         echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
@@ -53,7 +53,7 @@ runs:
       shell: bash
 
     - name: Install dependencies
-      run: yarn install
+      run: pnpm install
       shell: bash
 
     - name: Install Metro dependencies
@@ -69,7 +69,7 @@ runs:
 
     - name: E2E Prepare Script
       run: |
-        yarn workspace ${{ inputs.app_name }} e2e:prepare:android &
+        pnpm --filter ${{ inputs.app_name }} e2e:prepare:android &
       shell: bash
 
     - name: Run Android E2E Tests
@@ -84,9 +84,9 @@ runs:
         disable-animations: true
         emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
         script: |
-          yarn workspace ${{ inputs.app_name }} android:release
-          yarn workspace ${{ inputs.app_name }} adbreverse
-          yarn workspace ${{ inputs.app_name }} e2e:run
+          pnpm --filter ${{ inputs.app_name }} android:release
+          pnpm --filter ${{ inputs.app_name }} adbreverse
+          pnpm --filter ${{ inputs.app_name }} e2e:run
 
     - name: Upload Maestro Logs on Failure
       if: failure() # Runs only if any of the previous steps fail

@@ -2,7 +2,7 @@ name: iOS E2E Tests
 
 inputs:
   app_name:
-    description: 'Name of the app to test'
+    description: "Name of the app to test"
     required: true
 
 runs:
@@ -29,7 +29,7 @@ runs:
       shell: bash
 
     - name: Install dependencies
-      run: yarn install
+      run: pnpm install
       shell: bash
 
     - name: Install Metro dependencies
@@ -46,7 +46,7 @@ runs:
           ${{ runner.os }}-pods-
 
     - name: Install Pods
-      run: yarn pods
+      run: pnpm pods
       working-directory: apps/${{ inputs.app_name }}
       shell: bash
 
@@ -60,9 +60,9 @@ runs:
 
     - name: Run iOS E2E Tests
       run: |
-        yarn workspace ${{ inputs.app_name }} e2e:prepare:ios &
-        yarn workspace ${{ inputs.app_name }} ios:release
-        yarn workspace ${{ inputs.app_name }} e2e:run
+        pnpm --filter ${{ inputs.app_name }} e2e:prepare:ios &
+        pnpm --filter ${{ inputs.app_name }} ios:release
+        pnpm --filter ${{ inputs.app_name }} e2e:run
       shell: bash
 
     - name: Upload Maestro Logs on Failure
@@ -71,4 +71,3 @@ runs:
       with:
         name: maestro-logs-ios-${{ inputs.app_name }}
         path: ~/.maestro/tests/
-

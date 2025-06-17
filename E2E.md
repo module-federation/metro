@@ -20,17 +20,17 @@ This project uses [**Maestro**](https://maestro.mobile.dev/) for automated end-t
 Before running E2E tests, ensure the Metro bundler for the host app is running as well as all the dependent mini apps.
 
 ```bash
-yarn workspace <app-name> <platform>
-yarn workspace <app-name> start
-yarn workspace <mini-app-name> start
+pnpm --filter <app-name> <platform>
+pnpm --filter <app-name> start
+pnpm --filter <mini-app-name> start
 ```
 
 or alternatively you can run:
 
 ```bash
-yarn workspace <app-name> <platform>
-yarn workspace <app-name> start
-yarn workspace <app-name> e2e:prepare:<platform>
+pnpm --filter <app-name> <platform>
+pnpm --filter <app-name> start
+pnpm --filter <app-name> e2e:prepare:<platform>
 ```
 
 ## 🧪 Running E2E Tests
@@ -38,7 +38,7 @@ yarn workspace <app-name> e2e:prepare:<platform>
 You can run E2E test by executing the following command:
 
 ```bash
-yarn workspace <app-name> e2e:run
+pnpm --filter <app-name> e2e:run
 ```
 
 ## 🛠 CI Integration
