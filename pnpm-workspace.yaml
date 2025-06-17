@@ -26,6 +26,9 @@ overrides:
   metro-transform-worker: link:./external/metro/packages/metro-transform-worker
   ob1: link:./external/metro/packages/ob1
 
+publicHoistPattern:
+- "@babel/runtime"
+
 patchedDependencies:
   '@react-native/community-cli-plugin': patches/@react-native__community-cli-plugin.patch
   react-native: patches/react-native.patch

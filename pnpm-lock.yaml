@@ -519,6 +519,9 @@ importers:
       '@types/react':
         specifier: ^19.0.0
         version: 19.1.8
+      react:
+        specifier: 19.0.0
+        version: 19.0.0
       react-native:
         specifier: 0.79.0
         version: 0.79.0(patch_hash=25ca577106daa307f4f2c747fc9cba0d48347d7042fd354f0c4e20342f8c2b6c)(@babel/core@7.27.4)(@types/react@19.1.8)(react@19.0.0)
