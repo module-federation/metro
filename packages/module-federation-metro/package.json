@@ -21,12 +21,8 @@
     },
     "./babel/*": "./babel/*.js",
     "./bootstrap": {
-      "dev": "./src/modules/asyncStartup.ts",
-      "default": "./dist/modules/asyncStartup.ts"
-    },
-    "./runtime-plugin": {
-      "dev": "./src/modules/metroCorePlugin.ts",
-      "default": "./dist/modules/metroCorePlugin.ts"
+      "dev": "./src/modules/asyncStartup.tsx",
+      "default": "./dist/modules/asyncStartup.tsx"
     }
   },
   "files": ["dist", "babel", "bootstrap"],
