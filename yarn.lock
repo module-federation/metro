@@ -2729,7 +2729,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rnef/platform-apple-helpers@npm:^0.7.20":
+"@rnef/platform-apple-helpers@npm:0.7.20":
   version: 0.7.20
   resolution: "@rnef/platform-apple-helpers@npm:0.7.20"
   dependencies:
@@ -2742,6 +2742,22 @@ __metadata:
     fast-xml-parser: "npm:^4.5.0"
     tslib: "npm:^2.3.0"
   checksum: 10c0/bde0573f8e4934858eb075afb0e939ae2b66170cf75ff0a5f63db54fd514c91177a114a05069bc526b40a4515c1e04b4ef5c53578acf8a6dcf8f0094c74c6807
+  languageName: node
+  linkType: hard
+
+"@rnef/platform-apple-helpers@patch:@rnef/platform-apple-helpers@npm%3A0.7.20#~/.yarn/patches/@rnef-platform-apple-helpers-npm-0.7.20-4932d15c7b.patch":
+  version: 0.7.20
+  resolution: "@rnef/platform-apple-helpers@patch:@rnef/platform-apple-helpers@npm%3A0.7.20#~/.yarn/patches/@rnef-platform-apple-helpers-npm-0.7.20-4932d15c7b.patch::version=0.7.20&hash=8d13de"
+  dependencies:
+    "@react-native-community/cli-config": "npm:^18.0.0"
+    "@react-native-community/cli-config-apple": "npm:^18.0.0"
+    "@rnef/tools": "npm:^0.7.20"
+    "@types/adm-zip": "npm:^0.5.7"
+    adm-zip: "npm:^0.5.16"
+    fast-glob: "npm:^3.3.2"
+    fast-xml-parser: "npm:^4.5.0"
+    tslib: "npm:^2.3.0"
+  checksum: 10c0/8863e4c07793b48c7f4a0871cd41f0b3b3fb1d1c13ae5060083f0e411f0d275d9581152791f0972eb236be501c8647123a0cd39ef9575e8e5a5f66ccf99ef8d9
   languageName: node
   linkType: hard
 

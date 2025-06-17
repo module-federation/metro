@@ -35,7 +35,14 @@ export const pluginMetroModuleFederation =
         logger.info('Bundle artifacts available at ...');
         outro('Success 🎉.');
       },
-      options: commands.bundleFederatedHostOptions,
+      options: [
+        ...commands.bundleFederatedHostOptions,
+        {
+          name: "--config-cmd [string]",
+          description:
+            "[Internal] A hack for Xcode build script pointing to wrong bundle command that recognizes this flag. Do not use.",
+        },
+      ],
     });
 
     // Register the bundle-mf-remote command
