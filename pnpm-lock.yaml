@@ -31,6 +31,9 @@ patchedDependencies:
   '@react-native/community-cli-plugin':
     hash: 445cc837d2f72ab42efc5a3f98e1906b366b2f99b0930b1fa11c9569c4bddd62
     path: patches/@react-native__community-cli-plugin.patch
+  '@rnef/platform-apple-helpers':
+    hash: 65b9faffab5e5a70cf8e2ac38e0148c4d16e6a29565c6b18eb0ed62bf85eef92
+    path: patches/@rnef__platform-apple-helpers.patch
   '@rnef/plugin-metro':
     hash: 9eaf43b02d5f0d8d8433452a7e745e18784a15565529a2e3565d1787b14c2366
     path: patches/@rnef__plugin-metro.patch
@@ -5860,7 +5863,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@rnef/platform-apple-helpers@0.7.24(typescript@5.0.4)':
+  '@rnef/platform-apple-helpers@0.7.24(patch_hash=65b9faffab5e5a70cf8e2ac38e0148c4d16e6a29565c6b18eb0ed62bf85eef92)(typescript@5.0.4)':
     dependencies:
       '@react-native-community/cli-config': 18.0.0(typescript@5.0.4)
       '@react-native-community/cli-config-apple': 18.0.0
@@ -5878,7 +5881,7 @@ snapshots:
     dependencies:
       '@react-native-community/cli-config-apple': 18.0.0
       '@react-native-community/cli-types': 18.0.0
-      '@rnef/platform-apple-helpers': 0.7.24(typescript@5.0.4)
+      '@rnef/platform-apple-helpers': 0.7.24(patch_hash=65b9faffab5e5a70cf8e2ac38e0148c4d16e6a29565c6b18eb0ed62bf85eef92)(typescript@5.0.4)
       '@rnef/tools': 0.7.24
       tslib: 2.8.1
     transitivePeerDependencies:
