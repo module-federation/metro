@@ -3,6 +3,7 @@
   "packageManager": "pnpm@10.12.1",
   "private": true,
   "scripts": {
+    "prepare": "pnpm build",
     "build": "turbo build",
     "dev": "turbo dev --filter=showcase-host --filter=showcase-mini --ui=tui",
     "dev:example": "turbo dev --filter=example-host --filter=example-mini --filter=example-nested-mini --ui=tui",
