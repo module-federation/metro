@@ -2,6 +2,10 @@ packages:
   - packages/*
   - apps/*
 
+onlyBuiltDependencies:
+  - '@biomejs/biome'
+  - core-js
+
 overrides:
   buck-worker-tool: link:./external/metro/packages/buck-worker-tool
   metro: link:./external/metro/packages/metro
