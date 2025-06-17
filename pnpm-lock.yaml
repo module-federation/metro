@@ -497,6 +497,15 @@ importers:
       metro:
         specifier: link:../../external/metro/packages/metro
         version: link:../../external/metro/packages/metro
+      metro-config:
+        specifier: link:../../external/metro/packages/metro-config
+        version: link:../../external/metro/packages/metro-config
+      metro-resolver:
+        specifier: link:../../external/metro/packages/metro-resolver
+        version: link:../../external/metro/packages/metro-resolver
+      metro-source-map:
+        specifier: link:../../external/metro/packages/metro-source-map
+        version: link:../../external/metro/packages/metro-source-map
     devDependencies:
       '@rslib/core':
         specifier: ^0.10.0
@@ -507,15 +516,6 @@ importers:
       '@types/react':
         specifier: ^19.0.0
         version: 19.1.8
-      metro-config:
-        specifier: link:../../external/metro/packages/metro-config
-        version: link:../../external/metro/packages/metro-config
-      metro-resolver:
-        specifier: link:../../external/metro/packages/metro-resolver
-        version: link:../../external/metro/packages/metro-resolver
-      metro-source-map:
-        specifier: link:../../external/metro/packages/metro-source-map
-        version: link:../../external/metro/packages/metro-source-map
       react-native:
         specifier: 0.79.0
         version: 0.79.0(patch_hash=25ca577106daa307f4f2c747fc9cba0d48347d7042fd354f0c4e20342f8c2b6c)(@babel/core@7.27.4)(@types/react@19.1.8)(react@19.0.0)
