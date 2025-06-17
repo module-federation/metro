@@ -6,6 +6,14 @@ onlyBuiltDependencies:
   - '@biomejs/biome'
   - core-js
 
+autoInstallPeers: false
+updateNotifier: false
+
+publicHoistPattern:
+  - "@babel/runtime"
+  - "@react-native/gradle-plugin"
+  - "@react-native/codegen"
+
 overrides:
   buck-worker-tool: link:./external/metro/packages/buck-worker-tool
   metro: link:./external/metro/packages/metro
@@ -26,10 +34,7 @@ overrides:
   metro-transform-worker: link:./external/metro/packages/metro-transform-worker
   ob1: link:./external/metro/packages/ob1
 
-publicHoistPattern:
-- "@babel/runtime"
-- "@react-native/gradle-plugin"
-- "@react-native/codegen"
+
 
 patchedDependencies:
   '@react-native/community-cli-plugin': patches/@react-native__community-cli-plugin.patch

@@ -45,6 +45,7 @@
     "react-native": ">=0.79.0"
   },
   "devDependencies": {
+    "@babel/types": "^7.25.0",
     "@rslib/core": "^0.10.0",
     "@types/react": "^19.0.0",
     "@types/node": "^20.0.0",
