@@ -1,24 +1,23 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import type { ConfigT } from 'metro-config';
-import generateManifest from '../generate-manifest';
 import type {
   ModuleFederationConfig,
   ModuleFederationConfigNormalized,
 } from '../types';
-import { ConfigError } from '../utils/errors';
-import { VirtualModuleManager } from '../utils/vm-manager';
-import { MANIFEST_FILENAME } from './constants';
+import { VirtualModuleManager } from '../utils';
 import {
   isUsingMFCommand,
   mfDisabledWarning,
   replaceExtension,
 } from './helpers';
+import { createManifest } from './manifest';
 import { normalizeOptions } from './normalize';
 import createResolveRequest from './resolver';
 import { createRewriteRequest } from './rewrite-request.js';
 import { createBabelTransformer } from './runtime-modules';
 import { getModuleFederationSerializer } from './serializer';
+import { validateOptions } from './validate';
 
 declare global {
   var __METRO_FEDERATION_CONFIG: ModuleFederationConfigNormalized;
@@ -33,29 +32,9 @@ function createMFRuntimeNodeModules(projectNodeModulesPath: string) {
   return mfMetroPath;
 }
 
-function createManifest(
-  options: ModuleFederationConfigNormalized,
-  mfMetroPath: string
-) {
-  const manifestPath = path.join(mfMetroPath, MANIFEST_FILENAME);
-  const manifest = generateManifest(options);
-  fs.writeFileSync(manifestPath, JSON.stringify(manifest, undefined, 2));
-  return manifestPath;
-}
-
 function stubRemoteEntry(remoteEntryPath: string) {
   const remoteEntryModule = '// remote entry stub';
   fs.writeFileSync(remoteEntryPath, remoteEntryModule, 'utf-8');
-}
-
-function validateOptions(options: ModuleFederationConfigNormalized) {
-  // validate filename
-  if (!options.filename.endsWith('.bundle')) {
-    throw new ConfigError(
-      `Invalid filename: ${options.filename}. ` +
-        'Filename must end with .bundle extension.'
-    );
-  }
 }
 
 function withModuleFederation(

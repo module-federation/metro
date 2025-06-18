@@ -1,7 +1,7 @@
 import path from 'node:path';
 import type { CustomResolver, Resolution } from 'metro-resolver';
 import type { ModuleFederationConfigNormalized } from '../types';
-import type { VirtualModuleManager } from '../utils/vm-manager';
+import type { VirtualModuleManager } from '../utils';
 import {
   ASYNC_REQUIRE,
   INIT_HOST,

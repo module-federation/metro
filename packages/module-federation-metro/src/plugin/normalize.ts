@@ -5,7 +5,7 @@ import type {
   ModuleFederationConfigNormalized,
   Shared,
 } from '../types';
-import { DEFAULT_ENTRY_FILENAME } from './constants.js';
+import { DEFAULT_ENTRY_FILENAME } from './constants';
 
 export function normalizeOptions(
   options: ModuleFederationConfig,

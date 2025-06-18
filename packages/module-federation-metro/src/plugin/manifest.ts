@@ -1,9 +1,20 @@
+import fs from 'node:fs';
+import path from 'node:path';
 import type { Manifest, StatsAssets } from '@module-federation/sdk';
-import type { ModuleFederationConfigNormalized } from './types';
+import type { ModuleFederationConfigNormalized } from '../types';
+import { MANIFEST_FILENAME } from './constants';
 
-export default function generateManifest(
-  config: ModuleFederationConfigNormalized
-): Manifest {
+export function createManifest(
+  options: ModuleFederationConfigNormalized,
+  mfMetroPath: string
+) {
+  const manifestPath = path.join(mfMetroPath, MANIFEST_FILENAME);
+  const manifest = generateManifest(options);
+  fs.writeFileSync(manifestPath, JSON.stringify(manifest, undefined, 2));
+  return manifestPath;
+}
+
+function generateManifest(config: ModuleFederationConfigNormalized): Manifest {
   return {
     id: config.name,
     name: config.name,
