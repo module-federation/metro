@@ -3,6 +3,13 @@ import bundleFederatedRemote, {
   bundleFederatedRemoteOptions,
 } from './bundle-remote';
 
+export {
+  bundleFederatedHost,
+  bundleFederatedHostOptions,
+  bundleFederatedRemote,
+  bundleFederatedRemoteOptions,
+};
+
 export default {
   bundleFederatedHost,
   bundleFederatedHostOptions,
