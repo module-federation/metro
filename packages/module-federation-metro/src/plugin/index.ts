@@ -7,8 +7,8 @@ import type {
 } from '../types';
 import { VirtualModuleManager } from '../utils';
 import {
-  createMFRuntimeNodeModules,
   isUsingMFCommand,
+  prepareTmpDir,
   replaceExtension,
   stubRemoteEntry,
 } from './helpers';
@@ -57,42 +57,33 @@ function augmentConfig(
   const isHost = !federationOptions.exposes;
   const isRemote = !isHost;
 
-  const options = normalizeOptions(federationOptions, config);
+  const tmpDirPath = prepareTmpDir(config.projectRoot);
+  const options = normalizeOptions(federationOptions, {
+    projectRoot: config.projectRoot,
+    tmpDirPath,
+  });
 
   validateOptions(options);
 
   const vmManager = new VirtualModuleManager(config);
 
-  const projectNodeModulesPath = path.resolve(
-    config.projectRoot,
-    'node_modules'
-  );
-
-  const mfMetroPath = createMFRuntimeNodeModules(projectNodeModulesPath);
-
-  // auto-inject 'metro-core-plugin' MF runtime plugin
-  options.plugins = [
-    require.resolve('./modules/metroCorePlugin.ts'),
-    ...options.plugins,
-  ].map((plugin) => path.relative(mfMetroPath, plugin));
-
-  const initHostPath = path.resolve(mfMetroPath, 'init-host.js');
-  const registryPath = path.resolve(mfMetroPath, 'remote-module-registry.js');
+  const initHostPath = path.resolve(tmpDirPath, 'init-host.js');
+  const registryPath = path.resolve(tmpDirPath, 'remote-module-registry.js');
 
   const remoteEntryFilename = replaceExtension(options.filename, '.js');
-  const remoteEntryPath = path.resolve(mfMetroPath, remoteEntryFilename);
-  const remoteHMRSetupPath = path.resolve(mfMetroPath, 'remote-hmr.js');
+  const remoteEntryPath = path.resolve(tmpDirPath, remoteEntryFilename);
+  const remoteHMRSetupPath = path.resolve(tmpDirPath, 'remote-hmr.js');
 
-  const asyncRequirePath = path.resolve(__dirname, './modules/asyncRequire.ts');
+  const asyncRequirePath = require.resolve('../modules/asyncRequire.ts');
 
   const babelTransformerPath = createBabelTransformer({
     proxiedBabelTrasnsformerPath: config.transformer.babelTransformerPath,
-    mfMetroPath,
     mfConfig: options,
+    mfMetroPath: tmpDirPath,
     blacklistedPaths: [initHostPath, remoteEntryPath],
   });
 
-  const manifestPath = createManifest(options, mfMetroPath);
+  const manifestPath = createManifest(options, tmpDirPath);
 
   // remote entry is an entrypoint so it needs to be in the filesystem
   // we create a stub on the filesystem and then redirect to a virtual module
@@ -136,7 +127,7 @@ function augmentConfig(
           registry: registryPath,
           remoteHMRSetup: remoteHMRSetupPath,
           remoteEntry: remoteEntryPath,
-          mfMetro: mfMetroPath,
+          mfMetro: tmpDirPath,
         },
       }),
     },

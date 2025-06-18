@@ -1,6 +1,5 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import type { ConfigT } from 'metro-config';
 import type {
   ModuleFederationConfig,
   ModuleFederationConfigNormalized,
@@ -8,31 +7,35 @@ import type {
 } from '../types';
 import { DEFAULT_ENTRY_FILENAME } from './constants';
 
+interface ProjectConfig {
+  projectRoot: string;
+  tmpDirPath: string;
+}
+
 export function normalizeOptions(
   options: ModuleFederationConfig,
-  config: ConfigT
+  { projectRoot, tmpDirPath }: ProjectConfig
 ): ModuleFederationConfigNormalized {
-  const filename = options.filename ?? DEFAULT_ENTRY_FILENAME;
-
-  const shared = getNormalizedShared(options, config);
+  const shared = getNormalizedShared(options, projectRoot);
   const shareStrategy = getNormalizedShareStrategy(options);
+  const plugins = getNormalizedPlugins(options, tmpDirPath);
 
   return {
     name: options.name,
-    filename,
+    filename: options.filename ?? DEFAULT_ENTRY_FILENAME,
     remotes: options.remotes ?? {},
     exposes: options.exposes ?? {},
     shared,
     shareStrategy,
-    plugins: options.plugins ?? [],
+    plugins,
   };
 }
 
 function getNormalizedShared(
   options: ModuleFederationConfig,
-  config: ConfigT
+  projectRoot: string
 ): Shared {
-  const pkg = getProjectPackageJson(config.projectRoot);
+  const pkg = getProjectPackageJson(projectRoot);
   const shared = options.shared ?? {};
 
   // force all shared modules in host to be eager
@@ -59,6 +62,17 @@ function getNormalizedShareStrategy(options: ModuleFederationConfig) {
   // it makes more sense to have loaded-first as default on mobile
   // in order to avoid longer TTI upon app startup
   return options.shareStrategy ?? 'loaded-first';
+}
+
+function getNormalizedPlugins(
+  options: ModuleFederationConfig,
+  tmpDirPath: string
+) {
+  const plugins = options.plugins ?? [];
+  // auto-inject 'metro-core-plugin' runtime plugin
+  plugins.unshift(require.resolve('../modules/metroCorePlugin.ts'));
+  // make paths relative to the tmp dir
+  return plugins.map((pluginPath) => path.relative(tmpDirPath, pluginPath));
 }
 
 function getProjectPackageJson(projectRoot: string): {

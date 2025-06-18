@@ -1,5 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
+import { TMP_DIR_NAME } from './constants';
 
 export function isUsingMFCommand(command = process.argv[2]) {
   const allowedCommands = ['start', 'bundle-mf-host', 'bundle-mf-remote'];
@@ -22,9 +23,10 @@ export function stubRemoteEntry(remoteEntryPath: string) {
   fs.writeFileSync(remoteEntryPath, stub, 'utf-8');
 }
 
-export function createMFRuntimeNodeModules(projectNodeModulesPath: string) {
-  const mfMetroPath = path.join(projectNodeModulesPath, '.mf-metro');
-  fs.rmSync(mfMetroPath, { recursive: true, force: true });
-  fs.mkdirSync(mfMetroPath, { recursive: true });
-  return mfMetroPath;
+export function prepareTmpDir(projectRootPath: string) {
+  const nodeModulesPath = path.resolve(projectRootPath, 'node_modules');
+  const tmpDirPath = path.join(nodeModulesPath, TMP_DIR_NAME);
+  fs.rmSync(tmpDirPath, { recursive: true, force: true });
+  fs.mkdirSync(tmpDirPath, { recursive: true });
+  return tmpDirPath;
 }
