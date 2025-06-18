@@ -6,21 +6,66 @@ function resolveRuntimeModule(moduleName: string): string {
   return require.resolve(`../runtime/${moduleName}`);
 }
 
+function getModuleTemplate(moduleName: string) {
+  const templatePath = resolveRuntimeModule(moduleName);
+  return fs.readFileSync(templatePath, 'utf-8');
+}
+
+export function getRemoteModule(name: string) {
+  const template = getModuleTemplate('remote-module.js');
+  return template.replaceAll('__MODULE_ID__', `"${name}"`);
+}
+
 export function getInitHostModule(options: ModuleFederationConfigNormalized) {
-  const initHostPath = resolveRuntimeModule('init-host.js');
-  let initHostModule = fs.readFileSync(initHostPath, 'utf-8');
-
-  const sharedString = getSharedString(options);
-
-  // Replace placeholders with actual values
-  initHostModule = initHostModule
+  const template = getModuleTemplate('init-host.js');
+  return template
     .replaceAll('__NAME__', JSON.stringify(options.name))
     .replaceAll('__REMOTES__', generateRemotes(options.remotes))
-    .replaceAll('__SHARED__', sharedString)
-    .replaceAll('__PLUGINS__', generateRuntimePlugins(options.plugins))
-    .replaceAll('__SHARE_STRATEGY__', JSON.stringify(options.shareStrategy));
+    .replaceAll('__SHARED__', generateShared(options))
+    .replaceAll('__SHARE_STRATEGY__', JSON.stringify(options.shareStrategy))
+    .replaceAll('__PLUGINS__', generateRuntimePlugins(options.plugins));
+}
 
-  return initHostModule;
+export function getRemoteEntryModule(
+  options: ModuleFederationConfigNormalized
+) {
+  const template = getModuleTemplate('remote-entry.js');
+  return template
+    .replaceAll('__NAME__', JSON.stringify(options.name))
+    .replaceAll('__EXPOSES_MAP__', generateExposes(options.exposes))
+    .replaceAll('__REMOTES__', generateRemotes(options.remotes))
+    .replaceAll('__SHARED__', generateShared(options))
+    .replaceAll('__SHARE_STRATEGY__', JSON.stringify(options.shareStrategy))
+    .replaceAll('__PLUGINS__', generateRuntimePlugins(options.plugins));
+}
+
+export function getRemoteModuleRegistryModule() {
+  const template = getModuleTemplate('remote-module-registry.js');
+  return template.replaceAll(
+    '__EARLY_MODULE_TEST__',
+    '/^react(-native(\\/|$)|$)/'
+  );
+}
+
+export function getRemoteHMRSetupModule() {
+  const template = getModuleTemplate('remote-hmr.js');
+  return template;
+}
+
+function generateExposes(exposes: Record<string, string>) {
+  const exposesString = Object.keys(exposes)
+    .map((key) => {
+      const importName = path.relative('.', exposes[key]);
+      // TODO: relative path to .mf-metro dir
+      const importPath = `../../${importName}`;
+      return `"${key}": async () => {
+          const module = await import("${importPath}");
+          return module;
+        }`;
+    })
+    .join(',');
+
+  return `{${exposesString}}`;
 }
 
 function generateRuntimePlugins(runtimePlugins: string[]) {
@@ -60,7 +105,7 @@ function generateRemotes(remotes: Record<string, string> = {}) {
   return `[${remotesEntries.join(',\n')}]`;
 }
 
-function getSharedString(options: ModuleFederationConfigNormalized) {
+function generateShared(options: ModuleFederationConfigNormalized) {
   const shared = Object.keys(options.shared).reduce(
     (acc, name) => {
       acc[name] = `__SHARED_${name}__`;
@@ -72,14 +117,14 @@ function getSharedString(options: ModuleFederationConfigNormalized) {
   let sharedString = JSON.stringify(shared);
   for (const name of Object.keys(options.shared)) {
     const sharedConfig = options.shared[name];
-    const entry = createSharedModuleEntry(name, sharedConfig);
+    const entry = getSharedModuleEntry(name, sharedConfig);
     sharedString = sharedString.replaceAll(`"__SHARED_${name}__"`, entry);
   }
 
   return sharedString;
 }
 
-function createSharedModuleEntry(name: string, options: SharedConfig) {
+function getSharedModuleEntry(name: string, options: SharedConfig) {
   const template = {
     version: options.version,
     scope: 'default',
@@ -101,67 +146,6 @@ function createSharedModuleEntry(name: string, options: SharedConfig) {
       '"__GET_ASYNC_PLACEHOLDER__"',
       `async () => import("${name}").then((m) => () => m)`
     );
-}
-
-export function getRemoteModuleRegistryModule() {
-  const registryPath = resolveRuntimeModule('remote-module-registry.js');
-  let registryModule = fs.readFileSync(registryPath, 'utf-8');
-
-  registryModule = registryModule.replaceAll(
-    '__EARLY_MODULE_TEST__',
-    '/^react(-native(\\/|$)|$)/'
-  );
-
-  return registryModule;
-}
-
-export function getRemoteHMRSetupModule() {
-  const remoteHMRSetupTemplatePath = resolveRuntimeModule('remote-hmr.js');
-  const remoteHMRSetupModule = fs.readFileSync(
-    remoteHMRSetupTemplatePath,
-    'utf-8'
-  );
-
-  return remoteHMRSetupModule;
-}
-
-export function getRemoteEntryModule(
-  options: ModuleFederationConfigNormalized
-) {
-  const remoteEntryTemplatePath = resolveRuntimeModule('remote-entry.js');
-  const remoteEntryModule = fs.readFileSync(remoteEntryTemplatePath, 'utf-8');
-
-  const sharedString = getSharedString(options);
-
-  const exposes = options.exposes || {};
-
-  const exposesString = Object.keys(exposes)
-    .map((key) => {
-      const importName = path.relative('.', exposes[key]);
-      const importPath = `../../${importName}`;
-
-      return `"${key}": async () => {
-          const module = await import("${importPath}");
-          return module;
-        }`;
-    })
-    .join(',');
-
-  return remoteEntryModule
-    .replaceAll('__PLUGINS__', generateRuntimePlugins(options.plugins))
-    .replaceAll('__SHARED__', sharedString)
-    .replaceAll('__REMOTES__', generateRemotes(options.remotes))
-    .replaceAll('__EXPOSES_MAP__', `{${exposesString}}`)
-    .replaceAll('__NAME__', `"${options.name}"`)
-    .replaceAll('__SHARE_STRATEGY__', JSON.stringify(options.shareStrategy));
-}
-
-export function getRemoteModule(name: string) {
-  const remoteTemplatePath = resolveRuntimeModule('remote-module.js');
-
-  return fs
-    .readFileSync(remoteTemplatePath, 'utf-8')
-    .replaceAll('__MODULE_ID__', `"${name}"`);
 }
 
 export function createBabelTransformer({
