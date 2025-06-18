@@ -2,15 +2,6 @@ import fs from 'node:fs';
 import path from 'node:path';
 import type { ModuleFederationConfigNormalized, SharedConfig } from '../types';
 
-function resolveRuntimeModule(moduleName: string): string {
-  return require.resolve(`../runtime/${moduleName}`);
-}
-
-function getModuleTemplate(moduleName: string) {
-  const templatePath = resolveRuntimeModule(moduleName);
-  return fs.readFileSync(templatePath, 'utf-8');
-}
-
 export function getRemoteModule(name: string) {
   const template = getModuleTemplate('remote-module.js');
   return template.replaceAll('__MODULE_ID__', `"${name}"`);
@@ -50,6 +41,35 @@ export function getRemoteModuleRegistryModule() {
 export function getRemoteHMRSetupModule() {
   const template = getModuleTemplate('remote-hmr.js');
   return template;
+}
+
+export function createBabelTransformer({
+  proxiedBabelTrasnsformerPath,
+  mfConfig,
+  mfMetroPath,
+  blacklistedPaths,
+}: {
+  proxiedBabelTrasnsformerPath: string;
+  mfConfig: ModuleFederationConfigNormalized;
+  mfMetroPath: string;
+  blacklistedPaths: string[];
+}) {
+  const babelTransformerPath = path.join(mfMetroPath, 'babel-transformer.js');
+
+  const babelTransformerTemplate = fs.readFileSync(
+    resolveRuntimeModule('babel-transformer.js'),
+    'utf-8'
+  );
+
+  const babelTransformer = babelTransformerTemplate
+    .replaceAll('__BABEL_TRANSFORMER_PATH__', proxiedBabelTrasnsformerPath)
+    .replaceAll('__REMOTES__', JSON.stringify(mfConfig.remotes))
+    .replaceAll('__SHARED__', JSON.stringify(mfConfig.shared))
+    .replaceAll('__BLACKLISTED_PATHS__', JSON.stringify(blacklistedPaths));
+
+  fs.writeFileSync(babelTransformerPath, babelTransformer, 'utf-8');
+
+  return babelTransformerPath;
 }
 
 function generateExposes(exposes: Record<string, string>) {
@@ -148,31 +168,11 @@ function getSharedModuleEntry(name: string, options: SharedConfig) {
     );
 }
 
-export function createBabelTransformer({
-  proxiedBabelTrasnsformerPath,
-  mfConfig,
-  mfMetroPath,
-  blacklistedPaths,
-}: {
-  proxiedBabelTrasnsformerPath: string;
-  mfConfig: ModuleFederationConfigNormalized;
-  mfMetroPath: string;
-  blacklistedPaths: string[];
-}) {
-  const babelTransformerPath = path.join(mfMetroPath, 'babel-transformer.js');
+function resolveRuntimeModule(moduleName: string): string {
+  return require.resolve(`../runtime/${moduleName}`);
+}
 
-  const babelTransformerTemplate = fs.readFileSync(
-    resolveRuntimeModule('babel-transformer.js'),
-    'utf-8'
-  );
-
-  const babelTransformer = babelTransformerTemplate
-    .replaceAll('__BABEL_TRANSFORMER_PATH__', proxiedBabelTrasnsformerPath)
-    .replaceAll('__REMOTES__', JSON.stringify(mfConfig.remotes))
-    .replaceAll('__SHARED__', JSON.stringify(mfConfig.shared))
-    .replaceAll('__BLACKLISTED_PATHS__', JSON.stringify(blacklistedPaths));
-
-  fs.writeFileSync(babelTransformerPath, babelTransformer, 'utf-8');
-
-  return babelTransformerPath;
+function getModuleTemplate(moduleName: string) {
+  const templatePath = resolveRuntimeModule(moduleName);
+  return fs.readFileSync(templatePath, 'utf-8');
 }
