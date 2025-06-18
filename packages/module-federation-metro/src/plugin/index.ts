@@ -13,7 +13,7 @@ import {
 } from './helpers';
 import { createManifest } from './manifest';
 import { normalizeOptions } from './normalize';
-import createResolveRequest from './resolver';
+import { createResolveRequest } from './resolver';
 import { createRewriteRequest } from './rewrite-request.js';
 import { createBabelTransformer } from './runtime-modules';
 import { getModuleFederationSerializer } from './serializer';

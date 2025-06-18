@@ -17,23 +17,21 @@ import {
   getRemoteModuleRegistryModule,
 } from './runtime-modules';
 
-type CreateResolveRequestOptions = {
-  vmManager: VirtualModuleManager;
-  options: ModuleFederationConfigNormalized;
+interface CreateResolveRequestOptions {
   isRemote: boolean;
-  paths: ResolvePaths;
-};
+  paths: {
+    initHost: string;
+    asyncRequire: string;
+    registry: string;
+    remoteHMRSetup: string;
+    remoteEntry: string;
+    mfMetro: string;
+  };
+  options: ModuleFederationConfigNormalized;
+  vmManager: VirtualModuleManager;
+}
 
-type ResolvePaths = {
-  initHost: string;
-  asyncRequire: string;
-  registry: string;
-  remoteHMRSetup: string;
-  remoteEntry: string;
-  mfMetro: string;
-};
-
-export default function createResolveRequest({
+export function createResolveRequest({
   vmManager,
   options,
   paths,
@@ -127,7 +125,7 @@ export default function createResolveRequest({
     if (isRemote && moduleName.endsWith('getDevServer')) {
       const res = context.resolveRequest(context, moduleName, platform);
       const from = /react-native\/Libraries\/Core\/Devtools\/getDevServer\.js$/;
-      const to = path.resolve(__dirname, './modules/getDevServer.ts');
+      const to = resolveModule('getDevServer.ts');
       return replaceModule(from, to)(res);
     }
 
@@ -135,7 +133,7 @@ export default function createResolveRequest({
     if (isUsingMFBundleCommand() && moduleName.endsWith('HMRClient')) {
       const res = context.resolveRequest(context, moduleName, platform);
       const from = /react-native\/Libraries\/Utilities\/HMRClient\.js$/;
-      const to = path.resolve(__dirname, './modules/HMRClientShim.ts');
+      const to = resolveModule('HMRClientShim.ts');
       return replaceModule(from, to)(res);
     }
 
@@ -144,19 +142,19 @@ export default function createResolveRequest({
 }
 
 function getSharedPath(name: string, dir: string) {
-  const sharedName = name.replaceAll('/', '_');
-  const sharedDir = path.join(dir, 'shared');
-  return path.join(sharedDir, `${sharedName}.js`);
+  const sharedModuleName = name.replaceAll('/', '_');
+  const sharedModuleDir = path.join(dir, 'shared');
+  return path.join(sharedModuleDir, `${sharedModuleName}.js`);
 }
 
-function getRemoteModulePath(name: string, outputDir: string) {
+function getRemoteModulePath(name: string, dir: string) {
   const remoteModuleName = name.replaceAll('/', '_');
-  const remoteModulePath = path.join(
-    outputDir,
-    'remote',
-    `${remoteModuleName}.js`
-  );
-  return remoteModulePath;
+  const remoteModuleDir = path.join(dir, 'remote');
+  return path.join(remoteModuleDir, `${remoteModuleName}.js`);
+}
+
+function resolveModule(moduleName: string): string {
+  return path.resolve(__dirname, `../modules/${moduleName}`);
 }
 
 function replaceModule(from: RegExp, to: string) {
