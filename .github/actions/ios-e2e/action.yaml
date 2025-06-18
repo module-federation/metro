@@ -87,7 +87,7 @@ runs:
     - name: Run iOS E2E Tests
       run: |
         pnpm --filter ${{ inputs.app_name }} ios:release
-        pnpm --filter ${{ inputs.app_name }} e2e:run
+        pnpm --filter ${{ inputs.app_name }} e2e:run:ios
       shell: bash
 
     - name: Upload Maestro Logs on Failure
