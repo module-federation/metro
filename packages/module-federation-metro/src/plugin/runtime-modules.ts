@@ -2,8 +2,12 @@ import fs from 'node:fs';
 import path from 'node:path';
 import type { ModuleFederationConfigNormalized, SharedConfig } from '../types';
 
+function resolveRuntimeModule(moduleName: string): string {
+  return require.resolve(`../runtime/${moduleName}`);
+}
+
 export function getInitHostModule(options: ModuleFederationConfigNormalized) {
-  const initHostPath = require.resolve('./runtime/init-host.js');
+  const initHostPath = resolveRuntimeModule('init-host.js');
   let initHostModule = fs.readFileSync(initHostPath, 'utf-8');
 
   const sharedString = getSharedString(options);
@@ -100,7 +104,7 @@ function createSharedModuleEntry(name: string, options: SharedConfig) {
 }
 
 export function getRemoteModuleRegistryModule() {
-  const registryPath = require.resolve('./runtime/remote-module-registry.js');
+  const registryPath = resolveRuntimeModule('remote-module-registry.js');
   let registryModule = fs.readFileSync(registryPath, 'utf-8');
 
   registryModule = registryModule.replaceAll(
@@ -112,7 +116,7 @@ export function getRemoteModuleRegistryModule() {
 }
 
 export function getRemoteHMRSetupModule() {
-  const remoteHMRSetupTemplatePath = require.resolve('./runtime/remote-hmr.js');
+  const remoteHMRSetupTemplatePath = resolveRuntimeModule('remote-hmr.js');
   const remoteHMRSetupModule = fs.readFileSync(
     remoteHMRSetupTemplatePath,
     'utf-8'
@@ -124,7 +128,7 @@ export function getRemoteHMRSetupModule() {
 export function getRemoteEntryModule(
   options: ModuleFederationConfigNormalized
 ) {
-  const remoteEntryTemplatePath = require.resolve('./runtime/remote-entry.js');
+  const remoteEntryTemplatePath = resolveRuntimeModule('remote-entry.js');
   const remoteEntryModule = fs.readFileSync(remoteEntryTemplatePath, 'utf-8');
 
   const sharedString = getSharedString(options);
@@ -153,7 +157,7 @@ export function getRemoteEntryModule(
 }
 
 export function getRemoteModule(name: string) {
-  const remoteTemplatePath = require.resolve('./runtime/remote-module.js');
+  const remoteTemplatePath = resolveRuntimeModule('remote-module.js');
 
   return fs
     .readFileSync(remoteTemplatePath, 'utf-8')
@@ -174,7 +178,7 @@ export function createBabelTransformer({
   const babelTransformerPath = path.join(mfMetroPath, 'babel-transformer.js');
 
   const babelTransformerTemplate = fs.readFileSync(
-    require.resolve('./runtime/babel-transformer.js'),
+    resolveRuntimeModule('babel-transformer.js'),
     'utf-8'
   );
 
