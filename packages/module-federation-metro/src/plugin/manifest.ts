@@ -4,24 +4,16 @@ import type { Manifest, StatsAssets } from '@module-federation/sdk';
 import type { ModuleFederationConfigNormalized } from '../types';
 import { MANIFEST_FILENAME } from './constants';
 
-export function createManifest(
-  options: ModuleFederationConfigNormalized,
-  mfMetroPath: string
-) {
-  const manifestPath = path.join(mfMetroPath, MANIFEST_FILENAME);
-  const manifest = generateManifest(options);
-  fs.writeFileSync(manifestPath, JSON.stringify(manifest, undefined, 2));
-  return manifestPath;
-}
-
-function generateManifest(config: ModuleFederationConfigNormalized): Manifest {
+function getEmptyAssets(): StatsAssets {
   return {
-    id: config.name,
-    name: config.name,
-    metaData: generateMetaData(config),
-    remotes: generateRemotes(config),
-    shared: generateShared(config),
-    exposes: generateExposes(config),
+    js: {
+      sync: [],
+      async: [],
+    },
+    css: {
+      sync: [],
+      async: [],
+    },
   };
 }
 
@@ -50,6 +42,24 @@ function generateMetaData(
     pluginVersion: '',
     publicPath: 'auto',
   };
+}
+
+function generateExposes(
+  config: ModuleFederationConfigNormalized
+): Manifest['exposes'] {
+  return Object.keys(config.exposes).map((expose) => {
+    const formatKey = expose.replace('./', '');
+    const assets = getEmptyAssets();
+
+    assets.js.sync.push(config.exposes[expose]);
+
+    return {
+      id: `${config.name}:${formatKey}`,
+      name: formatKey,
+      path: expose,
+      assets,
+    };
+  });
 }
 
 function generateRemotes(
@@ -87,33 +97,23 @@ function generateShared(
   });
 }
 
-function generateExposes(
-  config: ModuleFederationConfigNormalized
-): Manifest['exposes'] {
-  return Object.keys(config.exposes).map((expose) => {
-    const formatKey = expose.replace('./', '');
-    const assets = getEmptyAssets();
-
-    assets.js.sync.push(config.exposes[expose]);
-
-    return {
-      id: `${config.name}:${formatKey}`,
-      name: formatKey,
-      path: expose,
-      assets,
-    };
-  });
+function generateManifest(config: ModuleFederationConfigNormalized): Manifest {
+  return {
+    id: config.name,
+    name: config.name,
+    metaData: generateMetaData(config),
+    exposes: generateExposes(config),
+    remotes: generateRemotes(config),
+    shared: generateShared(config),
+  };
 }
 
-function getEmptyAssets(): StatsAssets {
-  return {
-    js: {
-      sync: [],
-      async: [],
-    },
-    css: {
-      sync: [],
-      async: [],
-    },
-  };
+export function createManifest(
+  options: ModuleFederationConfigNormalized,
+  mfMetroPath: string
+) {
+  const manifestPath = path.join(mfMetroPath, MANIFEST_FILENAME);
+  const manifest = generateManifest(options);
+  fs.writeFileSync(manifestPath, JSON.stringify(manifest, undefined, 2));
+  return manifestPath;
 }
