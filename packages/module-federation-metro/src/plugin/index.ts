@@ -6,6 +6,7 @@ import type {
   ModuleFederationConfigNormalized,
 } from '../types';
 import { VirtualModuleManager } from '../utils';
+import { createBabelTransformer } from './generators';
 import {
   isUsingMFCommand,
   prepareTmpDir,
@@ -16,7 +17,6 @@ import { createManifest } from './manifest';
 import { normalizeOptions } from './normalize-options';
 import { createResolveRequest } from './resolver';
 import { createRewriteRequest } from './rewrite-request.js';
-import { createBabelTransformer } from './runtime-modules';
 import { getModuleFederationSerializer } from './serializer';
 import { validateOptions } from './validate-options';
 

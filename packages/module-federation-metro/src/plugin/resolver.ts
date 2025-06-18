@@ -8,14 +8,14 @@ import {
   REMOTE_HMR_SETUP,
   REMOTE_MODULE_REGISTRY,
 } from './constants';
-import { isUsingMFBundleCommand } from './helpers';
 import {
   getInitHostModule,
   getRemoteEntryModule,
   getRemoteHMRSetupModule,
   getRemoteModule,
   getRemoteModuleRegistryModule,
-} from './runtime-modules';
+} from './generators';
+import { isUsingMFBundleCommand } from './helpers';
 
 interface CreateResolveRequestOptions {
   isRemote: boolean;
