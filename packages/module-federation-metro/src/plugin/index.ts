@@ -16,7 +16,7 @@ import {
 import { createManifest } from './manifest';
 import { normalizeOptions } from './normalize-options';
 import { createResolveRequest } from './resolver';
-import { createRewriteRequest } from './rewrite-request.js';
+import { createRewriteRequest } from './rewrite-request';
 import { getModuleFederationSerializer } from './serializer';
 import { validateOptions } from './validate-options';
 
