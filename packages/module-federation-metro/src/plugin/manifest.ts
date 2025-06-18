@@ -4,16 +4,24 @@ import type { Manifest, StatsAssets } from '@module-federation/sdk';
 import type { ModuleFederationConfigNormalized } from '../types';
 import { MANIFEST_FILENAME } from './constants';
 
-function getEmptyAssets(): StatsAssets {
+export function createManifest(
+  options: ModuleFederationConfigNormalized,
+  mfMetroPath: string
+) {
+  const manifestPath = path.join(mfMetroPath, MANIFEST_FILENAME);
+  const manifest = generateManifest(options);
+  fs.writeFileSync(manifestPath, JSON.stringify(manifest, undefined, 2));
+  return manifestPath;
+}
+
+function generateManifest(config: ModuleFederationConfigNormalized): Manifest {
   return {
-    js: {
-      sync: [],
-      async: [],
-    },
-    css: {
-      sync: [],
-      async: [],
-    },
+    id: config.name,
+    name: config.name,
+    metaData: generateMetaData(config),
+    exposes: generateExposes(config),
+    remotes: generateRemotes(config),
+    shared: generateShared(config),
   };
 }
 
@@ -97,23 +105,15 @@ function generateShared(
   });
 }
 
-function generateManifest(config: ModuleFederationConfigNormalized): Manifest {
+function getEmptyAssets(): StatsAssets {
   return {
-    id: config.name,
-    name: config.name,
-    metaData: generateMetaData(config),
-    exposes: generateExposes(config),
-    remotes: generateRemotes(config),
-    shared: generateShared(config),
+    js: {
+      sync: [],
+      async: [],
+    },
+    css: {
+      sync: [],
+      async: [],
+    },
   };
-}
-
-export function createManifest(
-  options: ModuleFederationConfigNormalized,
-  mfMetroPath: string
-) {
-  const manifestPath = path.join(mfMetroPath, MANIFEST_FILENAME);
-  const manifest = generateManifest(options);
-  fs.writeFileSync(manifestPath, JSON.stringify(manifest, undefined, 2));
-  return manifestPath;
 }
