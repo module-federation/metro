@@ -80,7 +80,9 @@ runs:
     - name: E2E Prepare Script
       shell: bash
       run: |
-        pnpm --filter ${{ inputs.app_name }} e2e:prepare:ios &
+        pnpm --filter ${{ inputs.app_name }} e2e:prepare:ios
+        # Serve mini apps in the background
+        pnpm --filter ${{ inputs.app_name }} e2e:serve:ios &
 
     - name: Run iOS E2E Tests
       run: |

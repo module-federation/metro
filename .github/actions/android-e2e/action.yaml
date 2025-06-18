@@ -80,7 +80,9 @@ runs:
 
     - name: E2E Prepare Script
       run: |
-        pnpm --filter ${{ inputs.app_name }} e2e:prepare:android &
+        pnpm --filter ${{ inputs.app_name }} e2e:prepare:android
+        # Serve mini apps in the background
+        pnpm --filter ${{ inputs.app_name }} e2e:serve:android &
       shell: bash
 
     - uses: callstackincubator/android@v1
