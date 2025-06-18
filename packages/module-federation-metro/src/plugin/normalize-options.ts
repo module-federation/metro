@@ -1,3 +1,4 @@
+import fs from 'node:fs';
 import path from 'node:path';
 import type { ConfigT } from 'metro-config';
 import type {
@@ -31,7 +32,7 @@ function getNormalizedShared(
   options: ModuleFederationConfig,
   config: ConfigT
 ): Shared {
-  const pkg = require(path.join(config.projectRoot, 'package.json'));
+  const pkg = getProjectPackageJson(config.projectRoot);
   const shared = options.shared ?? {};
 
   // force all shared modules in host to be eager
@@ -44,6 +45,7 @@ function getNormalizedShared(
   // default requiredVersion
   for (const sharedName of Object.keys(shared)) {
     if (!shared[sharedName].requiredVersion) {
+      // @ts-expect-error - TODO fix this
       shared[sharedName].requiredVersion =
         pkg.dependencies?.[sharedName] || pkg.devDependencies?.[sharedName];
     }
@@ -57,4 +59,12 @@ function getNormalizedShareStrategy(options: ModuleFederationConfig) {
   // it makes more sense to have loaded-first as default on mobile
   // in order to avoid longer TTI upon app startup
   return options.shareStrategy ?? 'loaded-first';
+}
+
+function getProjectPackageJson(projectRoot: string): {
+  dependencies?: Record<string, string>;
+  devDependencies?: Record<string, string>;
+} {
+  const packageJsonPath = path.join(projectRoot, 'package.json');
+  return JSON.parse(fs.readFileSync(packageJsonPath, 'utf-8'));
 }
