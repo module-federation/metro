@@ -31,9 +31,6 @@ patchedDependencies:
   '@react-native/community-cli-plugin':
     hash: 445cc837d2f72ab42efc5a3f98e1906b366b2f99b0930b1fa11c9569c4bddd62
     path: patches/@react-native__community-cli-plugin.patch
-  '@rnef/platform-apple-helpers':
-    hash: 65b9faffab5e5a70cf8e2ac38e0148c4d16e6a29565c6b18eb0ed62bf85eef92
-    path: patches/@rnef__platform-apple-helpers.patch
   '@rnef/plugin-metro':
     hash: 9eaf43b02d5f0d8d8433452a7e745e18784a15565529a2e3565d1787b14c2366
     path: patches/@rnef__plugin-metro.patch
@@ -92,17 +89,17 @@ importers:
         specifier: 0.79.0
         version: 0.79.0
       '@rnef/cli':
-        specifier: ^0.7.20
-        version: 0.7.24(typescript@5.0.4)
+        specifier: ^0.7.25
+        version: 0.7.25(typescript@5.0.4)
       '@rnef/platform-android':
-        specifier: ^0.7.20
-        version: 0.7.24
+        specifier: ^0.7.25
+        version: 0.7.25
       '@rnef/platform-ios':
-        specifier: ^0.7.20
-        version: 0.7.24(typescript@5.0.4)
+        specifier: ^0.7.25
+        version: 0.7.25(typescript@5.0.4)
       '@rnef/plugin-metro':
-        specifier: ^0.7.20
-        version: 0.7.24(patch_hash=9eaf43b02d5f0d8d8433452a7e745e18784a15565529a2e3565d1787b14c2366)(@react-native/community-cli-plugin@0.79.0(patch_hash=445cc837d2f72ab42efc5a3f98e1906b366b2f99b0930b1fa11c9569c4bddd62))
+        specifier: ^0.7.25
+        version: 0.7.25(patch_hash=9eaf43b02d5f0d8d8433452a7e745e18784a15565529a2e3565d1787b14c2366)(@react-native/community-cli-plugin@0.79.0(patch_hash=445cc837d2f72ab42efc5a3f98e1906b366b2f99b0930b1fa11c9569c4bddd62))
       '@types/jest':
         specifier: ^29.5.13
         version: 29.5.14
@@ -177,17 +174,17 @@ importers:
         specifier: 0.79.0
         version: 0.79.0
       '@rnef/cli':
-        specifier: ^0.7.20
-        version: 0.7.24(typescript@5.0.4)
+        specifier: ^0.7.25
+        version: 0.7.25(typescript@5.0.4)
       '@rnef/platform-android':
-        specifier: ^0.7.20
-        version: 0.7.24
+        specifier: ^0.7.25
+        version: 0.7.25
       '@rnef/platform-ios':
-        specifier: ^0.7.20
-        version: 0.7.24(typescript@5.0.4)
+        specifier: ^0.7.25
+        version: 0.7.25(typescript@5.0.4)
       '@rnef/plugin-metro':
-        specifier: ^0.7.20
-        version: 0.7.24(patch_hash=9eaf43b02d5f0d8d8433452a7e745e18784a15565529a2e3565d1787b14c2366)(@react-native/community-cli-plugin@0.79.0(patch_hash=445cc837d2f72ab42efc5a3f98e1906b366b2f99b0930b1fa11c9569c4bddd62))
+        specifier: ^0.7.25
+        version: 0.7.25(patch_hash=9eaf43b02d5f0d8d8433452a7e745e18784a15565529a2e3565d1787b14c2366)(@react-native/community-cli-plugin@0.79.0(patch_hash=445cc837d2f72ab42efc5a3f98e1906b366b2f99b0930b1fa11c9569c4bddd62))
       '@types/jest':
         specifier: ^29.5.13
         version: 29.5.14
@@ -265,17 +262,17 @@ importers:
         specifier: 0.79.0
         version: 0.79.0
       '@rnef/cli':
-        specifier: ^0.7.20
-        version: 0.7.24(typescript@5.0.4)
+        specifier: ^0.7.25
+        version: 0.7.25(typescript@5.0.4)
       '@rnef/platform-android':
-        specifier: ^0.7.20
-        version: 0.7.24
+        specifier: ^0.7.25
+        version: 0.7.25
       '@rnef/platform-ios':
-        specifier: ^0.7.20
-        version: 0.7.24(typescript@5.0.4)
+        specifier: ^0.7.25
+        version: 0.7.25(typescript@5.0.4)
       '@rnef/plugin-metro':
-        specifier: ^0.7.20
-        version: 0.7.24(patch_hash=9eaf43b02d5f0d8d8433452a7e745e18784a15565529a2e3565d1787b14c2366)(@react-native/community-cli-plugin@0.79.0(patch_hash=445cc837d2f72ab42efc5a3f98e1906b366b2f99b0930b1fa11c9569c4bddd62))
+        specifier: ^0.7.25
+        version: 0.7.25(patch_hash=9eaf43b02d5f0d8d8433452a7e745e18784a15565529a2e3565d1787b14c2366)(@react-native/community-cli-plugin@0.79.0(patch_hash=445cc837d2f72ab42efc5a3f98e1906b366b2f99b0930b1fa11c9569c4bddd62))
       '@types/jest':
         specifier: ^29.5.13
         version: 29.5.14
@@ -356,17 +353,17 @@ importers:
         specifier: 0.79.0
         version: 0.79.0
       '@rnef/cli':
-        specifier: ^0.7.20
-        version: 0.7.24(typescript@5.0.4)
+        specifier: ^0.7.25
+        version: 0.7.25(typescript@5.0.4)
       '@rnef/platform-android':
-        specifier: ^0.7.20
-        version: 0.7.24
+        specifier: ^0.7.25
+        version: 0.7.25
       '@rnef/platform-ios':
-        specifier: ^0.7.20
-        version: 0.7.24(typescript@5.0.4)
+        specifier: ^0.7.25
+        version: 0.7.25(typescript@5.0.4)
       '@rnef/plugin-metro':
-        specifier: ^0.7.20
-        version: 0.7.24(patch_hash=9eaf43b02d5f0d8d8433452a7e745e18784a15565529a2e3565d1787b14c2366)(@react-native/community-cli-plugin@0.79.0(patch_hash=445cc837d2f72ab42efc5a3f98e1906b366b2f99b0930b1fa11c9569c4bddd62))
+        specifier: ^0.7.25
+        version: 0.7.25(patch_hash=9eaf43b02d5f0d8d8433452a7e745e18784a15565529a2e3565d1787b14c2366)(@react-native/community-cli-plugin@0.79.0(patch_hash=445cc837d2f72ab42efc5a3f98e1906b366b2f99b0930b1fa11c9569c4bddd62))
       '@types/jest':
         specifier: ^29.5.13
         version: 29.5.14
@@ -444,17 +441,17 @@ importers:
         specifier: 0.79.0
         version: 0.79.0
       '@rnef/cli':
-        specifier: ^0.7.20
-        version: 0.7.24(typescript@5.0.4)
+        specifier: ^0.7.25
+        version: 0.7.25(typescript@5.0.4)
       '@rnef/platform-android':
-        specifier: ^0.7.20
-        version: 0.7.24
+        specifier: ^0.7.25
+        version: 0.7.25
       '@rnef/platform-ios':
-        specifier: ^0.7.20
-        version: 0.7.24(typescript@5.0.4)
+        specifier: ^0.7.25
+        version: 0.7.25(typescript@5.0.4)
       '@rnef/plugin-metro':
-        specifier: ^0.7.20
-        version: 0.7.24(patch_hash=9eaf43b02d5f0d8d8433452a7e745e18784a15565529a2e3565d1787b14c2366)(@react-native/community-cli-plugin@0.79.0(patch_hash=445cc837d2f72ab42efc5a3f98e1906b366b2f99b0930b1fa11c9569c4bddd62))
+        specifier: ^0.7.25
+        version: 0.7.25(patch_hash=9eaf43b02d5f0d8d8433452a7e745e18784a15565529a2e3565d1787b14c2366)(@react-native/community-cli-plugin@0.79.0(patch_hash=445cc837d2f72ab42efc5a3f98e1906b366b2f99b0930b1fa11c9569c4bddd62))
       '@types/jest':
         specifier: ^29.5.13
         version: 29.5.14
@@ -1638,32 +1635,41 @@ packages:
       '@types/react':
         optional: true
 
-  '@rnef/cli@0.7.24':
-    resolution: {integrity: sha512-sNtzy+h6tBz9SY1E0ITvH9GU+HvG2kLtn8fAdB6p1HMO4Ks0uNX1pJCUgqiC+tXA5+aDMvscaduB4ek7BVH2Kg==}
+  '@rnef/cli@0.7.25':
+    resolution: {integrity: sha512-0Nn/3Nph9Jftths10yYzD1JUKC1yZhBWmDHiArPYwMuwhaN23j07gbe/4UWHfBHeC4aavcR5PVISJvyx+kwVqg==}
     hasBin: true
 
   '@rnef/config@0.7.24':
     resolution: {integrity: sha512-pqqLRH9ZTou6AQRdvjmqoQk9dNO8JpYXm5u82tUH61lApfsAufw0022q/1jjcZW/b2GNLZzCsqpZkMmw2yFQRg==}
 
-  '@rnef/platform-android@0.7.24':
-    resolution: {integrity: sha512-bxUI1y9tNDx0SsJjo9eP8SyyRO1pK/2bpq4FtUK6kVYVentb3KkByImyj/e354MX2ie75O3vou5XsQJxKm6k/w==}
+  '@rnef/config@0.7.25':
+    resolution: {integrity: sha512-d+urW6aGoqofYVCBuiUSJaAi1nchnXMNPA5xI9R3w6KMgYB3PdTO5jIPhJ5PsFqgo7GQ++d1W2Oit1yVn8/VrA==}
 
-  '@rnef/platform-apple-helpers@0.7.24':
-    resolution: {integrity: sha512-FruXV2dBwb+MPLXYC4YVZeVGq88Lqa1Trn6pZxhVE1ZEmD3FvzH8KUmwUyrDc3wHbjKnACvlOM1gdR4KtSm4kQ==}
+  '@rnef/platform-android@0.7.25':
+    resolution: {integrity: sha512-Pj1+HJZkGO/RAjTYpo0acNYInSLia4xM2ip3AQoA0SbCH0yncCffKeVADXH9y3BvaaZJVFE6KUo/nAmfikxChw==}
 
-  '@rnef/platform-ios@0.7.24':
-    resolution: {integrity: sha512-C3QNvqqczAUSOrhx2rOHGK0uCHWLZjEFWWNWZjwMZmo55Nb8lSaOoqLdt9tzS2p0eAsbmAs0/qn6rw0oAPA6lw==}
+  '@rnef/platform-apple-helpers@0.7.25':
+    resolution: {integrity: sha512-NzK6o6og3XMZ1Lz/0p6AeLh4AhCPm2R4lwpm4qZJ1zPoMjJTaNLcXsnJb9/nyiFCU0Q2BbQQSINp5lvANrlOsw==}
 
-  '@rnef/plugin-metro@0.7.24':
-    resolution: {integrity: sha512-AQAoqoisoepecr9Sk6yRBxaCrBIULwWHo28G5KQPtzCls8Q9rr9r0/njp56+VN/P743ZlMn8JMV2pIqU11ZFug==}
+  '@rnef/platform-ios@0.7.25':
+    resolution: {integrity: sha512-MJ966+YVLWJHeKP7qeBbq5Hzx6Smy8o055rPMf4IbRQ07yo6LLd05Lwtml5mpcCEEnE3TMmk+L4IrvPKE5pRPQ==}
+
+  '@rnef/plugin-metro@0.7.25':
+    resolution: {integrity: sha512-6iQqgoQq1kDXYx0YBf4+eFKFp/NUy7o87+S7zvGvSfrw9QnhKAZ1SnZX9QK+DXpyGyQQ66kDLSU4EBLAIXEbsw==}
     peerDependencies:
       '@react-native/community-cli-plugin': '*'
 
   '@rnef/provider-github@0.7.24':
     resolution: {integrity: sha512-xOxVA5k6VXpct2aOrALAH51d3iTW4V/VPyEixJ4UF5EzseXkG70H0gLMpjg4xLKzWBU4RqmwrTDwzfe40++mag==}
 
+  '@rnef/provider-github@0.7.25':
+    resolution: {integrity: sha512-iLJ2W5ToT7ja2vxV70H89WbQCWlDd5RCLOjG9bSWDquo7/XZR+SQTcloN2uQ5qBN9cTMUwy1RTTiMzdF6MM2Sg==}
+
   '@rnef/tools@0.7.24':
     resolution: {integrity: sha512-WcgI/iELQCHphOEaWJ8ndN+xdTLdsvXJOpfL1xidWfqOaATsO/OxyejZEezPyogAm3zSB95dCyxFq5+TLsPdBQ==}
+
+  '@rnef/tools@0.7.25':
+    resolution: {integrity: sha512-eRjq4A/wWjmRXv0JvNp1GfnkWLVetfttI2yzEL3vdeRdamH2dOfXk1LSMobd3iV5uv7WlUig9Yd40/UWoj6O5A==}
 
   '@rsbuild/core@1.4.0-beta.3':
     resolution: {integrity: sha512-i8RP/8gCXPFZ4b8L1ekolNbSgzc61VDJy7PEoJ55gBDI7ZtXtnIH9EhYdvYIpqBZFzF43S0deFKwi2S4XaZGCA==}
@@ -5831,11 +5837,11 @@ snapshots:
     optionalDependencies:
       '@types/react': 19.1.8
 
-  '@rnef/cli@0.7.24(typescript@5.0.4)':
+  '@rnef/cli@0.7.25(typescript@5.0.4)':
     dependencies:
       '@react-native-community/cli-config': 18.0.0(typescript@5.0.4)
-      '@rnef/config': 0.7.24
-      '@rnef/tools': 0.7.24
+      '@rnef/config': 0.7.25
+      '@rnef/tools': 0.7.25
       adm-zip: 0.5.16
       commander: 12.1.0
       tar: 7.4.3
@@ -5854,20 +5860,30 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@rnef/platform-android@0.7.24':
+  '@rnef/config@0.7.25':
+    dependencies:
+      '@babel/code-frame': 7.27.1
+      '@rnef/provider-github': 0.7.25
+      '@rnef/tools': 0.7.25
+      joi: 17.13.3
+      tslib: 2.8.1
+    transitivePeerDependencies:
+      - supports-color
+
+  '@rnef/platform-android@0.7.25':
     dependencies:
       '@react-native-community/cli-config-android': 18.0.0
-      '@rnef/tools': 0.7.24
+      '@rnef/tools': 0.7.25
       adm-zip: 0.5.16
       tslib: 2.8.1
     transitivePeerDependencies:
       - supports-color
 
-  '@rnef/platform-apple-helpers@0.7.24(patch_hash=65b9faffab5e5a70cf8e2ac38e0148c4d16e6a29565c6b18eb0ed62bf85eef92)(typescript@5.0.4)':
+  '@rnef/platform-apple-helpers@0.7.25(typescript@5.0.4)':
     dependencies:
       '@react-native-community/cli-config': 18.0.0(typescript@5.0.4)
       '@react-native-community/cli-config-apple': 18.0.0
-      '@rnef/tools': 0.7.24
+      '@rnef/tools': 0.7.25
       '@types/adm-zip': 0.5.7
       adm-zip: 0.5.16
       fast-glob: 3.3.3
@@ -5877,23 +5893,23 @@ snapshots:
       - supports-color
       - typescript
 
-  '@rnef/platform-ios@0.7.24(typescript@5.0.4)':
+  '@rnef/platform-ios@0.7.25(typescript@5.0.4)':
     dependencies:
       '@react-native-community/cli-config-apple': 18.0.0
       '@react-native-community/cli-types': 18.0.0
-      '@rnef/platform-apple-helpers': 0.7.24(patch_hash=65b9faffab5e5a70cf8e2ac38e0148c4d16e6a29565c6b18eb0ed62bf85eef92)(typescript@5.0.4)
-      '@rnef/tools': 0.7.24
+      '@rnef/platform-apple-helpers': 0.7.25(typescript@5.0.4)
+      '@rnef/tools': 0.7.25
       tslib: 2.8.1
     transitivePeerDependencies:
       - supports-color
       - typescript
 
-  '@rnef/plugin-metro@0.7.24(patch_hash=9eaf43b02d5f0d8d8433452a7e745e18784a15565529a2e3565d1787b14c2366)(@react-native/community-cli-plugin@0.79.0(patch_hash=445cc837d2f72ab42efc5a3f98e1906b366b2f99b0930b1fa11c9569c4bddd62))':
+  '@rnef/plugin-metro@0.7.25(patch_hash=9eaf43b02d5f0d8d8433452a7e745e18784a15565529a2e3565d1787b14c2366)(@react-native/community-cli-plugin@0.79.0(patch_hash=445cc837d2f72ab42efc5a3f98e1906b366b2f99b0930b1fa11c9569c4bddd62))':
     dependencies:
       '@react-native-community/cli-server-api': 18.0.0
       '@react-native/community-cli-plugin': 0.79.0(patch_hash=445cc837d2f72ab42efc5a3f98e1906b366b2f99b0930b1fa11c9569c4bddd62)
       '@react-native/dev-middleware': 0.79.3
-      '@rnef/tools': 0.7.24
+      '@rnef/tools': 0.7.25
       metro: link:external/metro/packages/metro
       metro-config: link:external/metro/packages/metro-config
       metro-core: link:external/metro/packages/metro-core
@@ -5912,7 +5928,32 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
+  '@rnef/provider-github@0.7.25':
+    dependencies:
+      '@rnef/tools': 0.7.25
+      ts-regex-builder: 1.8.2
+      tslib: 2.8.1
+    transitivePeerDependencies:
+      - supports-color
+
   '@rnef/tools@0.7.24':
+    dependencies:
+      '@clack/prompts': 0.10.1
+      '@expo/fingerprint': 0.11.11
+      '@types/adm-zip': 0.5.7
+      adm-zip: 0.5.16
+      appdirsjs: 1.2.7
+      fast-glob: 3.3.3
+      is-unicode-supported: 2.1.0
+      nano-spawn: 0.2.1
+      picocolors: 1.1.1
+      string-argv: 0.3.2
+      tar: 7.4.3
+      tslib: 2.8.1
+    transitivePeerDependencies:
+      - supports-color
+
+  '@rnef/tools@0.7.25':
     dependencies:
       '@clack/prompts': 0.10.1
       '@expo/fingerprint': 0.11.11

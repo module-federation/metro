@@ -33,7 +33,6 @@ patchedDependencies:
   react-native: patches/react-native.patch
   '@rnef/plugin-metro': patches/@rnef__plugin-metro.patch
   '@module-federation/runtime-core@0.11.4': patches/@module-federation__runtime-core@0.11.4.patch
-  '@rnef/platform-apple-helpers': patches/@rnef__platform-apple-helpers.patch
 
 publicHoistPattern:
   - '@babel/runtime'
