@@ -18,6 +18,7 @@ target 'MFExampleHost' do
   config = use_native_modules!(['npx', 'rnef', 'config', '-p', 'ios'])
 
   use_react_native!(
+    :path => config[:reactNativePath],
     # An absolute path to your application root.
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
