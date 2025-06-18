@@ -1,5 +1,5 @@
-import fs from 'node:fs';
 import path from 'node:path';
+import chalk from 'chalk';
 import type { ConfigT } from 'metro-config';
 import type {
   ModuleFederationConfig,
@@ -7,17 +7,18 @@ import type {
 } from '../types';
 import { VirtualModuleManager } from '../utils';
 import {
+  createMFRuntimeNodeModules,
   isUsingMFCommand,
-  mfDisabledWarning,
   replaceExtension,
+  stubRemoteEntry,
 } from './helpers';
 import { createManifest } from './manifest';
-import { normalizeOptions } from './normalize';
+import { normalizeOptions } from './normalize-options';
 import { createResolveRequest } from './resolver';
 import { createRewriteRequest } from './rewrite-request.js';
 import { createBabelTransformer } from './runtime-modules';
 import { getModuleFederationSerializer } from './serializer';
-import { validateOptions } from './validate';
+import { validateOptions } from './validate-options';
 
 declare global {
   var __METRO_FEDERATION_CONFIG: ModuleFederationConfigNormalized;
@@ -25,27 +26,34 @@ declare global {
   var __METRO_FEDERATION_MANIFEST_PATH: string | undefined;
 }
 
-function createMFRuntimeNodeModules(projectNodeModulesPath: string) {
-  const mfMetroPath = path.join(projectNodeModulesPath, '.mf-metro');
-  fs.rmSync(mfMetroPath, { recursive: true, force: true });
-  fs.mkdirSync(mfMetroPath, { recursive: true });
-  return mfMetroPath;
-}
-
-function stubRemoteEntry(remoteEntryPath: string) {
-  const remoteEntryModule = '// remote entry stub';
-  fs.writeFileSync(remoteEntryPath, remoteEntryModule, 'utf-8');
-}
-
-function withModuleFederation(
+export function withModuleFederation(
   config: ConfigT,
   federationOptions: ModuleFederationConfig
 ): ConfigT {
-  if (!isUsingMFCommand()) {
-    mfDisabledWarning();
-    return config;
+  if (isUsingMFCommand()) {
+    return augmentConfig(config, federationOptions);
   }
 
+  console.warn(
+    chalk.yellow(
+      'Warning: Module Federation build is disabled for this command.\n'
+    ) +
+      chalk.yellow(
+        'To enable Module Federation, please use one of the dedicated bundle commands:\n'
+      ) +
+      ` ${chalk.dim('•')} bundle-mf-host` +
+      chalk.dim(' - for bundling a host application\n') +
+      ` ${chalk.dim('•')} bundle-mf-remote` +
+      chalk.dim(' - for bundling a remote application\n')
+  );
+
+  return config;
+}
+
+function augmentConfig(
+  config: ConfigT,
+  federationOptions: ModuleFederationConfig
+): ConfigT {
   const isHost = !federationOptions.exposes;
   const isRemote = !isHost;
 
@@ -143,5 +151,3 @@ function withModuleFederation(
     },
   };
 }
-
-export { withModuleFederation };
