@@ -14,11 +14,7 @@ export function normalizeOptions(
   const filename = options.filename ?? DEFAULT_ENTRY_FILENAME;
 
   const shared = getNormalizedShared(options, config);
-
-  // this is different from the default share strategy in mf-core
-  // it makes more sense to have loaded-first as default on mobile
-  // in order to avoid longer TTI upon app startup
-  const shareStrategy = options.shareStrategy ?? 'loaded-first';
+  const shareStrategy = getNormalizedShareStrategy(options);
 
   return {
     name: options.name,
@@ -54,4 +50,11 @@ function getNormalizedShared(
   }
 
   return shared;
+}
+
+function getNormalizedShareStrategy(options: ModuleFederationConfig) {
+  // this is different from the default share strategy in mf-core
+  // it makes more sense to have loaded-first as default on mobile
+  // in order to avoid longer TTI upon app startup
+  return options.shareStrategy ?? 'loaded-first';
 }

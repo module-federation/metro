@@ -22,8 +22,6 @@ export function stubRemoteEntry(remoteEntryPath: string) {
   fs.writeFileSync(remoteEntryPath, stub, 'utf-8');
 }
 
-export function mfDisabledWarning() {}
-
 export function createMFRuntimeNodeModules(projectNodeModulesPath: string) {
   const mfMetroPath = path.join(projectNodeModulesPath, '.mf-metro');
   fs.rmSync(mfMetroPath, { recursive: true, force: true });
