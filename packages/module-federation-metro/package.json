@@ -53,7 +53,7 @@
     "metro-resolver": "^0.82.1",
     "metro-source-map": "^0.82.1",
     "react": "19.0.0",
-    "react-native": "0.79.0",
+    "react-native": "0.79.4",
     "ts-node": "^10.9.2",
     "typescript": "^5.8.3"
   }
