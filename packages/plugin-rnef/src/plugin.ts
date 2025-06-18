@@ -13,6 +13,7 @@ interface PluginConfig {
 export const pluginMetroModuleFederation =
   (pluginConfig: PluginConfig = {}) =>
   (api: PluginApi): PluginOutput => {
+    console.log(commands);
     // Register the bundle-mf-host command
     api.registerCommand({
       name: 'bundle-mf-host',
