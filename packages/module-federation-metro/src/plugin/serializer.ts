@@ -135,9 +135,9 @@ function getBundleCode(
   return code;
 }
 
-const getModuleFederationSerializer: (
+export function getModuleFederationSerializer(
   mfConfig: ModuleFederationConfigNormalized
-) => CustomSerializer = (mfConfig) => {
+): CustomSerializer {
   return async (entryPoint, preModules, graph, options) => {
     const syncRemoteModules = collectSyncRemoteModules(graph, mfConfig.remotes);
     const syncSharedModules = collectSyncSharedModules(graph, mfConfig.shared);
@@ -171,6 +171,4 @@ const getModuleFederationSerializer: (
     const finalOptions = { ...options, modulesOnly: false };
     return getBundleCode(entryPoint, finalPreModules, graph, finalOptions);
   };
-};
-
-export { getModuleFederationSerializer };
+}
