@@ -1,24 +1,21 @@
-import path from "path";
+import path from 'node:path';
+import type { CustomResolver, Resolution } from 'metro-resolver';
+import type { ModuleFederationConfigNormalized } from '../types';
+import type { VirtualModuleManager } from '../utils/vm-manager';
 import {
-  CustomResolver,
-  Resolution,
-} from "metro-resolver";
-import {
-  INIT_HOST,
   ASYNC_REQUIRE,
-  REMOTE_MODULE_REGISTRY,
+  INIT_HOST,
   REMOTE_HMR_SETUP,
-} from "./constants";
+  REMOTE_MODULE_REGISTRY,
+} from './constants';
+import { isUsingMFBundleCommand } from './helpers';
 import {
   getInitHostModule,
   getRemoteEntryModule,
   getRemoteHMRSetupModule,
   getRemoteModule,
   getRemoteModuleRegistryModule,
-} from "./runtime-modules";
-import { isUsingMFBundleCommand } from "./helpers";
-import { VirtualModuleManager } from "../utils/vm-manager";
-import type { ModuleFederationConfigNormalized } from "../types";
+} from './runtime-modules';
 
 type CreateResolveRequestOptions = {
   vmManager: VirtualModuleManager;
@@ -47,19 +44,19 @@ export default function createResolveRequest({
     if (moduleName === INIT_HOST) {
       const initHostGenerator = () => getInitHostModule(options);
       vmManager.registerVirtualModule(paths.initHost, initHostGenerator);
-      return { type: "sourceFile", filePath: paths.initHost as string };
+      return { type: 'sourceFile', filePath: paths.initHost as string };
     }
 
     // virtual module: async-require
     if (moduleName === ASYNC_REQUIRE) {
-      return { type: "sourceFile", filePath: paths.asyncRequire };
+      return { type: 'sourceFile', filePath: paths.asyncRequire };
     }
 
     // virtual module: remote-module-registry
     if (moduleName === REMOTE_MODULE_REGISTRY) {
       const registryGenerator = () => getRemoteModuleRegistryModule();
       vmManager.registerVirtualModule(paths.registry, registryGenerator);
-      return { type: "sourceFile", filePath: paths.registry };
+      return { type: 'sourceFile', filePath: paths.registry };
     }
 
     // virtual module: remote-hmr
@@ -69,7 +66,7 @@ export default function createResolveRequest({
         paths.remoteHMRSetup,
         remoteHMRSetupGenerator
       );
-      return { type: "sourceFile", filePath: paths.remoteHMRSetup as string };
+      return { type: 'sourceFile', filePath: paths.remoteHMRSetup as string };
     }
 
     // virtual entrypoint to create MF containers
@@ -78,7 +75,7 @@ export default function createResolveRequest({
     if (moduleName === `./${path.basename(paths.remoteEntry)}`) {
       const remoteEntryGenerator = () => getRemoteEntryModule(options);
       vmManager.registerVirtualModule(paths.remoteEntry, remoteEntryGenerator);
-      return { type: "sourceFile", filePath: paths.remoteEntry as string };
+      return { type: 'sourceFile', filePath: paths.remoteEntry as string };
     }
 
     // shared modules handling in init-host.js
@@ -94,18 +91,18 @@ export default function createResolveRequest({
       // import: false means that the module is marked as external
       if (sharedModule && sharedModule.import === false) {
         const sharedPath = getSharedPath(moduleName, paths.mfMetro);
-        return { type: "sourceFile", filePath: sharedPath };
+        return { type: 'sourceFile', filePath: sharedPath };
       }
       return context.resolveRequest(context, moduleName, platform);
     }
 
     // remote modules
     for (const remoteName of Object.keys(options.remotes)) {
-      if (moduleName.startsWith(remoteName + "/")) {
+      if (moduleName.startsWith(remoteName + '/')) {
         const remotePath = getRemoteModulePath(moduleName, paths.mfMetro);
         const remoteGenerator = () => getRemoteModule(moduleName);
         vmManager.registerVirtualModule(remotePath, remoteGenerator);
-        return { type: "sourceFile", filePath: remotePath };
+        return { type: 'sourceFile', filePath: remotePath };
       }
     }
 
@@ -117,7 +114,7 @@ export default function createResolveRequest({
         const sharedPath = getSharedPath(moduleName, paths.mfMetro);
         const sharedGenerator = () => getRemoteModule(moduleName);
         vmManager.registerVirtualModule(sharedPath, sharedGenerator);
-        return { type: "sourceFile", filePath: sharedPath };
+        return { type: 'sourceFile', filePath: sharedPath };
       }
       // TODO: module deep import
       // if (importName.endsWith("/") && moduleName.startsWith(importName)) {
@@ -127,18 +124,18 @@ export default function createResolveRequest({
     }
 
     // replace getDevServer module in remote with our own implementation
-    if (isRemote && moduleName.endsWith("getDevServer")) {
+    if (isRemote && moduleName.endsWith('getDevServer')) {
       const res = context.resolveRequest(context, moduleName, platform);
       const from = /react-native\/Libraries\/Core\/Devtools\/getDevServer\.js$/;
-      const to = path.resolve(__dirname, "./modules/getDevServer.ts");
+      const to = path.resolve(__dirname, './modules/getDevServer.ts');
       return replaceModule(from, to)(res);
     }
 
     // replace HMRClient module with HMRClientShim when using bundle commands
-    if (isUsingMFBundleCommand() && moduleName.endsWith("HMRClient")) {
+    if (isUsingMFBundleCommand() && moduleName.endsWith('HMRClient')) {
       const res = context.resolveRequest(context, moduleName, platform);
       const from = /react-native\/Libraries\/Utilities\/HMRClient\.js$/;
-      const to = path.resolve(__dirname, "./modules/HMRClientShim.ts");
+      const to = path.resolve(__dirname, './modules/HMRClientShim.ts');
       return replaceModule(from, to)(res);
     }
 
@@ -147,16 +144,16 @@ export default function createResolveRequest({
 }
 
 function getSharedPath(name: string, dir: string) {
-  const sharedName = name.replaceAll("/", "_");
-  const sharedDir = path.join(dir, "shared");
+  const sharedName = name.replaceAll('/', '_');
+  const sharedDir = path.join(dir, 'shared');
   return path.join(sharedDir, `${sharedName}.js`);
 }
 
 function getRemoteModulePath(name: string, outputDir: string) {
-  const remoteModuleName = name.replaceAll("/", "_");
+  const remoteModuleName = name.replaceAll('/', '_');
   const remoteModulePath = path.join(
     outputDir,
-    "remote",
+    'remote',
     `${remoteModuleName}.js`
   );
   return remoteModulePath;
@@ -164,8 +161,8 @@ function getRemoteModulePath(name: string, outputDir: string) {
 
 function replaceModule(from: RegExp, to: string) {
   return (resolved: Resolution): Resolution => {
-    if (resolved.type === "sourceFile" && from.test(resolved.filePath)) {
-      return { type: "sourceFile", filePath: to };
+    if (resolved.type === 'sourceFile' && from.test(resolved.filePath)) {
+      return { type: 'sourceFile', filePath: to };
     }
     return resolved;
   };

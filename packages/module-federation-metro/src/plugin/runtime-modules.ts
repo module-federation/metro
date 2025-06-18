@@ -1,20 +1,20 @@
-import fs from "fs";
-import path from "path";
-import { ModuleFederationConfigNormalized, SharedConfig } from "../types";
+import fs from 'node:fs';
+import path from 'node:path';
+import type { ModuleFederationConfigNormalized, SharedConfig } from '../types';
 
 export function getInitHostModule(options: ModuleFederationConfigNormalized) {
-  const initHostPath = require.resolve("./runtime/init-host.js");
-  let initHostModule = fs.readFileSync(initHostPath, "utf-8");
+  const initHostPath = require.resolve('./runtime/init-host.js');
+  let initHostModule = fs.readFileSync(initHostPath, 'utf-8');
 
   const sharedString = getSharedString(options);
 
   // Replace placeholders with actual values
   initHostModule = initHostModule
-    .replaceAll("__NAME__", JSON.stringify(options.name))
-    .replaceAll("__REMOTES__", generateRemotes(options.remotes))
-    .replaceAll("__SHARED__", sharedString)
-    .replaceAll("__PLUGINS__", generateRuntimePlugins(options.plugins))
-    .replaceAll("__SHARE_STRATEGY__", JSON.stringify(options.shareStrategy));
+    .replaceAll('__NAME__', JSON.stringify(options.name))
+    .replaceAll('__REMOTES__', generateRemotes(options.remotes))
+    .replaceAll('__SHARED__', sharedString)
+    .replaceAll('__PLUGINS__', generateRuntimePlugins(options.plugins))
+    .replaceAll('__SHARE_STRATEGY__', JSON.stringify(options.shareStrategy));
 
   return initHostModule;
 }
@@ -29,8 +29,8 @@ function generateRuntimePlugins(runtimePlugins: string[]) {
     pluginImports.push(`import ${pluginName} from "${plugin}";`);
   });
 
-  const imports = pluginImports.join("\n");
-  const plugins = `const plugins = [${pluginNames.join(", ")}];`;
+  const imports = pluginImports.join('\n');
+  const plugins = `const plugins = [${pluginNames.join(', ')}];`;
 
   return `${imports}\n${plugins}`;
 }
@@ -38,9 +38,9 @@ function generateRuntimePlugins(runtimePlugins: string[]) {
 function generateRemotes(remotes: Record<string, string> = {}) {
   const remotesEntries: string[] = [];
   for (const [remoteAlias, remoteEntry] of Object.entries(remotes)) {
-    const remoteEntryParts = remoteEntry.split("@");
+    const remoteEntryParts = remoteEntry.split('@');
     const remoteName = remoteEntryParts[0];
-    const remoteEntryUrl = remoteEntryParts.slice(1).join("@");
+    const remoteEntryUrl = remoteEntryParts.slice(1).join('@');
 
     remotesEntries.push(
       `{ 
@@ -53,14 +53,17 @@ function generateRemotes(remotes: Record<string, string> = {}) {
     );
   }
 
-  return `[${remotesEntries.join(",\n")}]`;
+  return `[${remotesEntries.join(',\n')}]`;
 }
 
 function getSharedString(options: ModuleFederationConfigNormalized) {
-  const shared = Object.keys(options.shared).reduce((acc, name) => {
-    acc[name] = `__SHARED_${name}__`;
-    return acc;
-  }, {} as Record<string, string>);
+  const shared = Object.keys(options.shared).reduce(
+    (acc, name) => {
+      acc[name] = `__SHARED_${name}__`;
+      return acc;
+    },
+    {} as Record<string, string>
+  );
 
   let sharedString = JSON.stringify(shared);
   for (const name of Object.keys(options.shared)) {
@@ -75,15 +78,15 @@ function getSharedString(options: ModuleFederationConfigNormalized) {
 function createSharedModuleEntry(name: string, options: SharedConfig) {
   const template = {
     version: options.version,
-    scope: "default",
+    scope: 'default',
     shareConfig: {
       singleton: options.singleton,
       eager: options.eager,
       requiredVersion: options.requiredVersion,
     },
     get: options.eager
-      ? "__GET_SYNC_PLACEHOLDER__"
-      : "__GET_ASYNC_PLACEHOLDER__",
+      ? '__GET_SYNC_PLACEHOLDER__'
+      : '__GET_ASYNC_PLACEHOLDER__',
   };
 
   const templateString = JSON.stringify(template);
@@ -97,22 +100,22 @@ function createSharedModuleEntry(name: string, options: SharedConfig) {
 }
 
 export function getRemoteModuleRegistryModule() {
-  const registryPath = require.resolve("./runtime/remote-module-registry.js");
-  let registryModule = fs.readFileSync(registryPath, "utf-8");
+  const registryPath = require.resolve('./runtime/remote-module-registry.js');
+  let registryModule = fs.readFileSync(registryPath, 'utf-8');
 
   registryModule = registryModule.replaceAll(
-    "__EARLY_MODULE_TEST__",
-    "/^react(-native(\\/|$)|$)/"
+    '__EARLY_MODULE_TEST__',
+    '/^react(-native(\\/|$)|$)/'
   );
 
   return registryModule;
 }
 
 export function getRemoteHMRSetupModule() {
-  const remoteHMRSetupTemplatePath = require.resolve("./runtime/remote-hmr.js");
+  const remoteHMRSetupTemplatePath = require.resolve('./runtime/remote-hmr.js');
   const remoteHMRSetupModule = fs.readFileSync(
     remoteHMRSetupTemplatePath,
-    "utf-8"
+    'utf-8'
   );
 
   return remoteHMRSetupModule;
@@ -121,8 +124,8 @@ export function getRemoteHMRSetupModule() {
 export function getRemoteEntryModule(
   options: ModuleFederationConfigNormalized
 ) {
-  const remoteEntryTemplatePath = require.resolve("./runtime/remote-entry.js");
-  const remoteEntryModule = fs.readFileSync(remoteEntryTemplatePath, "utf-8");
+  const remoteEntryTemplatePath = require.resolve('./runtime/remote-entry.js');
+  const remoteEntryModule = fs.readFileSync(remoteEntryTemplatePath, 'utf-8');
 
   const sharedString = getSharedString(options);
 
@@ -130,7 +133,7 @@ export function getRemoteEntryModule(
 
   const exposesString = Object.keys(exposes)
     .map((key) => {
-      const importName = path.relative(".", exposes[key]);
+      const importName = path.relative('.', exposes[key]);
       const importPath = `../../${importName}`;
 
       return `"${key}": async () => {
@@ -138,23 +141,23 @@ export function getRemoteEntryModule(
           return module;
         }`;
     })
-    .join(",");
+    .join(',');
 
   return remoteEntryModule
-    .replaceAll("__PLUGINS__", generateRuntimePlugins(options.plugins))
-    .replaceAll("__SHARED__", sharedString)
-    .replaceAll("__REMOTES__", generateRemotes(options.remotes))
-    .replaceAll("__EXPOSES_MAP__", `{${exposesString}}`)
-    .replaceAll("__NAME__", `"${options.name}"`)
-    .replaceAll("__SHARE_STRATEGY__", JSON.stringify(options.shareStrategy));
+    .replaceAll('__PLUGINS__', generateRuntimePlugins(options.plugins))
+    .replaceAll('__SHARED__', sharedString)
+    .replaceAll('__REMOTES__', generateRemotes(options.remotes))
+    .replaceAll('__EXPOSES_MAP__', `{${exposesString}}`)
+    .replaceAll('__NAME__', `"${options.name}"`)
+    .replaceAll('__SHARE_STRATEGY__', JSON.stringify(options.shareStrategy));
 }
 
 export function getRemoteModule(name: string) {
-  const remoteTemplatePath = require.resolve("./runtime/remote-module.js");
+  const remoteTemplatePath = require.resolve('./runtime/remote-module.js');
 
   return fs
-    .readFileSync(remoteTemplatePath, "utf-8")
-    .replaceAll("__MODULE_ID__", `"${name}"`);
+    .readFileSync(remoteTemplatePath, 'utf-8')
+    .replaceAll('__MODULE_ID__', `"${name}"`);
 }
 
 export function createBabelTransformer({
@@ -168,21 +171,20 @@ export function createBabelTransformer({
   mfMetroPath: string;
   blacklistedPaths: string[];
 }) {
-  const babelTransformerPath = path.join(mfMetroPath, "babel-transformer.js");
+  const babelTransformerPath = path.join(mfMetroPath, 'babel-transformer.js');
 
   const babelTransformerTemplate = fs.readFileSync(
-    require.resolve("./runtime/babel-transformer.js"),
-    "utf-8"
+    require.resolve('./runtime/babel-transformer.js'),
+    'utf-8'
   );
 
   const babelTransformer = babelTransformerTemplate
-    .replaceAll("__BABEL_TRANSFORMER_PATH__", proxiedBabelTrasnsformerPath)
-    .replaceAll("__REMOTES__", JSON.stringify(mfConfig.remotes))
-    .replaceAll("__SHARED__", JSON.stringify(mfConfig.shared))
-    .replaceAll("__BLACKLISTED_PATHS__", JSON.stringify(blacklistedPaths));
+    .replaceAll('__BABEL_TRANSFORMER_PATH__', proxiedBabelTrasnsformerPath)
+    .replaceAll('__REMOTES__', JSON.stringify(mfConfig.remotes))
+    .replaceAll('__SHARED__', JSON.stringify(mfConfig.shared))
+    .replaceAll('__BLACKLISTED_PATHS__', JSON.stringify(blacklistedPaths));
 
-  fs.writeFileSync(babelTransformerPath, babelTransformer, "utf-8");
+  fs.writeFileSync(babelTransformerPath, babelTransformer, 'utf-8');
 
   return babelTransformerPath;
 }
-

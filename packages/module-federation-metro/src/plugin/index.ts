@@ -1,24 +1,24 @@
-import fs from "node:fs";
-import path from "node:path";
-import type { ConfigT } from "metro-config";
-import generateManifest from "../generate-manifest";
-import { getModuleFederationSerializer } from "./serializer";
+import fs from 'node:fs';
+import path from 'node:path';
+import type { ConfigT } from 'metro-config';
+import generateManifest from '../generate-manifest';
 import type {
   ModuleFederationConfig,
   ModuleFederationConfigNormalized,
-} from "../types";
-import { ConfigError } from "../utils/errors";
-import { VirtualModuleManager } from "../utils/vm-manager";
-import { MANIFEST_FILENAME } from "./constants";
-import { normalizeOptions } from "./normalize";
-import createResolveRequest from "./resolver";
+} from '../types';
+import { ConfigError } from '../utils/errors';
+import { VirtualModuleManager } from '../utils/vm-manager';
+import { MANIFEST_FILENAME } from './constants';
 import {
   isUsingMFCommand,
   mfDisabledWarning,
   replaceExtension,
-} from "./helpers";
-import { createBabelTransformer } from "./runtime-modules";
-import { createRewriteRequest } from "./rewrite-request.js";
+} from './helpers';
+import { normalizeOptions } from './normalize';
+import createResolveRequest from './resolver';
+import { createRewriteRequest } from './rewrite-request.js';
+import { createBabelTransformer } from './runtime-modules';
+import { getModuleFederationSerializer } from './serializer';
 
 declare global {
   var __METRO_FEDERATION_CONFIG: ModuleFederationConfigNormalized;
@@ -27,7 +27,7 @@ declare global {
 }
 
 function createMFRuntimeNodeModules(projectNodeModulesPath: string) {
-  const mfMetroPath = path.join(projectNodeModulesPath, ".mf-metro");
+  const mfMetroPath = path.join(projectNodeModulesPath, '.mf-metro');
   fs.rmSync(mfMetroPath, { recursive: true, force: true });
   fs.mkdirSync(mfMetroPath, { recursive: true });
   return mfMetroPath;
@@ -44,16 +44,16 @@ function createManifest(
 }
 
 function stubRemoteEntry(remoteEntryPath: string) {
-  const remoteEntryModule = "// remote entry stub";
-  fs.writeFileSync(remoteEntryPath, remoteEntryModule, "utf-8");
+  const remoteEntryModule = '// remote entry stub';
+  fs.writeFileSync(remoteEntryPath, remoteEntryModule, 'utf-8');
 }
 
 function validateOptions(options: ModuleFederationConfigNormalized) {
   // validate filename
-  if (!options.filename.endsWith(".bundle")) {
+  if (!options.filename.endsWith('.bundle')) {
     throw new ConfigError(
       `Invalid filename: ${options.filename}. ` +
-        "Filename must end with .bundle extension."
+        'Filename must end with .bundle extension.'
     );
   }
 }
@@ -78,25 +78,25 @@ function withModuleFederation(
 
   const projectNodeModulesPath = path.resolve(
     config.projectRoot,
-    "node_modules"
+    'node_modules'
   );
 
   const mfMetroPath = createMFRuntimeNodeModules(projectNodeModulesPath);
 
   // auto-inject 'metro-core-plugin' MF runtime plugin
   options.plugins = [
-    require.resolve("./modules/metroCorePlugin.ts"),
+    require.resolve('./modules/metroCorePlugin.ts'),
     ...options.plugins,
   ].map((plugin) => path.relative(mfMetroPath, plugin));
 
-  const initHostPath = path.resolve(mfMetroPath, "init-host.js");
-  const registryPath = path.resolve(mfMetroPath, "remote-module-registry.js");
+  const initHostPath = path.resolve(mfMetroPath, 'init-host.js');
+  const registryPath = path.resolve(mfMetroPath, 'remote-module-registry.js');
 
-  const remoteEntryFilename = replaceExtension(options.filename, ".js");
+  const remoteEntryFilename = replaceExtension(options.filename, '.js');
   const remoteEntryPath = path.resolve(mfMetroPath, remoteEntryFilename);
-  const remoteHMRSetupPath = path.resolve(mfMetroPath, "remote-hmr.js");
+  const remoteHMRSetupPath = path.resolve(mfMetroPath, 'remote-hmr.js');
 
-  const asyncRequirePath = path.resolve(__dirname, "./modules/asyncRequire.ts");
+  const asyncRequirePath = path.resolve(__dirname, './modules/asyncRequire.ts');
 
   const babelTransformerPath = createBabelTransformer({
     proxiedBabelTrasnsformerPath: config.transformer.babelTransformerPath,
