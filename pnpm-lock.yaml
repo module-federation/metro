@@ -532,6 +532,12 @@ importers:
         specifier: ^5.8.3
         version: 5.8.3
 
+  packages/plugin-rnc-cli:
+    devDependencies:
+      module-federation-metro:
+        specifier: workspace:*
+        version: link:../module-federation-metro
+
   packages/plugin-rnef:
     devDependencies:
       '@rnef/config':
