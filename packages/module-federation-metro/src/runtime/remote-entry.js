@@ -1,5 +1,6 @@
 import 'mf:async-require';
 
+import { initializeScope } from 'mf:instance-helpers';
 import { loadSharedToRegistry } from 'mf:remote-module-registry';
 import { init as runtimeInit } from '@module-federation/runtime';
 
@@ -18,9 +19,10 @@ function get(moduleName) {
 }
 
 const initTokens = {};
+
+const name = __NAME__;
 const shareScopeName = 'default';
 const shareStrategy = __SHARE_STRATEGY__;
-const name = __NAME__;
 
 let hmrInitialized = false;
 
@@ -69,14 +71,6 @@ async function init(shared = {}, initScope = []) {
   return initRes;
 }
 
-global.__METRO_FEDERATION__[__NAME__] =
-  global.__METRO_FEDERATION__[__NAME__] || {};
+const scope = initializeScope(name);
 
-global.__METRO_FEDERATION__[__NAME__].dependencies = global
-  .__METRO_FEDERATION__[__NAME__].dependencies || {
-  shared: {},
-  remotes: {},
-};
-
-global.__METRO_FEDERATION__[__NAME__].get = get;
-global.__METRO_FEDERATION__[__NAME__].init = init;
+scope.entry = { get, init };

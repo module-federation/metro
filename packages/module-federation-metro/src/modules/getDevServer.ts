@@ -1,6 +1,6 @@
 export default function getDevServer() {
   const scriptUrl =
-    global.__METRO_FEDERATION__[__METRO_GLOBAL_PREFIX__].location;
+    globalThis.__FEDERATION__.__NATIVE__[__METRO_GLOBAL_PREFIX__].origin;
 
   if (!scriptUrl) {
     throw new Error(
@@ -9,7 +9,7 @@ export default function getDevServer() {
   }
 
   return {
-    url: scriptUrl.match(/^https?:\/\/.*?\//)[0],
+    url: scriptUrl.match(/^https?:\/\/.*?\//)![0],
     fullBundleUrl: scriptUrl,
   };
 }
