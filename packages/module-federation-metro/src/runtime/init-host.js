@@ -1,4 +1,3 @@
-import { initializeScope } from 'mf:instance-helpers';
 import {
   loadRemoteToRegistry,
   loadSharedToRegistry,
@@ -14,7 +13,7 @@ const name = __NAME__;
 const shareScopeName = 'default';
 const shareStrategy = __SHARE_STRATEGY__;
 
-const initRes = init({
+const instance = init({
   name,
   remotes: usedRemotes,
   plugins,
@@ -22,10 +21,16 @@ const initRes = init({
   shareStrategy,
 });
 
-const scope = initializeScope(name);
+globalThis.__FEDERATION__ ??= {};
+globalThis.__FEDERATION__.__NATIVE__ ??= {};
+globalThis.__FEDERATION__.__NATIVE__[name] ??= {};
+globalThis.__FEDERATION__.__NATIVE__[name].deps ??= {
+  shared: {},
+  remotes: {},
+};
 
-scope.init = Promise.all([
-  initRes.initializeSharing(shareScopeName, {
+globalThis.__FEDERATION__.__NATIVE__[name].init = Promise.all([
+  instance.initializeSharing(shareScopeName, {
     strategy: shareStrategy,
     from: 'build',
     initScope: [],

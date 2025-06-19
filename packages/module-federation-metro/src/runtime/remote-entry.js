@@ -1,6 +1,5 @@
 import 'mf:async-require';
 
-import { initializeScope } from 'mf:instance-helpers';
 import { loadSharedToRegistry } from 'mf:remote-module-registry';
 import { init as runtimeInit } from '@module-federation/runtime';
 
@@ -27,7 +26,7 @@ const shareStrategy = __SHARE_STRATEGY__;
 let hmrInitialized = false;
 
 async function init(shared = {}, initScope = []) {
-  const initRes = runtimeInit({
+  const instance = runtimeInit({
     name,
     remotes: usedRemotes,
     shared: usedShared,
@@ -45,10 +44,10 @@ async function init(shared = {}, initScope = []) {
     return;
   }
   initScope.push(initToken);
-  initRes.initShareScopeMap(shareScopeName, shared);
+  instance.initShareScopeMap(shareScopeName, shared);
 
   await Promise.all(
-    initRes.initializeSharing(shareScopeName, {
+    instance.initializeSharing(shareScopeName, {
       strategy: shareStrategy,
       from: 'build',
       initScope,
@@ -68,9 +67,19 @@ async function init(shared = {}, initScope = []) {
   // load the rest of shared deps
   await Promise.all(Object.keys(shared).map(loadSharedToRegistry));
 
-  return initRes;
+  return instance;
 }
 
-const scope = initializeScope(name);
+globalThis.__FEDERATION__ ??= {};
+globalThis.__FEDERATION__.__NATIVE__ ??= {};
+globalThis.__FEDERATION__.__NATIVE__[name] ??= {};
 
-scope.entry = { get, init };
+globalThis.__FEDERATION__.__NATIVE__[name].deps ??= {
+  shared: {},
+  remotes: {},
+};
+
+globalThis.__FEDERATION__.__NATIVE__[name].exports = {
+  get,
+  init,
+};
