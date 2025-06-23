@@ -18,8 +18,6 @@ jobs:
       - name: Prepare repository
         uses: ./.github/actions/prepare-repo
 
-      - uses: pnpm/action-setup@v3
-
       - name: Lint
         run: pnpm lint
 
