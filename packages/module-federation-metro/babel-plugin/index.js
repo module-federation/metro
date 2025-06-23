@@ -29,7 +29,7 @@ function isSharedImport(path, options) {
   );
 }
 
-function getWrappedRemoteImport(importName) {
+function createWrappedImport(importName, methodName) {
   const importArg = t.stringLiteral(importName);
 
   // require('mf:remote-module-registry')
@@ -37,30 +37,21 @@ function getWrappedRemoteImport(importName) {
     t.stringLiteral('mf:remote-module-registry'),
   ]);
 
-  // .loadAndGetRemote(importName)
-  const loadAndGetRemoteCall = t.callExpression(
-    t.memberExpression(requireCall, t.identifier('loadAndGetRemote')),
+  // .loadAndGetRemote(importName) or .loadAndGetShared(importName)
+  const loadAndGetCall = t.callExpression(
+    t.memberExpression(requireCall, t.identifier(methodName)),
     [importArg]
   );
 
-  return loadAndGetRemoteCall;
+  return loadAndGetCall;
+}
+
+function getWrappedRemoteImport(importName) {
+  return createWrappedImport(importName, 'loadAndGetRemote');
 }
 
 function getWrappedSharedImport(importName) {
-  const importArg = t.stringLiteral(importName);
-
-  // require('mf:remote-module-registry')
-  const requireCall = t.callExpression(t.identifier('require'), [
-    t.stringLiteral('mf:remote-module-registry'),
-  ]);
-
-  // .loadAndGetShared(importName)
-  const loadAndGetSharedCall = t.callExpression(
-    t.memberExpression(requireCall, t.identifier('loadAndGetShared')),
-    [importArg]
-  );
-
-  return loadAndGetSharedCall;
+  return createWrappedImport(importName, 'loadAndGetShared');
 }
 
 function moduleFederationRemotesBabelPlugin() {
@@ -77,9 +68,7 @@ function moduleFederationRemotesBabelPlugin() {
             path.node.arguments[0].value
           );
           path.replaceWith(wrappedImport);
-        }
-
-        if (isSharedImport(path, state.opts)) {
+        } else if (isSharedImport(path, state.opts)) {
           const wrappedImport = getWrappedSharedImport(
             path.node.arguments[0].value
           );
