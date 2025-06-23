@@ -1,17 +1,18 @@
-import type { FederationRuntimePlugin } from '@module-federation/runtime';
+import type {
+  Federation,
+  FederationRuntimePlugin,
+} from '@module-federation/runtime';
 
 declare global {
   var __DEV__: boolean;
   var __METRO_GLOBAL_PREFIX__: string;
-  var __METRO_FEDERATION__: Record<string, any> & {
-    [key: string]: { __shareInit: Promise<void> };
-  };
   var __FUSEBOX_HAS_FULL_CONSOLE_SUPPORT__: boolean;
   var __loadBundleAsync: (entry: string) => Promise<void>;
+  var __FEDERATION__: Federation;
 }
 
 const getQueryParams = () => {
-  const isFuseboxEnabled = !!global.__FUSEBOX_HAS_FULL_CONSOLE_SUPPORT__;
+  const isFuseboxEnabled = !!globalThis.__FUSEBOX_HAS_FULL_CONSOLE_SUPPORT__;
   const queryParams: Record<string, string> = {
     platform: require('react-native').Platform.OS,
     dev: 'true',
@@ -43,10 +44,10 @@ const MetroCorePlugin: () => FederationRuntimePlugin = () => ({
 
     const __loadBundleAsync =
       // @ts-expect-error dynamic key access on global object
-      global[`${__METRO_GLOBAL_PREFIX__ ?? ''}__loadBundleAsync`];
+      globalThis[`${__METRO_GLOBAL_PREFIX__ ?? ''}__loadBundleAsync`];
 
     const loadBundleAsync =
-      __loadBundleAsync as typeof global.__loadBundleAsync;
+      __loadBundleAsync as typeof globalThis.__loadBundleAsync;
 
     if (!loadBundleAsync) {
       throw new Error('loadBundleAsync is not defined');
@@ -56,15 +57,15 @@ const MetroCorePlugin: () => FederationRuntimePlugin = () => ({
       const entryUrl = buildUrlForEntryBundle(entry);
       await loadBundleAsync(entryUrl);
 
-      if (!global.__METRO_FEDERATION__[entryGlobalName]) {
+      if (!globalThis.__FEDERATION__.__NATIVE__[entryGlobalName]) {
         throw new Error(`Remote entry ${entryGlobalName} failed to register.`);
       }
 
-      global.__METRO_FEDERATION__[entryGlobalName].location = entryUrl;
+      globalThis.__FEDERATION__.__NATIVE__[entryGlobalName].origin = entryUrl;
 
-      return global.__METRO_FEDERATION__[entryGlobalName];
+      return globalThis.__FEDERATION__.__NATIVE__[entryGlobalName].exports;
     } catch (error) {
-      console.error(
+      throw new Error(
         `Failed to load remote entry: ${entryGlobalName}. Reason: ${error}`
       );
     }

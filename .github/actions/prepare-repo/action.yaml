@@ -1,0 +1,21 @@
+name: Prepare repository
+
+runs:
+  using: "composite"
+  steps:
+    - uses: pnpm/action-setup@v3
+
+    - name: Setup Node
+      uses: actions/setup-node@v4
+      with:
+        node-version: 22
+        cache: 'pnpm'
+
+    - name: Install Metro dependencies
+      working-directory: external/metro
+      run: yarn set version 1.22.22 && yarn install
+      shell: bash
+
+    - name: Install dependencies
+      run: pnpm install --frozen-lockfile
+      shell: bash

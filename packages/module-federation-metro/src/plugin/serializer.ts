@@ -96,11 +96,11 @@ function collectSyncSharedModules(graph: ReadOnlyGraph, _shared: Shared) {
 }
 
 function getFederationSharedDependenciesNamespace(scope: string) {
-  return `globalThis.__METRO_FEDERATION__["${scope}"].dependencies.shared`;
+  return `globalThis.__FEDERATION__.__NATIVE__["${scope}"].deps.shared`;
 }
 
 function getFederationRemotesDependenciesNamespace(scope: string) {
-  return `globalThis.__METRO_FEDERATION__["${scope}"].dependencies.remotes`;
+  return `globalThis.__FEDERATION__.__NATIVE__["${scope}"].deps.remotes`;
 }
 
 function getSyncShared(shared: string[], entry: string, scope: string): Module {

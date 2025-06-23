@@ -1,11 +1,3 @@
-interface FederationScope {
-  location?: string;
-  dependencies: {
-    shared: Record<string, string[]>;
-    remotes: Record<string, string[]>;
-  };
-}
-
 // join two paths
 // e.g. /a/b/ + /c/d -> /a/b/c/d
 function joinComponents(prefix: string, suffix: string) {
@@ -58,16 +50,15 @@ function buildLoadBundleAsyncWrapper() {
 
   const __loadBundleAsync =
     // @ts-expect-error dynamic key access on global object
-    global[`${__METRO_GLOBAL_PREFIX__ ?? ''}__loadBundleAsync`];
+    globalThis[`${__METRO_GLOBAL_PREFIX__ ?? ''}__loadBundleAsync`];
 
-  const loadBundleAsync = __loadBundleAsync as typeof global.__loadBundleAsync;
+  const loadBundleAsync =
+    __loadBundleAsync as typeof globalThis.__loadBundleAsync;
 
   return async (originalBundlePath: string) => {
-    const scope = global.__METRO_FEDERATION__[
-      __METRO_GLOBAL_PREFIX__
-    ] as FederationScope;
+    const scope = globalThis.__FEDERATION__.__NATIVE__[__METRO_GLOBAL_PREFIX__];
 
-    const bundlePath = getBundlePath(originalBundlePath, scope.location);
+    const bundlePath = getBundlePath(originalBundlePath, scope.origin);
 
     // ../../node_modules/ -> ..%2F..%2Fnode_modules/ so that it's not automatically sanitized
     const encodedBundlePath = bundlePath.replaceAll('../', '..%2F');
@@ -76,15 +67,15 @@ function buildLoadBundleAsyncWrapper() {
 
     // when the origin is not the same, it means we are loading a remote container
     // we can return early since dependencies are processed differently for entry bundles
-    if (!isSameOrigin(bundlePath, scope.location)) {
+    if (!isSameOrigin(bundlePath, scope.origin)) {
       return result;
     }
 
     // at this point the code in the bundle has been evaluated
     // but not yet executed through metroRequire
     const bundleId = getBundleId(originalBundlePath);
-    const shared = scope.dependencies.shared[bundleId];
-    const remotes = scope.dependencies.remotes[bundleId];
+    const shared = scope.deps.shared[bundleId];
+    const remotes = scope.deps.remotes[bundleId];
 
     const promises = [];
     if (shared && shared.length > 0) {
