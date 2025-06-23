@@ -9,34 +9,33 @@ __PLUGINS__;
 const usedRemotes = __REMOTES__;
 const usedShared = __SHARED__;
 
+const name = __NAME__;
 const shareScopeName = 'default';
 const shareStrategy = __SHARE_STRATEGY__;
 
-const initRes = init({
-  name: __NAME__,
+const instance = init({
+  name,
   remotes: usedRemotes,
   plugins,
   shared: usedShared,
   shareStrategy,
 });
 
-global.__METRO_FEDERATION__ = global.__METRO_FEDERATION__ || {};
-global.__METRO_FEDERATION__[__NAME__] =
-  global.__METRO_FEDERATION__[__NAME__] || {};
-
-global.__METRO_FEDERATION__[__NAME__].dependencies = global
-  .__METRO_FEDERATION__[__NAME__].dependencies || {
+globalThis.__FEDERATION__ ??= {};
+globalThis.__FEDERATION__.__NATIVE__ ??= {};
+globalThis.__FEDERATION__.__NATIVE__[name] ??= {};
+globalThis.__FEDERATION__.__NATIVE__[name].deps ??= {
   shared: {},
   remotes: {},
 };
 
-global.__METRO_FEDERATION__[__NAME__].__shareInit = Promise.all(
-  initRes.initializeSharing(shareScopeName, {
+globalThis.__FEDERATION__.__NATIVE__[name].init = Promise.all([
+  instance.initializeSharing(shareScopeName, {
     strategy: shareStrategy,
     from: 'build',
     initScope: [],
-  })
-).then(() =>
+  }),
+]).then(() =>
   Promise.all([
     ...Object.keys(usedShared).map(loadSharedToRegistry),
     ...__EARLY_REMOTES__.map(loadRemoteToRegistry),

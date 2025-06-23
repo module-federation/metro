@@ -18,14 +18,15 @@ function get(moduleName) {
 }
 
 const initTokens = {};
+
+const name = __NAME__;
 const shareScopeName = 'default';
 const shareStrategy = __SHARE_STRATEGY__;
-const name = __NAME__;
 
 let hmrInitialized = false;
 
 async function init(shared = {}, initScope = []) {
-  const initRes = runtimeInit({
+  const instance = runtimeInit({
     name,
     remotes: usedRemotes,
     shared: usedShared,
@@ -43,10 +44,10 @@ async function init(shared = {}, initScope = []) {
     return;
   }
   initScope.push(initToken);
-  initRes.initShareScopeMap(shareScopeName, shared);
+  instance.initShareScopeMap(shareScopeName, shared);
 
   await Promise.all(
-    initRes.initializeSharing(shareScopeName, {
+    instance.initializeSharing(shareScopeName, {
       strategy: shareStrategy,
       from: 'build',
       initScope,
@@ -66,17 +67,19 @@ async function init(shared = {}, initScope = []) {
   // load the rest of shared deps
   await Promise.all(Object.keys(shared).map(loadSharedToRegistry));
 
-  return initRes;
+  return instance;
 }
 
-global.__METRO_FEDERATION__[__NAME__] =
-  global.__METRO_FEDERATION__[__NAME__] || {};
+globalThis.__FEDERATION__ ??= {};
+globalThis.__FEDERATION__.__NATIVE__ ??= {};
+globalThis.__FEDERATION__.__NATIVE__[name] ??= {};
 
-global.__METRO_FEDERATION__[__NAME__].dependencies = global
-  .__METRO_FEDERATION__[__NAME__].dependencies || {
+globalThis.__FEDERATION__.__NATIVE__[name].deps ??= {
   shared: {},
   remotes: {},
 };
 
-global.__METRO_FEDERATION__[__NAME__].get = get;
-global.__METRO_FEDERATION__[__NAME__].init = init;
+globalThis.__FEDERATION__.__NATIVE__[name].exports = {
+  get,
+  init,
+};
