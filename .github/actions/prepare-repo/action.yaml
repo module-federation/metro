@@ -1,0 +1,22 @@
+name: Prepare repository
+
+runs:
+  using: "composite"
+  steps:
+    - name: Setup Node
+      uses: actions/setup-node@v4
+      with:
+        node-version: 22
+
+    - name: Enable Corepack
+      run: corepack enable
+      shell: bash
+
+    - name: Install Metro dependencies
+      working-directory: external/metro
+      run: yarn set version 1.22.22 && yarn install
+      shell: bash
+
+    - name: Install dependencies
+      run: pnpm install --frozen-lockfile
+      shell: bash
