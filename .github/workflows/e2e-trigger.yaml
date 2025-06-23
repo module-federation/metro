@@ -4,7 +4,15 @@ on:
   push:
     branches:
       - main
+  pull_request:
   workflow_dispatch:
+
+permissions:
+  actions: read
+  contents: read
+  checks: write
+  pull-requests: write
+  id-token: write
 
 jobs:
   e2e-matrix-android:
