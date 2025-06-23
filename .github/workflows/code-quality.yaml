@@ -1,0 +1,38 @@
+name: Code Quality Checks
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: true
+          clean: true
+
+      - name: Prepare repository
+        uses: ./.github/actions/prepare-repo
+
+      - uses: pnpm/action-setup@v3
+
+      - name: Lint
+        run: pnpm lint
+
+  typecheck:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: true
+          clean: true
+
+      - name: Prepare repository
+        uses: ./.github/actions/prepare-repo
+
+      - name: Typecheck
+        run: pnpm typecheck
