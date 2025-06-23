@@ -63,13 +63,15 @@ function moduleFederationRemotesBabelPlugin() {
           return;
         }
 
-        const importName = path.node.arguments[0].value;
-
         if (isRemoteImport(path, state.opts)) {
-          const wrappedImport = getWrappedRemoteImport(importName);
+          const wrappedImport = getWrappedRemoteImport(
+            path.node.arguments[0].value
+          );
           path.replaceWith(wrappedImport);
         } else if (isSharedImport(path, state.opts)) {
-          const wrappedImport = getWrappedSharedImport(importName);
+          const wrappedImport = getWrappedSharedImport(
+            path.node.arguments[0].value
+          );
           path.replaceWith(wrappedImport);
         }
       },
