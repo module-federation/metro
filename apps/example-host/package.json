@@ -13,9 +13,12 @@
     "pods": "(cd ios && bundle install && bundle exec pod install)",
     "test": "jest",
     "adbreverse": "pnpm --filter example-mini --filter example-nested-mini run adbreverse",
-    "e2e:prepare:ios": "pnpm --filter example-mini --filter example-nested-mini run serve:ios",
-    "e2e:prepare:android": "pnpm --filter example-mini --filter example-nested-mini run serve:android",
-    "e2e:run": "maestro test e2e"
+    "e2e:prepare:ios": "pnpm --filter example-mini --filter example-nested-mini run build:ios",
+    "e2e:prepare:android": "pnpm --filter example-mini --filter example-nested-mini run build:android",
+    "e2e:serve:ios": "pnpm --filter example-mini --filter example-nested-mini run serve:ios",
+    "e2e:serve:android": "pnpm --filter example-mini --filter example-nested-mini run serve:android",
+    "e2e:run:ios": "maestro --platform=ios test e2e",
+    "e2e:run:android": "maestro --platform=android test e2e"
   },
   "dependencies": {
     "lodash": "4.16.6",

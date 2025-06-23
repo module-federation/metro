@@ -80,7 +80,9 @@ runs:
 
     - name: E2E Prepare Script
       run: |
-        pnpm --filter ${{ inputs.app_name }} e2e:prepare:android &
+        pnpm --filter ${{ inputs.app_name }} e2e:prepare:android
+        # Serve mini apps in the background
+        pnpm --filter ${{ inputs.app_name }} e2e:serve:android &
       shell: bash
 
     - uses: callstackincubator/android@v1
@@ -103,7 +105,7 @@ runs:
         script: |
           pnpm --filter ${{ inputs.app_name }} android:release
           pnpm --filter ${{ inputs.app_name }} adbreverse
-          pnpm --filter ${{ inputs.app_name }} e2e:run
+          pnpm --filter ${{ inputs.app_name }} e2e:run:android
 
     - name: Upload Maestro Logs on Failure
       if: failure() # Runs only if any of the previous steps fail
