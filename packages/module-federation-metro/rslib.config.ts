@@ -33,12 +33,13 @@ export default defineConfig({
   ],
   source: {
     entry: {
-      index: 'src/!(modules|runtime)',
+      index: 'src/!(babel|modules|runtime)',
     },
     tsconfigPath: './tsconfig.build.json',
   },
   output: {
     copy: [
+      { from: './src/babel', to: 'babel' },
       { from: './src/modules', to: 'modules' },
       { from: './src/runtime', to: 'runtime' },
     ],

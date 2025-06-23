@@ -19,13 +19,13 @@
       "import": "./dist/commands/index.mjs",
       "default": "./dist/commands/index.js"
     },
-    "./babel/*": "./babel/*.js",
+    "./babel-plugin": "./babel-plugin/index.js",
     "./bootstrap": {
       "dev": "./src/modules/asyncStartup.tsx",
       "default": "./dist/modules/asyncStartup.tsx"
     }
   },
-  "files": ["dist", "babel", "bootstrap"],
+  "files": ["dist", "babel-plugin", "bootstrap"],
   "scripts": {
     "build": "rslib build",
     "typecheck": "tsc --noEmit"

@@ -7,6 +7,10 @@ function getRemotesRegExp(remotes) {
   return new RegExp(`^(${Object.keys(remotes).join('|')})\/`);
 }
 
+function getSharedRegExp(shared) {
+  return new RegExp(`^(${Object.keys(shared).join('|')})$`);
+}
+
 function isRemoteImport(path, options) {
   return (
     t.isImport(path.node.callee) &&
@@ -16,7 +20,16 @@ function isRemoteImport(path, options) {
   );
 }
 
-function getWrappedRemoteImport(importName) {
+function isSharedImport(path, options) {
+  return (
+    t.isImport(path.node.callee) &&
+    t.isStringLiteral(path.node.arguments[0]) &&
+    Object.keys(options.shared).length > 0 &&
+    path.node.arguments[0].value.match(getSharedRegExp(options.shared))
+  );
+}
+
+function createWrappedImport(importName, methodName) {
   const importArg = t.stringLiteral(importName);
 
   // require('mf:remote-module-registry')
@@ -24,18 +37,26 @@ function getWrappedRemoteImport(importName) {
     t.stringLiteral('mf:remote-module-registry'),
   ]);
 
-  // .loadAndGetRemote(importName)
-  const loadAndGetRemoteCall = t.callExpression(
-    t.memberExpression(requireCall, t.identifier('loadAndGetRemote')),
+  // .loadAndGetRemote(importName) or .loadAndGetShared(importName)
+  const loadAndGetCall = t.callExpression(
+    t.memberExpression(requireCall, t.identifier(methodName)),
     [importArg]
   );
 
-  return loadAndGetRemoteCall;
+  return loadAndGetCall;
+}
+
+function getWrappedRemoteImport(importName) {
+  return createWrappedImport(importName, 'loadAndGetRemote');
+}
+
+function getWrappedSharedImport(importName) {
+  return createWrappedImport(importName, 'loadAndGetShared');
 }
 
 function moduleFederationRemotesBabelPlugin() {
   return {
-    name: 'module-federation-remotes-babel-plugin',
+    name: 'module-federation-metro-babel-plugin',
     visitor: {
       CallExpression(path, state) {
         if (state.opts.blacklistedPaths.includes(state.filename)) {
@@ -46,7 +67,11 @@ function moduleFederationRemotesBabelPlugin() {
           const wrappedImport = getWrappedRemoteImport(
             path.node.arguments[0].value
           );
-
+          path.replaceWith(wrappedImport);
+        } else if (isSharedImport(path, state.opts)) {
+          const wrappedImport = getWrappedSharedImport(
+            path.node.arguments[0].value
+          );
           path.replaceWith(wrappedImport);
         }
       },
