@@ -114,11 +114,6 @@ export function createResolveRequest({
         vmManager.registerVirtualModule(sharedPath, sharedGenerator);
         return { type: 'sourceFile', filePath: sharedPath };
       }
-      // TODO: module deep import
-      // if (importName.endsWith("/") && moduleName.startsWith(importName)) {
-      //   const sharedPath = createSharedModule(moduleName, paths.mfMetro);
-      //   return { type: "sourceFile", filePath: sharedPath };
-      // }
     }
 
     // replace getDevServer module in remote with our own implementation
