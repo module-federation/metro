@@ -80,12 +80,14 @@ runs:
     - name: E2E Prepare Script
       shell: bash
       run: |
-        pnpm --filter ${{ inputs.app_name }} e2e:prepare:ios &
+        pnpm --filter ${{ inputs.app_name }} e2e:prepare:ios
+        # Serve mini apps in the background
+        pnpm --filter ${{ inputs.app_name }} e2e:serve:ios &
 
     - name: Run iOS E2E Tests
       run: |
         pnpm --filter ${{ inputs.app_name }} ios:release
-        pnpm --filter ${{ inputs.app_name }} e2e:run
+        pnpm --filter ${{ inputs.app_name }} e2e:run:ios
       shell: bash
 
     - name: Upload Maestro Logs on Failure

@@ -12,8 +12,8 @@
     "pods": "(cd ios && bundle install && bundle exec pod install)",
     "build:ios": "METRO_FEDERATION_DEV=1 rnef bundle-mf-remote --platform ios --dev false",
     "build:android": "METRO_FEDERATION_DEV=1 rnef bundle-mf-remote --platform android --dev false",
-    "serve:ios": "pnpm build:ios && serve dist/ios -p 8083",
-    "serve:android": "pnpm build:android && serve dist/android -p 8083",
+    "serve:ios": "serve dist/ios -p 8083",
+    "serve:android": "serve dist/android -p 8083",
     "adbreverse": "adb reverse tcp:8083 tcp:8083"
   },
   "dependencies": {
