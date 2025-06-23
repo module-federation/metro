@@ -16,7 +16,7 @@ export function createBabelTransformer({
   tmpDirPath,
 }: CreateBabelTransformerOptions) {
   const outputPath = path.join(tmpDirPath, 'babel-transformer.js');
-  const templatePath = require.resolve('../runtime/babel-transformer.js');
+  const templatePath = require.resolve('../babel/babel-transformer.js');
   const transformerTemplate = fs.readFileSync(templatePath, 'utf-8');
 
   const babelTransformer = transformerTemplate
