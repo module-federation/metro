@@ -40,19 +40,6 @@ runs:
       run: pnpm install --frozen-lockfile
       shell: bash
 
-    - name: Cache Pods
-      uses: actions/cache@v3
-      with:
-        path: apps/${{ inputs.app_name }}/ios/Pods
-        key: ${{ runner.os }}-pods-${{ hashFiles('apps/${{ inputs.app_name }}/ios/Podfile.lock') }}
-        restore-keys: |
-          ${{ runner.os }}-pods-
-
-    - name: Install Pods
-      run: pnpm pods
-      working-directory: apps/${{ inputs.app_name }}
-      shell: bash
-
     - name: Install Maestro CLI and iOS Utilities
       run: |
         curl -Ls "https://get.maestro.mobile.dev" | bash
