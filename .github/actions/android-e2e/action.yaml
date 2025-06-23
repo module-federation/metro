@@ -47,14 +47,13 @@ runs:
         emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
         script: echo "Generated AVD snapshot for caching."
 
+    - uses: pnpm/action-setup@v3
+
     - name: Set up Node
       uses: actions/setup-node@v4
       with:
         node-version: 22
-
-    - name: Enable Corepack
-      run: corepack enable
-      shell: bash
+        cache: 'pnpm'
 
     - name: Install Metro dependencies
       working-directory: external/metro

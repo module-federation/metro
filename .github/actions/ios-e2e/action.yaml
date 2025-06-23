@@ -23,14 +23,13 @@ runs:
       with:
         ruby-version: ${{ env.RUBY_VERSION }}
 
+    - uses: pnpm/action-setup@v3
+
     - name: Set up Node
       uses: actions/setup-node@v4
       with:
         node-version: 22
-
-    - name: Enable Corepack
-      run: corepack enable
-      shell: bash
+        cache: 'pnpm'
 
     - name: Install Metro dependencies
       working-directory: external/metro
