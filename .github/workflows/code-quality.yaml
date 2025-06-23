@@ -19,7 +19,7 @@ jobs:
         uses: ./.github/actions/prepare-repo
 
       - name: Lint
-        run: pnpm lint
+        run: pnpm lint:ci
 
   typecheck:
     runs-on: ubuntu-latest
