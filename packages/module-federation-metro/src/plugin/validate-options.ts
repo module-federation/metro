@@ -38,7 +38,8 @@ function validateShared(shared: Shared) {
     // disallow deep import wildcards (containing /)
     if (sharedName.endsWith('/')) {
       throw new ConfigError(
-        'Deep import wildcards are not supported as shared module names.'
+        'Deep import wildcards are not supported as shared module names. ' +
+          'You need to list all deep imports explicitly.'
       );
     }
   }
