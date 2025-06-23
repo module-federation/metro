@@ -6,7 +6,7 @@ import type {
   ModuleFederationConfigNormalized,
 } from '../types';
 import { VirtualModuleManager } from '../utils';
-import { createBabelTransformer } from './generators';
+import { createBabelTransformer } from './babel-transformer';
 import {
   isUsingMFCommand,
   prepareTmpDir,
@@ -77,10 +77,10 @@ function augmentConfig(
   const asyncRequirePath = require.resolve('../modules/asyncRequire.ts');
 
   const babelTransformerPath = createBabelTransformer({
-    proxiedBabelTrasnsformerPath: config.transformer.babelTransformerPath,
-    mfConfig: options,
-    mfMetroPath: tmpDirPath,
     blacklistedPaths: [initHostPath, remoteEntryPath],
+    federationConfig: options,
+    originalBabelTransformerPath: config.transformer.babelTransformerPath,
+    tmpDirPath: tmpDirPath,
   });
 
   const manifestPath = createManifest(options, tmpDirPath);
