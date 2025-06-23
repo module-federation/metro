@@ -25,7 +25,7 @@
       "default": "./dist/modules/asyncStartup.tsx"
     }
   },
-  "files": ["dist", "babel", "bootstrap"],
+  "files": ["dist", "babel-plugin", "bootstrap"],
   "scripts": {
     "build": "rslib build",
     "typecheck": "tsc --noEmit"
