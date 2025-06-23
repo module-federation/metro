@@ -61,7 +61,7 @@ runs:
       shell: bash
 
     - name: Install dependencies
-      run: pnpm install
+      run: pnpm install --frozen-lockfile
       shell: bash
 
     - name: Install Maestro CLI
