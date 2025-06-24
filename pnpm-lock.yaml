@@ -52,11 +52,11 @@ importers:
         specifier: 4.16.6
         version: 4.16.6
       react:
-        specifier: 19.0.0
-        version: 19.0.0
+        specifier: 19.1.0
+        version: 19.1.0
       react-native:
-        specifier: 0.79.4
-        version: 0.79.4(patch_hash=25ca577106daa307f4f2c747fc9cba0d48347d7042fd354f0c4e20342f8c2b6c)(@babel/core@7.27.4)(@types/react@19.1.8)(react@19.0.0)
+        specifier: 0.80.0
+        version: 0.80.0(patch_hash=25ca577106daa307f4f2c747fc9cba0d48347d7042fd354f0c4e20342f8c2b6c)(@babel/core@7.27.4)(@types/react@19.1.8)(react@19.1.0)
     devDependencies:
       '@babel/core':
         specifier: ^7.25.2
@@ -77,17 +77,17 @@ importers:
         specifier: ^0.15.0
         version: 0.15.0
       '@react-native/babel-preset':
-        specifier: 0.79.4
-        version: 0.79.4(@babel/core@7.27.4)
+        specifier: 0.80.0
+        version: 0.80.0(@babel/core@7.27.4)
       '@react-native/eslint-config':
-        specifier: 0.79.4
-        version: 0.79.4(eslint@8.57.1)(jest@29.7.0(@types/node@20.19.1)(ts-node@10.9.2(@types/node@20.19.1)(typescript@5.0.4)))(prettier@2.8.8)(typescript@5.0.4)
+        specifier: 0.80.0
+        version: 0.80.0(eslint@8.57.1)(jest@29.7.0(@types/node@20.19.1)(ts-node@10.9.2(@types/node@20.19.1)(typescript@5.0.4)))(prettier@2.8.8)(typescript@5.0.4)
       '@react-native/metro-config':
-        specifier: 0.79.4
-        version: 0.79.4(@babel/core@7.27.4)
+        specifier: 0.80.0
+        version: 0.80.0(@babel/core@7.27.4)
       '@react-native/typescript-config':
-        specifier: 0.79.4
-        version: 0.79.4
+        specifier: 0.80.0
+        version: 0.80.0
       '@rnef/cli':
         specifier: ^0.7.25
         version: 0.7.25(typescript@5.0.4)
@@ -99,7 +99,7 @@ importers:
         version: 0.7.25(typescript@5.0.4)
       '@rnef/plugin-metro':
         specifier: ^0.7.25
-        version: 0.7.25(patch_hash=9eaf43b02d5f0d8d8433452a7e745e18784a15565529a2e3565d1787b14c2366)(@react-native/community-cli-plugin@0.79.4(patch_hash=445cc837d2f72ab42efc5a3f98e1906b366b2f99b0930b1fa11c9569c4bddd62))
+        version: 0.7.25(patch_hash=9eaf43b02d5f0d8d8433452a7e745e18784a15565529a2e3565d1787b14c2366)(@react-native/community-cli-plugin@0.80.0(patch_hash=445cc837d2f72ab42efc5a3f98e1906b366b2f99b0930b1fa11c9569c4bddd62))
       '@types/jest':
         specifier: ^29.5.13
         version: 29.5.14
@@ -107,10 +107,10 @@ importers:
         specifier: ^4
         version: 4.17.17
       '@types/react':
-        specifier: ^19.0.0
+        specifier: ^19.1.0
         version: 19.1.8
       '@types/react-test-renderer':
-        specifier: ^19.0.0
+        specifier: ^19.1.0
         version: 19.1.0
       eslint:
         specifier: ^8.19.0
@@ -125,8 +125,8 @@ importers:
         specifier: 2.8.8
         version: 2.8.8
       react-test-renderer:
-        specifier: 19.0.0
-        version: 19.0.0(react@19.0.0)
+        specifier: 19.1.0
+        version: 19.1.0(react@19.1.0)
       typescript:
         specifier: 5.0.4
         version: 5.0.4
@@ -137,11 +137,11 @@ importers:
         specifier: ^4.17.21
         version: 4.17.21
       react:
-        specifier: 19.0.0
-        version: 19.0.0
+        specifier: 19.1.0
+        version: 19.1.0
       react-native:
-        specifier: 0.79.4
-        version: 0.79.4(patch_hash=25ca577106daa307f4f2c747fc9cba0d48347d7042fd354f0c4e20342f8c2b6c)(@babel/core@7.27.4)(@types/react@19.1.8)(react@19.0.0)
+        specifier: 0.80.0
+        version: 0.80.0(patch_hash=25ca577106daa307f4f2c747fc9cba0d48347d7042fd354f0c4e20342f8c2b6c)(@babel/core@7.27.4)(@types/react@19.1.8)(react@19.1.0)
     devDependencies:
       '@babel/core':
         specifier: ^7.25.2
@@ -162,17 +162,17 @@ importers:
         specifier: ^0.15.0
         version: 0.15.0
       '@react-native/babel-preset':
-        specifier: 0.79.4
-        version: 0.79.4(@babel/core@7.27.4)
+        specifier: 0.80.0
+        version: 0.80.0(@babel/core@7.27.4)
       '@react-native/eslint-config':
-        specifier: 0.79.4
-        version: 0.79.4(eslint@8.57.1)(jest@29.7.0(@types/node@20.19.1)(ts-node@10.9.2(@types/node@20.19.1)(typescript@5.0.4)))(prettier@2.8.8)(typescript@5.0.4)
+        specifier: 0.80.0
+        version: 0.80.0(eslint@8.57.1)(jest@29.7.0(@types/node@20.19.1)(ts-node@10.9.2(@types/node@20.19.1)(typescript@5.0.4)))(prettier@2.8.8)(typescript@5.0.4)
       '@react-native/metro-config':
-        specifier: 0.79.4
-        version: 0.79.4(@babel/core@7.27.4)
+        specifier: 0.80.0
+        version: 0.80.0(@babel/core@7.27.4)
       '@react-native/typescript-config':
-        specifier: 0.79.4
-        version: 0.79.4
+        specifier: 0.80.0
+        version: 0.80.0
       '@rnef/cli':
         specifier: ^0.7.25
         version: 0.7.25(typescript@5.0.4)
@@ -184,7 +184,7 @@ importers:
         version: 0.7.25(typescript@5.0.4)
       '@rnef/plugin-metro':
         specifier: ^0.7.25
-        version: 0.7.25(patch_hash=9eaf43b02d5f0d8d8433452a7e745e18784a15565529a2e3565d1787b14c2366)(@react-native/community-cli-plugin@0.79.4(patch_hash=445cc837d2f72ab42efc5a3f98e1906b366b2f99b0930b1fa11c9569c4bddd62))
+        version: 0.7.25(patch_hash=9eaf43b02d5f0d8d8433452a7e745e18784a15565529a2e3565d1787b14c2366)(@react-native/community-cli-plugin@0.80.0(patch_hash=445cc837d2f72ab42efc5a3f98e1906b366b2f99b0930b1fa11c9569c4bddd62))
       '@types/jest':
         specifier: ^29.5.13
         version: 29.5.14
@@ -192,10 +192,10 @@ importers:
         specifier: ^4
         version: 4.17.17
       '@types/react':
-        specifier: ^19.0.0
+        specifier: ^19.1.0
         version: 19.1.8
       '@types/react-test-renderer':
-        specifier: ^19.0.0
+        specifier: ^19.1.0
         version: 19.1.0
       eslint:
         specifier: ^8.19.0
@@ -210,8 +210,8 @@ importers:
         specifier: 2.8.8
         version: 2.8.8
       react-test-renderer:
-        specifier: 19.0.0
-        version: 19.0.0(react@19.0.0)
+        specifier: 19.1.0
+        version: 19.1.0(react@19.1.0)
       serve:
         specifier: ^14.2.4
         version: 14.2.4
@@ -225,11 +225,11 @@ importers:
         specifier: 4.16.6
         version: 4.16.6
       react:
-        specifier: 19.0.0
-        version: 19.0.0
+        specifier: 19.1.0
+        version: 19.1.0
       react-native:
-        specifier: 0.79.4
-        version: 0.79.4(patch_hash=25ca577106daa307f4f2c747fc9cba0d48347d7042fd354f0c4e20342f8c2b6c)(@babel/core@7.27.4)(@types/react@19.1.8)(react@19.0.0)
+        specifier: 0.80.0
+        version: 0.80.0(patch_hash=25ca577106daa307f4f2c747fc9cba0d48347d7042fd354f0c4e20342f8c2b6c)(@babel/core@7.27.4)(@types/react@19.1.8)(react@19.1.0)
     devDependencies:
       '@babel/core':
         specifier: ^7.25.2
@@ -250,17 +250,17 @@ importers:
         specifier: ^0.15.0
         version: 0.15.0
       '@react-native/babel-preset':
-        specifier: 0.79.4
-        version: 0.79.4(@babel/core@7.27.4)
+        specifier: 0.80.0
+        version: 0.80.0(@babel/core@7.27.4)
       '@react-native/eslint-config':
-        specifier: 0.79.4
-        version: 0.79.4(eslint@8.57.1)(jest@29.7.0(@types/node@20.19.1)(ts-node@10.9.2(@types/node@20.19.1)(typescript@5.0.4)))(prettier@2.8.8)(typescript@5.0.4)
+        specifier: 0.80.0
+        version: 0.80.0(eslint@8.57.1)(jest@29.7.0(@types/node@20.19.1)(ts-node@10.9.2(@types/node@20.19.1)(typescript@5.0.4)))(prettier@2.8.8)(typescript@5.0.4)
       '@react-native/metro-config':
-        specifier: 0.79.4
-        version: 0.79.4(@babel/core@7.27.4)
+        specifier: 0.80.0
+        version: 0.80.0(@babel/core@7.27.4)
       '@react-native/typescript-config':
-        specifier: 0.79.4
-        version: 0.79.4
+        specifier: 0.80.0
+        version: 0.80.0
       '@rnef/cli':
         specifier: ^0.7.25
         version: 0.7.25(typescript@5.0.4)
@@ -272,7 +272,7 @@ importers:
         version: 0.7.25(typescript@5.0.4)
       '@rnef/plugin-metro':
         specifier: ^0.7.25
-        version: 0.7.25(patch_hash=9eaf43b02d5f0d8d8433452a7e745e18784a15565529a2e3565d1787b14c2366)(@react-native/community-cli-plugin@0.79.4(patch_hash=445cc837d2f72ab42efc5a3f98e1906b366b2f99b0930b1fa11c9569c4bddd62))
+        version: 0.7.25(patch_hash=9eaf43b02d5f0d8d8433452a7e745e18784a15565529a2e3565d1787b14c2366)(@react-native/community-cli-plugin@0.80.0(patch_hash=445cc837d2f72ab42efc5a3f98e1906b366b2f99b0930b1fa11c9569c4bddd62))
       '@types/jest':
         specifier: ^29.5.13
         version: 29.5.14
@@ -280,10 +280,10 @@ importers:
         specifier: ^4
         version: 4.17.17
       '@types/react':
-        specifier: ^19.0.0
+        specifier: ^19.1.0
         version: 19.1.8
       '@types/react-test-renderer':
-        specifier: ^19.0.0
+        specifier: ^19.1.0
         version: 19.1.0
       eslint:
         specifier: ^8.19.0
@@ -298,8 +298,8 @@ importers:
         specifier: 2.8.8
         version: 2.8.8
       react-test-renderer:
-        specifier: 19.0.0
-        version: 19.0.0(react@19.0.0)
+        specifier: 19.1.0
+        version: 19.1.0(react@19.1.0)
       serve:
         specifier: ^14.2.4
         version: 14.2.4
@@ -314,13 +314,13 @@ importers:
         version: 4.16.6
       lottie-react-native:
         specifier: ^7.2.2
-        version: 7.2.2(react-native@0.79.4(patch_hash=25ca577106daa307f4f2c747fc9cba0d48347d7042fd354f0c4e20342f8c2b6c)(@babel/core@7.27.4)(@types/react@19.1.8)(react@19.0.0))(react@19.0.0)
+        version: 7.2.2(react-native@0.80.0(patch_hash=25ca577106daa307f4f2c747fc9cba0d48347d7042fd354f0c4e20342f8c2b6c)(@babel/core@7.27.4)(@types/react@19.1.8)(react@19.1.0))(react@19.1.0)
       react:
-        specifier: 19.0.0
-        version: 19.0.0
+        specifier: 19.1.0
+        version: 19.1.0
       react-native:
-        specifier: 0.79.4
-        version: 0.79.4(patch_hash=25ca577106daa307f4f2c747fc9cba0d48347d7042fd354f0c4e20342f8c2b6c)(@babel/core@7.27.4)(@types/react@19.1.8)(react@19.0.0)
+        specifier: 0.80.0
+        version: 0.80.0(patch_hash=25ca577106daa307f4f2c747fc9cba0d48347d7042fd354f0c4e20342f8c2b6c)(@babel/core@7.27.4)(@types/react@19.1.8)(react@19.1.0)
     devDependencies:
       '@babel/core':
         specifier: ^7.25.2
@@ -341,17 +341,17 @@ importers:
         specifier: ^0.15.0
         version: 0.15.0
       '@react-native/babel-preset':
-        specifier: 0.79.4
-        version: 0.79.4(@babel/core@7.27.4)
+        specifier: 0.80.0
+        version: 0.80.0(@babel/core@7.27.4)
       '@react-native/eslint-config':
-        specifier: 0.79.4
-        version: 0.79.4(eslint@8.57.1)(jest@29.7.0(@types/node@20.19.1)(ts-node@10.9.2(@types/node@20.19.1)(typescript@5.0.4)))(prettier@2.8.8)(typescript@5.0.4)
+        specifier: 0.80.0
+        version: 0.80.0(eslint@8.57.1)(jest@29.7.0(@types/node@20.19.1)(ts-node@10.9.2(@types/node@20.19.1)(typescript@5.0.4)))(prettier@2.8.8)(typescript@5.0.4)
       '@react-native/metro-config':
-        specifier: 0.79.4
-        version: 0.79.4(@babel/core@7.27.4)
+        specifier: 0.80.0
+        version: 0.80.0(@babel/core@7.27.4)
       '@react-native/typescript-config':
-        specifier: 0.79.4
-        version: 0.79.4
+        specifier: 0.80.0
+        version: 0.80.0
       '@rnef/cli':
         specifier: ^0.7.25
         version: 0.7.25(typescript@5.0.4)
@@ -363,7 +363,7 @@ importers:
         version: 0.7.25(typescript@5.0.4)
       '@rnef/plugin-metro':
         specifier: ^0.7.25
-        version: 0.7.25(patch_hash=9eaf43b02d5f0d8d8433452a7e745e18784a15565529a2e3565d1787b14c2366)(@react-native/community-cli-plugin@0.79.4(patch_hash=445cc837d2f72ab42efc5a3f98e1906b366b2f99b0930b1fa11c9569c4bddd62))
+        version: 0.7.25(patch_hash=9eaf43b02d5f0d8d8433452a7e745e18784a15565529a2e3565d1787b14c2366)(@react-native/community-cli-plugin@0.80.0(patch_hash=445cc837d2f72ab42efc5a3f98e1906b366b2f99b0930b1fa11c9569c4bddd62))
       '@types/jest':
         specifier: ^29.5.13
         version: 29.5.14
@@ -371,10 +371,10 @@ importers:
         specifier: ^4
         version: 4.17.17
       '@types/react':
-        specifier: ^19.0.0
+        specifier: ^19.1.0
         version: 19.1.8
       '@types/react-test-renderer':
-        specifier: ^19.0.0
+        specifier: ^19.1.0
         version: 19.1.0
       eslint:
         specifier: ^8.19.0
@@ -389,8 +389,8 @@ importers:
         specifier: 2.8.8
         version: 2.8.8
       react-test-renderer:
-        specifier: 19.0.0
-        version: 19.0.0(react@19.0.0)
+        specifier: 19.1.0
+        version: 19.1.0(react@19.1.0)
       typescript:
         specifier: 5.0.4
         version: 5.0.4
@@ -402,13 +402,13 @@ importers:
         version: 4.17.21
       lottie-react-native:
         specifier: ^7.2.2
-        version: 7.2.2(react-native@0.79.4(patch_hash=25ca577106daa307f4f2c747fc9cba0d48347d7042fd354f0c4e20342f8c2b6c)(@babel/core@7.27.4)(@types/react@19.1.8)(react@19.0.0))(react@19.0.0)
+        version: 7.2.2(react-native@0.80.0(patch_hash=25ca577106daa307f4f2c747fc9cba0d48347d7042fd354f0c4e20342f8c2b6c)(@babel/core@7.27.4)(@types/react@19.1.8)(react@19.1.0))(react@19.1.0)
       react:
-        specifier: 19.0.0
-        version: 19.0.0
+        specifier: 19.1.0
+        version: 19.1.0
       react-native:
-        specifier: 0.79.4
-        version: 0.79.4(patch_hash=25ca577106daa307f4f2c747fc9cba0d48347d7042fd354f0c4e20342f8c2b6c)(@babel/core@7.27.4)(@types/react@19.1.8)(react@19.0.0)
+        specifier: 0.80.0
+        version: 0.80.0(patch_hash=25ca577106daa307f4f2c747fc9cba0d48347d7042fd354f0c4e20342f8c2b6c)(@babel/core@7.27.4)(@types/react@19.1.8)(react@19.1.0)
     devDependencies:
       '@babel/core':
         specifier: ^7.25.2
@@ -429,17 +429,17 @@ importers:
         specifier: ^0.15.0
         version: 0.15.0
       '@react-native/babel-preset':
-        specifier: 0.79.4
-        version: 0.79.4(@babel/core@7.27.4)
+        specifier: 0.80.0
+        version: 0.80.0(@babel/core@7.27.4)
       '@react-native/eslint-config':
-        specifier: 0.79.4
-        version: 0.79.4(eslint@8.57.1)(jest@29.7.0(@types/node@20.19.1)(ts-node@10.9.2(@types/node@20.19.1)(typescript@5.0.4)))(prettier@2.8.8)(typescript@5.0.4)
+        specifier: 0.80.0
+        version: 0.80.0(eslint@8.57.1)(jest@29.7.0(@types/node@20.19.1)(ts-node@10.9.2(@types/node@20.19.1)(typescript@5.0.4)))(prettier@2.8.8)(typescript@5.0.4)
       '@react-native/metro-config':
-        specifier: 0.79.4
-        version: 0.79.4(@babel/core@7.27.4)
+        specifier: 0.80.0
+        version: 0.80.0(@babel/core@7.27.4)
       '@react-native/typescript-config':
-        specifier: 0.79.4
-        version: 0.79.4
+        specifier: 0.80.0
+        version: 0.80.0
       '@rnef/cli':
         specifier: ^0.7.25
         version: 0.7.25(typescript@5.0.4)
@@ -451,7 +451,7 @@ importers:
         version: 0.7.25(typescript@5.0.4)
       '@rnef/plugin-metro':
         specifier: ^0.7.25
-        version: 0.7.25(patch_hash=9eaf43b02d5f0d8d8433452a7e745e18784a15565529a2e3565d1787b14c2366)(@react-native/community-cli-plugin@0.79.4(patch_hash=445cc837d2f72ab42efc5a3f98e1906b366b2f99b0930b1fa11c9569c4bddd62))
+        version: 0.7.25(patch_hash=9eaf43b02d5f0d8d8433452a7e745e18784a15565529a2e3565d1787b14c2366)(@react-native/community-cli-plugin@0.80.0(patch_hash=445cc837d2f72ab42efc5a3f98e1906b366b2f99b0930b1fa11c9569c4bddd62))
       '@types/jest':
         specifier: ^29.5.13
         version: 29.5.14
@@ -459,10 +459,10 @@ importers:
         specifier: ^4
         version: 4.17.17
       '@types/react':
-        specifier: ^19.0.0
+        specifier: ^19.1.0
         version: 19.1.8
       '@types/react-test-renderer':
-        specifier: ^19.0.0
+        specifier: ^19.1.0
         version: 19.1.0
       eslint:
         specifier: ^8.19.0
@@ -477,8 +477,8 @@ importers:
         specifier: 2.8.8
         version: 2.8.8
       react-test-renderer:
-        specifier: 19.0.0
-        version: 19.0.0(react@19.0.0)
+        specifier: 19.1.0
+        version: 19.1.0(react@19.1.0)
       typescript:
         specifier: 5.0.4
         version: 5.0.4
@@ -514,14 +514,14 @@ importers:
         specifier: ^20.0.0
         version: 20.19.1
       '@types/react':
-        specifier: ^19.0.0
+        specifier: ^19.1.0
         version: 19.1.8
       react:
-        specifier: 19.0.0
-        version: 19.0.0
+        specifier: 19.1.0
+        version: 19.1.0
       react-native:
-        specifier: 0.79.4
-        version: 0.79.4(patch_hash=25ca577106daa307f4f2c747fc9cba0d48347d7042fd354f0c4e20342f8c2b6c)(@babel/core@7.27.4)(@types/react@19.1.8)(react@19.0.0)
+        specifier: 0.80.0
+        version: 0.80.0(patch_hash=25ca577106daa307f4f2c747fc9cba0d48347d7042fd354f0c4e20342f8c2b6c)(@babel/core@7.27.4)(@types/react@19.1.8)(react@19.1.0)
       ts-node:
         specifier: ^10.9.2
         version: 10.9.2(@types/node@20.19.1)(typescript@5.8.3)
@@ -1535,28 +1535,28 @@ packages:
   '@react-native-community/cli-types@18.0.0':
     resolution: {integrity: sha512-J84+4IRXl8WlVdoe1maTD5skYZZO9CbQ6LNXEHx1kaZcFmvPZKfjsaxuyQ+8BsSqZnM2izOw8dEWnAp/Zuwb0w==}
 
-  '@react-native/assets-registry@0.79.4':
-    resolution: {integrity: sha512-7PjHNRtYlc36B7P1PHme8ZV0ZJ/xsA/LvMoXe6EX++t7tSPJ8iYCMBryZhcdnztgce73b94Hfx6TTGbLF+xtUg==}
+  '@react-native/assets-registry@0.80.0':
+    resolution: {integrity: sha512-MlScsKAz99zoYghe5Rf5mUqsqz2rMB02640NxtPtBMSHNdGxxRlWu/pp1bFexDa1DYJwyIjnLgt3Z/Y90ikHfw==}
     engines: {node: '>=18'}
 
-  '@react-native/babel-plugin-codegen@0.79.4':
-    resolution: {integrity: sha512-quhytIlDedR3ircRwifa22CaWVUVnkxccrrgztroCZaemSJM+HLurKJrjKWm0J5jV9ed+d+9Qyb1YB0syTHDjg==}
+  '@react-native/babel-plugin-codegen@0.80.0':
+    resolution: {integrity: sha512-LXd766LHCR/79WmhIg4zUB9jRosgw8xGJ1QnYOoef1rA7vCdubC23nhUxF+PJdfTdAl1cqX4u1dhZcjg6yXjRg==}
     engines: {node: '>=18'}
 
-  '@react-native/babel-preset@0.79.4':
-    resolution: {integrity: sha512-El9JvYKiNfnkQ3qR7zJvvRdP3DX2i4BGYlIricWQishI3gWAfm88FQYFC2CcGoMQWJQEPN4jnDMpoISAJDEN4g==}
-    engines: {node: '>=18'}
-    peerDependencies:
-      '@babel/core': '*'
-
-  '@react-native/codegen@0.79.4':
-    resolution: {integrity: sha512-K0moZDTJtqZqSs+u9tnDPSxNsdxi5irq8Nu4mzzOYlJTVNGy5H9BiIDg/NeKGfjAdo43yTDoaPSbUCvVV8cgIw==}
+  '@react-native/babel-preset@0.80.0':
+    resolution: {integrity: sha512-ZgwbSOUPNKpIsZ6E0y3bncahh2vBf5V1URNV0tr9PBtu/LbGJ12nBKSH7gqrFdRzfEwKlhc0vP8p1oJt+A5mpw==}
     engines: {node: '>=18'}
     peerDependencies:
       '@babel/core': '*'
 
-  '@react-native/community-cli-plugin@0.79.4':
-    resolution: {integrity: sha512-lx1RXEJwU9Tcs2B2uiDZBa6yghU6m6STvwYqHbJlFZyNN1k3JRa9j0/CDu+0fCFacIn7rEfZpb4UWi5YhsHpQg==}
+  '@react-native/codegen@0.80.0':
+    resolution: {integrity: sha512-X9TsPgytoUkNrQjzAZh4dXa4AuouvYT0NzYyvnjw1ry4LESCZtKba+eY4x3+M30WPR52zjgu+UFL//14BSdCCA==}
+    engines: {node: '>=18'}
+    peerDependencies:
+      '@babel/core': '*'
+
+  '@react-native/community-cli-plugin@0.80.0':
+    resolution: {integrity: sha512-uadfVvzZfz5tGpqwslL12i+rELK9m6cLhtqICX0JQvS7Bu12PJwrozhKzEzIYwN9i3wl2dWrKDUr08izt7S9Iw==}
     engines: {node: '>=18'}
     peerDependencies:
       '@react-native-community/cli': '*'
@@ -1568,47 +1568,55 @@ packages:
     resolution: {integrity: sha512-Gg4LhxHIK86Bi2RiT1rbFAB6fuwANRsaZJ1sFZ1OZEMQEx6stEnzaIrmfgzcv4z0bTQdQ8lzCrpsz0qtdaD4eA==}
     engines: {node: '>=18'}
 
+  '@react-native/debugger-frontend@0.80.0':
+    resolution: {integrity: sha512-lpu9Z3xtKUaKFvEcm5HSgo1KGfkDa/W3oZHn22Zy0WQ9MiOu2/ar1txgd1wjkoNiK/NethKcRdCN7mqnc6y2mA==}
+    engines: {node: '>=18'}
+
   '@react-native/dev-middleware@0.79.4':
     resolution: {integrity: sha512-OWRDNkgrFEo+OSC5QKfiiBmGXKoU8gmIABK8rj2PkgwisFQ/22p7MzE5b6oB2lxWaeJT7jBX5KVniNqO46VhHA==}
     engines: {node: '>=18'}
 
-  '@react-native/eslint-config@0.79.4':
-    resolution: {integrity: sha512-CPHskdEEV765O0M9jgSCeF2rcTrwJb/wyA8sUyT+EQWOX5oWsQzNKN4sWJHB/qAY/1D0sPxZk/YneqHPxnBIUw==}
+  '@react-native/dev-middleware@0.80.0':
+    resolution: {integrity: sha512-lLyTnJ687A5jF3fn8yR/undlCis3FG+N/apQ+Q0Lcl+GV6FsZs0U5H28YmL6lZtjOj4TLek6uGPMPmZasHx7cQ==}
+    engines: {node: '>=18'}
+
+  '@react-native/eslint-config@0.80.0':
+    resolution: {integrity: sha512-bd0GOcG++qIKzEngeyeNrGaDWWHtB8CpC5zbpYho2TTWpJDxBRcoPAzBdpPkxQtpBMdXyYRZMENRp6Khrg0YYQ==}
     engines: {node: '>=18'}
     peerDependencies:
       eslint: '>=8'
       prettier: '>=2'
 
-  '@react-native/eslint-plugin@0.79.4':
-    resolution: {integrity: sha512-vp2eJQmutSsqhiBda3j0OJ5jXd5KXX7fDcr/1EdOzWf2st+dvKl140Rxx/E85eQSx8RTo8OpAzSw+wnq307/zA==}
+  '@react-native/eslint-plugin@0.80.0':
+    resolution: {integrity: sha512-4kFD3M/zGqKdKyeevnTdhgAhNCj89VflDfv2wElo4jOb07xkR6VlEymv/6mZX3tdP/N5ukP2SZB+FDZH1GxBTg==}
     engines: {node: '>=18'}
 
-  '@react-native/gradle-plugin@0.79.4':
-    resolution: {integrity: sha512-Gv5ryy23k7Sib2xVgqw65GTryg9YTij6URcMul5cI7LRcW0Aa1/FPb26l388P4oeNGNdDoAkkS+CuCWNunRuWg==}
+  '@react-native/gradle-plugin@0.80.0':
+    resolution: {integrity: sha512-drmS68rabSMOuDD+YsAY2luNT8br82ycodSDORDqAg7yWQcieHMp4ZUOcdOi5iW+JCqobablT/b6qxcrBg+RaA==}
     engines: {node: '>=18'}
 
-  '@react-native/js-polyfills@0.79.4':
-    resolution: {integrity: sha512-VyKPo/l9zP4+oXpQHrJq4vNOtxF7F5IMdQmceNzTnRpybRvGGgO/9jYu9mdmdKRO2KpQEc5dB4W2rYhVKdGNKg==}
+  '@react-native/js-polyfills@0.80.0':
+    resolution: {integrity: sha512-dMX7IcBuwghySTgIeK8q03tYz/epg5ScGmJEfBQAciuhzMDMV1LBR/9wwdgD73EXM/133yC5A+TlHb3KQil4Ew==}
     engines: {node: '>=18'}
 
-  '@react-native/metro-babel-transformer@0.79.4':
-    resolution: {integrity: sha512-GzfFBMeUtybd+bNpVsHX3+deRkyKklD4f5xMzexe+RGn8yKR4biwFvaUeHLT2RVZPAyHzTYm2rGClxzATpIJxA==}
+  '@react-native/metro-babel-transformer@0.80.0':
+    resolution: {integrity: sha512-5TldnaJE15IUNnZhjAelRz4+6qATlSO9yuzLqN1Y47qfJrAl/2lrI4KdSjFfvUaWrhezi94Aly1OKSJm9fjrXg==}
     engines: {node: '>=18'}
     peerDependencies:
       '@babel/core': '*'
 
-  '@react-native/metro-config@0.79.4':
-    resolution: {integrity: sha512-iKynCOo71HVKYzWKdrF1K5zMVwHfadCO9qkekCOjdsP5t9yJ0SaGXCkEo8qt50sL7mQ6TbfvJEl/lAAJqBwBOQ==}
+  '@react-native/metro-config@0.80.0':
+    resolution: {integrity: sha512-LJ1ZC9vs/B3wez6BsOIgJ3iw7N4QalMpiT/fb5b66L4vHUGqVucOWNUwpxbDb1m1/wlhTa8AljiAdjt401sFjA==}
     engines: {node: '>=18'}
 
-  '@react-native/normalize-colors@0.79.4':
-    resolution: {integrity: sha512-247/8pHghbYY2wKjJpUsY6ZNbWcdUa5j5517LZMn6pXrbSSgWuj3JA4OYibNnocCHBaVrt+3R8XC3VEJqLlHFg==}
+  '@react-native/normalize-colors@0.80.0':
+    resolution: {integrity: sha512-bJZDSopadjJxMDvysc634eTfLL4w7cAx5diPe14Ez5l+xcKjvpfofS/1Ja14DlgdMJhxGd03MTXlrxoWust3zg==}
 
-  '@react-native/typescript-config@0.79.4':
-    resolution: {integrity: sha512-sgtWypxWibkc+J8MDQ8qxfJadzVo9CEAbLBFGwqsmzwe5n/mu3qEIpi1hIGqUuNrPYe2yfUauDx1Yn0UNdI8EA==}
+  '@react-native/typescript-config@0.80.0':
+    resolution: {integrity: sha512-mlZhlXnVsDFvetx2vnOEwspJ5qWLiH2JY7dhxMiT/N90uJZjgFFvRMAWWNeJ1zgZPQylEuHHUUlDoaDZ7tQbTA==}
 
-  '@react-native/virtualized-lists@0.79.4':
-    resolution: {integrity: sha512-0Mdcox6e5PTonuM1WIo3ks7MBAa3IDzj0pKnE5xAwSgQ0DJW2P5dYf+KjWmpkE+Yb0w41ZbtXPhKq+U2JJ6C/Q==}
+  '@react-native/virtualized-lists@0.80.0':
+    resolution: {integrity: sha512-d9zZdPS/ZRexVAkxo1eRp85U7XnnEpXA1ZpSomRKxBuStYKky1YohfEX5YD5MhphemKK24tT7JR4UhaLlmeX8Q==}
     engines: {node: '>=18'}
     peerDependencies:
       '@types/react': ^19.0.0
@@ -2070,8 +2078,8 @@ packages:
     peerDependencies:
       '@babel/core': ^7.4.0 || ^8.0.0-0 <8.0.0
 
-  babel-plugin-syntax-hermes-parser@0.25.1:
-    resolution: {integrity: sha512-IVNpGzboFLfXZUAwkLFcI/bnqVbwky0jP3eBno4HKtqvQJAHBLdgxiG6lQ4to0+Q/YCN3PO0od5NZwIKyY4REQ==}
+  babel-plugin-syntax-hermes-parser@0.28.1:
+    resolution: {integrity: sha512-meT17DOuUElMNsL5LZN56d+KBp22hb0EfxWfuPUeoSi54e40v1W4C2V36P75FpsH9fVEfDKpw5Nnkahc8haSsQ==}
 
   babel-plugin-transform-flow-enums@0.0.2:
     resolution: {integrity: sha512-g4aaCrDDOsWjbm0PUUeVnkcVd6AKJsVc/MbnPhEotEpkeJQP6b8nzewohQi7+QS8UyPehOhGWn0nOwjvWpmMvQ==}
@@ -2528,11 +2536,11 @@ packages:
       jest:
         optional: true
 
-  eslint-plugin-react-hooks@4.6.2:
-    resolution: {integrity: sha512-QzliNJq4GinDBcD8gPB5v0wh6g8q3SUi6EFF0x8N/BL9PoVs0atuGc47ozMRyOWAKdwaZ5OnbOEa3WR+dSGKuQ==}
+  eslint-plugin-react-hooks@5.2.0:
+    resolution: {integrity: sha512-+f15FfK64YQwZdJNELETdn5ibXEUQmW1DZL6KXhNnc2heoy/sg9VJJeT7n8TlMWouzWqSWavFkIhHyIbIAEapg==}
     engines: {node: '>=10'}
     peerDependencies:
-      eslint: ^3.0.0 || ^4.0.0 || ^5.0.0 || ^6.0.0 || ^7.0.0 || ^8.0.0-0
+      eslint: ^3.0.0 || ^4.0.0 || ^5.0.0 || ^6.0.0 || ^7.0.0 || ^8.0.0-0 || ^9.0.0
 
   eslint-plugin-react-native-globals@0.1.2:
     resolution: {integrity: sha512-9aEPf1JEpiTjcFAmmyw8eiIXmcNZOqaZyHO77wgm0/dWfT/oxC1SrIq8ET38pMxHYrcB6Uew+TzUVsBeczF88g==}
@@ -2807,11 +2815,11 @@ packages:
     resolution: {integrity: sha512-0hJU9SCPvmMzIBdZFqNPXWa6dqh7WdH0cII9y+CyS8rG3nL48Bclra9HmKhVVUHyPWNH5Y7xDwAB7bfgSjkUMQ==}
     engines: {node: '>= 0.4'}
 
-  hermes-estree@0.25.1:
-    resolution: {integrity: sha512-0wUoCcLp+5Ev5pDW2OriHC2MJCbwLwuRx+gAqMTOkGKJJiBCLjtrvy4PWUGn6MIVefecRpzoOZ/UV6iGdOr+Cw==}
+  hermes-estree@0.28.1:
+    resolution: {integrity: sha512-w3nxl/RGM7LBae0v8LH2o36+8VqwOZGv9rX1wyoWT6YaKZLqpJZ0YQ5P0LVr3tuRpf7vCx0iIG4i/VmBJejxTQ==}
 
-  hermes-parser@0.25.1:
-    resolution: {integrity: sha512-6pEjquH3rqaI6cYAXYPcz9MS4rY6R4ngRgrgfDshRptUZIc3lw0MCIJIGDj9++mfySOuPTHB4nrSW99BCvOPIA==}
+  hermes-parser@0.28.1:
+    resolution: {integrity: sha512-nf8o+hE8g7UJWParnccljHumE9Vlq8F7MqIdeahl+4x0tvCUJYRrT0L7h0MMg/X9YJmkNwsfbaNNrzPtFXOscg==}
 
   html-escaper@2.0.2:
     resolution: {integrity: sha512-H2iMtd0I4Mt5eYiapRdIDjp+XzelXQ0tFE4JS7YFwFevXXMmOp9myNrUvCg0D6ws8iqkRPBfKHgbwig1SmlLfg==}
@@ -3668,13 +3676,13 @@ packages:
   react-is@19.1.0:
     resolution: {integrity: sha512-Oe56aUPnkHyyDxxkvqtd7KkdQP5uIUfHxd5XTb3wE9d/kRnZLmKbDB0GWk919tdQ+mxxPtG6EAs6RMT6i1qtHg==}
 
-  react-native@0.79.4:
-    resolution: {integrity: sha512-CfxYMuszvnO/33Q5rB//7cU1u9P8rSOvzhE2053Phdb8+6bof9NLayCllU2nmPrm8n9o6RU1Fz5H0yquLQ0DAw==}
+  react-native@0.80.0:
+    resolution: {integrity: sha512-b9K1ygb2MWCBtKAodKmE3UsbUuC29Pt4CrJMR0ocTA8k+8HJQTPleBPDNKL4/p0P01QO9aL/gZUddoxHempLow==}
     engines: {node: '>=18'}
     hasBin: true
     peerDependencies:
-      '@types/react': ^19.0.0
-      react: ^19.0.0
+      '@types/react': ^19.1.0
+      react: ^19.1.0
     peerDependenciesMeta:
       '@types/react':
         optional: true
@@ -3683,13 +3691,13 @@ packages:
     resolution: {integrity: sha512-jCvmsr+1IUSMUyzOkRcvnVbX3ZYC6g9TDrDbFuFmRDq7PD4yaGbLKNQL6k2jnArV8hjYxh7hVhAZB6s9HDGpZA==}
     engines: {node: '>=0.10.0'}
 
-  react-test-renderer@19.0.0:
-    resolution: {integrity: sha512-oX5u9rOQlHzqrE/64CNr0HB0uWxkCQmZNSfozlYvwE71TLVgeZxVf0IjouGEr1v7r1kcDifdAJBeOhdhxsG/DA==}
+  react-test-renderer@19.1.0:
+    resolution: {integrity: sha512-jXkSl3CpvPYEF+p/eGDLB4sPoDX8pKkYvRl9+rR8HxLY0X04vW7hCm1/0zHoUSjPZ3bDa+wXWNTDVIw/R8aDVw==}
     peerDependencies:
-      react: ^19.0.0
+      react: ^19.1.0
 
-  react@19.0.0:
-    resolution: {integrity: sha512-V8AVnmPIICiWpGfm6GLzCR/W5FXLchHop40W4nXBmdlEceh16rCN8O8LNWm5bh5XUX91fh7KpA+W0TgMKmgTpQ==}
+  react@19.1.0:
+    resolution: {integrity: sha512-FS+XFBNvn3GTAWq26joslQgWNoFu08F4kl0J4CgdNKADkdSGXQyTCnKteIAJy96Br6YbpEU1LSzV5dYtjMkMDg==}
     engines: {node: '>=0.10.0'}
 
   readable-stream@3.6.2:
@@ -3819,8 +3827,8 @@ packages:
   safer-buffer@2.1.2:
     resolution: {integrity: sha512-YZo3K82SD7Riyi0E1EQPojLz7kpepnSQI9IyPbHHg1XXXevb5dJI7tpyN2ADxGcQbHG7vcyRHk0cbwqcQriUtg==}
 
-  scheduler@0.25.0:
-    resolution: {integrity: sha512-xFVuu11jh+xcO7JOAGJNOXld8/TcEHK/4CituBUeUb5hqxJLj9YuemAEuvm9gQ/+pgXYfbQuqAkiYu+u7YEsNA==}
+  scheduler@0.26.0:
+    resolution: {integrity: sha512-NlHwttCI/l5gCPR3D1nNXtWABUmBwvZpEQiD4IXSbIDq8BzLIK/7Ir5gTFSGZDUu37K5cMNp0hFtzO38sC7gWA==}
 
   semver@6.3.1:
     resolution: {integrity: sha512-BR7VvDCVHO+q2xBEWskxS6DJE1qRnb7DxzUrogb71CWoSficBxYsiAGd+Kl0mmq/MprG9yArRkyrQxTO6XjMzA==}
@@ -5613,17 +5621,17 @@ snapshots:
     dependencies:
       joi: 17.13.3
 
-  '@react-native/assets-registry@0.79.4': {}
+  '@react-native/assets-registry@0.80.0': {}
 
-  '@react-native/babel-plugin-codegen@0.79.4(@babel/core@7.27.4)':
+  '@react-native/babel-plugin-codegen@0.80.0(@babel/core@7.27.4)':
     dependencies:
       '@babel/traverse': 7.27.4
-      '@react-native/codegen': 0.79.4(@babel/core@7.27.4)
+      '@react-native/codegen': 0.80.0(@babel/core@7.27.4)
     transitivePeerDependencies:
       - '@babel/core'
       - supports-color
 
-  '@react-native/babel-preset@0.79.4(@babel/core@7.27.4)':
+  '@react-native/babel-preset@0.80.0(@babel/core@7.27.4)':
     dependencies:
       '@babel/core': 7.27.4
       '@babel/plugin-proposal-export-default-from': 7.27.1(@babel/core@7.27.4)
@@ -5666,27 +5674,27 @@ snapshots:
       '@babel/plugin-transform-typescript': 7.27.1(@babel/core@7.27.4)
       '@babel/plugin-transform-unicode-regex': 7.27.1(@babel/core@7.27.4)
       '@babel/template': 7.27.2
-      '@react-native/babel-plugin-codegen': 0.79.4(@babel/core@7.27.4)
-      babel-plugin-syntax-hermes-parser: 0.25.1
+      '@react-native/babel-plugin-codegen': 0.80.0(@babel/core@7.27.4)
+      babel-plugin-syntax-hermes-parser: 0.28.1
       babel-plugin-transform-flow-enums: 0.0.2(@babel/core@7.27.4)
       react-refresh: 0.14.2
     transitivePeerDependencies:
       - supports-color
 
-  '@react-native/codegen@0.79.4(@babel/core@7.27.4)':
+  '@react-native/codegen@0.80.0(@babel/core@7.27.4)':
     dependencies:
       '@babel/core': 7.27.4
       glob: 7.2.3
-      hermes-parser: 0.25.1
+      hermes-parser: 0.28.1
       invariant: 2.2.4
       nullthrows: 1.1.1
       yargs: 17.7.2
 
-  '@react-native/community-cli-plugin@0.79.4(patch_hash=445cc837d2f72ab42efc5a3f98e1906b366b2f99b0930b1fa11c9569c4bddd62)':
+  '@react-native/community-cli-plugin@0.80.0(patch_hash=445cc837d2f72ab42efc5a3f98e1906b366b2f99b0930b1fa11c9569c4bddd62)':
     dependencies:
-      '@react-native/dev-middleware': 0.79.4
+      '@react-native/dev-middleware': 0.80.0
       chalk: 4.1.2
-      debug: 2.6.9
+      debug: 4.4.1(supports-color@5.5.0)
       invariant: 2.2.4
       metro: link:external/metro/packages/metro
       metro-config: link:external/metro/packages/metro-config
@@ -5698,6 +5706,8 @@ snapshots:
       - utf-8-validate
 
   '@react-native/debugger-frontend@0.79.4': {}
+
+  '@react-native/debugger-frontend@0.80.0': {}
 
   '@react-native/dev-middleware@0.79.4':
     dependencies:
@@ -5717,11 +5727,29 @@ snapshots:
       - supports-color
       - utf-8-validate
 
-  '@react-native/eslint-config@0.79.4(eslint@8.57.1)(jest@29.7.0(@types/node@20.19.1)(ts-node@10.9.2(@types/node@20.19.1)(typescript@5.0.4)))(prettier@2.8.8)(typescript@5.0.4)':
+  '@react-native/dev-middleware@0.80.0':
+    dependencies:
+      '@isaacs/ttlcache': 1.4.1
+      '@react-native/debugger-frontend': 0.80.0
+      chrome-launcher: 0.15.2
+      chromium-edge-launcher: 0.2.0
+      connect: 3.7.0
+      debug: 4.4.1(supports-color@5.5.0)
+      invariant: 2.2.4
+      nullthrows: 1.1.1
+      open: 7.4.2
+      serve-static: 1.16.2
+      ws: 6.2.3
+    transitivePeerDependencies:
+      - bufferutil
+      - supports-color
+      - utf-8-validate
+
+  '@react-native/eslint-config@0.80.0(eslint@8.57.1)(jest@29.7.0(@types/node@20.19.1)(ts-node@10.9.2(@types/node@20.19.1)(typescript@5.0.4)))(prettier@2.8.8)(typescript@5.0.4)':
     dependencies:
       '@babel/core': 7.27.4
       '@babel/eslint-parser': 7.27.5(@babel/core@7.27.4)(eslint@8.57.1)
-      '@react-native/eslint-plugin': 0.79.4
+      '@react-native/eslint-plugin': 0.80.0
       '@typescript-eslint/eslint-plugin': 7.18.0(@typescript-eslint/parser@7.18.0(eslint@8.57.1)(typescript@5.0.4))(eslint@8.57.1)(typescript@5.0.4)
       '@typescript-eslint/parser': 7.18.0(eslint@8.57.1)(typescript@5.0.4)
       eslint: 8.57.1
@@ -5730,7 +5758,7 @@ snapshots:
       eslint-plugin-ft-flow: 2.0.3(@babel/eslint-parser@7.27.5(@babel/core@7.27.4)(eslint@8.57.1))(eslint@8.57.1)
       eslint-plugin-jest: 27.9.0(@typescript-eslint/eslint-plugin@7.18.0(@typescript-eslint/parser@7.18.0(eslint@8.57.1)(typescript@5.0.4))(eslint@8.57.1)(typescript@5.0.4))(eslint@8.57.1)(jest@29.7.0(@types/node@20.19.1)(ts-node@10.9.2(@types/node@20.19.1)(typescript@5.0.4)))(typescript@5.0.4)
       eslint-plugin-react: 7.37.5(eslint@8.57.1)
-      eslint-plugin-react-hooks: 4.6.2(eslint@8.57.1)
+      eslint-plugin-react-hooks: 5.2.0(eslint@8.57.1)
       eslint-plugin-react-native: 4.1.0(eslint@8.57.1)
       prettier: 2.8.8
     transitivePeerDependencies:
@@ -5738,41 +5766,41 @@ snapshots:
       - supports-color
       - typescript
 
-  '@react-native/eslint-plugin@0.79.4': {}
+  '@react-native/eslint-plugin@0.80.0': {}
 
-  '@react-native/gradle-plugin@0.79.4': {}
+  '@react-native/gradle-plugin@0.80.0': {}
 
-  '@react-native/js-polyfills@0.79.4': {}
+  '@react-native/js-polyfills@0.80.0': {}
 
-  '@react-native/metro-babel-transformer@0.79.4(@babel/core@7.27.4)':
+  '@react-native/metro-babel-transformer@0.80.0(@babel/core@7.27.4)':
     dependencies:
       '@babel/core': 7.27.4
-      '@react-native/babel-preset': 0.79.4(@babel/core@7.27.4)
-      hermes-parser: 0.25.1
+      '@react-native/babel-preset': 0.80.0(@babel/core@7.27.4)
+      hermes-parser: 0.28.1
       nullthrows: 1.1.1
     transitivePeerDependencies:
       - supports-color
 
-  '@react-native/metro-config@0.79.4(@babel/core@7.27.4)':
+  '@react-native/metro-config@0.80.0(@babel/core@7.27.4)':
     dependencies:
-      '@react-native/js-polyfills': 0.79.4
-      '@react-native/metro-babel-transformer': 0.79.4(@babel/core@7.27.4)
+      '@react-native/js-polyfills': 0.80.0
+      '@react-native/metro-babel-transformer': 0.80.0(@babel/core@7.27.4)
       metro-config: link:external/metro/packages/metro-config
       metro-runtime: link:external/metro/packages/metro-runtime
     transitivePeerDependencies:
       - '@babel/core'
       - supports-color
 
-  '@react-native/normalize-colors@0.79.4': {}
+  '@react-native/normalize-colors@0.80.0': {}
 
-  '@react-native/typescript-config@0.79.4': {}
+  '@react-native/typescript-config@0.80.0': {}
 
-  '@react-native/virtualized-lists@0.79.4(@types/react@19.1.8)(react-native@0.79.4(patch_hash=25ca577106daa307f4f2c747fc9cba0d48347d7042fd354f0c4e20342f8c2b6c)(@babel/core@7.27.4)(@types/react@19.1.8)(react@19.0.0))(react@19.0.0)':
+  '@react-native/virtualized-lists@0.80.0(@types/react@19.1.8)(react-native@0.80.0(patch_hash=25ca577106daa307f4f2c747fc9cba0d48347d7042fd354f0c4e20342f8c2b6c)(@babel/core@7.27.4)(@types/react@19.1.8)(react@19.1.0))(react@19.1.0)':
     dependencies:
       invariant: 2.2.4
       nullthrows: 1.1.1
-      react: 19.0.0
-      react-native: 0.79.4(patch_hash=25ca577106daa307f4f2c747fc9cba0d48347d7042fd354f0c4e20342f8c2b6c)(@babel/core@7.27.4)(@types/react@19.1.8)(react@19.0.0)
+      react: 19.1.0
+      react-native: 0.80.0(patch_hash=25ca577106daa307f4f2c747fc9cba0d48347d7042fd354f0c4e20342f8c2b6c)(@babel/core@7.27.4)(@types/react@19.1.8)(react@19.1.0)
     optionalDependencies:
       '@types/react': 19.1.8
 
@@ -5833,10 +5861,10 @@ snapshots:
       - supports-color
       - typescript
 
-  '@rnef/plugin-metro@0.7.25(patch_hash=9eaf43b02d5f0d8d8433452a7e745e18784a15565529a2e3565d1787b14c2366)(@react-native/community-cli-plugin@0.79.4(patch_hash=445cc837d2f72ab42efc5a3f98e1906b366b2f99b0930b1fa11c9569c4bddd62))':
+  '@rnef/plugin-metro@0.7.25(patch_hash=9eaf43b02d5f0d8d8433452a7e745e18784a15565529a2e3565d1787b14c2366)(@react-native/community-cli-plugin@0.80.0(patch_hash=445cc837d2f72ab42efc5a3f98e1906b366b2f99b0930b1fa11c9569c4bddd62))':
     dependencies:
       '@react-native-community/cli-server-api': 18.0.0
-      '@react-native/community-cli-plugin': 0.79.4(patch_hash=445cc837d2f72ab42efc5a3f98e1906b366b2f99b0930b1fa11c9569c4bddd62)
+      '@react-native/community-cli-plugin': 0.80.0(patch_hash=445cc837d2f72ab42efc5a3f98e1906b366b2f99b0930b1fa11c9569c4bddd62)
       '@react-native/dev-middleware': 0.79.4
       '@rnef/tools': 0.7.25
       metro: link:external/metro/packages/metro
@@ -6370,9 +6398,9 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  babel-plugin-syntax-hermes-parser@0.25.1:
+  babel-plugin-syntax-hermes-parser@0.28.1:
     dependencies:
-      hermes-parser: 0.25.1
+      hermes-parser: 0.28.1
 
   babel-plugin-transform-flow-enums@0.0.2(@babel/core@7.27.4):
     dependencies:
@@ -6913,7 +6941,7 @@ snapshots:
       - supports-color
       - typescript
 
-  eslint-plugin-react-hooks@4.6.2(eslint@8.57.1):
+  eslint-plugin-react-hooks@5.2.0(eslint@8.57.1):
     dependencies:
       eslint: 8.57.1
 
@@ -7246,11 +7274,11 @@ snapshots:
     dependencies:
       function-bind: 1.1.2
 
-  hermes-estree@0.25.1: {}
+  hermes-estree@0.28.1: {}
 
-  hermes-parser@0.25.1:
+  hermes-parser@0.28.1:
     dependencies:
-      hermes-estree: 0.25.1
+      hermes-estree: 0.28.1
 
   html-escaper@2.0.2: {}
 
@@ -7901,10 +7929,10 @@ snapshots:
     dependencies:
       js-tokens: 4.0.0
 
-  lottie-react-native@7.2.2(react-native@0.79.4(patch_hash=25ca577106daa307f4f2c747fc9cba0d48347d7042fd354f0c4e20342f8c2b6c)(@babel/core@7.27.4)(@types/react@19.1.8)(react@19.0.0))(react@19.0.0):
+  lottie-react-native@7.2.2(react-native@0.80.0(patch_hash=25ca577106daa307f4f2c747fc9cba0d48347d7042fd354f0c4e20342f8c2b6c)(@babel/core@7.27.4)(@types/react@19.1.8)(react@19.1.0))(react@19.1.0):
     dependencies:
-      react: 19.0.0
-      react-native: 0.79.4(patch_hash=25ca577106daa307f4f2c747fc9cba0d48347d7042fd354f0c4e20342f8c2b6c)(@babel/core@7.27.4)(@types/react@19.1.8)(react@19.0.0)
+      react: 19.1.0
+      react-native: 0.80.0(patch_hash=25ca577106daa307f4f2c747fc9cba0d48347d7042fd354f0c4e20342f8c2b6c)(@babel/core@7.27.4)(@types/react@19.1.8)(react@19.1.0)
 
   lru-cache@5.1.1:
     dependencies:
@@ -8245,25 +8273,24 @@ snapshots:
 
   react-is@19.1.0: {}
 
-  react-native@0.79.4(patch_hash=25ca577106daa307f4f2c747fc9cba0d48347d7042fd354f0c4e20342f8c2b6c)(@babel/core@7.27.4)(@types/react@19.1.8)(react@19.0.0):
+  react-native@0.80.0(patch_hash=25ca577106daa307f4f2c747fc9cba0d48347d7042fd354f0c4e20342f8c2b6c)(@babel/core@7.27.4)(@types/react@19.1.8)(react@19.1.0):
     dependencies:
       '@jest/create-cache-key-function': 29.7.0
-      '@react-native/assets-registry': 0.79.4
-      '@react-native/codegen': 0.79.4(@babel/core@7.27.4)
-      '@react-native/community-cli-plugin': 0.79.4(patch_hash=445cc837d2f72ab42efc5a3f98e1906b366b2f99b0930b1fa11c9569c4bddd62)
-      '@react-native/gradle-plugin': 0.79.4
-      '@react-native/js-polyfills': 0.79.4
-      '@react-native/normalize-colors': 0.79.4
-      '@react-native/virtualized-lists': 0.79.4(@types/react@19.1.8)(react-native@0.79.4(patch_hash=25ca577106daa307f4f2c747fc9cba0d48347d7042fd354f0c4e20342f8c2b6c)(@babel/core@7.27.4)(@types/react@19.1.8)(react@19.0.0))(react@19.0.0)
+      '@react-native/assets-registry': 0.80.0
+      '@react-native/codegen': 0.80.0(@babel/core@7.27.4)
+      '@react-native/community-cli-plugin': 0.80.0(patch_hash=445cc837d2f72ab42efc5a3f98e1906b366b2f99b0930b1fa11c9569c4bddd62)
+      '@react-native/gradle-plugin': 0.80.0
+      '@react-native/js-polyfills': 0.80.0
+      '@react-native/normalize-colors': 0.80.0
+      '@react-native/virtualized-lists': 0.80.0(@types/react@19.1.8)(react-native@0.80.0(patch_hash=25ca577106daa307f4f2c747fc9cba0d48347d7042fd354f0c4e20342f8c2b6c)(@babel/core@7.27.4)(@types/react@19.1.8)(react@19.1.0))(react@19.1.0)
       abort-controller: 3.0.0
       anser: 1.4.10
       ansi-regex: 5.0.1
       babel-jest: 29.7.0(@babel/core@7.27.4)
-      babel-plugin-syntax-hermes-parser: 0.25.1
+      babel-plugin-syntax-hermes-parser: 0.28.1
       base64-js: 1.5.1
       chalk: 4.1.2
       commander: 12.1.0
-      event-target-shim: 5.0.1
       flow-enums-runtime: 0.0.6
       glob: 7.2.3
       invariant: 2.2.4
@@ -8274,11 +8301,11 @@ snapshots:
       nullthrows: 1.1.1
       pretty-format: 29.7.0
       promise: 8.3.0
-      react: 19.0.0
+      react: 19.1.0
       react-devtools-core: 6.1.2
       react-refresh: 0.14.2
       regenerator-runtime: 0.13.11
-      scheduler: 0.25.0
+      scheduler: 0.26.0
       semver: 7.7.2
       stacktrace-parser: 0.1.11
       whatwg-fetch: 3.6.20
@@ -8295,13 +8322,13 @@ snapshots:
 
   react-refresh@0.14.2: {}
 
-  react-test-renderer@19.0.0(react@19.0.0):
+  react-test-renderer@19.1.0(react@19.1.0):
     dependencies:
-      react: 19.0.0
+      react: 19.1.0
       react-is: 19.1.0
-      scheduler: 0.25.0
+      scheduler: 0.26.0
 
-  react@19.0.0: {}
+  react@19.1.0: {}
 
   readable-stream@3.6.2:
     dependencies:
@@ -8442,7 +8469,7 @@ snapshots:
 
   safer-buffer@2.1.2: {}
 
-  scheduler@0.25.0: {}
+  scheduler@0.26.0: {}
 
   semver@6.3.1: {}
 
