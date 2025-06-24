@@ -67,6 +67,9 @@ importers:
       '@babel/runtime':
         specifier: ^7.25.0
         version: 7.27.6
+      '@module-federation/metro':
+        specifier: workspace:*
+        version: link:../../packages/core
       '@module-federation/metro-plugin-rnef':
         specifier: workspace:*
         version: link:../../packages/plugin-rnef
@@ -115,9 +118,6 @@ importers:
       jest:
         specifier: ^29.6.3
         version: 29.7.0(@types/node@20.19.1)(ts-node@10.9.2(@types/node@20.19.1)(typescript@5.0.4))
-      module-federation-metro:
-        specifier: workspace:*
-        version: link:../../packages/module-federation-metro
       nodemon:
         specifier: ^3.1.9
         version: 3.1.10
@@ -152,6 +152,9 @@ importers:
       '@babel/runtime':
         specifier: ^7.25.0
         version: 7.27.6
+      '@module-federation/metro':
+        specifier: workspace:*
+        version: link:../../packages/core
       '@module-federation/metro-plugin-rnef':
         specifier: workspace:*
         version: link:../../packages/plugin-rnef
@@ -200,9 +203,6 @@ importers:
       jest:
         specifier: ^29.6.3
         version: 29.7.0(@types/node@20.19.1)(ts-node@10.9.2(@types/node@20.19.1)(typescript@5.0.4))
-      module-federation-metro:
-        specifier: workspace:*
-        version: link:../../packages/module-federation-metro
       nodemon:
         specifier: ^3.1.9
         version: 3.1.10
@@ -240,6 +240,9 @@ importers:
       '@babel/runtime':
         specifier: ^7.25.0
         version: 7.27.6
+      '@module-federation/metro':
+        specifier: workspace:*
+        version: link:../../packages/core
       '@module-federation/metro-plugin-rnef':
         specifier: workspace:*
         version: link:../../packages/plugin-rnef
@@ -288,9 +291,6 @@ importers:
       jest:
         specifier: ^29.6.3
         version: 29.7.0(@types/node@20.19.1)(ts-node@10.9.2(@types/node@20.19.1)(typescript@5.0.4))
-      module-federation-metro:
-        specifier: workspace:*
-        version: link:../../packages/module-federation-metro
       nodemon:
         specifier: ^3.1.9
         version: 3.1.10
@@ -331,6 +331,9 @@ importers:
       '@babel/runtime':
         specifier: ^7.25.0
         version: 7.27.6
+      '@module-federation/metro':
+        specifier: workspace:*
+        version: link:../../packages/core
       '@module-federation/metro-plugin-rnef':
         specifier: workspace:*
         version: link:../../packages/plugin-rnef
@@ -379,9 +382,6 @@ importers:
       jest:
         specifier: ^29.6.3
         version: 29.7.0(@types/node@20.19.1)(ts-node@10.9.2(@types/node@20.19.1)(typescript@5.0.4))
-      module-federation-metro:
-        specifier: workspace:*
-        version: link:../../packages/module-federation-metro
       nodemon:
         specifier: ^3.1.9
         version: 3.1.10
@@ -419,6 +419,9 @@ importers:
       '@babel/runtime':
         specifier: ^7.25.0
         version: 7.27.6
+      '@module-federation/metro':
+        specifier: workspace:*
+        version: link:../../packages/core
       '@module-federation/metro-plugin-rnef':
         specifier: workspace:*
         version: link:../../packages/plugin-rnef
@@ -467,9 +470,6 @@ importers:
       jest:
         specifier: ^29.6.3
         version: 29.7.0(@types/node@20.19.1)(ts-node@10.9.2(@types/node@20.19.1)(typescript@5.0.4))
-      module-federation-metro:
-        specifier: workspace:*
-        version: link:../../packages/module-federation-metro
       nodemon:
         specifier: ^3.1.9
         version: 3.1.10
@@ -483,7 +483,7 @@ importers:
         specifier: 5.0.4
         version: 5.0.4
 
-  packages/module-federation-metro:
+  packages/core:
     dependencies:
       '@module-federation/runtime':
         specifier: ^0.15.0
@@ -531,12 +531,15 @@ importers:
 
   packages/plugin-rnc-cli:
     devDependencies:
-      module-federation-metro:
+      '@module-federation/metro':
         specifier: workspace:*
-        version: link:../module-federation-metro
+        version: link:../core
 
   packages/plugin-rnef:
     devDependencies:
+      '@module-federation/metro':
+        specifier: workspace:*
+        version: link:../core
       '@rnef/config':
         specifier: ^0.7.18
         version: 0.7.25
@@ -549,9 +552,6 @@ importers:
       '@types/node':
         specifier: ^20.0.0
         version: 20.19.1
-      module-federation-metro:
-        specifier: workspace:*
-        version: link:../module-federation-metro
       typescript:
         specifier: ^5.8.3
         version: 5.8.3

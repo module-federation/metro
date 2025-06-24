@@ -7,7 +7,7 @@ const babelTransformer = require('__BABEL_TRANSFORMER_PATH__');
 function transform(config) {
   const federationPlugins = [
     [
-      'module-federation-metro/babel-plugin',
+      '@module-federation/metro/babel-plugin',
       { blacklistedPaths, remotes, shared },
     ],
   ];

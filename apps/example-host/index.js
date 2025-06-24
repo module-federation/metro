@@ -4,7 +4,7 @@
 import 'mf:init-host';
 import 'mf:async-require';
 
-import { withAsyncStartup } from 'module-federation-metro/bootstrap';
+import { withAsyncStartup } from '@module-federation/metro/bootstrap';
 import { AppRegistry } from 'react-native';
 import { name as appName } from './app.json';
 
