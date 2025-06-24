@@ -1,5 +1,5 @@
 {
-  "name": "metro-mf",
+  "name": "module-federation-metro",
   "private": true,
   "license": "MIT",
   "contributors": [
@@ -7,7 +7,7 @@
     "Kacper Wiszczuk <kacperwiszczuk@gmail.com> (https://github.com/esemesek)"
   ],
   "packageManager": "pnpm@10.12.1",
-  "repository": "https://github.com/module-federation/metro-mf",
+  "repository": "https://github.com/module-federation/metro",
   "scripts": {
     "prepare": "pnpm build",
     "build": "turbo build",

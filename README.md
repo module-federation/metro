@@ -1,4 +1,4 @@
-# metro-mf
+# Module Federation for Metro Bundler
 
 ## Getting Started
 
@@ -18,13 +18,13 @@ npm install -g corepack
 1. Clone the repository with submodules:
 
 ```bash
-git clone --recurse-submodules -j8 git@github.com:module-federation/metro-mf.git
+git clone --recurse-submodules -j8 git@github.com:module-federation/metro.git mf-metro
 ```
 
 2. Navigate to the project directory:
 
 ```bash
-cd metro-mf
+cd mf-metro
 ```
 
 3. Enable Corepack and install dependencies in the monorepo:
