@@ -8,7 +8,8 @@
     "lint": "eslint .",
     "dev": "nodemon --config ../../nodemon.json --exec NODE_OPTIONS='--conditions=dev' pnpm start",
     "start": "rnef start --reset-cache --client-logs --port 8082",
-    "test": "jest"
+    "test": "jest",
+    "pods": "(cd ios && bundle install && bundle exec pod install)"
   },
   "dependencies": {
     "lodash": "^4.17.21",
