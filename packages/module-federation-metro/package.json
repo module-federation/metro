@@ -9,6 +9,16 @@
     "Jakub Romańczyk <j.romanczyk@gmail.com> (https://github.com/jbroma)",
     "Kacper Wiszczuk <kacperwiszczuk@gmail.com> (https://github.com/esemesek)"
   ],
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/module-federation/metro-mf",
+    "directory": "packages/core"
+  },
+  "files": ["dist/", "babel-plugin/", "bootstrap/"],
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
@@ -30,7 +40,6 @@
       "default": "./dist/modules/asyncStartup.tsx"
     }
   },
-  "files": ["dist", "babel-plugin", "bootstrap"],
   "scripts": {
     "build": "rslib build",
     "typecheck": "tsc --noEmit"
