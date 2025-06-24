@@ -1,7 +1,13 @@
 {
   "name": "metro-mf",
-  "packageManager": "pnpm@10.12.1",
   "private": true,
+  "license": "MIT",
+  "contributors": [
+    "Jakub Romańczyk <j.romanczyk@gmail.com> (https://github.com/jbroma)",
+    "Kacper Wiszczuk <kacperwiszczuk@gmail.com> (https://github.com/esemesek)"
+  ],
+  "packageManager": "pnpm@10.12.1",
+  "repository": "https://github.com/module-federation/metro-mf",
   "scripts": {
     "prepare": "pnpm build",
     "build": "turbo build",
