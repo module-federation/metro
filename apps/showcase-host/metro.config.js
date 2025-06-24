@@ -1,7 +1,7 @@
 const path = require('node:path');
 const { getDefaultConfig, mergeConfig } = require('@react-native/metro-config');
 
-const { withModuleFederation } = require('module-federation-metro');
+const { withModuleFederation } = require('@module-federation/metro');
 
 /**
  * Metro configuration
@@ -15,7 +15,7 @@ const config = {
   watchFolders: [
     path.resolve(__dirname, '../../node_modules'),
     path.resolve(__dirname, '../../external/metro/packages'),
-    path.resolve(__dirname, '../../packages/module-federation-metro'),
+    path.resolve(__dirname, '../../packages/core'),
   ],
 };
 

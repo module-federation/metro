@@ -8,10 +8,7 @@
   },
   "files": {
     "ignoreUnknown": false,
-    "ignore": [
-      "external/metro/**",
-      "packages/module-federation-metro/vendor/**"
-    ]
+    "ignore": ["external/metro/**", "packages/core/vendor/**"]
   },
   "formatter": {
     "enabled": true,
@@ -90,7 +87,7 @@
       }
     },
     {
-      "include": ["packages/module-federation-metro/src/modules/**"],
+      "include": ["packages/core/src/modules/**"],
       "linter": {
         "rules": {
           "style": {

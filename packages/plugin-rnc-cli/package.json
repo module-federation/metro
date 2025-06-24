@@ -15,9 +15,9 @@
   "author": "Jakub Romanczyk <jakub.romanczyk@callstack.com>",
   "license": "MIT",
   "peerDependencies": {
-    "module-federation-metro": "workspace:*"
+    "@module-federation/metro": "workspace:*"
   },
   "devDependencies": {
-    "module-federation-metro": "workspace:*"
+    "@module-federation/metro": "workspace:*"
   }
 }
