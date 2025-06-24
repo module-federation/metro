@@ -1,4 +1,4 @@
-const { default: commands } = require('module-federation-metro/commands');
+const { default: commands } = require('@module-federation/metro/commands');
 
 const {
   bundleFederatedHost,

@@ -1,10 +1,10 @@
-import type { PluginApi, PluginOutput } from '@rnef/config';
-import { color, logger, outro } from '@rnef/tools';
-import commands from 'module-federation-metro/commands';
+import commands from '@module-federation/metro/commands';
 import type {
   BundleFederatedHostArgs,
   BundleFederatedRemoteArgs,
-} from 'module-federation-metro/commands';
+} from '@module-federation/metro/commands';
+import type { PluginApi, PluginOutput } from '@rnef/config';
+import { color, logger, outro } from '@rnef/tools';
 
 interface PluginConfig {
   platforms?: Record<string, object>;

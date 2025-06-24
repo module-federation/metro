@@ -1,7 +1,7 @@
 {
-  "name": "module-federation-metro",
+  "name": "@module-federation/metro",
   "version": "0.0.1",
-  "description": "Module Federation for Metro bundler",
+  "description": "Metro plugin for Module Federation",
   "author": "",
   "type": "commonjs",
   "main": "./dist/index.js",
