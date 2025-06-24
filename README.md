@@ -59,4 +59,4 @@ Then, run the development servers for both apps:
 yarn dev
 ```
 
-> **Note:** You can freely make changes to both the `module-federation-metro` package (`packages/module-federation-metro`) and the `metro` packages (`external/metro`). The dev server will automatically restart when changes are detected - there's no need to manually build either package.
+> **Note:** You can freely make changes to both the `@module-federation/metro` package (`packages/core`) and the `metro` packages (`external/metro`). The dev server will automatically restart when changes are detected - there's no need to manually build either package.

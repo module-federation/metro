@@ -3,6 +3,25 @@ const metroPath = require.resolve('metro');
 const babelTypesPath = require.resolve('@babel/types', { paths: [metroPath] });
 const t = require(babelTypesPath);
 
+const UNSUPPORTED_IMPORT_MESSAGE =
+  'The module path for import() must be a static string literal. Expressions or variables are not supported.';
+const WEBPACK_IGNORE_COMMENT = 'webpackIgnore: true';
+
+function isIgnoredWebpackImport(path) {
+  const [firstArg] = path.node.arguments;
+
+  const comments = [
+    ...(firstArg?.leadingComments || []),
+    ...(path.node?.leadingComments || []),
+    ...(path.node?.innerComments || []),
+  ];
+
+  return (
+    t.isImport(path.node.callee) &&
+    comments.some((comment) => comment.value.includes(WEBPACK_IGNORE_COMMENT))
+  );
+}
+
 function getRemotesRegExp(remotes) {
   return new RegExp(`^(${Object.keys(remotes).join('|')})\/`);
 }
@@ -54,12 +73,26 @@ function getWrappedSharedImport(importName) {
   return createWrappedImport(importName, 'loadAndGetShared');
 }
 
-function moduleFederationRemotesBabelPlugin() {
+function getRejectedPromise(errorMessage) {
+  return t.callExpression(
+    t.memberExpression(t.identifier('Promise'), t.identifier('reject')),
+    [t.newExpression(t.identifier('Error'), [t.stringLiteral(errorMessage)])]
+  );
+}
+
+function moduleFederationMetroBabelPlugin() {
   return {
     name: 'module-federation-metro-babel-plugin',
     visitor: {
       CallExpression(path, state) {
         if (state.opts.blacklistedPaths.includes(state.filename)) {
+          return;
+        }
+
+        // Workaround to remove problematic import from `loadEsmEntry` in `@module-federation/runtime-core`
+        // That causes crashes in Metro bundler
+        if (isIgnoredWebpackImport(path)) {
+          path.replaceWith(getRejectedPromise(UNSUPPORTED_IMPORT_MESSAGE));
           return;
         }
 
@@ -79,4 +112,4 @@ function moduleFederationRemotesBabelPlugin() {
   };
 }
 
-module.exports = moduleFederationRemotesBabelPlugin;
+module.exports = moduleFederationMetroBabelPlugin;

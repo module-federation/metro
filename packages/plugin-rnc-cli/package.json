@@ -22,9 +22,9 @@
   "main": "./index.js",
   "exports": "./index.js",
   "peerDependencies": {
-    "module-federation-metro": "workspace:*"
+    "@module-federation/metro": "workspace:*"
   },
   "devDependencies": {
-    "module-federation-metro": "workspace:*"
+    "@module-federation/metro": "workspace:*"
   }
 }

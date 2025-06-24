@@ -25,9 +25,6 @@ overrides:
   ob1: link:./external/metro/packages/ob1
 
 patchedDependencies:
-  '@module-federation/runtime-core@0.11.4':
-    hash: 75f51e7c8d17d568b7e880ce4f6b75eb97060fe4fc28cf079bac3b25292d3607
-    path: patches/@module-federation__runtime-core@0.11.4.patch
   '@react-native/community-cli-plugin':
     hash: 445cc837d2f72ab42efc5a3f98e1906b366b2f99b0930b1fa11c9569c4bddd62
     path: patches/@react-native__community-cli-plugin.patch
@@ -70,12 +67,15 @@ importers:
       '@babel/runtime':
         specifier: ^7.25.0
         version: 7.27.6
+      '@module-federation/metro':
+        specifier: workspace:*
+        version: link:../../packages/core
       '@module-federation/metro-plugin-rnef':
         specifier: workspace:*
         version: link:../../packages/plugin-rnef
       '@module-federation/runtime':
-        specifier: 0.11.4
-        version: 0.11.4
+        specifier: ^0.15.0
+        version: 0.15.0
       '@react-native/babel-preset':
         specifier: 0.79.4
         version: 0.79.4(@babel/core@7.27.4)
@@ -118,9 +118,6 @@ importers:
       jest:
         specifier: ^29.6.3
         version: 29.7.0(@types/node@20.19.1)(ts-node@10.9.2(@types/node@20.19.1)(typescript@5.0.4))
-      module-federation-metro:
-        specifier: workspace:*
-        version: link:../../packages/module-federation-metro
       nodemon:
         specifier: ^3.1.9
         version: 3.1.10
@@ -155,12 +152,15 @@ importers:
       '@babel/runtime':
         specifier: ^7.25.0
         version: 7.27.6
+      '@module-federation/metro':
+        specifier: workspace:*
+        version: link:../../packages/core
       '@module-federation/metro-plugin-rnef':
         specifier: workspace:*
         version: link:../../packages/plugin-rnef
       '@module-federation/runtime':
-        specifier: 0.11.4
-        version: 0.11.4
+        specifier: ^0.15.0
+        version: 0.15.0
       '@react-native/babel-preset':
         specifier: 0.79.4
         version: 0.79.4(@babel/core@7.27.4)
@@ -203,9 +203,6 @@ importers:
       jest:
         specifier: ^29.6.3
         version: 29.7.0(@types/node@20.19.1)(ts-node@10.9.2(@types/node@20.19.1)(typescript@5.0.4))
-      module-federation-metro:
-        specifier: workspace:*
-        version: link:../../packages/module-federation-metro
       nodemon:
         specifier: ^3.1.9
         version: 3.1.10
@@ -243,12 +240,15 @@ importers:
       '@babel/runtime':
         specifier: ^7.25.0
         version: 7.27.6
+      '@module-federation/metro':
+        specifier: workspace:*
+        version: link:../../packages/core
       '@module-federation/metro-plugin-rnef':
         specifier: workspace:*
         version: link:../../packages/plugin-rnef
       '@module-federation/runtime':
-        specifier: 0.11.4
-        version: 0.11.4
+        specifier: ^0.15.0
+        version: 0.15.0
       '@react-native/babel-preset':
         specifier: 0.79.4
         version: 0.79.4(@babel/core@7.27.4)
@@ -291,9 +291,6 @@ importers:
       jest:
         specifier: ^29.6.3
         version: 29.7.0(@types/node@20.19.1)(ts-node@10.9.2(@types/node@20.19.1)(typescript@5.0.4))
-      module-federation-metro:
-        specifier: workspace:*
-        version: link:../../packages/module-federation-metro
       nodemon:
         specifier: ^3.1.9
         version: 3.1.10
@@ -334,12 +331,15 @@ importers:
       '@babel/runtime':
         specifier: ^7.25.0
         version: 7.27.6
+      '@module-federation/metro':
+        specifier: workspace:*
+        version: link:../../packages/core
       '@module-federation/metro-plugin-rnef':
         specifier: workspace:*
         version: link:../../packages/plugin-rnef
       '@module-federation/runtime':
-        specifier: 0.11.4
-        version: 0.11.4
+        specifier: ^0.15.0
+        version: 0.15.0
       '@react-native/babel-preset':
         specifier: 0.79.4
         version: 0.79.4(@babel/core@7.27.4)
@@ -382,9 +382,6 @@ importers:
       jest:
         specifier: ^29.6.3
         version: 29.7.0(@types/node@20.19.1)(ts-node@10.9.2(@types/node@20.19.1)(typescript@5.0.4))
-      module-federation-metro:
-        specifier: workspace:*
-        version: link:../../packages/module-federation-metro
       nodemon:
         specifier: ^3.1.9
         version: 3.1.10
@@ -422,12 +419,15 @@ importers:
       '@babel/runtime':
         specifier: ^7.25.0
         version: 7.27.6
+      '@module-federation/metro':
+        specifier: workspace:*
+        version: link:../../packages/core
       '@module-federation/metro-plugin-rnef':
         specifier: workspace:*
         version: link:../../packages/plugin-rnef
       '@module-federation/runtime':
-        specifier: 0.11.4
-        version: 0.11.4
+        specifier: ^0.15.0
+        version: 0.15.0
       '@react-native/babel-preset':
         specifier: 0.79.4
         version: 0.79.4(@babel/core@7.27.4)
@@ -470,9 +470,6 @@ importers:
       jest:
         specifier: ^29.6.3
         version: 29.7.0(@types/node@20.19.1)(ts-node@10.9.2(@types/node@20.19.1)(typescript@5.0.4))
-      module-federation-metro:
-        specifier: workspace:*
-        version: link:../../packages/module-federation-metro
       nodemon:
         specifier: ^3.1.9
         version: 3.1.10
@@ -486,14 +483,14 @@ importers:
         specifier: 5.0.4
         version: 5.0.4
 
-  packages/module-federation-metro:
+  packages/core:
     dependencies:
       '@module-federation/runtime':
-        specifier: 0.11.4
-        version: 0.11.4
+        specifier: ^0.15.0
+        version: 0.15.0
       '@module-federation/sdk':
-        specifier: 0.11.4
-        version: 0.11.4
+        specifier: ^0.15.0
+        version: 0.15.0
       chalk:
         specifier: ^5.4.1
         version: 5.4.1
@@ -534,12 +531,15 @@ importers:
 
   packages/plugin-rnc-cli:
     devDependencies:
-      module-federation-metro:
+      '@module-federation/metro':
         specifier: workspace:*
-        version: link:../module-federation-metro
+        version: link:../core
 
   packages/plugin-rnef:
     devDependencies:
+      '@module-federation/metro':
+        specifier: workspace:*
+        version: link:../core
       '@rnef/config':
         specifier: ^0.7.18
         version: 0.7.25
@@ -552,9 +552,6 @@ importers:
       '@types/node':
         specifier: ^20.0.0
         version: 20.19.1
-      module-federation-metro:
-        specifier: workspace:*
-        version: link:../module-federation-metro
       typescript:
         specifier: ^5.8.3
         version: 5.8.3
@@ -1487,14 +1484,8 @@ packages:
   '@jridgewell/trace-mapping@0.3.9':
     resolution: {integrity: sha512-3Belt6tdc8bPgAtbcmdtNJlirVoTmEb5e2gC94PnkwEW9jI6CAHUeoG85tjWP5WquqfavoMtMwiG4P926ZKKuQ==}
 
-  '@module-federation/error-codes@0.11.4':
-    resolution: {integrity: sha512-WugZdcNbNVTKuxuArGfnRW1R+siNgMBhad451HniyCG+SjlS0HEO9zIDuVP12l3xJsiTHgLqyutYEvunQ5O1aQ==}
-
   '@module-federation/error-codes@0.15.0':
     resolution: {integrity: sha512-CFJSF+XKwTcy0PFZ2l/fSUpR4z247+Uwzp1sXVkdIfJ/ATsnqf0Q01f51qqSEA6MYdQi6FKos9FIcu3dCpQNdg==}
-
-  '@module-federation/runtime-core@0.11.4':
-    resolution: {integrity: sha512-+n2fWUPj6cCeHXmChZ35RFyNONfBEcNgQ3o7KEmxOBJ6bRh1vr3AO2OPRPYr5WHcvAyjny+l/xhi+sZPNV3uOQ==}
 
   '@module-federation/runtime-core@0.15.0':
     resolution: {integrity: sha512-RYzI61fRDrhyhaEOXH3AgIGlHiot0wPFXu7F43cr+ZnTi+VlSYWLdlZ4NBuT9uV6JSmH54/c+tEZm5SXgKR2sQ==}
@@ -1502,14 +1493,8 @@ packages:
   '@module-federation/runtime-tools@0.15.0':
     resolution: {integrity: sha512-kzFn3ObUeBp5vaEtN1WMxhTYBuYEErxugu1RzFUERD21X3BZ+b4cWwdFJuBDlsmVjctIg/QSOoZoPXRKAO0foA==}
 
-  '@module-federation/runtime@0.11.4':
-    resolution: {integrity: sha512-pUfhsa3iYoXBV3CsUfBJN04Cvckj9gBbs8+sLsYiWxxU+cJYNiJpco0iKxRX1/60O+RAH8fAaNq5ilz2qc204A==}
-
   '@module-federation/runtime@0.15.0':
     resolution: {integrity: sha512-dTPsCNum9Bhu3yPOcrPYq0YnM9eCMMMNB1wuiqf1+sFbQlNApF0vfZxooqz3ln0/MpgE0jerVvFsLVGfqvC9Ug==}
-
-  '@module-federation/sdk@0.11.4':
-    resolution: {integrity: sha512-23Poajva/+wye8+66NvEiL/dJDUahOjEgxljLvzmxQXi9x5hdrfJvBDIwLtzyewZ+vA5Nzpwz35sSzEOyPJUqg==}
 
   '@module-federation/sdk@0.15.0':
     resolution: {integrity: sha512-PWiYbGcJrKUD6JZiEPihrXhV3bgXdll4bV7rU+opV7tHaun+Z0CdcawjZ82Xnpb8MCPGmqHwa1MPFeUs66zksw==}
@@ -5528,14 +5513,7 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.0
 
-  '@module-federation/error-codes@0.11.4': {}
-
   '@module-federation/error-codes@0.15.0': {}
-
-  '@module-federation/runtime-core@0.11.4(patch_hash=75f51e7c8d17d568b7e880ce4f6b75eb97060fe4fc28cf079bac3b25292d3607)':
-    dependencies:
-      '@module-federation/error-codes': 0.11.4
-      '@module-federation/sdk': 0.11.4
 
   '@module-federation/runtime-core@0.15.0':
     dependencies:
@@ -5547,19 +5525,11 @@ snapshots:
       '@module-federation/runtime': 0.15.0
       '@module-federation/webpack-bundler-runtime': 0.15.0
 
-  '@module-federation/runtime@0.11.4':
-    dependencies:
-      '@module-federation/error-codes': 0.11.4
-      '@module-federation/runtime-core': 0.11.4(patch_hash=75f51e7c8d17d568b7e880ce4f6b75eb97060fe4fc28cf079bac3b25292d3607)
-      '@module-federation/sdk': 0.11.4
-
   '@module-federation/runtime@0.15.0':
     dependencies:
       '@module-federation/error-codes': 0.15.0
       '@module-federation/runtime-core': 0.15.0
       '@module-federation/sdk': 0.15.0
-
-  '@module-federation/sdk@0.11.4': {}
 
   '@module-federation/sdk@0.15.0': {}
 

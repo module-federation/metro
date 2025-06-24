@@ -113,7 +113,7 @@ async function bundleFederatedRemote(
     );
     logger.info(
       "Import the plugin 'withModuleFederation' " +
-        "from 'module-federation-metro' package " +
+        "from '@module-federation/metro' package " +
         'and wrap your final Metro config with it.'
     );
     throw new CLIError('Bundling failed');
