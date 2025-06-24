@@ -71,7 +71,7 @@ importers:
         specifier: workspace:*
         version: link:../../packages/plugin-rnef
       '@module-federation/runtime':
-        specifier: 0.15.0
+        specifier: ^0.15.0
         version: 0.15.0
       '@react-native/babel-preset':
         specifier: 0.79.4
@@ -156,7 +156,7 @@ importers:
         specifier: workspace:*
         version: link:../../packages/plugin-rnef
       '@module-federation/runtime':
-        specifier: 0.15.0
+        specifier: ^0.15.0
         version: 0.15.0
       '@react-native/babel-preset':
         specifier: 0.79.4
@@ -244,7 +244,7 @@ importers:
         specifier: workspace:*
         version: link:../../packages/plugin-rnef
       '@module-federation/runtime':
-        specifier: 0.15.0
+        specifier: ^0.15.0
         version: 0.15.0
       '@react-native/babel-preset':
         specifier: 0.79.4
@@ -335,7 +335,7 @@ importers:
         specifier: workspace:*
         version: link:../../packages/plugin-rnef
       '@module-federation/runtime':
-        specifier: 0.15.0
+        specifier: ^0.15.0
         version: 0.15.0
       '@react-native/babel-preset':
         specifier: 0.79.4
@@ -423,7 +423,7 @@ importers:
         specifier: workspace:*
         version: link:../../packages/plugin-rnef
       '@module-federation/runtime':
-        specifier: 0.15.0
+        specifier: ^0.15.0
         version: 0.15.0
       '@react-native/babel-preset':
         specifier: 0.79.4
@@ -486,10 +486,10 @@ importers:
   packages/module-federation-metro:
     dependencies:
       '@module-federation/runtime':
-        specifier: 0.15.0
+        specifier: ^0.15.0
         version: 0.15.0
       '@module-federation/sdk':
-        specifier: 0.15.0
+        specifier: ^0.15.0
         version: 0.15.0
       chalk:
         specifier: ^5.4.1
