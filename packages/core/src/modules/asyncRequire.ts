@@ -99,7 +99,13 @@ if (!process.env.EXPO_OS) {
   // process.env.EXPO_OS to be set but since expo is optional, we set it
   // to an empty string as a fallback to prevent reference errors
   process.env.EXPO_OS = '';
-  require('../../vendor/expo/async-require');
+
+  const {
+    buildAsyncRequire,
+  } = require('@expo/metro-runtime/src/async-require/buildAsyncRequire');
+
+  // @ts-expect-error dynamic key access on global object
+  global[`${__METRO_GLOBAL_PREFIX__}__loadBundleAsync`] = buildAsyncRequire();
 }
 
 // @ts-expect-error dynamic key access on global object
