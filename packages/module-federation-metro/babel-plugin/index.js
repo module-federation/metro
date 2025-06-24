@@ -15,9 +15,8 @@ function hasWebpackIgnoreComment(path) {
     ...(path.node?.innerComments || []),
   ];
 
-  return (
-    comments.length > 0 &&
-    comments.some((comment) => comment.value.includes(WEBPACK_IGNORE_COMMENT))
+  return comments.some((comment) =>
+    comment.value.includes(WEBPACK_IGNORE_COMMENT)
   );
 }
 
