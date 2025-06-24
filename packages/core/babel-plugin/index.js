@@ -54,7 +54,7 @@ function getWrappedSharedImport(importName) {
   return createWrappedImport(importName, 'loadAndGetShared');
 }
 
-function moduleFederationRemotesBabelPlugin() {
+function moduleFederationMetroBabelPlugin() {
   return {
     name: 'module-federation-metro-babel-plugin',
     visitor: {
@@ -79,4 +79,4 @@ function moduleFederationRemotesBabelPlugin() {
   };
 }
 
-module.exports = moduleFederationRemotesBabelPlugin;
+module.exports = moduleFederationMetroBabelPlugin;
