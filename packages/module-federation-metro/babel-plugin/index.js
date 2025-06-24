@@ -3,6 +3,24 @@ const metroPath = require.resolve('metro');
 const babelTypesPath = require.resolve('@babel/types', { paths: [metroPath] });
 const t = require(babelTypesPath);
 
+const WEBPACK_IGNORE_COMMENT = 'webpackIgnore: true';
+
+function hasWebpackIgnoreComment(path) {
+  // Get first argument of import()
+  const [firstArg] = path.node.arguments;
+
+  const comments = [
+    ...(firstArg?.leadingComments || []),
+    ...(path.node?.leadingComments || []),
+    ...(path.node?.innerComments || []),
+  ];
+
+  return (
+    comments.length > 0 &&
+    comments.some((comment) => comment.value.includes(WEBPACK_IGNORE_COMMENT))
+  );
+}
+
 function getRemotesRegExp(remotes) {
   return new RegExp(`^(${Object.keys(remotes).join('|')})\/`);
 }
@@ -54,12 +72,28 @@ function getWrappedSharedImport(importName) {
   return createWrappedImport(importName, 'loadAndGetShared');
 }
 
+function getResolvedPromiseExpression() {
+  const emptyObject = t.objectExpression([]);
+
+  return t.callExpression(
+    t.memberExpression(t.identifier('Promise'), t.identifier('resolve')),
+    [emptyObject]
+  );
+}
+
 function moduleFederationRemotesBabelPlugin() {
   return {
     name: 'module-federation-metro-babel-plugin',
     visitor: {
       CallExpression(path, state) {
         if (state.opts.blacklistedPaths.includes(state.filename)) {
+          return;
+        }
+
+        // Workaround to remove problematic import from `loadEsmEntry` in `@module-federation/runtime-core`
+        // That causes crashes in Metro bundler
+        if (hasWebpackIgnoreComment(path)) {
+          path.replaceWith(getResolvedPromiseExpression());
           return;
         }
 

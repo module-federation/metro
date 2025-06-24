@@ -32,7 +32,6 @@ patchedDependencies:
   '@react-native/community-cli-plugin': patches/@react-native__community-cli-plugin.patch
   react-native: patches/react-native.patch
   '@rnef/plugin-metro': patches/@rnef__plugin-metro.patch
-  '@module-federation/runtime-core@0.11.4': patches/@module-federation__runtime-core@0.11.4.patch
 
 publicHoistPattern:
   - '@babel/runtime'
