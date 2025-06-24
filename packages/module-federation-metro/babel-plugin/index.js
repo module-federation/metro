@@ -3,10 +3,11 @@ const metroPath = require.resolve('metro');
 const babelTypesPath = require.resolve('@babel/types', { paths: [metroPath] });
 const t = require(babelTypesPath);
 
+const UNSUPPORTED_IMPORT_MESSAGE =
+  'The module path for import() must be a static string literal. Expressions or variables are not supported.';
 const WEBPACK_IGNORE_COMMENT = 'webpackIgnore: true';
 
-function hasWebpackIgnoreComment(path) {
-  // Get first argument of import()
+function isIgnoredWebpackImport(path) {
   const [firstArg] = path.node.arguments;
 
   const comments = [
@@ -15,8 +16,9 @@ function hasWebpackIgnoreComment(path) {
     ...(path.node?.innerComments || []),
   ];
 
-  return comments.some((comment) =>
-    comment.value.includes(WEBPACK_IGNORE_COMMENT)
+  return (
+    t.isImport(path.node.callee) &&
+    comments.some((comment) => comment.value.includes(WEBPACK_IGNORE_COMMENT))
   );
 }
 
@@ -71,12 +73,10 @@ function getWrappedSharedImport(importName) {
   return createWrappedImport(importName, 'loadAndGetShared');
 }
 
-function getResolvedPromiseExpression() {
-  const emptyObject = t.objectExpression([]);
-
+function getRejectedPromise(errorMessage) {
   return t.callExpression(
-    t.memberExpression(t.identifier('Promise'), t.identifier('resolve')),
-    [emptyObject]
+    t.memberExpression(t.identifier('Promise'), t.identifier('reject')),
+    [t.newExpression(t.identifier('Error'), [t.stringLiteral(errorMessage)])]
   );
 }
 
@@ -91,8 +91,8 @@ function moduleFederationRemotesBabelPlugin() {
 
         // Workaround to remove problematic import from `loadEsmEntry` in `@module-federation/runtime-core`
         // That causes crashes in Metro bundler
-        if (hasWebpackIgnoreComment(path)) {
-          path.replaceWith(getResolvedPromiseExpression());
+        if (isIgnoredWebpackImport(path)) {
+          path.replaceWith(getRejectedPromise(UNSUPPORTED_IMPORT_MESSAGE));
           return;
         }
 
