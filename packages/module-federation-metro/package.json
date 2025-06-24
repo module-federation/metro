@@ -2,8 +2,13 @@
   "name": "module-federation-metro",
   "version": "0.0.1",
   "description": "Module Federation for Metro bundler",
-  "author": "",
+  "keywords": ["module-federation", "metro", "react-native"],
   "type": "commonjs",
+  "license": "MIT",
+  "contributors": [
+    "Jakub Romańczyk <j.romanczyk@gmail.com> (https://github.com/jbroma)",
+    "Kacper Wiszczuk <kacperwiszczuk@gmail.com> (https://github.com/esemesek)"
+  ],
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
