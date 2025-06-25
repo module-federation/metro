@@ -275,15 +275,21 @@ async function bundleFederatedRemote(
         moduleOutputDir,
         moduleBundleName
       );
-      // TODO: should this use `file:///` protocol?
-      const moduleBundleUrl = pathToFileURL(moduleBundleFilepath).href;
+      // Metro requires `sourceURL` to be defined when doing bundle splitting
+      // we use relative path and supply it in fileURL format to avoid issues
+      const moduleBundleUrl = pathToFileURL(
+        '/' + path.relative(outputDir, moduleBundleFilepath)
+      ).href;
       const moduleSourceMapName = `${moduleBundleName}.map`;
       const moduleSourceMapFilepath = path.resolve(
         moduleOutputDir,
         moduleSourceMapName
       );
-      // TODO: should this use `file:///` protocol?
-      const moduleSourceMapUrl = pathToFileURL(moduleSourceMapFilepath).href;
+      // use relative path just like when bundling `index.bundle`
+      const moduleSourceMapUrl = path.relative(
+        outputDir,
+        moduleSourceMapFilepath
+      );
 
       if (!isContainerModule) {
         modulePathRemapper.addMapping(
