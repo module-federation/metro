@@ -8,7 +8,7 @@
   },
   "files": {
     "ignoreUnknown": false,
-    "ignore": ["external/metro/**", "packages/core/vendor/**"]
+    "ignore": ["external/metro/**"]
   },
   "formatter": {
     "enabled": true,

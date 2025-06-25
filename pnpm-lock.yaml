@@ -485,6 +485,9 @@ importers:
 
   packages/core:
     dependencies:
+      '@expo/metro-runtime':
+        specifier: ^5.0.4
+        version: 5.0.4(react-native@0.79.4(patch_hash=25ca577106daa307f4f2c747fc9cba0d48347d7042fd354f0c4e20342f8c2b6c)(@babel/core@7.27.4)(@types/react@19.1.8)(react@19.0.0))
       '@module-federation/runtime':
         specifier: ^0.15.0
         version: 0.15.0
@@ -1349,6 +1352,11 @@ packages:
   '@expo/fingerprint@0.11.11':
     resolution: {integrity: sha512-gNyn1KnAOpEa8gSNsYqXMTcq0fSwqU/vit6fP5863vLSKxHm/dNt/gm/uZJxrRZxKq71KUJWF6I7d3z8qIfq5g==}
     hasBin: true
+
+  '@expo/metro-runtime@5.0.4':
+    resolution: {integrity: sha512-r694MeO+7Vi8IwOsDIDzH/Q5RPMt1kUDYbiTJwnO15nIqiDwlE8HU55UlRhffKZy6s5FmxQsZ8HA+T8DqUW8cQ==}
+    peerDependencies:
+      react-native: '*'
 
   '@expo/spawn-async@1.7.2':
     resolution: {integrity: sha512-QdWi16+CHB9JYP7gma19OVVg0BFkvU8zNj9GjWorYI8Iv8FUxjOCcYRuAmX4s/h91e4e7BPsskc8cSrZYho9Ew==}
@@ -5278,6 +5286,10 @@ snapshots:
       semver: 7.7.2
     transitivePeerDependencies:
       - supports-color
+
+  '@expo/metro-runtime@5.0.4(react-native@0.79.4(patch_hash=25ca577106daa307f4f2c747fc9cba0d48347d7042fd354f0c4e20342f8c2b6c)(@babel/core@7.27.4)(@types/react@19.1.8)(react@19.0.0))':
+    dependencies:
+      react-native: 0.79.4(patch_hash=25ca577106daa307f4f2c747fc9cba0d48347d7042fd354f0c4e20342f8c2b6c)(@babel/core@7.27.4)(@types/react@19.1.8)(react@19.0.0)
 
   '@expo/spawn-async@1.7.2':
     dependencies:
