@@ -242,7 +242,6 @@ async function bundleFederatedRemote(
       return acc;
     }, {} as ModuleDescriptor);
 
-  // TODO: we might detect if the dependency is native and skip emitting the bundle altogether
   const sharedModules = Object.entries(federationConfig.shared)
     .filter(([, sharedConfig]) => {
       return !sharedConfig.eager && sharedConfig.import !== false;
