@@ -49,10 +49,8 @@ function generateExposes(
   paths: { tmpDir: string; projectDir: string }
 ) {
   const exposesString = Object.keys(exposes).map((key) => {
-    // ./exposed -> exposed
-    const importName = path.relative('.', exposes[key]);
-    const importPath = path.join(paths.tmpDir, importName);
-    const relativeImportPath = path.relative(paths.projectDir, importPath);
+    const importPath = path.join(paths.projectDir, exposes[key]);
+    const relativeImportPath = path.relative(paths.tmpDir, importPath);
     return `"${key}": async () => import("${relativeImportPath}")`;
   });
 
