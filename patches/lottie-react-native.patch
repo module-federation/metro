@@ -1,0 +1,18 @@
+diff --git a/package.json b/package.json
+index b104a6b892c04789c7ae7dca202c60f4e451cc9c..06577e1bfa6976b66e0e6ecbac2c530f02131014 100644
+--- a/package.json
++++ b/package.json
+@@ -97,6 +97,13 @@
+     "android": {
+       "javaPackageName": "com.airbnb.android.react.lottie"
+     },
++    "ios": {
++      "components": {
++        "LottieAnimationView": {
++          "className": "LottieAnimationViewComponentView"
++        }
++      }
++    },
+     "name": "lottiereactnative",
+     "type": "components",
+     "jsSrcsDir": "./src/specs"

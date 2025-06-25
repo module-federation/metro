@@ -61,14 +61,14 @@
   },
   "devDependencies": {
     "@rslib/core": "^0.10.0",
-    "@types/react": "^19.0.0",
+    "@types/react": "^19.1.0",
     "@types/node": "^20.0.0",
     "metro": "^0.82.1",
     "metro-config": "^0.82.1",
     "metro-resolver": "^0.82.1",
     "metro-source-map": "^0.82.1",
-    "react": "19.0.0",
-    "react-native": "0.79.4",
+    "react": "19.1.0",
+    "react-native": "0.80.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.8.3"
   }
