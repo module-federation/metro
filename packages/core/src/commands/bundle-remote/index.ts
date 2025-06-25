@@ -120,7 +120,6 @@ async function bundleFederatedRemote(
   }
 
   // TODO: pass this without globals
-  // TODO: this should be validated inside the plugin
   const containerEntryFilepath = global.__METRO_FEDERATION_REMOTE_ENTRY_PATH;
   if (!containerEntryFilepath) {
     logger.error(
@@ -133,6 +132,7 @@ async function bundleFederatedRemote(
     throw new CLIError('Bundling failed');
   }
 
+  // TODO: pass this without globals
   const manifestFilepath = global.__METRO_FEDERATION_MANIFEST_PATH;
   if (!manifestFilepath) {
     logger.error(
