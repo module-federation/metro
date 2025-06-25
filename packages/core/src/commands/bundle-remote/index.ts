@@ -120,7 +120,6 @@ async function bundleFederatedRemote(
   }
 
   // TODO: pass this without globals
-  // TODO: this should be validated inside the plugin
   const containerEntryFilepath = global.__METRO_FEDERATION_REMOTE_ENTRY_PATH;
   if (!containerEntryFilepath) {
     logger.error(
@@ -133,6 +132,7 @@ async function bundleFederatedRemote(
     throw new CLIError('Bundling failed');
   }
 
+  // TODO: pass this without globals
   const manifestFilepath = global.__METRO_FEDERATION_MANIFEST_PATH;
   if (!manifestFilepath) {
     logger.error(
@@ -242,7 +242,6 @@ async function bundleFederatedRemote(
       return acc;
     }, {} as ModuleDescriptor);
 
-  // TODO: we might detect if the dependency is native and skip emitting the bundle altogether
   const sharedModules = Object.entries(federationConfig.shared)
     .filter(([, sharedConfig]) => {
       return !sharedConfig.eager && sharedConfig.import !== false;
@@ -276,15 +275,21 @@ async function bundleFederatedRemote(
         moduleOutputDir,
         moduleBundleName
       );
-      // TODO: should this use `file:///` protocol?
-      const moduleBundleUrl = pathToFileURL(moduleBundleFilepath).href;
+      // Metro requires `sourceURL` to be defined when doing bundle splitting
+      // we use relative path and supply it in fileURL format to avoid issues
+      const moduleBundleUrl = pathToFileURL(
+        '/' + path.relative(outputDir, moduleBundleFilepath)
+      ).href;
       const moduleSourceMapName = `${moduleBundleName}.map`;
       const moduleSourceMapFilepath = path.resolve(
         moduleOutputDir,
         moduleSourceMapName
       );
-      // TODO: should this use `file:///` protocol?
-      const moduleSourceMapUrl = pathToFileURL(moduleSourceMapFilepath).href;
+      // use relative path just like when bundling `index.bundle`
+      const moduleSourceMapUrl = path.relative(
+        outputDir,
+        moduleSourceMapFilepath
+      );
 
       if (!isContainerModule) {
         modulePathRemapper.addMapping(
