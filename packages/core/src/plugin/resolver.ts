@@ -20,12 +20,13 @@ import { isUsingMFBundleCommand } from './helpers';
 interface CreateResolveRequestOptions {
   isRemote: boolean;
   paths: {
-    initHost: string;
     asyncRequire: string;
-    registry: string;
-    remoteHMRSetup: string;
+    initHost: string;
     remoteEntry: string;
-    mfMetro: string;
+    remoteHMRSetup: string;
+    remoteModuleRegistry: string;
+    projectDir: string;
+    tmpDir: string;
   };
   options: ModuleFederationConfigNormalized;
   vmManager: VirtualModuleManager;
@@ -42,7 +43,7 @@ export function createResolveRequest({
     if (moduleName === INIT_HOST) {
       const initHostGenerator = () => getInitHostModule(options);
       vmManager.registerVirtualModule(paths.initHost, initHostGenerator);
-      return { type: 'sourceFile', filePath: paths.initHost as string };
+      return { type: 'sourceFile', filePath: paths.initHost };
     }
 
     // virtual module: async-require
@@ -53,8 +54,11 @@ export function createResolveRequest({
     // virtual module: remote-module-registry
     if (moduleName === REMOTE_MODULE_REGISTRY) {
       const registryGenerator = () => getRemoteModuleRegistryModule();
-      vmManager.registerVirtualModule(paths.registry, registryGenerator);
-      return { type: 'sourceFile', filePath: paths.registry };
+      vmManager.registerVirtualModule(
+        paths.remoteModuleRegistry,
+        registryGenerator
+      );
+      return { type: 'sourceFile', filePath: paths.remoteModuleRegistry };
     }
 
     // virtual module: remote-hmr
@@ -71,9 +75,13 @@ export function createResolveRequest({
     // MF options.filename is provided as a name only and will be requested from the root of project
     // so the filename mini.js becomes ./mini.js and we need to match exactly that
     if (moduleName === `./${path.basename(paths.remoteEntry)}`) {
-      const remoteEntryGenerator = () => getRemoteEntryModule(options);
+      const remoteEntryGenerator = () =>
+        getRemoteEntryModule(options, {
+          tmpDir: paths.tmpDir,
+          projectDir: paths.projectDir,
+        });
       vmManager.registerVirtualModule(paths.remoteEntry, remoteEntryGenerator);
-      return { type: 'sourceFile', filePath: paths.remoteEntry as string };
+      return { type: 'sourceFile', filePath: paths.remoteEntry };
     }
 
     // shared modules handling in init-host.js
@@ -88,7 +96,7 @@ export function createResolveRequest({
       const sharedModule = options.shared[moduleName];
       // import: false means that the module is marked as external
       if (sharedModule && sharedModule.import === false) {
-        const sharedPath = getSharedPath(moduleName, paths.mfMetro);
+        const sharedPath = getSharedPath(moduleName, paths.tmpDir);
         return { type: 'sourceFile', filePath: sharedPath };
       }
       return context.resolveRequest(context, moduleName, platform);
@@ -97,7 +105,7 @@ export function createResolveRequest({
     // remote modules
     for (const remoteName of Object.keys(options.remotes)) {
       if (moduleName.startsWith(remoteName + '/')) {
-        const remotePath = getRemoteModulePath(moduleName, paths.mfMetro);
+        const remotePath = getRemoteModulePath(moduleName, paths.tmpDir);
         const remoteGenerator = () => getRemoteModule(moduleName);
         vmManager.registerVirtualModule(remotePath, remoteGenerator);
         return { type: 'sourceFile', filePath: remotePath };
@@ -109,7 +117,7 @@ export function createResolveRequest({
       const importName = options.shared[sharedName].import || sharedName;
       // module import
       if (moduleName === importName) {
-        const sharedPath = getSharedPath(moduleName, paths.mfMetro);
+        const sharedPath = getSharedPath(moduleName, paths.tmpDir);
         const sharedGenerator = () => getRemoteModule(moduleName);
         vmManager.registerVirtualModule(sharedPath, sharedGenerator);
         return { type: 'sourceFile', filePath: sharedPath };

@@ -68,11 +68,14 @@ function augmentConfig(
   const vmManager = new VirtualModuleManager(config);
 
   const initHostPath = path.resolve(tmpDirPath, 'init-host.js');
-  const registryPath = path.resolve(tmpDirPath, 'remote-module-registry.js');
 
   const remoteEntryFilename = replaceExtension(options.filename, '.js');
   const remoteEntryPath = path.resolve(tmpDirPath, remoteEntryFilename);
   const remoteHMRSetupPath = path.resolve(tmpDirPath, 'remote-hmr.js');
+  const remoteModuleRegistryPath = path.resolve(
+    tmpDirPath,
+    'remote-module-registry.js'
+  );
 
   const asyncRequirePath = require.resolve('../modules/asyncRequire.ts');
 
@@ -124,10 +127,11 @@ function augmentConfig(
         paths: {
           initHost: initHostPath,
           asyncRequire: asyncRequirePath,
-          registry: registryPath,
+          remoteModuleRegistry: remoteModuleRegistryPath,
           remoteHMRSetup: remoteHMRSetupPath,
           remoteEntry: remoteEntryPath,
-          mfMetro: tmpDirPath,
+          projectDir: config.projectRoot,
+          tmpDir: tmpDirPath,
         },
       }),
     },

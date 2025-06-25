@@ -18,12 +18,13 @@ export function getInitHostModule(options: ModuleFederationConfigNormalized) {
 }
 
 export function getRemoteEntryModule(
-  options: ModuleFederationConfigNormalized
+  options: ModuleFederationConfigNormalized,
+  paths: { tmpDir: string; projectDir: string }
 ) {
   const template = getModuleTemplate('remote-entry.js');
   return template
     .replaceAll('__NAME__', JSON.stringify(options.name))
-    .replaceAll('__EXPOSES_MAP__', generateExposes(options.exposes))
+    .replaceAll('__EXPOSES_MAP__', generateExposes(options.exposes, paths))
     .replaceAll('__REMOTES__', generateRemotes(options.remotes))
     .replaceAll('__SHARED__', generateShared(options))
     .replaceAll('__SHARE_STRATEGY__', JSON.stringify(options.shareStrategy))
@@ -43,20 +44,19 @@ export function getRemoteHMRSetupModule() {
   return template;
 }
 
-function generateExposes(exposes: Record<string, string>) {
-  const exposesString = Object.keys(exposes)
-    .map((key) => {
-      const importName = path.relative('.', exposes[key]);
-      // TODO: relative path to .mf-metro dir
-      const importPath = `../../${importName}`;
-      return `"${key}": async () => {
-          const module = await import("${importPath}");
-          return module;
-        }`;
-    })
-    .join(',');
+function generateExposes(
+  exposes: Record<string, string>,
+  paths: { tmpDir: string; projectDir: string }
+) {
+  const exposesString = Object.keys(exposes).map((key) => {
+    // ./exposed -> exposed
+    const importName = path.relative('.', exposes[key]);
+    const importPath = path.join(paths.tmpDir, importName);
+    const relativeImportPath = path.relative(paths.projectDir, importPath);
+    return `"${key}": async () => import("${relativeImportPath}")`;
+  });
 
-  return `{${exposesString}}`;
+  return `{${exposesString.join(',')}}`;
 }
 
 function generateRuntimePlugins(runtimePlugins: string[]) {
