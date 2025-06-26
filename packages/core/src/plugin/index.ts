@@ -144,6 +144,7 @@ function augmentConfig(
       rewriteRequestUrl: createRewriteRequest({
         options,
         config,
+        hostEntryPath,
         manifestPath,
       }),
     },
