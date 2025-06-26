@@ -132,26 +132,6 @@ export function createResolveRequest({
       return replaceModule(from, to)(res);
     }
 
-    if (moduleName.endsWith('HMRClient')) {
-      console.log(moduleName);
-      console.log('XDXD');
-      console.log('-----');
-    }
-
-    // replace HMRClient
-    if (
-      !isUsingMFBundleCommand() &&
-      moduleName.endsWith('HMRClient') &&
-      !context.originModulePath.endsWith('HMRClient.ts')
-    ) {
-      console.log('Replacing HMRClient');
-      const res = context.resolveRequest(context, moduleName, platform);
-      const from = /react-native\/Libraries\/Utilities\/HMRClient\.js$/;
-      const to = resolveModule('HMRClient.ts');
-      // replace HMRClient with our own
-      return replaceModule(from, to)(res);
-    }
-
     return context.resolveRequest(context, moduleName, platform);
   };
 }
