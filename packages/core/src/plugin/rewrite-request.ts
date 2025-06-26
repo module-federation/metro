@@ -1,35 +1,44 @@
-import path from 'node:path';
 import type { ConfigT } from 'metro-config';
-import type { ModuleFederationConfigNormalized } from '../types';
-import { MANIFEST_FILENAME } from './constants';
-import { replaceExtension } from './helpers';
+import {
+  MANIFEST_FILENAME,
+  VIRTUAL_HOST_ENTRY_NAME,
+  VIRTUAL_REMOTE_ENTRY_NAME,
+} from './constants';
+import { removeExtension } from './helpers';
 
 type CreateRewriteRequestOptions = {
-  options: ModuleFederationConfigNormalized;
   config: ConfigT;
-  hostEntryPath: string;
+  originalEntryFilename: string;
+  remoteEntryFilename: string;
   manifestPath: string;
 };
 
 export function createRewriteRequest({
-  options,
   config,
-  hostEntryPath,
+  originalEntryFilename,
+  remoteEntryFilename,
   manifestPath,
 }: CreateRewriteRequestOptions) {
+  const hostEntryName = removeExtension(originalEntryFilename);
+  const remoteEntryName = removeExtension(remoteEntryFilename);
+
+  const hostEntryPathRegex = new RegExp(
+    `^\\/${hostEntryName}(\\.js)?(\\.bundle)$`
+  );
+  const remoteEntryPathRegex = new RegExp(
+    `^\\/${remoteEntryName}(\\.js)?(\\.bundle)$`
+  );
+
   return function rewriteRequest(url: string) {
     const root = config.projectRoot;
     const { pathname } = new URL(url, 'protocol://host');
-    // rewrite /index.bundle -> /<tmpDir>/hostEntry.js.bundle
-    if (pathname.startsWith('/index.bundle')) {
-      const relativeHostEntryPath = path.relative(root, hostEntryPath);
-      const target = replaceExtension(relativeHostEntryPath, '.js.bundle');
-      return url.replace('index.bundle', target);
+    // rewrite /index.bundle -> /virtual-host-entry.bundle
+    if (pathname.match(hostEntryPathRegex)) {
+      return url.replace(hostEntryName, VIRTUAL_HOST_ENTRY_NAME);
     }
-    // rewrite /mini.bundle -> /mini.js.bundle
-    if (pathname.startsWith(`/${options.filename}`)) {
-      const target = replaceExtension(options.filename, '.js.bundle');
-      return url.replace(options.filename, target);
+    // rewrite /mini.bundle -> /virtual-remote-entry.bundle
+    if (pathname.match(remoteEntryPathRegex)) {
+      return url.replace(remoteEntryName, VIRTUAL_REMOTE_ENTRY_NAME);
     }
     // rewrite /mf-manifest.json -> /[metro-project]/node_modules/.mf-metro/mf-manifest.json
     if (pathname.startsWith(`/${MANIFEST_FILENAME}`)) {

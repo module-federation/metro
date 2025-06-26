@@ -68,11 +68,23 @@ function augmentConfig(
 
   const vmManager = new VirtualModuleManager(config);
 
-  const hostEntryPath = path.resolve(tmpDirPath, 'hostEntry.js');
-  const initHostPath = path.resolve(tmpDirPath, 'init-host.js');
+  // original host entrypoint, usually <projectRoot>/index.js
+  const originalEntryFilename = 'index.js';
+  const originalEntryPath = path.resolve(
+    config.projectRoot,
+    originalEntryFilename
+  );
 
+  // virtual host entrypoint
+  const hostEntryFilename = originalEntryFilename;
+  const hostEntryPath = path.resolve(tmpDirPath, hostEntryFilename);
+
+  // virtual remote entrypoint
   const remoteEntryFilename = replaceExtension(options.filename, '.js');
   const remoteEntryPath = path.resolve(tmpDirPath, remoteEntryFilename);
+
+  // other virtual modules
+  const initHostPath = path.resolve(tmpDirPath, 'init-host.js');
   const remoteHMRSetupPath = path.resolve(tmpDirPath, 'remote-hmr.js');
   const remoteModuleRegistryPath = path.resolve(
     tmpDirPath,
@@ -129,6 +141,7 @@ function augmentConfig(
         options,
         paths: {
           asyncRequire: asyncRequirePath,
+          originalEntry: originalEntryPath,
           hostEntry: hostEntryPath,
           initHost: initHostPath,
           remoteModuleRegistry: remoteModuleRegistryPath,
@@ -143,9 +156,9 @@ function augmentConfig(
       ...config.server,
       enhanceMiddleware: vmManager.getMiddleware(),
       rewriteRequestUrl: createRewriteRequest({
-        options,
         config,
-        hostEntryPath,
+        originalEntryFilename,
+        remoteEntryFilename,
         manifestPath,
       }),
     },

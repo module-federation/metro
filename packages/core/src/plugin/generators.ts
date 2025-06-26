@@ -9,13 +9,12 @@ export function getRemoteModule(name: string) {
 
 export function getHostEntryModule(
   _: ModuleFederationConfigNormalized,
-  paths: { tmpDir: string; projectDir: string }
+  paths: { originalEntry: string; tmpDir: string }
 ) {
-  const indexPath = path.join(paths.projectDir, 'index.js');
   const template = getModuleTemplate('host-entry.js');
   return template.replaceAll(
     '__ENTRYPOINT_IMPORT__',
-    `import './${path.relative(paths.tmpDir, indexPath)}'`
+    `import './${path.relative(paths.tmpDir, paths.originalEntry)}'`
   );
 }
 

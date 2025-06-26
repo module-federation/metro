@@ -7,6 +7,8 @@ import {
   INIT_HOST,
   REMOTE_HMR_SETUP,
   REMOTE_MODULE_REGISTRY,
+  VIRTUAL_HOST_ENTRY_NAME,
+  VIRTUAL_REMOTE_ENTRY_NAME,
 } from './constants';
 import {
   getHostEntryModule,
@@ -24,6 +26,7 @@ interface CreateResolveRequestOptions {
     asyncRequire: string;
     hostEntry: string;
     initHost: string;
+    originalEntry: string;
     remoteEntry: string;
     remoteHMRSetup: string;
     remoteModuleRegistry: string;
@@ -40,20 +43,13 @@ export function createResolveRequest({
   paths,
   isRemote,
 }: CreateResolveRequestOptions): CustomResolver {
-  const hostEntryPathRegex = new RegExp(
-    `^\\./${path.basename(paths.hostEntry, '.js')}(\\.js)?$`
-  );
-  const remoteEntryPathRegex = new RegExp(
-    `^\\./${path.basename(paths.remoteEntry, '.js')}(\\.js)?$`
-  );
-
   return function resolveRequest(context, moduleName, platform) {
     // virtual entrypoint for host
-    if (moduleName.match(hostEntryPathRegex)) {
+    if (moduleName === `./${VIRTUAL_HOST_ENTRY_NAME}`) {
       const hostEntryGenerator = () =>
         getHostEntryModule(options, {
+          originalEntry: paths.originalEntry,
           tmpDir: paths.tmpDir,
-          projectDir: paths.projectDir,
         });
       vmManager.registerVirtualModule(paths.hostEntry, hostEntryGenerator);
       return { type: 'sourceFile', filePath: paths.hostEntry };
@@ -62,7 +58,7 @@ export function createResolveRequest({
     // virtual entrypoint for MF containers
     // MF options.filename is provided as a name only and will be requested from the root of project
     // so the filename mini.js becomes ./mini.js and we need to match exactly that
-    if (moduleName.match(remoteEntryPathRegex)) {
+    if (moduleName === `./${VIRTUAL_REMOTE_ENTRY_NAME}`) {
       const remoteEntryGenerator = () =>
         getRemoteEntryModule(options, {
           tmpDir: paths.tmpDir,

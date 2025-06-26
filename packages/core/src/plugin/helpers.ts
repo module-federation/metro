@@ -17,6 +17,10 @@ export function replaceExtension(filepath: string, extension: string) {
   return path.format({ dir, name, ext: extension });
 }
 
+export function removeExtension(filepath: string) {
+  return replaceExtension(filepath, '');
+}
+
 export function stubHostEntry(hostEntryPath: string) {
   const stub = '// host entry stub';
   fs.mkdirSync(path.dirname(hostEntryPath), { recursive: true });
