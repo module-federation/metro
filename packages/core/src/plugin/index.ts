@@ -109,6 +109,7 @@ function augmentConfig(
 
   // pass data to bundle-mf-remote command
   global.__METRO_FEDERATION_CONFIG = options;
+  global.__METRO_FEDERATION_HOST_ENTRY_PATH = hostEntryPath;
   global.__METRO_FEDERATION_REMOTE_ENTRY_PATH = remoteEntryPath;
   global.__METRO_FEDERATION_MANIFEST_PATH = manifestPath;
 
