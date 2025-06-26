@@ -58,12 +58,13 @@ function augmentConfig(
   const isRemote = !isHost;
 
   const tmpDirPath = prepareTmpDir(config.projectRoot);
+
+  validateOptions(federationOptions);
+
   const options = normalizeOptions(federationOptions, {
     projectRoot: config.projectRoot,
     tmpDirPath,
   });
-
-  validateOptions(options);
 
   const vmManager = new VirtualModuleManager(config);
 

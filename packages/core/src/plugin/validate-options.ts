@@ -1,7 +1,12 @@
-import type { ModuleFederationConfigNormalized, Shared } from '../types';
+import type { ModuleFederationConfig, Shared } from '../types';
 import { ConfigError } from '../utils';
 
-function validateFilename(filename: string) {
+function validateFilename(filename: string | undefined) {
+  // filename is optional
+  if (!filename) {
+    return;
+  }
+
   if (!filename.endsWith('.bundle')) {
     throw new ConfigError(
       `Invalid filename: ${filename}. ` +
@@ -10,13 +15,28 @@ function validateFilename(filename: string) {
   }
 }
 
-function validateShared(shared: Shared) {
-  if (!shared || typeof shared !== 'object') {
+function validateShared(shared: Shared | undefined) {
+  if (!shared) {
+    throw new ConfigError('Shared configuration is required.');
+  }
+
+  if (typeof shared !== 'object') {
     throw new ConfigError('Shared must be an object.');
   }
 
   if (Array.isArray(shared)) {
     throw new ConfigError('Array format is not supported for shared.');
+  }
+
+  // validate react & react-native present
+  if (!('react' in shared)) {
+    throw new ConfigError("Dependency 'react' must be present in shared.");
+  }
+
+  if (!('react-native' in shared)) {
+    throw new ConfigError(
+      "Dependency 'react-native' must be present in shared."
+    );
   }
 
   // validate shared module names
@@ -45,7 +65,7 @@ function validateShared(shared: Shared) {
   }
 }
 
-export function validateOptions(options: ModuleFederationConfigNormalized) {
+export function validateOptions(options: ModuleFederationConfig) {
   // validate filename
   validateFilename(options.filename);
 
