@@ -11,6 +11,7 @@ import {
   isUsingMFCommand,
   prepareTmpDir,
   replaceExtension,
+  stubHostEntry,
   stubRemoteEntry,
 } from './helpers';
 import { createManifest } from './manifest';
@@ -67,6 +68,7 @@ function augmentConfig(
 
   const vmManager = new VirtualModuleManager(config);
 
+  const hostEntryPath = path.resolve(tmpDirPath, 'hostEntry.js');
   const initHostPath = path.resolve(tmpDirPath, 'init-host.js');
 
   const remoteEntryFilename = replaceExtension(options.filename, '.js');
@@ -88,8 +90,9 @@ function augmentConfig(
 
   const manifestPath = createManifest(options, tmpDirPath);
 
-  // remote entry is an entrypoint so it needs to be in the filesystem
-  // we create a stub on the filesystem and then redirect to a virtual module
+  // host & remote entry is are entrypoints so they needs to be present in the filesystem
+  // we create stubs on the filesystem and then redirect corresponding virtual modules
+  stubHostEntry(hostEntryPath);
   stubRemoteEntry(remoteEntryPath);
 
   // pass data to bundle-mf-remote command
