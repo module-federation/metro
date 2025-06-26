@@ -41,14 +41,18 @@ export function createResolveRequest({
   paths,
   isRemote,
 }: CreateResolveRequestOptions): CustomResolver {
-  const hostEntryPath =
-    './' + removeExtension(path.relative(paths.projectDir, paths.hostEntry));
-  const remoteEntryPath =
-    './' + removeExtension(path.relative(paths.projectDir, paths.remoteEntry));
+  const hostEntryPathRegex = getEntryPathRegex({
+    entry: paths.hostEntry,
+    projectDir: paths.projectDir,
+  });
+  const remoteEntryPathRegex = getEntryPathRegex({
+    entry: paths.remoteEntry,
+    projectDir: paths.projectDir,
+  });
 
   return function resolveRequest(context, moduleName, platform) {
     // virtual entrypoint for host
-    if (moduleName === hostEntryPath) {
+    if (moduleName.match(hostEntryPathRegex)) {
       const hostEntryGenerator = () =>
         getHostEntryModule(options, {
           originalEntry: paths.originalEntry,
@@ -59,7 +63,7 @@ export function createResolveRequest({
     }
 
     // virtual entrypoint for remote containers
-    if (moduleName === remoteEntryPath) {
+    if (moduleName.match(remoteEntryPathRegex)) {
       const remoteEntryGenerator = () =>
         getRemoteEntryModule(options, {
           tmpDir: paths.tmpDir,
@@ -184,4 +188,13 @@ function replaceModule(from: RegExp, to: string) {
     }
     return resolved;
   };
+}
+
+function getEntryPathRegex(paths: {
+  entry: string;
+  projectDir: string;
+}): RegExp {
+  const relativeEntryPath = path.relative(paths.projectDir, paths.entry);
+  const entryName = removeExtension(relativeEntryPath);
+  return new RegExp(`^\\./${entryName}\\.js?$`);
 }
