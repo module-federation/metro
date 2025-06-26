@@ -223,7 +223,7 @@ async function bundleFederatedRemote(
   // hack: resolve the container entry to register it as a virtual module
   resolver.resolve({
     from: config.projectRoot,
-    to: `./${path.basename(containerEntryFilepath)}`,
+    to: `./${path.relative(config.projectRoot, containerEntryFilepath)}`,
   });
 
   const exposedModules = Object.entries(federationConfig.exposes)
