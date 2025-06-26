@@ -128,8 +128,9 @@ function augmentConfig(
         vmManager,
         options,
         paths: {
-          initHost: initHostPath,
           asyncRequire: asyncRequirePath,
+          hostEntry: hostEntryPath,
+          initHost: initHostPath,
           remoteModuleRegistry: remoteModuleRegistryPath,
           remoteHMRSetup: remoteHMRSetupPath,
           remoteEntry: remoteEntryPath,

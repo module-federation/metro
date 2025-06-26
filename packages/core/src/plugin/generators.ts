@@ -7,6 +7,18 @@ export function getRemoteModule(name: string) {
   return template.replaceAll('__MODULE_ID__', `"${name}"`);
 }
 
+export function getHostEntryModule(
+  _: ModuleFederationConfigNormalized,
+  paths: { tmpDir: string; projectDir: string }
+) {
+  const indexPath = path.join(paths.projectDir, 'index.js');
+  const template = getModuleTemplate('host-entry.js');
+  return template.replaceAll(
+    '__ENTRYPOINT_IMPORT__',
+    `import './${path.relative(paths.tmpDir, indexPath)}'`
+  );
+}
+
 export function getInitHostModule(options: ModuleFederationConfigNormalized) {
   const template = getModuleTemplate('init-host.js');
   return template

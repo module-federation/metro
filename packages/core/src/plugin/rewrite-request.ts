@@ -1,3 +1,4 @@
+import path from 'node:path';
 import type { ConfigT } from 'metro-config';
 import type { ModuleFederationConfigNormalized } from '../types';
 import { MANIFEST_FILENAME } from './constants';
@@ -17,11 +18,12 @@ export function createRewriteRequest({
   manifestPath,
 }: CreateRewriteRequestOptions) {
   return function rewriteRequest(url: string) {
+    const root = config.projectRoot;
     const { pathname } = new URL(url, 'protocol://host');
-    // rewrite /index.bundle -> /hostEntry.bundle
+    // rewrite /index.bundle -> /<tmpDir>/hostEntry.js.bundle
     if (pathname.startsWith('/index.bundle')) {
-      const root = config.projectRoot;
-      const target = hostEntryPath.replace(root, '[metro-project]');
+      const relativeHostEntryPath = path.relative(root, hostEntryPath);
+      const target = replaceExtension(relativeHostEntryPath, '.js.bundle');
       return url.replace('index.bundle', target);
     }
     // rewrite /mini.bundle -> /mini.js.bundle
@@ -31,7 +33,6 @@ export function createRewriteRequest({
     }
     // rewrite /mf-manifest.json -> /[metro-project]/node_modules/.mf-metro/mf-manifest.json
     if (pathname.startsWith(`/${MANIFEST_FILENAME}`)) {
-      const root = config.projectRoot;
       const target = manifestPath.replace(root, '[metro-project]');
       return url.replace(MANIFEST_FILENAME, target);
     }

@@ -9,6 +9,7 @@ import {
   REMOTE_MODULE_REGISTRY,
 } from './constants';
 import {
+  getHostEntryModule,
   getInitHostModule,
   getRemoteEntryModule,
   getRemoteHMRSetupModule,
@@ -21,6 +22,7 @@ interface CreateResolveRequestOptions {
   isRemote: boolean;
   paths: {
     asyncRequire: string;
+    hostEntry: string;
     initHost: string;
     remoteEntry: string;
     remoteHMRSetup: string;
@@ -38,7 +40,38 @@ export function createResolveRequest({
   paths,
   isRemote,
 }: CreateResolveRequestOptions): CustomResolver {
+  const hostEntryPathRegex = new RegExp(
+    `^\\./${path.basename(paths.hostEntry, '.js')}(\\.js)?$`
+  );
+  const remoteEntryPathRegex = new RegExp(
+    `^\\./${path.basename(paths.remoteEntry, '.js')}(\\.js)?$`
+  );
+
   return function resolveRequest(context, moduleName, platform) {
+    // virtual entrypoint for host
+    if (moduleName.match(hostEntryPathRegex)) {
+      const hostEntryGenerator = () =>
+        getHostEntryModule(options, {
+          tmpDir: paths.tmpDir,
+          projectDir: paths.projectDir,
+        });
+      vmManager.registerVirtualModule(paths.hostEntry, hostEntryGenerator);
+      return { type: 'sourceFile', filePath: paths.hostEntry };
+    }
+
+    // virtual entrypoint for MF containers
+    // MF options.filename is provided as a name only and will be requested from the root of project
+    // so the filename mini.js becomes ./mini.js and we need to match exactly that
+    if (moduleName.match(remoteEntryPathRegex)) {
+      const remoteEntryGenerator = () =>
+        getRemoteEntryModule(options, {
+          tmpDir: paths.tmpDir,
+          projectDir: paths.projectDir,
+        });
+      vmManager.registerVirtualModule(paths.remoteEntry, remoteEntryGenerator);
+      return { type: 'sourceFile', filePath: paths.remoteEntry };
+    }
+
     // virtual module: init-host
     if (moduleName === INIT_HOST) {
       const initHostGenerator = () => getInitHostModule(options);
@@ -69,19 +102,6 @@ export function createResolveRequest({
         remoteHMRSetupGenerator
       );
       return { type: 'sourceFile', filePath: paths.remoteHMRSetup as string };
-    }
-
-    // virtual entrypoint to create MF containers
-    // MF options.filename is provided as a name only and will be requested from the root of project
-    // so the filename mini.js becomes ./mini.js and we need to match exactly that
-    if (moduleName === `./${path.basename(paths.remoteEntry)}`) {
-      const remoteEntryGenerator = () =>
-        getRemoteEntryModule(options, {
-          tmpDir: paths.tmpDir,
-          projectDir: paths.projectDir,
-        });
-      vmManager.registerVirtualModule(paths.remoteEntry, remoteEntryGenerator);
-      return { type: 'sourceFile', filePath: paths.remoteEntry };
     }
 
     // shared modules handling in init-host.js
