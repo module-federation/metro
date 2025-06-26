@@ -161,6 +161,7 @@ function augmentConfig(
         originalEntryFilename,
         remoteEntryFilename,
         manifestPath,
+        tmpDirPath,
       }),
     },
   };

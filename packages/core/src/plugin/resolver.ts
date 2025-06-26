@@ -7,8 +7,6 @@ import {
   INIT_HOST,
   REMOTE_HMR_SETUP,
   REMOTE_MODULE_REGISTRY,
-  VIRTUAL_HOST_ENTRY_NAME,
-  VIRTUAL_REMOTE_ENTRY_NAME,
 } from './constants';
 import {
   getHostEntryModule,
@@ -18,7 +16,7 @@ import {
   getRemoteModule,
   getRemoteModuleRegistryModule,
 } from './generators';
-import { isUsingMFBundleCommand } from './helpers';
+import { isUsingMFBundleCommand, removeExtension } from './helpers';
 
 interface CreateResolveRequestOptions {
   isRemote: boolean;
@@ -43,9 +41,14 @@ export function createResolveRequest({
   paths,
   isRemote,
 }: CreateResolveRequestOptions): CustomResolver {
+  const hostEntryPath =
+    './' + removeExtension(path.relative(paths.projectDir, paths.hostEntry));
+  const remoteEntryPath =
+    './' + removeExtension(path.relative(paths.projectDir, paths.remoteEntry));
+
   return function resolveRequest(context, moduleName, platform) {
     // virtual entrypoint for host
-    if (moduleName === `./${VIRTUAL_HOST_ENTRY_NAME}`) {
+    if (moduleName === hostEntryPath) {
       const hostEntryGenerator = () =>
         getHostEntryModule(options, {
           originalEntry: paths.originalEntry,
@@ -55,10 +58,8 @@ export function createResolveRequest({
       return { type: 'sourceFile', filePath: paths.hostEntry };
     }
 
-    // virtual entrypoint for MF containers
-    // MF options.filename is provided as a name only and will be requested from the root of project
-    // so the filename mini.js becomes ./mini.js and we need to match exactly that
-    if (moduleName === `./${VIRTUAL_REMOTE_ENTRY_NAME}`) {
+    // virtual entrypoint for remote containers
+    if (moduleName === remoteEntryPath) {
       const remoteEntryGenerator = () =>
         getRemoteEntryModule(options, {
           tmpDir: paths.tmpDir,
