@@ -61,6 +61,7 @@ runs:
       with:
         github-token: ${{ inputs.github_token }}
         variant: 'Release'
+        re-sign: true
         working-directory: './apps/${{ inputs.app_name}}'
 
     - name: Run Android E2E Tests
