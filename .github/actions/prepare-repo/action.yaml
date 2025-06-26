@@ -11,11 +11,6 @@ runs:
         node-version: 22
         cache: 'pnpm'
 
-    - name: Install Metro dependencies
-      working-directory: external/metro
-      run: yarn set version 1.22.22 && yarn install
-      shell: bash
-
     - name: Install dependencies
       run: pnpm install --frozen-lockfile
       shell: bash

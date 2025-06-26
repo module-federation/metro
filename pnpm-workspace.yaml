@@ -8,31 +8,11 @@ onlyBuiltDependencies:
   - '@biomejs/biome'
   - core-js
 
-overrides:
-  buck-worker-tool: link:./external/metro/packages/buck-worker-tool
-  metro: link:./external/metro/packages/metro
-  metro-babel-register: link:./external/metro/packages/metro-babel-register
-  metro-babel-transformer: link:./external/metro/packages/metro-babel-transformer
-  metro-cache: link:./external/metro/packages/metro-cache
-  metro-cache-key: link:./external/metro/packages/metro-cache-key
-  metro-config: link:./external/metro/packages/metro-config
-  metro-core: link:./external/metro/packages/metro-core
-  metro-file-map: link:./external/metro/packages/metro-file-map
-  metro-memory-fs: link:./external/metro/packages/metro-memory-fs
-  metro-minify-terser: link:./external/metro/packages/metro-minify-terser
-  metro-resolver: link:./external/metro/packages/metro-resolver
-  metro-runtime: link:./external/metro/packages/metro-runtime
-  metro-source-map: link:./external/metro/packages/metro-source-map
-  metro-symbolicate: link:./external/metro/packages/metro-symbolicate
-  metro-transform-plugins: link:./external/metro/packages/metro-transform-plugins
-  metro-transform-worker: link:./external/metro/packages/metro-transform-worker
-  ob1: link:./external/metro/packages/ob1
-
 patchedDependencies:
   '@react-native/community-cli-plugin': patches/@react-native__community-cli-plugin.patch
-  react-native: patches/react-native.patch
   '@rnef/plugin-metro': patches/@rnef__plugin-metro.patch
   lottie-react-native: patches/lottie-react-native.patch
+  metro-runtime: patches/metro-runtime.patch
 
 publicHoistPattern:
   - '@babel/runtime'

@@ -29,7 +29,6 @@ async function bundleFederatedHost(
       return server.build({
         ...Server.DEFAULT_BUNDLE_OPTIONS,
         ...requestOpts,
-        bundleType: 'bundle',
       });
     },
     save: saveBundleAndMap,

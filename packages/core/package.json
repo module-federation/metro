@@ -2,7 +2,11 @@
   "name": "@module-federation/metro",
   "version": "0.0.1",
   "description": "Module Federation for Metro bundler",
-  "keywords": ["module-federation", "metro", "react-native"],
+  "keywords": [
+    "module-federation",
+    "metro",
+    "react-native"
+  ],
   "type": "commonjs",
   "license": "MIT",
   "contributors": [
@@ -18,7 +22,11 @@
     "url": "https://github.com/module-federation/metro",
     "directory": "packages/core"
   },
-  "files": ["dist/", "babel-plugin/", "bootstrap/"],
+  "files": [
+    "dist/",
+    "babel-plugin/",
+    "bootstrap/"
+  ],
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
@@ -45,15 +53,16 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "chalk": "^5.4.1",
     "@expo/metro-runtime": "^5.0.4",
     "@module-federation/runtime": "^0.15.0",
-    "@module-federation/sdk": "^0.15.0"
+    "@module-federation/sdk": "^0.15.0",
+    "chalk": "^5.4.1"
   },
   "peerDependencies": {
     "@babel/types": "^7.25.0",
     "metro": "^0.82.1",
     "metro-config": "^0.82.1",
+    "metro-file-map": "^0.82.1",
     "metro-resolver": "^0.82.1",
     "metro-source-map": "^0.82.1",
     "react": ">=19.0.0",
@@ -61,10 +70,11 @@
   },
   "devDependencies": {
     "@rslib/core": "^0.10.0",
-    "@types/react": "^19.1.0",
     "@types/node": "^20.0.0",
+    "@types/react": "^19.1.0",
     "metro": "^0.82.1",
     "metro-config": "^0.82.1",
+    "metro-file-map": "^0.82.1",
     "metro-resolver": "^0.82.1",
     "metro-source-map": "^0.82.1",
     "react": "19.1.0",
