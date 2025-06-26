@@ -2,11 +2,7 @@
   "name": "@module-federation/metro",
   "version": "0.0.1",
   "description": "Module Federation for Metro bundler",
-  "keywords": [
-    "module-federation",
-    "metro",
-    "react-native"
-  ],
+  "keywords": ["module-federation", "metro", "react-native"],
   "type": "commonjs",
   "license": "MIT",
   "contributors": [
@@ -22,11 +18,7 @@
     "url": "https://github.com/module-federation/metro",
     "directory": "packages/core"
   },
-  "files": [
-    "dist/",
-    "babel-plugin/",
-    "bootstrap/"
-  ],
+  "files": ["dist/", "babel-plugin/", "bootstrap/"],
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
