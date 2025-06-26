@@ -23,6 +23,7 @@ import { validateOptions } from './validate-options';
 
 declare global {
   var __METRO_FEDERATION_CONFIG: ModuleFederationConfigNormalized;
+  var __METRO_FEDERATION_ORIGINAL_ENTRY_PATH: string | undefined;
   var __METRO_FEDERATION_REMOTE_ENTRY_PATH: string | undefined;
   var __METRO_FEDERATION_MANIFEST_PATH: string | undefined;
 }
@@ -69,10 +70,9 @@ function augmentConfig(
   const vmManager = new VirtualModuleManager(config);
 
   // original host entrypoint, usually <projectRoot>/index.js
-  const originalEntryFilename = 'index.js';
-  const originalEntryPath = path.resolve(
+  const { originalEntryFilename, originalEntryPath } = getOriginalEntry(
     config.projectRoot,
-    originalEntryFilename
+    'index.js'
   );
 
   // virtual host entrypoint
@@ -163,4 +163,21 @@ function augmentConfig(
       }),
     },
   };
+}
+
+function getOriginalEntry(
+  projectRoot: string,
+  entryFilename: string
+): {
+  originalEntryFilename: string;
+  originalEntryPath: string;
+} {
+  const originalEntryFilename = path.basename(
+    global.__METRO_FEDERATION_ORIGINAL_ENTRY_PATH ?? entryFilename
+  );
+  const originalEntryPath = path.resolve(
+    projectRoot,
+    global.__METRO_FEDERATION_ORIGINAL_ENTRY_PATH ?? entryFilename
+  );
+  return { originalEntryFilename, originalEntryPath };
 }
