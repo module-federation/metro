@@ -22,6 +22,11 @@ function isUrl(url: string) {
 }
 
 function isSameOrigin(url: string, origin?: string) {
+  // if it's not a fully qualified url, we assume it's the same origin
+  if (!isUrl(url)) {
+    return true;
+  }
+
   return origin && url.startsWith(origin);
 }
 
