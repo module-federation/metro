@@ -102,6 +102,7 @@ function augmentConfig(
     federationConfig: options,
     originalBabelTransformerPath: config.transformer.babelTransformerPath,
     tmpDirPath: tmpDirPath,
+    extraOptions,
   });
 
   const manifestPath = createManifest(options, tmpDirPath);
