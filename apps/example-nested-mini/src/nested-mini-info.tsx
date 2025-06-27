@@ -1,9 +1,8 @@
 import { VERSION } from 'lodash';
+// @ts-ignore
+import Info from 'mini/info';
 import React from 'react';
 import { View } from 'react-native';
-
-// @ts-ignore
-const Info = React.lazy(() => import('mini/info'));
 
 export default function NestedMiniInfo() {
   return (
