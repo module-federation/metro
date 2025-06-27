@@ -16,14 +16,7 @@ HMRClient.setup = (
   const serverHost = port !== null && port !== '' ? `${host}:${port}` : host;
   hmrOrigin = `${scheme}://${serverHost}`;
 
-  return originalSetup(
-    platform,
-    bundleEntry,
-    host,
-    port,
-    isEnabled,
-    scheme
-  );
+  return originalSetup(platform, bundleEntry, host, port, isEnabled, scheme);
 };
 
 HMRClient.registerBundle = (requestUrl: string) => {
