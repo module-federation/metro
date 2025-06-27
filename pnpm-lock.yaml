@@ -477,9 +477,6 @@ importers:
       '@module-federation/sdk':
         specifier: ^0.15.0
         version: 0.15.0
-      chalk:
-        specifier: ^5.4.1
-        version: 5.4.1
     devDependencies:
       '@rslib/core':
         specifier: ^0.10.0
