@@ -42,7 +42,6 @@ async function buildBundle(server: Server, requestOpts: BundleRequestOptions) {
   const bundle = await server.build({
     ...Server.DEFAULT_BUNDLE_OPTIONS,
     ...requestOpts,
-    bundleType: 'bundle',
   });
 
   return bundle;
@@ -329,7 +328,6 @@ async function bundleFederatedRemote(
       // const outputAssets = await server.getAssets({
       //   ...Server.DEFAULT_BUNDLE_OPTIONS,
       //   ...requestOpts,
-      //   bundleType: "todo",
       // });
 
       // When we're done saving bundle output and the assets, we're done.

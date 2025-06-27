@@ -1,0 +1,161 @@
+diff --git a/src/polyfills/require.js b/src/polyfills/require.js
+index 5cbacc00f4e04010c9f60cc3af471238e944c3ad..c73b35a917ccb6764a64108f059aa75e8d3e48a0 100644
+--- a/src/polyfills/require.js
++++ b/src/polyfills/require.js
+@@ -1,16 +1,16 @@
+ "use strict";
+ 
+-global.__r = metroRequire;
++global[`${__METRO_GLOBAL_PREFIX__}__r`] = metroRequire;
+ global[`${__METRO_GLOBAL_PREFIX__}__d`] = define;
+-global.__c = clear;
+-global.__registerSegment = registerSegment;
++global[`${__METRO_GLOBAL_PREFIX__}__c`] = clear;
++global[`${__METRO_GLOBAL_PREFIX__}__registerSegment`] = registerSegment;
+ var modules = clear();
+ const EMPTY = {};
+ const CYCLE_DETECTED = {};
+ const { hasOwnProperty } = {};
+ if (__DEV__) {
+-  global.$RefreshReg$ = () => {};
+-  global.$RefreshSig$ = () => (type) => type;
++  global.$RefreshReg$ = global.$RefreshReg$ ?? (() => {});
++  global.$RefreshSig$ = global.$RefreshSig$ ?? (() => type => type);
+ }
+ function clear() {
+   modules = new Map();
+@@ -32,7 +32,12 @@ function define(factory, moduleId, dependencyMap) {
+     if (__DEV__) {
+       const inverseDependencies = arguments[4];
+       if (inverseDependencies) {
+-        global.__accept(moduleId, factory, dependencyMap, inverseDependencies);
++        global[`${__METRO_GLOBAL_PREFIX__}__accept`](
++          moduleId,
++          factory,
++          dependencyMap,
++          inverseDependencies,
++        );
+       }
+     }
+     return;
+@@ -267,7 +272,8 @@ function loadModuleImplementation(moduleId, module) {
+       if (Refresh != null) {
+         const RefreshRuntime = Refresh;
+         global.$RefreshReg$ = (type, id) => {
+-          RefreshRuntime.register(type, moduleId + " " + id);
++          const uniqueId = __METRO_GLOBAL_PREFIX__ + ' ' + moduleId + ' ' + id;
++          RefreshRuntime.register(type, uniqueId);
+         };
+         global.$RefreshSig$ =
+           RefreshRuntime.createSignatureFunctionForTransform;
+@@ -290,7 +296,8 @@ function loadModuleImplementation(moduleId, module) {
+     if (__DEV__) {
+       Systrace.endEvent();
+       if (Refresh != null) {
+-        registerExportsForReactRefresh(Refresh, moduleObject.exports, moduleId);
++        const uniqueId = __METRO_GLOBAL_PREFIX__ + ' ' + moduleId;
++        registerExportsForReactRefresh(Refresh, moduleObject.exports, uniqueId);
+       }
+     }
+     return moduleObject.exports;
+@@ -679,7 +686,7 @@ if (__DEV__) {
+       Refresh.register(exportValue, typeID);
+     }
+   };
+-  global.__accept = metroHotUpdateModule;
++  global[`${__METRO_GLOBAL_PREFIX__}__accept`] = metroHotUpdateModule;
+ }
+ if (__DEV__) {
+   var requireSystrace = function requireSystrace() {
+@@ -689,7 +696,8 @@ if (__DEV__) {
+   };
+   var requireRefresh = function requireRefresh() {
+     return (
+-      global[__METRO_GLOBAL_PREFIX__ + "__ReactRefresh"] || metroRequire.Refresh
++      global[global.__METRO_GLOBAL_PREFIX__ + '__ReactRefresh'] ||
++      metroRequire.Refresh
+     );
+   };
+ }
+diff --git a/src/polyfills/require.js.flow b/src/polyfills/require.js.flow
+index a0b93124005644e9f5c158375f8c833a1376e485..7d4725a41338f7712c1e58983b5abde9ebf12824 100644
+--- a/src/polyfills/require.js.flow
++++ b/src/polyfills/require.js.flow
+@@ -80,10 +80,10 @@ export type DefineFn = (
+ type VerboseModuleNameForDev = string;
+ type ModuleDefiner = (moduleId: ModuleID) => void;
+ 
+-global.__r = (metroRequire: RequireFn);
++global[`${__METRO_GLOBAL_PREFIX__}__r`] = (metroRequire: RequireFn);
+ global[`${__METRO_GLOBAL_PREFIX__}__d`] = (define: DefineFn);
+-global.__c = clear;
+-global.__registerSegment = registerSegment;
++global[`${__METRO_GLOBAL_PREFIX__}__c`] = clear;
++global[`${__METRO_GLOBAL_PREFIX__}__registerSegment`] = registerSegment;
+ 
+ var modules = clear();
+ 
+@@ -94,8 +94,8 @@ const CYCLE_DETECTED = {};
+ const {hasOwnProperty} = {};
+ 
+ if (__DEV__) {
+-  global.$RefreshReg$ = () => {};
+-  global.$RefreshSig$ = () => type => type;
++  global.$RefreshReg$ = global.$RefreshReg$ ?? (() => {});
++  global.$RefreshSig$ = global.$RefreshSig$ ?? (() => type => type);
+ }
+ 
+ function clear(): ModuleList {
+@@ -133,7 +133,12 @@ function define(
+       // If the module has already been defined and the define method has been
+       // called with inverseDependencies, we can hot reload it.
+       if (inverseDependencies) {
+-        global.__accept(moduleId, factory, dependencyMap, inverseDependencies);
++        global[`${__METRO_GLOBAL_PREFIX__}__accept`](
++          moduleId,
++          factory,
++          dependencyMap,
++          inverseDependencies,
++        );
+       }
+     }
+ 
+@@ -459,7 +464,8 @@ function loadModuleImplementation(
+       if (Refresh != null) {
+         const RefreshRuntime = Refresh;
+         global.$RefreshReg$ = (type, id) => {
+-          RefreshRuntime.register(type, moduleId + ' ' + id);
++          const uniqueId = __METRO_GLOBAL_PREFIX__ + ' ' + moduleId + ' ' + id;
++          RefreshRuntime.register(type, uniqueId);
+         };
+         global.$RefreshSig$ =
+           RefreshRuntime.createSignatureFunctionForTransform;
+@@ -492,7 +498,8 @@ function loadModuleImplementation(
+       Systrace.endEvent();
+ 
+       if (Refresh != null) {
+-        registerExportsForReactRefresh(Refresh, moduleObject.exports, moduleId);
++        const uniqueId = __METRO_GLOBAL_PREFIX__ + ' ' + moduleId;
++        registerExportsForReactRefresh(Refresh, moduleObject.exports, uniqueId);
+       }
+     }
+ 
+@@ -1006,7 +1013,7 @@ if (__DEV__) {
+     }
+   };
+ 
+-  global.__accept = metroHotUpdateModule;
++  global[`${__METRO_GLOBAL_PREFIX__}__accept`] = metroHotUpdateModule;
+ }
+ 
+ if (__DEV__) {
+@@ -1026,7 +1033,8 @@ if (__DEV__) {
+   var requireRefresh = function requireRefresh() {
+     return (
+       // $FlowFixMe[prop-missing]
+-      global[__METRO_GLOBAL_PREFIX__ + '__ReactRefresh'] || metroRequire.Refresh
++      global[global.__METRO_GLOBAL_PREFIX__ + '__ReactRefresh'] ||
++      metroRequire.Refresh
+     );
+   };
+ }
