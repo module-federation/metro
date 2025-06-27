@@ -1,29 +1,47 @@
+import path from 'node:path';
 import type { ConfigT } from 'metro-config';
-import type { ModuleFederationConfigNormalized } from '../types';
 import { MANIFEST_FILENAME } from './constants';
-import { replaceExtension } from './helpers';
+import { removeExtension } from './helpers';
 
 type CreateRewriteRequestOptions = {
-  options: ModuleFederationConfigNormalized;
   config: ConfigT;
+  originalEntryFilename: string;
+  remoteEntryFilename: string;
   manifestPath: string;
+  tmpDirPath: string;
 };
 
 export function createRewriteRequest({
-  options,
   config,
+  originalEntryFilename,
+  remoteEntryFilename,
   manifestPath,
+  tmpDirPath,
 }: CreateRewriteRequestOptions) {
+  const hostEntryName = removeExtension(originalEntryFilename);
+  const remoteEntryName = removeExtension(remoteEntryFilename);
+  const relativeTmpDirPath = path
+    .relative(config.projectRoot, tmpDirPath)
+    .split(path.sep)
+    .join(path.posix.sep);
+  const hostEntryPathRegex = getEntryPathRegex(hostEntryName);
+  const remoteEntryPathRegex = getEntryPathRegex(remoteEntryName);
+
   return function rewriteRequest(url: string) {
+    const root = config.projectRoot;
     const { pathname } = new URL(url, 'protocol://host');
-    // rewrite /mini.bundle -> /mini.js.bundle
-    if (pathname.startsWith(`/${options.filename}`)) {
-      const target = replaceExtension(options.filename, '.js.bundle');
-      return url.replace(options.filename, target);
+    // rewrite /index.bundle -> /<tmp-dir>/index.bundle
+    if (pathname.match(hostEntryPathRegex)) {
+      const target = `${relativeTmpDirPath}/${hostEntryName}`;
+      return url.replace(hostEntryName, target);
+    }
+    // rewrite /mini.bundle -> /<tmp-dir>/mini.bundle
+    if (pathname.match(remoteEntryPathRegex)) {
+      const target = `${relativeTmpDirPath}/${remoteEntryName}`;
+      return url.replace(remoteEntryName, target);
     }
     // rewrite /mf-manifest.json -> /[metro-project]/node_modules/.mf-metro/mf-manifest.json
     if (pathname.startsWith(`/${MANIFEST_FILENAME}`)) {
-      const root = config.projectRoot;
       const target = manifestPath.replace(root, '[metro-project]');
       return url.replace(MANIFEST_FILENAME, target);
     }
@@ -33,4 +51,8 @@ export function createRewriteRequest({
     }
     return url;
   };
+}
+
+function getEntryPathRegex(entryFilename: string) {
+  return new RegExp(`^\\/${entryFilename}(\\.js)?(\\.bundle)$`);
 }

@@ -19,6 +19,7 @@ const DEFAULT_OUTPUT = 'dist';
 
 declare global {
   var __METRO_FEDERATION_CONFIG: ModuleFederationConfigNormalized;
+  var __METRO_FEDERATION_ORIGINAL_ENTRY_PATH: string | undefined;
   var __METRO_FEDERATION_REMOTE_ENTRY_PATH: string | undefined;
   var __METRO_FEDERATION_MANIFEST_PATH: string | undefined;
 }
@@ -221,7 +222,7 @@ async function bundleFederatedRemote(
   // hack: resolve the container entry to register it as a virtual module
   resolver.resolve({
     from: config.projectRoot,
-    to: `./${path.basename(containerEntryFilepath)}`,
+    to: `./${path.relative(config.projectRoot, containerEntryFilepath)}`,
   });
 
   const exposedModules = Object.entries(federationConfig.exposes)

@@ -11,6 +11,7 @@ import {
   isUsingMFCommand,
   prepareTmpDir,
   replaceExtension,
+  stubHostEntry,
   stubRemoteEntry,
 } from './helpers';
 import { createManifest } from './manifest';
@@ -22,6 +23,7 @@ import { validateOptions } from './validate-options';
 
 declare global {
   var __METRO_FEDERATION_CONFIG: ModuleFederationConfigNormalized;
+  var __METRO_FEDERATION_ORIGINAL_ENTRY_PATH: string | undefined;
   var __METRO_FEDERATION_REMOTE_ENTRY_PATH: string | undefined;
   var __METRO_FEDERATION_MANIFEST_PATH: string | undefined;
 }
@@ -68,10 +70,22 @@ function augmentConfig(
 
   const vmManager = new VirtualModuleManager(config);
 
-  const initHostPath = path.resolve(tmpDirPath, 'init-host.js');
+  // original host entrypoint, usually <projectRoot>/index.js
+  const { originalEntryFilename, originalEntryPath } = getOriginalEntry(
+    config.projectRoot,
+    'index.js'
+  );
 
+  // virtual host entrypoint
+  const hostEntryFilename = originalEntryFilename;
+  const hostEntryPath = path.resolve(tmpDirPath, hostEntryFilename);
+
+  // virtual remote entrypoint
   const remoteEntryFilename = replaceExtension(options.filename, '.js');
   const remoteEntryPath = path.resolve(tmpDirPath, remoteEntryFilename);
+
+  // other virtual modules
+  const initHostPath = path.resolve(tmpDirPath, 'init-host.js');
   const remoteHMRSetupPath = path.resolve(tmpDirPath, 'remote-hmr.js');
   const remoteModuleRegistryPath = path.resolve(
     tmpDirPath,
@@ -89,12 +103,14 @@ function augmentConfig(
 
   const manifestPath = createManifest(options, tmpDirPath);
 
-  // remote entry is an entrypoint so it needs to be in the filesystem
-  // we create a stub on the filesystem and then redirect to a virtual module
+  // host and remote entries are entry points, so they need to be present in the filesystem
+  // we create stubs on the filesystem and then redirect corresponding virtual modules
+  stubHostEntry(hostEntryPath);
   stubRemoteEntry(remoteEntryPath);
 
   // pass data to bundle-mf-remote command
   global.__METRO_FEDERATION_CONFIG = options;
+  global.__METRO_FEDERATION_HOST_ENTRY_PATH = hostEntryPath;
   global.__METRO_FEDERATION_REMOTE_ENTRY_PATH = remoteEntryPath;
   global.__METRO_FEDERATION_MANIFEST_PATH = manifestPath;
 
@@ -126,8 +142,10 @@ function augmentConfig(
         vmManager,
         options,
         paths: {
-          initHost: initHostPath,
           asyncRequire: asyncRequirePath,
+          originalEntry: originalEntryPath,
+          hostEntry: hostEntryPath,
+          initHost: initHostPath,
           remoteModuleRegistry: remoteModuleRegistryPath,
           remoteHMRSetup: remoteHMRSetupPath,
           remoteEntry: remoteEntryPath,
@@ -140,10 +158,29 @@ function augmentConfig(
       ...config.server,
       enhanceMiddleware: vmManager.getMiddleware(),
       rewriteRequestUrl: createRewriteRequest({
-        options,
         config,
+        originalEntryFilename,
+        remoteEntryFilename,
         manifestPath,
+        tmpDirPath,
       }),
     },
   };
+}
+
+function getOriginalEntry(
+  projectRoot: string,
+  entryFilename: string
+): {
+  originalEntryFilename: string;
+  originalEntryPath: string;
+} {
+  const originalEntryFilename = path.basename(
+    global.__METRO_FEDERATION_ORIGINAL_ENTRY_PATH ?? entryFilename
+  );
+  const originalEntryPath = path.resolve(
+    projectRoot,
+    global.__METRO_FEDERATION_ORIGINAL_ENTRY_PATH ?? entryFilename
+  );
+  return { originalEntryFilename, originalEntryPath };
 }
