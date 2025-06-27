@@ -53,5 +53,10 @@ module.exports = withModuleFederation(
     },
     shareStrategy: 'loaded-first',
     plugins: [path.resolve(__dirname, './runtime-plugin.ts')],
+  },
+  {
+    flags: {
+      unstable_patchHMRClient: true,
+    },
   }
 );

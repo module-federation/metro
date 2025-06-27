@@ -1,6 +1,9 @@
 import path from 'node:path';
 import type { CustomResolver, Resolution } from 'metro-resolver';
-import type { ModuleFederationConfigNormalized } from '../types';
+import type {
+  ModuleFederationConfigNormalized,
+  ModuleFederationExtraOptions,
+} from '../types';
 import type { VirtualModuleManager } from '../utils';
 import {
   ASYNC_REQUIRE,
@@ -33,6 +36,7 @@ interface CreateResolveRequestOptions {
   };
   options: ModuleFederationConfigNormalized;
   vmManager: VirtualModuleManager;
+  extraOptions?: ModuleFederationExtraOptions;
 }
 
 export function createResolveRequest({
@@ -40,6 +44,7 @@ export function createResolveRequest({
   options,
   paths,
   isRemote,
+  extraOptions,
 }: CreateResolveRequestOptions): CustomResolver {
   const hostEntryPathRegex = getEntryPathRegex({
     entry: paths.hostEntry,
@@ -158,6 +163,20 @@ export function createResolveRequest({
       const res = context.resolveRequest(context, moduleName, platform);
       const from = /react-native\/Libraries\/Utilities\/HMRClient\.js$/;
       const to = resolveModule('HMRClientShim.ts');
+      return replaceModule(from, to)(res);
+    }
+
+    // patch HMRClient module for older versions of React Native
+    if (
+      extraOptions?.flags?.unstable_patchHMRClient &&
+      !isUsingMFBundleCommand() &&
+      moduleName.endsWith('HMRClient') &&
+      !context.originModulePath.includes(resolveModule('HMRClient.ts'))
+    ) {
+      const res = context.resolveRequest(context, moduleName, platform);
+      const from = /react-native\/Libraries\/Utilities\/HMRClient\.js$/;
+      const to = resolveModule('HMRClient.ts');
+      // replace HMRClient with our own
       return replaceModule(from, to)(res);
     }
 

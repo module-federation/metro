@@ -19,3 +19,11 @@ export interface ModuleFederationConfig {
 }
 
 export type ModuleFederationConfigNormalized = Required<ModuleFederationConfig>;
+
+export type ModuleFederationExtraOptions = {
+  flags?: MetroMFFlags;
+};
+
+export type MetroMFFlags = {
+  unstable_patchHMRClient?: boolean;
+};

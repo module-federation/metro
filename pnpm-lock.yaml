@@ -17,9 +17,6 @@ patchedDependencies:
   metro-runtime:
     hash: eeb4f425d13e3fcf0b9c963aa7cb181c1fd7c6a404e2a5642793b8a0382a3ba4
     path: patches/metro-runtime.patch
-  react-native:
-    hash: 25ca577106daa307f4f2c747fc9cba0d48347d7042fd354f0c4e20342f8c2b6c
-    path: patches/react-native.patch
 
 importers:
 
@@ -42,7 +39,7 @@ importers:
         version: 19.1.0
       react-native:
         specifier: 0.80.0
-        version: 0.80.0(patch_hash=25ca577106daa307f4f2c747fc9cba0d48347d7042fd354f0c4e20342f8c2b6c)(@babel/core@7.27.4)(@types/react@19.1.8)(react@19.1.0)
+        version: 0.80.0(@babel/core@7.27.4)(@types/react@19.1.8)(react@19.1.0)
     devDependencies:
       '@babel/core':
         specifier: ^7.25.2
@@ -127,7 +124,7 @@ importers:
         version: 19.1.0
       react-native:
         specifier: 0.80.0
-        version: 0.80.0(patch_hash=25ca577106daa307f4f2c747fc9cba0d48347d7042fd354f0c4e20342f8c2b6c)(@babel/core@7.27.4)(@types/react@19.1.8)(react@19.1.0)
+        version: 0.80.0(@babel/core@7.27.4)(@types/react@19.1.8)(react@19.1.0)
     devDependencies:
       '@babel/core':
         specifier: ^7.25.2
@@ -215,7 +212,7 @@ importers:
         version: 19.1.0
       react-native:
         specifier: 0.80.0
-        version: 0.80.0(patch_hash=25ca577106daa307f4f2c747fc9cba0d48347d7042fd354f0c4e20342f8c2b6c)(@babel/core@7.27.4)(@types/react@19.1.8)(react@19.1.0)
+        version: 0.80.0(@babel/core@7.27.4)(@types/react@19.1.8)(react@19.1.0)
     devDependencies:
       '@babel/core':
         specifier: ^7.25.2
@@ -300,13 +297,13 @@ importers:
         version: 4.16.6
       lottie-react-native:
         specifier: ^7.2.2
-        version: 7.2.2(patch_hash=54f09d3be009340ce7db997b8a51b5a804d800c474f6e702e94887ded86ec340)(react-native@0.80.0(patch_hash=25ca577106daa307f4f2c747fc9cba0d48347d7042fd354f0c4e20342f8c2b6c)(@babel/core@7.27.4)(@types/react@19.1.8)(react@19.1.0))(react@19.1.0)
+        version: 7.2.2(patch_hash=54f09d3be009340ce7db997b8a51b5a804d800c474f6e702e94887ded86ec340)(react-native@0.80.0(@babel/core@7.27.4)(@types/react@19.1.8)(react@19.1.0))(react@19.1.0)
       react:
         specifier: 19.1.0
         version: 19.1.0
       react-native:
         specifier: 0.80.0
-        version: 0.80.0(patch_hash=25ca577106daa307f4f2c747fc9cba0d48347d7042fd354f0c4e20342f8c2b6c)(@babel/core@7.27.4)(@types/react@19.1.8)(react@19.1.0)
+        version: 0.80.0(@babel/core@7.27.4)(@types/react@19.1.8)(react@19.1.0)
     devDependencies:
       '@babel/core':
         specifier: ^7.25.2
@@ -388,13 +385,13 @@ importers:
         version: 4.17.21
       lottie-react-native:
         specifier: ^7.2.2
-        version: 7.2.2(patch_hash=54f09d3be009340ce7db997b8a51b5a804d800c474f6e702e94887ded86ec340)(react-native@0.80.0(patch_hash=25ca577106daa307f4f2c747fc9cba0d48347d7042fd354f0c4e20342f8c2b6c)(@babel/core@7.27.4)(@types/react@19.1.8)(react@19.1.0))(react@19.1.0)
+        version: 7.2.2(patch_hash=54f09d3be009340ce7db997b8a51b5a804d800c474f6e702e94887ded86ec340)(react-native@0.80.0(@babel/core@7.27.4)(@types/react@19.1.8)(react@19.1.0))(react@19.1.0)
       react:
         specifier: 19.1.0
         version: 19.1.0
       react-native:
         specifier: 0.80.0
-        version: 0.80.0(patch_hash=25ca577106daa307f4f2c747fc9cba0d48347d7042fd354f0c4e20342f8c2b6c)(@babel/core@7.27.4)(@types/react@19.1.8)(react@19.1.0)
+        version: 0.80.0(@babel/core@7.27.4)(@types/react@19.1.8)(react@19.1.0)
     devDependencies:
       '@babel/core':
         specifier: ^7.25.2
@@ -473,7 +470,7 @@ importers:
     dependencies:
       '@expo/metro-runtime':
         specifier: ^5.0.4
-        version: 5.0.4(react-native@0.80.0(patch_hash=25ca577106daa307f4f2c747fc9cba0d48347d7042fd354f0c4e20342f8c2b6c)(@babel/core@7.27.4)(@types/react@19.1.8)(react@19.1.0))
+        version: 5.0.4(react-native@0.80.0(@babel/core@7.27.4)(@types/react@19.1.8)(react@19.1.0))
       '@module-federation/runtime':
         specifier: ^0.15.0
         version: 0.15.0
@@ -513,7 +510,7 @@ importers:
         version: 19.1.0
       react-native:
         specifier: 0.80.0
-        version: 0.80.0(patch_hash=25ca577106daa307f4f2c747fc9cba0d48347d7042fd354f0c4e20342f8c2b6c)(@babel/core@7.27.4)(@types/react@19.1.8)(react@19.1.0)
+        version: 0.80.0(@babel/core@7.27.4)(@types/react@19.1.8)(react@19.1.0)
       ts-node:
         specifier: ^10.9.2
         version: 10.9.2(@types/node@20.19.1)(typescript@5.8.3)
@@ -5443,9 +5440,9 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@expo/metro-runtime@5.0.4(react-native@0.80.0(patch_hash=25ca577106daa307f4f2c747fc9cba0d48347d7042fd354f0c4e20342f8c2b6c)(@babel/core@7.27.4)(@types/react@19.1.8)(react@19.1.0))':
+  '@expo/metro-runtime@5.0.4(react-native@0.80.0(@babel/core@7.27.4)(@types/react@19.1.8)(react@19.1.0))':
     dependencies:
-      react-native: 0.80.0(patch_hash=25ca577106daa307f4f2c747fc9cba0d48347d7042fd354f0c4e20342f8c2b6c)(@babel/core@7.27.4)(@types/react@19.1.8)(react@19.1.0)
+      react-native: 0.80.0(@babel/core@7.27.4)(@types/react@19.1.8)(react@19.1.0)
 
   '@expo/spawn-async@1.7.2':
     dependencies:
@@ -5960,12 +5957,12 @@ snapshots:
 
   '@react-native/typescript-config@0.80.0': {}
 
-  '@react-native/virtualized-lists@0.80.0(@types/react@19.1.8)(react-native@0.80.0(patch_hash=25ca577106daa307f4f2c747fc9cba0d48347d7042fd354f0c4e20342f8c2b6c)(@babel/core@7.27.4)(@types/react@19.1.8)(react@19.1.0))(react@19.1.0)':
+  '@react-native/virtualized-lists@0.80.0(@types/react@19.1.8)(react-native@0.80.0(@babel/core@7.27.4)(@types/react@19.1.8)(react@19.1.0))(react@19.1.0)':
     dependencies:
       invariant: 2.2.4
       nullthrows: 1.1.1
       react: 19.1.0
-      react-native: 0.80.0(patch_hash=25ca577106daa307f4f2c747fc9cba0d48347d7042fd354f0c4e20342f8c2b6c)(@babel/core@7.27.4)(@types/react@19.1.8)(react@19.1.0)
+      react-native: 0.80.0(@babel/core@7.27.4)(@types/react@19.1.8)(react@19.1.0)
     optionalDependencies:
       '@types/react': 19.1.8
 
@@ -8147,10 +8144,10 @@ snapshots:
     dependencies:
       js-tokens: 4.0.0
 
-  lottie-react-native@7.2.2(patch_hash=54f09d3be009340ce7db997b8a51b5a804d800c474f6e702e94887ded86ec340)(react-native@0.80.0(patch_hash=25ca577106daa307f4f2c747fc9cba0d48347d7042fd354f0c4e20342f8c2b6c)(@babel/core@7.27.4)(@types/react@19.1.8)(react@19.1.0))(react@19.1.0):
+  lottie-react-native@7.2.2(patch_hash=54f09d3be009340ce7db997b8a51b5a804d800c474f6e702e94887ded86ec340)(react-native@0.80.0(@babel/core@7.27.4)(@types/react@19.1.8)(react@19.1.0))(react@19.1.0):
     dependencies:
       react: 19.1.0
-      react-native: 0.80.0(patch_hash=25ca577106daa307f4f2c747fc9cba0d48347d7042fd354f0c4e20342f8c2b6c)(@babel/core@7.27.4)(@types/react@19.1.8)(react@19.1.0)
+      react-native: 0.80.0(@babel/core@7.27.4)(@types/react@19.1.8)(react@19.1.0)
 
   lru-cache@5.1.1:
     dependencies:
@@ -8679,7 +8676,7 @@ snapshots:
 
   react-is@19.1.0: {}
 
-  react-native@0.80.0(patch_hash=25ca577106daa307f4f2c747fc9cba0d48347d7042fd354f0c4e20342f8c2b6c)(@babel/core@7.27.4)(@types/react@19.1.8)(react@19.1.0):
+  react-native@0.80.0(@babel/core@7.27.4)(@types/react@19.1.8)(react@19.1.0):
     dependencies:
       '@jest/create-cache-key-function': 29.7.0
       '@react-native/assets-registry': 0.80.0
@@ -8688,7 +8685,7 @@ snapshots:
       '@react-native/gradle-plugin': 0.80.0
       '@react-native/js-polyfills': 0.80.0
       '@react-native/normalize-colors': 0.80.0
-      '@react-native/virtualized-lists': 0.80.0(@types/react@19.1.8)(react-native@0.80.0(patch_hash=25ca577106daa307f4f2c747fc9cba0d48347d7042fd354f0c4e20342f8c2b6c)(@babel/core@7.27.4)(@types/react@19.1.8)(react@19.1.0))(react@19.1.0)
+      '@react-native/virtualized-lists': 0.80.0(@types/react@19.1.8)(react-native@0.80.0(@babel/core@7.27.4)(@types/react@19.1.8)(react@19.1.0))(react@19.1.0)
       abort-controller: 3.0.0
       anser: 1.4.10
       ansi-regex: 5.0.1
