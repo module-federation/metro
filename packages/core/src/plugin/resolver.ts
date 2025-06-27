@@ -150,7 +150,7 @@ export function createResolveRequest({
       extraOptions?.flags?.unstable_patchHMRClient &&
       !isUsingMFBundleCommand() &&
       moduleName.endsWith('HMRClient') &&
-      !context.originModulePath.endsWith('HMRClient.ts')
+      !context.originModulePath.includes(resolveModule('HMRClient.ts'))
     ) {
       const res = context.resolveRequest(context, moduleName, platform);
       const from = /react-native\/Libraries\/Utilities\/HMRClient\.js$/;
