@@ -54,7 +54,8 @@ async function init(shared = {}, initScope = []) {
     })
   );
 
-  // load early shared deps
+  // IMPORTANT: load early shared deps immediately without
+  // waiting for the async part of initializeSharing to resolve
   __EARLY_SHARED__.forEach(loadSharedToRegistry);
 
   await initSharingPromise;
