@@ -20,7 +20,10 @@ export function createRewriteRequest({
 }: CreateRewriteRequestOptions) {
   const hostEntryName = removeExtension(originalEntryFilename);
   const remoteEntryName = removeExtension(remoteEntryFilename);
-  const relativeTmpDirPath = path.relative(config.projectRoot, tmpDirPath);
+  const relativeTmpDirPath = path
+    .relative(config.projectRoot, tmpDirPath)
+    .split(path.sep)
+    .join(path.posix.sep);
   const hostEntryPathRegex = getEntryPathRegex(hostEntryName);
   const remoteEntryPathRegex = getEntryPathRegex(remoteEntryName);
 

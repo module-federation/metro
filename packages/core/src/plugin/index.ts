@@ -103,7 +103,7 @@ function augmentConfig(
 
   const manifestPath = createManifest(options, tmpDirPath);
 
-  // host & remote entry is are entrypoints so they needs to be present in the filesystem
+  // host and remote entries are entry points, so they need to be present in the filesystem
   // we create stubs on the filesystem and then redirect corresponding virtual modules
   stubHostEntry(hostEntryPath);
   stubRemoteEntry(remoteEntryPath);

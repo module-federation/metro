@@ -5,7 +5,7 @@ import type { RequestOptions } from 'metro/src/shared/types';
 import type { ModuleFederationConfigNormalized } from '../../types';
 import { CLIError } from '../../utils/errors';
 import type { Config } from '../types';
-import { createResolver } from '../utils/create-resolver.js';
+import { createResolver } from '../utils/create-resolver';
 import { getCommunityCliPlugin } from '../utils/get-community-plugin';
 import loadMetroConfig from '../utils/load-metro-config';
 import { saveBundleAndMap } from '../utils/save-bundle-and-map';
