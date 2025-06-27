@@ -10,6 +10,7 @@ function transform(config) {
       '@module-federation/metro/babel-plugin',
       { blacklistedPaths, remotes, shared },
     ],
+    '@module-federation/metro/babel-plugin/patch-require',
   ];
 
   return babelTransformer.transform({

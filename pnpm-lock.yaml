@@ -14,9 +14,6 @@ patchedDependencies:
   lottie-react-native:
     hash: 54f09d3be009340ce7db997b8a51b5a804d800c474f6e702e94887ded86ec340
     path: patches/lottie-react-native.patch
-  metro-runtime:
-    hash: eeb4f425d13e3fcf0b9c963aa7cb181c1fd7c6a404e2a5642793b8a0382a3ba4
-    path: patches/metro-runtime.patch
 
 importers:
 
@@ -5948,7 +5945,7 @@ snapshots:
       '@react-native/js-polyfills': 0.80.0
       '@react-native/metro-babel-transformer': 0.80.0(@babel/core@7.27.4)
       metro-config: 0.82.4
-      metro-runtime: 0.82.4(patch_hash=eeb4f425d13e3fcf0b9c963aa7cb181c1fd7c6a404e2a5642793b8a0382a3ba4)
+      metro-runtime: 0.82.4
     transitivePeerDependencies:
       - '@babel/core'
       - supports-color
@@ -8210,7 +8207,7 @@ snapshots:
       metro: 0.82.4
       metro-cache: 0.82.4
       metro-core: 0.82.4
-      metro-runtime: 0.82.4(patch_hash=eeb4f425d13e3fcf0b9c963aa7cb181c1fd7c6a404e2a5642793b8a0382a3ba4)
+      metro-runtime: 0.82.4
     transitivePeerDependencies:
       - bufferutil
       - supports-color
@@ -8245,7 +8242,7 @@ snapshots:
     dependencies:
       flow-enums-runtime: 0.0.6
 
-  metro-runtime@0.82.4(patch_hash=eeb4f425d13e3fcf0b9c963aa7cb181c1fd7c6a404e2a5642793b8a0382a3ba4):
+  metro-runtime@0.82.4:
     dependencies:
       '@babel/runtime': 7.27.6
       flow-enums-runtime: 0.0.6
@@ -8337,7 +8334,7 @@ snapshots:
       metro-core: 0.82.4
       metro-file-map: 0.82.4
       metro-resolver: 0.82.4
-      metro-runtime: 0.82.4(patch_hash=eeb4f425d13e3fcf0b9c963aa7cb181c1fd7c6a404e2a5642793b8a0382a3ba4)
+      metro-runtime: 0.82.4
       metro-source-map: 0.82.4
       metro-symbolicate: 0.82.4
       metro-transform-plugins: 0.82.4
@@ -8699,7 +8696,7 @@ snapshots:
       invariant: 2.2.4
       jest-environment-node: 29.7.0
       memoize-one: 5.2.1
-      metro-runtime: 0.82.4(patch_hash=eeb4f425d13e3fcf0b9c963aa7cb181c1fd7c6a404e2a5642793b8a0382a3ba4)
+      metro-runtime: 0.82.4
       metro-source-map: 0.82.4
       nullthrows: 1.1.1
       pretty-format: 29.7.0
