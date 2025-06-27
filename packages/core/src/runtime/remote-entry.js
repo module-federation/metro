@@ -46,7 +46,7 @@ async function init(shared = {}, initScope = []) {
   initScope.push(initToken);
   instance.initShareScopeMap(shareScopeName, shared);
 
-  await Promise.all(
+  const initSharingPromise = Promise.all(
     instance.initializeSharing(shareScopeName, {
       strategy: shareStrategy,
       from: 'build',
@@ -56,6 +56,8 @@ async function init(shared = {}, initScope = []) {
 
   // load early shared deps
   __EARLY_SHARED__.forEach(loadSharedToRegistry);
+
+  await initSharingPromise;
 
   // setup HMR client after the initializing sync shared deps
   if (__DEV__ && !hmrInitialized) {
