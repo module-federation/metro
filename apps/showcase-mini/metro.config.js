@@ -56,5 +56,8 @@ module.exports = withModuleFederation(
       },
     },
     shareStrategy: 'loaded-first',
+  },
+  {
+    unstable_patchHMRClient: true,
   }
 );

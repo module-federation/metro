@@ -2,6 +2,7 @@ import path from 'node:path';
 import chalk from 'chalk';
 import type { ConfigT } from 'metro-config';
 import type {
+  MetroMFFlags,
   ModuleFederationConfig,
   ModuleFederationConfigNormalized,
 } from '../types';
@@ -28,10 +29,11 @@ declare global {
 
 export function withModuleFederation(
   config: ConfigT,
-  federationOptions: ModuleFederationConfig
+  federationOptions: ModuleFederationConfig,
+  flags?: MetroMFFlags
 ): ConfigT {
   if (isUsingMFCommand()) {
-    return augmentConfig(config, federationOptions);
+    return augmentConfig(config, federationOptions, flags);
   }
 
   console.warn(
@@ -52,7 +54,8 @@ export function withModuleFederation(
 
 function augmentConfig(
   config: ConfigT,
-  federationOptions: ModuleFederationConfig
+  federationOptions: ModuleFederationConfig,
+  flags?: MetroMFFlags
 ): ConfigT {
   const isHost = !federationOptions.exposes;
   const isRemote = !isHost;
@@ -134,6 +137,7 @@ function augmentConfig(
           projectDir: config.projectRoot,
           tmpDir: tmpDirPath,
         },
+        flags,
       }),
     },
     server: {

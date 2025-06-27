@@ -19,3 +19,7 @@ export interface ModuleFederationConfig {
 }
 
 export type ModuleFederationConfigNormalized = Required<ModuleFederationConfig>;
+
+export type MetroMFFlags = {
+  unstable_patchHMRClient?: boolean;
+};
