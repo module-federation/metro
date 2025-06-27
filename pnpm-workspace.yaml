@@ -12,7 +12,6 @@ patchedDependencies:
   '@react-native/community-cli-plugin': patches/@react-native__community-cli-plugin.patch
   '@rnef/plugin-metro': patches/@rnef__plugin-metro.patch
   lottie-react-native: patches/lottie-react-native.patch
-  metro-runtime: patches/metro-runtime.patch
 
 publicHoistPattern:
   - '@babel/runtime'

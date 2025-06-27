@@ -57,6 +57,7 @@ module.exports = withModuleFederation(
   {
     flags: {
       unstable_patchHMRClient: true,
+      unstable_patchRuntimeRequire: true,
     },
   }
 );

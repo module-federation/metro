@@ -104,6 +104,9 @@ function augmentConfig(
     federationConfig: options,
     originalBabelTransformerPath: config.transformer.babelTransformerPath,
     tmpDirPath: tmpDirPath,
+    enableRuntimeRequirePatching: Boolean(
+      extraOptions?.flags?.unstable_patchRuntimeRequire
+    ),
   });
 
   const manifestPath = createManifest(options, tmpDirPath);

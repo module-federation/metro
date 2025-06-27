@@ -7,6 +7,7 @@ interface CreateBabelTransformerOptions {
   federationConfig: ModuleFederationConfigNormalized;
   originalBabelTransformerPath: string;
   tmpDirPath: string;
+  enableRuntimeRequirePatching: boolean;
 }
 
 export function createBabelTransformer({
@@ -14,16 +15,29 @@ export function createBabelTransformer({
   federationConfig,
   originalBabelTransformerPath,
   tmpDirPath,
+  enableRuntimeRequirePatching,
 }: CreateBabelTransformerOptions) {
   const outputPath = path.join(tmpDirPath, 'babel-transformer.js');
   const templatePath = require.resolve('../babel/transformer.js');
   const transformerTemplate = fs.readFileSync(templatePath, 'utf-8');
 
+  const plugins = [
+    [
+      '@module-federation/metro/babel-plugin',
+      {
+        blacklistedPaths,
+        remotes: federationConfig.remotes,
+        shared: federationConfig.shared,
+      },
+    ],
+    enableRuntimeRequirePatching
+      ? '@module-federation/metro/babel-plugin/patch-require'
+      : undefined,
+  ].filter(Boolean);
+
   const babelTransformer = transformerTemplate
     .replaceAll('__BABEL_TRANSFORMER_PATH__', originalBabelTransformerPath)
-    .replaceAll('__REMOTES__', JSON.stringify(federationConfig.remotes))
-    .replaceAll('__SHARED__', JSON.stringify(federationConfig.shared))
-    .replaceAll('__BLACKLISTED_PATHS__', JSON.stringify(blacklistedPaths));
+    .replaceAll('__BABEL_PLUGINS__', JSON.stringify(plugins));
 
   fs.writeFileSync(outputPath, babelTransformer, 'utf-8');
 
