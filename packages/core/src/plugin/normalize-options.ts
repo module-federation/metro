@@ -54,6 +54,14 @@ function getNormalizedShared(
     }
   }
 
+  // auto-include `react-native/Libraries/Network/RCTNetworking`
+  if (!shared['react-native/Libraries/Network/RCTNetworking']) {
+    const reactNativeSharedConfig = shared['react-native'];
+    // use the same config as `react-native`
+    shared['react-native/Libraries/Network/RCTNetworking'] =
+      reactNativeSharedConfig;
+  }
+
   return shared;
 }
 

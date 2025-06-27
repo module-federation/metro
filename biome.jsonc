@@ -7,8 +7,7 @@
     "useIgnoreFile": true
   },
   "files": {
-    "ignoreUnknown": false,
-    "ignore": ["external/metro/**"]
+    "ignoreUnknown": false
   },
   "formatter": {
     "enabled": true,

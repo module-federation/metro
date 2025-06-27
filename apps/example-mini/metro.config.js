@@ -13,7 +13,6 @@ const config = {
   resolver: { useWatchman: false },
   watchFolders: [
     path.resolve(__dirname, '../../node_modules'),
-    path.resolve(__dirname, '../../external/metro/packages'),
     path.resolve(__dirname, '../../packages/core'),
   ],
 };
@@ -40,12 +39,6 @@ module.exports = withModuleFederation(
         requiredVersion: '0.80.0',
         version: '0.80.0',
         import: false,
-      },
-      'react-native/Libraries/Network/RCTNetworking': {
-        singleton: true,
-        eager: false,
-        requiredVersion: '0.80.0',
-        version: '0.80.0',
       },
       lodash: {
         singleton: false,

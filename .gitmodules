@@ -1,4 +1,0 @@
-[submodule "Metro"]
-	path = external/metro
-	url = git@github.com:callstack/metro.git
-  branch = mf-main
