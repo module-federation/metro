@@ -49,6 +49,8 @@ module.exports = withModuleFederation(
     shareStrategy: 'version-first',
   },
   {
-    unstable_patchHMRClient: true,
+    flags: {
+      unstable_patchHMRClient: true,
+    },
   }
 );

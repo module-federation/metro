@@ -1,6 +1,9 @@
 import path from 'node:path';
 import type { CustomResolver, Resolution } from 'metro-resolver';
-import type { MetroMFFlags, ModuleFederationConfigNormalized } from '../types';
+import type {
+  ModuleFederationConfigNormalized,
+  ModuleFederationExtraOptions,
+} from '../types';
 import type { VirtualModuleManager } from '../utils';
 import {
   ASYNC_REQUIRE,
@@ -30,7 +33,7 @@ interface CreateResolveRequestOptions {
   };
   options: ModuleFederationConfigNormalized;
   vmManager: VirtualModuleManager;
-  flags?: MetroMFFlags;
+  extraOptions?: ModuleFederationExtraOptions;
 }
 
 export function createResolveRequest({
@@ -38,7 +41,7 @@ export function createResolveRequest({
   options,
   paths,
   isRemote,
-  flags,
+  extraOptions,
 }: CreateResolveRequestOptions): CustomResolver {
   return function resolveRequest(context, moduleName, platform) {
     // virtual module: init-host
@@ -144,7 +147,7 @@ export function createResolveRequest({
 
     // patch HMRClient module for older versions of React Native
     if (
-      flags?.unstable_patchHMRClient &&
+      extraOptions?.flags?.unstable_patchHMRClient &&
       !isUsingMFBundleCommand() &&
       moduleName.endsWith('HMRClient') &&
       !context.originModulePath.endsWith('HMRClient.ts')

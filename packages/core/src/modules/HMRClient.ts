@@ -2,8 +2,8 @@ import HMRClient from 'react-native/Libraries/Utilities/HMRClient';
 
 let hmrOrigin: string | null = null;
 
-HMRClient.__originalRegisterBundle = HMRClient.registerBundle;
-HMRClient.__originalSetup = HMRClient.setup;
+const originalRegisterBundle = HMRClient.registerBundle;
+const originalSetup = HMRClient.setup;
 
 HMRClient.setup = (
   platform: string,
@@ -16,7 +16,7 @@ HMRClient.setup = (
   const serverHost = port !== null && port !== '' ? `${host}:${port}` : host;
   hmrOrigin = `${scheme}://${serverHost}`;
 
-  return HMRClient.__originalSetup(
+  return originalSetup(
     platform,
     bundleEntry,
     host,
@@ -27,13 +27,12 @@ HMRClient.setup = (
 };
 
 HMRClient.registerBundle = (requestUrl: string) => {
-  console.log('HMRClient.registerBundle', requestUrl);
   // only process registerBundle calls from the same origin
   if (!requestUrl.includes(hmrOrigin as string)) {
     return;
   }
 
-  return HMRClient.__originalRegisterBundle(requestUrl);
+  return originalRegisterBundle(requestUrl);
 };
 
 export default HMRClient;

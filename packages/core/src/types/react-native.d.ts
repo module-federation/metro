@@ -10,8 +10,6 @@ declare module 'react-native/Libraries/Utilities/HMRClient' {
       isEnabled: boolean,
       scheme?: string
     ): void;
-    static __originalRegisterBundle: typeof this.registerBundle;
-    static __originalSetup: typeof this.setup;
   }
 }
 

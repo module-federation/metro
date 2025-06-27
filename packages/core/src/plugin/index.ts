@@ -2,9 +2,9 @@ import path from 'node:path';
 import chalk from 'chalk';
 import type { ConfigT } from 'metro-config';
 import type {
-  MetroMFFlags,
   ModuleFederationConfig,
   ModuleFederationConfigNormalized,
+  ModuleFederationExtraOptions,
 } from '../types';
 import { VirtualModuleManager } from '../utils';
 import { createBabelTransformer } from './babel-transformer';
@@ -30,10 +30,10 @@ declare global {
 export function withModuleFederation(
   config: ConfigT,
   federationOptions: ModuleFederationConfig,
-  flags?: MetroMFFlags
+  extraOptions?: ModuleFederationExtraOptions
 ): ConfigT {
   if (isUsingMFCommand()) {
-    return augmentConfig(config, federationOptions, flags);
+    return augmentConfig(config, federationOptions, extraOptions);
   }
 
   console.warn(
@@ -55,7 +55,7 @@ export function withModuleFederation(
 function augmentConfig(
   config: ConfigT,
   federationOptions: ModuleFederationConfig,
-  flags?: MetroMFFlags
+  extraOptions?: ModuleFederationExtraOptions
 ): ConfigT {
   const isHost = !federationOptions.exposes;
   const isRemote = !isHost;
@@ -137,7 +137,7 @@ function augmentConfig(
           projectDir: config.projectRoot,
           tmpDir: tmpDirPath,
         },
-        flags,
+        extraOptions,
       }),
     },
     server: {

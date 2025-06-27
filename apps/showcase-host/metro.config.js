@@ -55,6 +55,8 @@ module.exports = withModuleFederation(
     plugins: [path.resolve(__dirname, './runtime-plugin.ts')],
   },
   {
-    unstable_patchHMRClient: true,
+    flags: {
+      unstable_patchHMRClient: true,
+    },
   }
 );
