@@ -8,13 +8,12 @@ import {
   View,
 } from 'react-native';
 
+// @ts-ignore
+import NestedMiniInfo from 'nestedMini/nestedMiniInfo';
 import Card from './Card';
 
 // @ts-ignore
 const Info = React.lazy(() => import('mini/info'));
-
-// @ts-ignore
-const NestedMiniInfo = React.lazy(() => import('nestedMini/nestedMiniInfo'));
 
 function App(): React.JSX.Element {
   const [shouldLoadMini, setShouldLoadMini] = useState(false);
@@ -76,15 +75,7 @@ function App(): React.JSX.Element {
           title="Nested Federated Remote"
           description="Dynamically loaded nested module"
         >
-          <React.Suspense
-            fallback={
-              <View>
-                <ActivityIndicator size="large" color="#8b5cf6" />
-              </View>
-            }
-          >
-            <NestedMiniInfo />
-          </React.Suspense>
+          <NestedMiniInfo />
         </Card>
       </View>
     </View>
