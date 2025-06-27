@@ -1,16 +1,13 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import type {
-  ModuleFederationConfigNormalized,
-  ModuleFederationExtraOptions,
-} from '../types';
+import type { ModuleFederationConfigNormalized } from '../types';
 
 interface CreateBabelTransformerOptions {
   blacklistedPaths: string[];
   federationConfig: ModuleFederationConfigNormalized;
   originalBabelTransformerPath: string;
   tmpDirPath: string;
-  extraOptions?: ModuleFederationExtraOptions;
+  enableRuntimeRequirePatching: boolean;
 }
 
 export function createBabelTransformer({
@@ -18,7 +15,7 @@ export function createBabelTransformer({
   federationConfig,
   originalBabelTransformerPath,
   tmpDirPath,
-  extraOptions,
+  enableRuntimeRequirePatching,
 }: CreateBabelTransformerOptions) {
   const outputPath = path.join(tmpDirPath, 'babel-transformer.js');
   const templatePath = require.resolve('../babel/transformer.js');
@@ -33,7 +30,7 @@ export function createBabelTransformer({
         shared: federationConfig.shared,
       },
     ],
-    extraOptions?.flags?.unstable_patchRuntimeRequire
+    enableRuntimeRequirePatching
       ? '@module-federation/metro/babel-plugin/patch-require'
       : undefined,
   ].filter(Boolean);
