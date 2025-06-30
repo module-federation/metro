@@ -18,12 +18,19 @@ function isUrl(url: string) {
 // e.g. /a/b.bundle?platform=ios -> a/b
 // e.g. http://host:8081/a/b.bundle -> a/b
 function getBundleId(bundlePath: string) {
-  // remove the public path and slash
-  const path = bundlePath.split('/').slice(1).join('/');
+  let path = bundlePath;
+  // remove the public path if it's an url
+  if (isUrl(path)) {
+    path = path.replace(getPublicPath(path), '');
+  }
+  // remove the leading slash
+  if (path.startsWith('/')) {
+    path = path.slice(1);
+  }
   // remove the query params
-  const [cleanPath] = path.split('?');
-  // remove the .bundle extension
-  return cleanPath.replace('.bundle', '');
+  path = path.split('?')[0];
+  // remove the bundle extension
+  return path.replace('.bundle', '');
 }
 
 function isSameOrigin(url: string, origin?: string) {
