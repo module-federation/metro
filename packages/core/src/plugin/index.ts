@@ -9,6 +9,7 @@ import type {
 import { VirtualModuleManager } from '../utils';
 import { createBabelTransformer } from './babel-transformer';
 import {
+  isUsingMFBundleCommand,
   isUsingMFCommand,
   prepareTmpDir,
   replaceExtension,
@@ -126,7 +127,10 @@ function augmentConfig(
     ...config,
     serializer: {
       ...config.serializer,
-      customSerializer: getModuleFederationSerializer(options),
+      customSerializer: getModuleFederationSerializer(
+        options,
+        isUsingMFBundleCommand()
+      ),
       getModulesRunBeforeMainModule: () => {
         return isHost ? [initHostPath] : [];
       },

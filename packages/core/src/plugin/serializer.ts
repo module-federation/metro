@@ -9,7 +9,8 @@ import type { ModuleFederationConfigNormalized, Shared } from '../types';
 type CustomSerializer = SerializerConfigT['customSerializer'];
 
 export function getModuleFederationSerializer(
-  mfConfig: ModuleFederationConfigNormalized
+  mfConfig: ModuleFederationConfigNormalized,
+  isUsingMFBundleCommand: boolean
 ): CustomSerializer {
   return async (entryPoint, preModules, graph, options) => {
     const syncRemoteModules = collectSyncRemoteModules(graph, mfConfig.remotes);
@@ -29,7 +30,12 @@ export function getModuleFederationSerializer(
       return getBundleCode(entryPoint, preModules, graph, options);
     }
 
-    const bundlePath = getBundlePath(entryPoint, options.projectRoot);
+    const bundlePath = getBundlePath(
+      entryPoint,
+      options.projectRoot,
+      mfConfig.exposes,
+      isUsingMFBundleCommand
+    );
     const finalPreModules = [
       getSyncShared(syncSharedModules, bundlePath, mfConfig.name),
       getSyncRemotes(syncRemoteModules, bundlePath, mfConfig.name),
@@ -156,10 +162,26 @@ function isProjectSource(entryPoint: string, projectRoot: string) {
   );
 }
 
-function getBundlePath(entryPoint: string, projectRoot: string) {
+function getBundlePath(
+  entryPoint: string,
+  projectRoot: string,
+  exposes: ModuleFederationConfigNormalized['exposes'],
+  isUsingMFBundleCommand: boolean
+) {
   const relativePath = path.relative(projectRoot, entryPoint);
-  const { dir, name } = path.parse(relativePath);
-  return path.format({ dir, name, ext: '' });
+  const exposeKeyName = Object.keys(exposes).find((exposeKey) =>
+    exposes[exposeKey].match(relativePath)
+  );
+
+  if (!isUsingMFBundleCommand || !exposeKeyName) {
+    const { dir, name } = path.parse(relativePath);
+    return path.format({ dir, name, ext: '' });
+  }
+
+  // Remove './' prefix
+  const exposeName = exposeKeyName.slice(2);
+
+  return `exposed/${exposeName}`;
 }
 
 function getBundleCode(
