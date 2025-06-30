@@ -10,15 +10,20 @@ function getPublicPath(url: string) {
   return url.split('/').slice(0, -1).join('/');
 }
 
-// get bundle id from the url path
-// e.g. /a/b.bundle?platform=ios -> a/b
-function getBundleId(urlPath: string) {
-  const [bundlePath] = urlPath.split('?');
-  return bundlePath.slice(1).replace('.bundle', '');
-}
-
 function isUrl(url: string) {
   return url.match(/^https?:\/\//);
+}
+
+// get bundle id from the bundle path
+// e.g. /a/b.bundle?platform=ios -> a/b
+// e.g. http://host:8081/a/b.bundle -> a/b
+function getBundleId(bundlePath: string) {
+  // remove the public path and slash
+  const path = bundlePath.split('/').slice(1).join('/');
+  // remove the query params
+  const [cleanPath] = path.split('?');
+  // remove the .bundle extension
+  return cleanPath.replace('.bundle', '');
 }
 
 function isSameOrigin(url: string, origin?: string) {
@@ -78,7 +83,7 @@ function buildLoadBundleAsyncWrapper() {
 
     // at this point the code in the bundle has been evaluated
     // but not yet executed through metroRequire
-    const bundleId = getBundleId(originalBundlePath);
+    const bundleId = getBundleId(bundlePath);
     const shared = scope.deps.shared[bundleId];
     const remotes = scope.deps.remotes[bundleId];
 
