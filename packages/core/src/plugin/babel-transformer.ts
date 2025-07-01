@@ -7,6 +7,7 @@ interface CreateBabelTransformerOptions {
   federationConfig: ModuleFederationConfigNormalized;
   originalBabelTransformerPath: string;
   tmpDirPath: string;
+  enableInitializeCorePatching: boolean;
   enableRuntimeRequirePatching: boolean;
 }
 
@@ -15,6 +16,7 @@ export function createBabelTransformer({
   federationConfig,
   originalBabelTransformerPath,
   tmpDirPath,
+  enableInitializeCorePatching,
   enableRuntimeRequirePatching,
 }: CreateBabelTransformerOptions) {
   const outputPath = path.join(tmpDirPath, 'babel-transformer.js');
@@ -30,6 +32,9 @@ export function createBabelTransformer({
         shared: federationConfig.shared,
       },
     ],
+    enableInitializeCorePatching
+      ? '@module-federation/metro/babel-plugin/patch-initialize-core'
+      : undefined,
     enableRuntimeRequirePatching
       ? '@module-federation/metro/babel-plugin/patch-require'
       : undefined,

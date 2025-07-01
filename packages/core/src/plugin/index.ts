@@ -109,6 +109,7 @@ function augmentConfig(
     federationConfig: options,
     originalBabelTransformerPath: config.transformer.babelTransformerPath,
     tmpDirPath: tmpDirPath,
+    enableInitializeCorePatching: flags.unstable_patchInitializeCore,
     enableRuntimeRequirePatching: flags.unstable_patchRuntimeRequire,
   });
 
