@@ -6,23 +6,39 @@ function joinComponents(prefix: string, suffix: string) {
 
 // get the public path from the url
 // e.g. http://host:8081/a/b.bundle -> http://host:8081/a
-function getPublicPath(url: string) {
-  return url.split('/').slice(0, -1).join('/');
-}
-
-// get bundle id from the url path
-// e.g. /a/b.bundle?platform=ios -> a/b
-function getBundleId(urlPath: string) {
-  const [bundlePath] = urlPath.split('?');
-  return bundlePath.slice(1).replace('.bundle', '');
+function getPublicPath(url?: string) {
+  return url?.split('/').slice(0, -1).join('/');
 }
 
 function isUrl(url: string) {
   return url.match(/^https?:\/\//);
 }
 
-function isSameOrigin(url: string, origin?: string) {
-  return origin && url.startsWith(origin);
+// get bundle id from the bundle path
+// e.g. /a/b.bundle?platform=ios -> a/b
+// e.g. http://host:8081/a/b.bundle -> a/b
+function getBundleId(bundlePath: string, publicPath: string) {
+  let path = bundlePath;
+  // remove the public path if it's an url
+  if (isUrl(path)) {
+    path = path.replace(publicPath, '');
+  }
+  // remove the leading slash
+  if (path.startsWith('/')) {
+    path = path.slice(1);
+  }
+  // remove the query params
+  path = path.split('?')[0];
+  // remove the bundle extension
+  return path.replace('.bundle', '');
+}
+
+function isSameOrigin(url: string, originPublicPath?: string) {
+  // if it's not a fully qualified url, we assume it's the same origin
+  if (!isUrl(url)) {
+    return true;
+  }
+  return !!originPublicPath && url.startsWith(originPublicPath);
 }
 
 // prefix the bundle path with the public path
@@ -42,7 +58,7 @@ function getBundlePath(bundlePath: string, bundleOrigin?: string) {
   if (!bundleOrigin) {
     return bundlePath;
   }
-  return joinComponents(getPublicPath(bundleOrigin), bundlePath);
+  return joinComponents(bundleOrigin, bundlePath);
 }
 
 function buildLoadBundleAsyncWrapper() {
@@ -58,7 +74,11 @@ function buildLoadBundleAsyncWrapper() {
   return async (originalBundlePath: string) => {
     const scope = globalThis.__FEDERATION__.__NATIVE__[__METRO_GLOBAL_PREFIX__];
 
-    const bundlePath = getBundlePath(originalBundlePath, scope.origin);
+    // entry is always in the root directory of assets associated with remote
+    // based on that, we extract the public path from the origin URL
+    // e.g. http://example.com/a/b/c/mf-manfiest.json -> http://example.com/a/b/c
+    const publicPath = getPublicPath(scope.origin);
+    const bundlePath = getBundlePath(originalBundlePath, publicPath);
 
     // ../../node_modules/ -> ..%2F..%2Fnode_modules/ so that it's not automatically sanitized
     const encodedBundlePath = bundlePath.replaceAll('../', '..%2F');
@@ -67,13 +87,14 @@ function buildLoadBundleAsyncWrapper() {
 
     // when the origin is not the same, it means we are loading a remote container
     // we can return early since dependencies are processed differently for entry bundles
-    if (!isSameOrigin(bundlePath, scope.origin)) {
+    if (!isSameOrigin(bundlePath, publicPath)) {
       return result;
     }
 
     // at this point the code in the bundle has been evaluated
     // but not yet executed through metroRequire
-    const bundleId = getBundleId(originalBundlePath);
+    // note: at this point, public path is always defined
+    const bundleId = getBundleId(bundlePath, publicPath!);
     const shared = scope.deps.shared[bundleId];
     const remotes = scope.deps.remotes[bundleId];
 

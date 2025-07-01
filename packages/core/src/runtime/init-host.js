@@ -29,17 +29,19 @@ globalThis.__FEDERATION__.__NATIVE__[name].deps ??= {
   remotes: {},
 };
 
-globalThis.__FEDERATION__.__NATIVE__[name].init = Promise.all([
+globalThis.__FEDERATION__.__NATIVE__[name].init = Promise.all(
   instance.initializeSharing(shareScopeName, {
     strategy: shareStrategy,
     from: 'build',
     initScope: [],
-  }),
-]).then(() =>
+  })
+).then(() =>
   Promise.all([
     ...Object.keys(usedShared).map(loadSharedToRegistry),
     ...__EARLY_REMOTES__.map(loadRemoteToRegistry),
   ])
 );
 
+// IMPORTANT: load early shared deps immediately without
+// waiting for the async part of initializeSharing to resolve
 __EARLY_SHARED__.forEach(loadSharedToRegistry);

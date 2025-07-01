@@ -36,7 +36,7 @@ export async function loadRemoteToRegistry(id) {
       const remoteModule = await loadRemote(id);
       cloneModule(remoteModule, registry[id]);
     })();
-    return loading[id];
+    await loading[id];
   }
 }
 

@@ -5,11 +5,13 @@ import baseJSBundle from 'metro/src/DeltaBundler/Serializers/baseJSBundle';
 import CountingSet from 'metro/src/lib/CountingSet';
 import bundleToString from 'metro/src/lib/bundleToString';
 import type { ModuleFederationConfigNormalized, Shared } from '../types';
+import { ConfigError } from '../utils/errors';
 
 type CustomSerializer = SerializerConfigT['customSerializer'];
 
 export function getModuleFederationSerializer(
-  mfConfig: ModuleFederationConfigNormalized
+  mfConfig: ModuleFederationConfigNormalized,
+  isUsingMFBundleCommand: boolean
 ): CustomSerializer {
   return async (entryPoint, preModules, graph, options) => {
     const syncRemoteModules = collectSyncRemoteModules(graph, mfConfig.remotes);
@@ -25,11 +27,17 @@ export function getModuleFederationSerializer(
     }
 
     // skip non-project source like node_modules
+    // this includes handling of shared modules!
     if (!isProjectSource(entryPoint, options.projectRoot)) {
       return getBundleCode(entryPoint, preModules, graph, options);
     }
 
-    const bundlePath = getBundlePath(entryPoint, options.projectRoot);
+    const bundlePath = getBundlePath(
+      entryPoint,
+      options.projectRoot,
+      mfConfig.exposes,
+      isUsingMFBundleCommand
+    );
     const finalPreModules = [
       getSyncShared(syncSharedModules, bundlePath, mfConfig.name),
       getSyncRemotes(syncRemoteModules, bundlePath, mfConfig.name),
@@ -156,10 +164,40 @@ function isProjectSource(entryPoint: string, projectRoot: string) {
   );
 }
 
-function getBundlePath(entryPoint: string, projectRoot: string) {
-  const relativePath = path.relative(projectRoot, entryPoint);
-  const { dir, name } = path.parse(relativePath);
-  return path.format({ dir, name, ext: '' });
+function getBundlePath(
+  entryPoint: string,
+  projectRoot: string,
+  exposes: ModuleFederationConfigNormalized['exposes'],
+  isUsingMFBundleCommand: boolean
+) {
+  const relativeEntryPath = path.relative(projectRoot, entryPoint);
+  if (!isUsingMFBundleCommand) {
+    const { dir, name } = path.parse(relativeEntryPath);
+    return path.format({ dir, name, ext: '' });
+  }
+
+  // try to match with an exposed module first
+  const exposedMatchedKey = Object.keys(exposes).find((exposeKey) =>
+    exposes[exposeKey].match(relativeEntryPath)
+  );
+
+  if (exposedMatchedKey) {
+    // handle as exposed module
+    let exposedName = exposedMatchedKey;
+    // Remove './' prefix
+    if (exposedName.startsWith('./')) {
+      exposedName = exposedName.slice(2);
+    }
+    return `exposed/${exposedName}`;
+  }
+
+  throw new ConfigError(
+    `Unable to handle entry point: ${relativeEntryPath}. ` +
+      'Expected to match an entrypoint with one of the exposed keys, but failed. ' +
+      'This is most likely a configuration error. ' +
+      'If you believe this is not a configuration issue, please report it as a bug. ' +
+      `Debug info: entryPoint="${entryPoint}", projectRoot="${projectRoot}", exposesKeys=[${Object.keys(exposes).join(', ')}]`
+  );
 }
 
 function getBundleCode(
