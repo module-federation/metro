@@ -5,12 +5,6 @@ settings:
   excludeLinksFromLockfile: false
 
 patchedDependencies:
-  '@react-native/community-cli-plugin':
-    hash: 445cc837d2f72ab42efc5a3f98e1906b366b2f99b0930b1fa11c9569c4bddd62
-    path: patches/@react-native__community-cli-plugin.patch
-  '@rnef/plugin-metro':
-    hash: 9eaf43b02d5f0d8d8433452a7e745e18784a15565529a2e3565d1787b14c2366
-    path: patches/@rnef__plugin-metro.patch
   lottie-react-native:
     hash: 54f09d3be009340ce7db997b8a51b5a804d800c474f6e702e94887ded86ec340
     path: patches/lottie-react-native.patch
@@ -79,7 +73,7 @@ importers:
         version: 0.7.25(typescript@5.0.4)
       '@rnef/plugin-metro':
         specifier: ^0.7.25
-        version: 0.7.25(patch_hash=9eaf43b02d5f0d8d8433452a7e745e18784a15565529a2e3565d1787b14c2366)(@react-native/community-cli-plugin@0.80.0(patch_hash=445cc837d2f72ab42efc5a3f98e1906b366b2f99b0930b1fa11c9569c4bddd62))
+        version: 0.7.25(@react-native/community-cli-plugin@0.80.0)
       '@types/jest':
         specifier: ^29.5.13
         version: 29.5.14
@@ -164,7 +158,7 @@ importers:
         version: 0.7.25(typescript@5.0.4)
       '@rnef/plugin-metro':
         specifier: ^0.7.25
-        version: 0.7.25(patch_hash=9eaf43b02d5f0d8d8433452a7e745e18784a15565529a2e3565d1787b14c2366)(@react-native/community-cli-plugin@0.80.0(patch_hash=445cc837d2f72ab42efc5a3f98e1906b366b2f99b0930b1fa11c9569c4bddd62))
+        version: 0.7.25(@react-native/community-cli-plugin@0.80.0)
       '@types/jest':
         specifier: ^29.5.13
         version: 29.5.14
@@ -252,7 +246,7 @@ importers:
         version: 0.7.25(typescript@5.0.4)
       '@rnef/plugin-metro':
         specifier: ^0.7.25
-        version: 0.7.25(patch_hash=9eaf43b02d5f0d8d8433452a7e745e18784a15565529a2e3565d1787b14c2366)(@react-native/community-cli-plugin@0.80.0(patch_hash=445cc837d2f72ab42efc5a3f98e1906b366b2f99b0930b1fa11c9569c4bddd62))
+        version: 0.7.25(@react-native/community-cli-plugin@0.80.0)
       '@types/jest':
         specifier: ^29.5.13
         version: 29.5.14
@@ -343,7 +337,7 @@ importers:
         version: 0.7.25(typescript@5.0.4)
       '@rnef/plugin-metro':
         specifier: ^0.7.25
-        version: 0.7.25(patch_hash=9eaf43b02d5f0d8d8433452a7e745e18784a15565529a2e3565d1787b14c2366)(@react-native/community-cli-plugin@0.80.0(patch_hash=445cc837d2f72ab42efc5a3f98e1906b366b2f99b0930b1fa11c9569c4bddd62))
+        version: 0.7.25(@react-native/community-cli-plugin@0.80.0)
       '@types/jest':
         specifier: ^29.5.13
         version: 29.5.14
@@ -431,7 +425,7 @@ importers:
         version: 0.7.25(typescript@5.0.4)
       '@rnef/plugin-metro':
         specifier: ^0.7.25
-        version: 0.7.25(patch_hash=9eaf43b02d5f0d8d8433452a7e745e18784a15565529a2e3565d1787b14c2366)(@react-native/community-cli-plugin@0.80.0(patch_hash=445cc837d2f72ab42efc5a3f98e1906b366b2f99b0930b1fa11c9569c4bddd62))
+        version: 0.7.25(@react-native/community-cli-plugin@0.80.0)
       '@types/jest':
         specifier: ^29.5.13
         version: 29.5.14
@@ -5846,7 +5840,7 @@ snapshots:
       nullthrows: 1.1.1
       yargs: 17.7.2
 
-  '@react-native/community-cli-plugin@0.80.0(patch_hash=445cc837d2f72ab42efc5a3f98e1906b366b2f99b0930b1fa11c9569c4bddd62)':
+  '@react-native/community-cli-plugin@0.80.0':
     dependencies:
       '@react-native/dev-middleware': 0.80.0
       chalk: 4.1.2
@@ -6017,10 +6011,10 @@ snapshots:
       - supports-color
       - typescript
 
-  '@rnef/plugin-metro@0.7.25(patch_hash=9eaf43b02d5f0d8d8433452a7e745e18784a15565529a2e3565d1787b14c2366)(@react-native/community-cli-plugin@0.80.0(patch_hash=445cc837d2f72ab42efc5a3f98e1906b366b2f99b0930b1fa11c9569c4bddd62))':
+  '@rnef/plugin-metro@0.7.25(@react-native/community-cli-plugin@0.80.0)':
     dependencies:
       '@react-native-community/cli-server-api': 18.0.0
-      '@react-native/community-cli-plugin': 0.80.0(patch_hash=445cc837d2f72ab42efc5a3f98e1906b366b2f99b0930b1fa11c9569c4bddd62)
+      '@react-native/community-cli-plugin': 0.80.0
       '@react-native/dev-middleware': 0.79.4
       '@rnef/tools': 0.7.25
       metro: 0.82.4
@@ -8675,7 +8669,7 @@ snapshots:
       '@jest/create-cache-key-function': 29.7.0
       '@react-native/assets-registry': 0.80.0
       '@react-native/codegen': 0.80.0(@babel/core@7.27.4)
-      '@react-native/community-cli-plugin': 0.80.0(patch_hash=445cc837d2f72ab42efc5a3f98e1906b366b2f99b0930b1fa11c9569c4bddd62)
+      '@react-native/community-cli-plugin': 0.80.0
       '@react-native/gradle-plugin': 0.80.0
       '@react-native/js-polyfills': 0.80.0
       '@react-native/normalize-colors': 0.80.0
