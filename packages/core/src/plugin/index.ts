@@ -154,10 +154,6 @@ function augmentConfig(
         isRemote,
         vmManager,
         options,
-        hacks: {
-          patchHMRClient: flags.unstable_patchHMRClient,
-          patchInitializeCore: flags.unstable_patchInitializeCore,
-        },
         paths: {
           asyncRequire: asyncRequirePath,
           originalEntry: originalEntryPath,
@@ -168,6 +164,10 @@ function augmentConfig(
           remoteEntry: remoteEntryPath,
           projectDir: config.projectRoot,
           tmpDir: tmpDirPath,
+        },
+        hacks: {
+          patchHMRClient: flags.unstable_patchHMRClient,
+          patchInitializeCore: flags.unstable_patchInitializeCore,
         },
       }),
     },

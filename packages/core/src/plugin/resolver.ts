@@ -167,6 +167,7 @@ export function createResolveRequest({
     }
 
     // patch HMRClient module for older versions of React Native
+    // this is needed for avoiding HMR errors between multiple dev servers
     if (
       hacks.patchHMRClient &&
       !isUsingMFBundleCommand() &&
