@@ -132,7 +132,11 @@ function augmentConfig(
         options,
         isUsingMFBundleCommand()
       ),
-      getModulesRunBeforeMainModule: () => {
+      getModulesRunBeforeMainModule: (entryFilePath) => {
+        // skip altering the list of modules when unstable_patchInitializeCore is enabled
+        if (flags.unstable_patchInitializeCore) {
+          return config.serializer.getModulesRunBeforeMainModule(entryFilePath);
+        }
         return isHost ? [initHostPath] : [];
       },
       getRunModuleStatement: (moduleId: number | string) => {
