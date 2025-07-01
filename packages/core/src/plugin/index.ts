@@ -17,6 +17,7 @@ import {
   stubRemoteEntry,
 } from './helpers';
 import { createManifest } from './manifest';
+import { normalizeExtraOptions } from './normalize-extra-options';
 import { normalizeOptions } from './normalize-options';
 import { createResolveRequest } from './resolver';
 import { createRewriteRequest } from './rewrite-request';
@@ -74,6 +75,8 @@ function augmentConfig(
     tmpDirPath,
   });
 
+  const { flags } = normalizeExtraOptions(extraOptions);
+
   const vmManager = new VirtualModuleManager(config);
 
   // original host entrypoint, usually <projectRoot>/index.js
@@ -105,9 +108,7 @@ function augmentConfig(
     federationConfig: options,
     originalBabelTransformerPath: config.transformer.babelTransformerPath,
     tmpDirPath: tmpDirPath,
-    enableRuntimeRequirePatching: Boolean(
-      extraOptions?.flags?.unstable_patchRuntimeRequire
-    ),
+    enableRuntimeRequirePatching: flags.unstable_patchRuntimeRequire,
   });
 
   const manifestPath = createManifest(options, tmpDirPath);
@@ -153,6 +154,10 @@ function augmentConfig(
         isRemote,
         vmManager,
         options,
+        hacks: {
+          patchHMRClient: flags.unstable_patchHMRClient,
+          patchInitializeCore: flags.unstable_patchInitializeCore,
+        },
         paths: {
           asyncRequire: asyncRequirePath,
           originalEntry: originalEntryPath,
@@ -164,7 +169,6 @@ function augmentConfig(
           projectDir: config.projectRoot,
           tmpDir: tmpDirPath,
         },
-        extraOptions,
       }),
     },
     server: {

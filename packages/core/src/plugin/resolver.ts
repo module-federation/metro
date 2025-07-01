@@ -1,9 +1,6 @@
 import path from 'node:path';
 import type { CustomResolver, Resolution } from 'metro-resolver';
-import type {
-  ModuleFederationConfigNormalized,
-  ModuleFederationExtraOptions,
-} from '../types';
+import type { ModuleFederationConfigNormalized } from '../types';
 import type { VirtualModuleManager } from '../utils';
 import {
   ASYNC_REQUIRE,
@@ -23,6 +20,10 @@ import { isUsingMFBundleCommand, removeExtension } from './helpers';
 
 interface CreateResolveRequestOptions {
   isRemote: boolean;
+  hacks: {
+    patchHMRClient: boolean;
+    patchInitializeCore: boolean;
+  };
   paths: {
     asyncRequire: string;
     hostEntry: string;
@@ -36,15 +37,14 @@ interface CreateResolveRequestOptions {
   };
   options: ModuleFederationConfigNormalized;
   vmManager: VirtualModuleManager;
-  extraOptions?: ModuleFederationExtraOptions;
 }
 
 export function createResolveRequest({
   vmManager,
   options,
+  hacks,
   paths,
   isRemote,
-  extraOptions,
 }: CreateResolveRequestOptions): CustomResolver {
   const hostEntryPathRegex = getEntryPathRegex({
     entry: paths.hostEntry,
@@ -85,11 +85,6 @@ export function createResolveRequest({
       return { type: 'sourceFile', filePath: paths.initHost };
     }
 
-    // virtual module: async-require
-    if (moduleName === ASYNC_REQUIRE) {
-      return { type: 'sourceFile', filePath: paths.asyncRequire };
-    }
-
     // virtual module: remote-module-registry
     if (moduleName === REMOTE_MODULE_REGISTRY) {
       const registryGenerator = () => getRemoteModuleRegistryModule();
@@ -108,6 +103,11 @@ export function createResolveRequest({
         remoteHMRSetupGenerator
       );
       return { type: 'sourceFile', filePath: paths.remoteHMRSetup as string };
+    }
+
+    // module: async-require
+    if (moduleName === ASYNC_REQUIRE) {
+      return { type: 'sourceFile', filePath: paths.asyncRequire };
     }
 
     // shared modules handling in init-host.js
@@ -168,7 +168,7 @@ export function createResolveRequest({
 
     // patch HMRClient module for older versions of React Native
     if (
-      extraOptions?.flags?.unstable_patchHMRClient &&
+      hacks.patchHMRClient &&
       !isUsingMFBundleCommand() &&
       moduleName.endsWith('HMRClient') &&
       !context.originModulePath.includes(resolveModule('HMRClient.ts'))
@@ -177,6 +177,15 @@ export function createResolveRequest({
       const from = /react-native\/Libraries\/Utilities\/HMRClient\.js$/;
       const to = resolveModule('HMRClient.ts');
       // replace HMRClient with our own
+      return replaceModule(from, to)(res);
+    }
+
+    // patch InitializeCore module as a workaround for
+    // inability to use override getModulesRunBeforeMainModule
+    if (hacks.patchInitializeCore && moduleName.endsWith('InitializeCore')) {
+      const res = context.resolveRequest(context, moduleName, platform);
+      const from = /react-native\/Libraries\/Core\/InitializeCore\.js$/;
+      const to = resolveModule('InitializeCore.ts');
       return replaceModule(from, to)(res);
     }
 
