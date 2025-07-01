@@ -47,16 +47,10 @@ yarn set version 1.22.22 && yarn install
 
 ## Development
 
-Set the `METRO_FEDERATION_DEV` environment variable in your shell:
-
-```bash
-export METRO_FEDERATION_DEV=1
-```
-
-Then, run the development servers for both apps:
+Run the development servers for both showcase apps:
 
 ```bash
 yarn dev
 ```
 
-> **Note:** You can freely make changes to both the `@module-federation/metro` package (`packages/core`) and the `metro` packages (`external/metro`). The dev server will automatically restart when changes are detected - there's no need to manually build either package.
+> **Note:** You can freely make changes to both the `@module-federation/metro` package (`packages/core`) and the the dev server will automatically restart when changes are detected - there's no need to manually build either package.
