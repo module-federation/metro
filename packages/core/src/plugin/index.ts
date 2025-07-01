@@ -133,13 +133,13 @@ function augmentConfig(
         isUsingMFBundleCommand()
       ),
       getModulesRunBeforeMainModule: (entryFilePath) => {
-        // remove existing pre-modules like InitializeCore for remote entrypoints
-        if (isRemote) {
-          return [];
-        }
         // skip altering the list of modules when unstable_patchInitializeCore is enabled
         if (flags.unstable_patchInitializeCore) {
           return config.serializer.getModulesRunBeforeMainModule(entryFilePath);
+        }
+        // remove existing pre-modules like InitializeCore for remote entrypoints
+        if (isRemote) {
+          return [];
         }
         // prepend init-host to the list of modules to ensure it's run first
         return [

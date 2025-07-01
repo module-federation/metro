@@ -186,7 +186,7 @@ export function createResolveRequest({
     if (hacks.patchInitializeCore && moduleName.endsWith('InitializeCore')) {
       const res = context.resolveRequest(context, moduleName, platform);
       const from = /react-native\/Libraries\/Core\/InitializeCore\.js$/;
-      const to = resolveModule('InitializeCore.ts');
+      const to = isRemote ? null : resolveModule('InitializeCore.ts');
       return replaceModule(from, to)(res);
     }
 
@@ -210,9 +210,10 @@ function resolveModule(moduleName: string): string {
   return path.resolve(__dirname, `../modules/${moduleName}`);
 }
 
-function replaceModule(from: RegExp, to: string) {
+function replaceModule(from: RegExp, to: string | null) {
   return (resolved: Resolution): Resolution => {
     if (resolved.type === 'sourceFile' && from.test(resolved.filePath)) {
+      if (to === null) return { type: 'empty' };
       return { type: 'sourceFile', filePath: to };
     }
     return resolved;
