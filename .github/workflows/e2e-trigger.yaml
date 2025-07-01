@@ -26,7 +26,6 @@ jobs:
       matrix:
         app_name: [example-host]
     env:
-      METRO_FEDERATION_DEV: 1
       ANDROID_EMULATOR_API_LEVEL: 28
       ANDROID_EMULATOR_TARGET: default
       ANDROID_EMULATOR_ARCH: x86_64
@@ -50,7 +49,6 @@ jobs:
       matrix:
         app_name: [example-host]
     env:
-      METRO_FEDERATION_DEV: 1
       RUBY_VERSION: 2.7.6
       MAESTRO_VERSION: 1.39.13
       MAESTRO_DRIVER_STARTUP_TIMEOUT: 360000
