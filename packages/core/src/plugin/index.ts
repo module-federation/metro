@@ -17,7 +17,6 @@ import {
   stubRemoteEntry,
 } from './helpers';
 import { createManifest } from './manifest';
-import { getCreateModuleIdFactory } from './module-id-factory';
 import { normalizeExtraOptions } from './normalize-extra-options';
 import { normalizeOptions } from './normalize-options';
 import { createResolveRequest } from './resolver';
@@ -133,10 +132,6 @@ function augmentConfig(
       customSerializer: getModuleFederationSerializer(
         options,
         isUsingMFBundleCommand()
-      ),
-      createModuleIdFactory: getCreateModuleIdFactory(
-        config.serializer.createModuleIdFactory,
-        flags.unstable_patchInitializeCore
       ),
       getModulesRunBeforeMainModule: (entryFilePath) => {
         // skip altering the list of modules when unstable_patchInitializeCore is enabled
