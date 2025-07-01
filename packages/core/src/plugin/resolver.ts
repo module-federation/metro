@@ -1,12 +1,11 @@
 import path from 'node:path';
 import type { CustomResolver, Resolution } from 'metro-resolver';
-import type {
-  ModuleFederationConfigNormalized,
-  ModuleFederationExtraOptions,
-} from '../types';
+import type { ModuleFederationConfigNormalized } from '../types';
 import type { VirtualModuleManager } from '../utils';
 import {
   ASYNC_REQUIRE,
+  GET_DEV_SERVER_REGEX,
+  HMR_CLIENT_REGEX,
   INIT_HOST,
   REMOTE_HMR_SETUP,
   REMOTE_MODULE_REGISTRY,
@@ -23,6 +22,10 @@ import { isUsingMFBundleCommand, removeExtension } from './helpers';
 
 interface CreateResolveRequestOptions {
   isRemote: boolean;
+  hacks: {
+    patchHMRClient: boolean;
+    patchInitializeCore: boolean;
+  };
   paths: {
     asyncRequire: string;
     hostEntry: string;
@@ -36,15 +39,14 @@ interface CreateResolveRequestOptions {
   };
   options: ModuleFederationConfigNormalized;
   vmManager: VirtualModuleManager;
-  extraOptions?: ModuleFederationExtraOptions;
 }
 
 export function createResolveRequest({
   vmManager,
   options,
+  hacks,
   paths,
   isRemote,
-  extraOptions,
 }: CreateResolveRequestOptions): CustomResolver {
   const hostEntryPathRegex = getEntryPathRegex({
     entry: paths.hostEntry,
@@ -85,11 +87,6 @@ export function createResolveRequest({
       return { type: 'sourceFile', filePath: paths.initHost };
     }
 
-    // virtual module: async-require
-    if (moduleName === ASYNC_REQUIRE) {
-      return { type: 'sourceFile', filePath: paths.asyncRequire };
-    }
-
     // virtual module: remote-module-registry
     if (moduleName === REMOTE_MODULE_REGISTRY) {
       const registryGenerator = () => getRemoteModuleRegistryModule();
@@ -108,6 +105,11 @@ export function createResolveRequest({
         remoteHMRSetupGenerator
       );
       return { type: 'sourceFile', filePath: paths.remoteHMRSetup as string };
+    }
+
+    // module: async-require
+    if (moduleName === ASYNC_REQUIRE) {
+      return { type: 'sourceFile', filePath: paths.asyncRequire };
     }
 
     // shared modules handling in init-host.js
@@ -153,7 +155,7 @@ export function createResolveRequest({
     // replace getDevServer module in remote with our own implementation
     if (isRemote && moduleName.endsWith('getDevServer')) {
       const res = context.resolveRequest(context, moduleName, platform);
-      const from = /react-native\/Libraries\/Core\/Devtools\/getDevServer\.js$/;
+      const from = GET_DEV_SERVER_REGEX;
       const to = resolveModule('getDevServer.ts');
       return replaceModule(from, to)(res);
     }
@@ -161,20 +163,20 @@ export function createResolveRequest({
     // replace HMRClient module with HMRClientShim when using bundle commands
     if (isUsingMFBundleCommand() && moduleName.endsWith('HMRClient')) {
       const res = context.resolveRequest(context, moduleName, platform);
-      const from = /react-native\/Libraries\/Utilities\/HMRClient\.js$/;
+      const from = HMR_CLIENT_REGEX;
       const to = resolveModule('HMRClientShim.ts');
       return replaceModule(from, to)(res);
     }
 
     // patch HMRClient module for older versions of React Native
+    // this is needed for avoiding HMR errors between multiple dev servers
     if (
-      extraOptions?.flags?.unstable_patchHMRClient &&
-      !isUsingMFBundleCommand() &&
+      hacks.patchHMRClient &&
       moduleName.endsWith('HMRClient') &&
-      !context.originModulePath.includes(resolveModule('HMRClient.ts'))
+      context.originModulePath !== resolveModule('HMRClient.ts')
     ) {
       const res = context.resolveRequest(context, moduleName, platform);
-      const from = /react-native\/Libraries\/Utilities\/HMRClient\.js$/;
+      const from = HMR_CLIENT_REGEX;
       const to = resolveModule('HMRClient.ts');
       // replace HMRClient with our own
       return replaceModule(from, to)(res);
@@ -200,9 +202,10 @@ function resolveModule(moduleName: string): string {
   return path.resolve(__dirname, `../modules/${moduleName}`);
 }
 
-function replaceModule(from: RegExp, to: string) {
+function replaceModule(from: RegExp, to: string | null) {
   return (resolved: Resolution): Resolution => {
     if (resolved.type === 'sourceFile' && from.test(resolved.filePath)) {
+      if (to === null) return { type: 'empty' };
       return { type: 'sourceFile', filePath: to };
     }
     return resolved;

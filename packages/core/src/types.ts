@@ -26,5 +26,6 @@ export type ModuleFederationExtraOptions = {
 
 export type MetroMFFlags = {
   unstable_patchHMRClient?: boolean;
+  unstable_patchInitializeCore?: boolean;
   unstable_patchRuntimeRequire?: boolean;
 };

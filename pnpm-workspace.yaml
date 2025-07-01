@@ -5,17 +5,15 @@ packages:
 autoInstallPeers: false
 
 onlyBuiltDependencies:
-  - '@biomejs/biome'
+  - "@biomejs/biome"
   - core-js
 
 patchedDependencies:
-  '@react-native/community-cli-plugin': patches/@react-native__community-cli-plugin.patch
-  '@rnef/plugin-metro': patches/@rnef__plugin-metro.patch
   lottie-react-native: patches/lottie-react-native.patch
 
 publicHoistPattern:
-  - '@babel/runtime'
-  - '@react-native/gradle-plugin'
-  - '@react-native/codegen'
+  - "@babel/runtime"
+  - "@react-native/gradle-plugin"
+  - "@react-native/codegen"
 
 updateNotifier: false

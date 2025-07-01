@@ -17,6 +17,7 @@ import {
   stubRemoteEntry,
 } from './helpers';
 import { createManifest } from './manifest';
+import { normalizeExtraOptions } from './normalize-extra-options';
 import { normalizeOptions } from './normalize-options';
 import { createResolveRequest } from './resolver';
 import { createRewriteRequest } from './rewrite-request';
@@ -74,6 +75,8 @@ function augmentConfig(
     tmpDirPath,
   });
 
+  const { flags } = normalizeExtraOptions(extraOptions);
+
   const vmManager = new VirtualModuleManager(config);
 
   // original host entrypoint, usually <projectRoot>/index.js
@@ -105,9 +108,8 @@ function augmentConfig(
     federationConfig: options,
     originalBabelTransformerPath: config.transformer.babelTransformerPath,
     tmpDirPath: tmpDirPath,
-    enableRuntimeRequirePatching: Boolean(
-      extraOptions?.flags?.unstable_patchRuntimeRequire
-    ),
+    enableInitializeCorePatching: flags.unstable_patchInitializeCore,
+    enableRuntimeRequirePatching: flags.unstable_patchRuntimeRequire,
   });
 
   const manifestPath = createManifest(options, tmpDirPath);
@@ -131,8 +133,20 @@ function augmentConfig(
         options,
         isUsingMFBundleCommand()
       ),
-      getModulesRunBeforeMainModule: () => {
-        return isHost ? [initHostPath] : [];
+      getModulesRunBeforeMainModule: (entryFilePath) => {
+        // skip altering the list of modules when unstable_patchInitializeCore is enabled
+        if (flags.unstable_patchInitializeCore) {
+          return config.serializer.getModulesRunBeforeMainModule(entryFilePath);
+        }
+        // remove existing pre-modules like InitializeCore for remote entrypoints
+        if (isRemote) {
+          return [];
+        }
+        // prepend init-host to the list of modules to ensure it's run first
+        return [
+          initHostPath,
+          ...config.serializer.getModulesRunBeforeMainModule(entryFilePath),
+        ];
       },
       getRunModuleStatement: (moduleId: number | string) => {
         return `${options.name}__r(${JSON.stringify(moduleId)});`;
@@ -164,7 +178,10 @@ function augmentConfig(
           projectDir: config.projectRoot,
           tmpDir: tmpDirPath,
         },
-        extraOptions,
+        hacks: {
+          patchHMRClient: flags.unstable_patchHMRClient,
+          patchInitializeCore: flags.unstable_patchInitializeCore,
+        },
       }),
     },
     server: {
