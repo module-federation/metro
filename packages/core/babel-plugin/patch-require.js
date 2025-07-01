@@ -135,7 +135,7 @@ function patchRequireRefresh(path) {
 
 function metroPatchRequireBabelPlugin() {
   return {
-    name: 'metro-patch-require',
+    name: 'module-federation-metro-patch-require',
     visitor: {
       Program: {
         enter(_, state) {

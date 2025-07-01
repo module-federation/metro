@@ -35,7 +35,7 @@
       "default": "./dist/commands/index.js"
     },
     "./babel-plugin": "./babel-plugin/index.js",
-    "./babel-plugin/patch-require": "./babel-plugin/patch-require.js",
+    "./babel-plugin/*": "./babel-plugin/*.js",
     "./bootstrap": {
       "dev": "./src/modules/asyncStartup.tsx",
       "default": "./dist/modules/asyncStartup.tsx"
