@@ -170,15 +170,15 @@ function getBundlePath(
   exposes: ModuleFederationConfigNormalized['exposes'],
   isUsingMFBundleCommand: boolean
 ) {
-  const relativePath = path.relative(projectRoot, entryPoint);
+  const relativeEntryPath = path.relative(projectRoot, entryPoint);
   if (!isUsingMFBundleCommand) {
-    const { dir, name } = path.parse(relativePath);
+    const { dir, name } = path.parse(relativeEntryPath);
     return path.format({ dir, name, ext: '' });
   }
 
   // try to match with an exposed module first
   const exposedMatchedKey = Object.keys(exposes).find((exposeKey) =>
-    exposes[exposeKey].match(relativePath)
+    exposes[exposeKey].match(relativeEntryPath)
   );
 
   if (exposedMatchedKey) {
@@ -192,7 +192,7 @@ function getBundlePath(
   }
 
   throw new ConfigError(
-    `Unable to handle entry point: ${relativePath}. ` +
+    `Unable to handle entry point: ${relativeEntryPath}. ` +
       'Expected to match an entrypoint with one of the exposed keys, but failed. ' +
       'This is most likely a configuration error. ' +
       'If you believe this is not a configuration issue, please report it as a bug. ' +
