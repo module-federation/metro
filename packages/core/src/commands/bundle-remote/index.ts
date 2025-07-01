@@ -159,16 +159,9 @@ async function bundleFederatedRemote(
     throw new CLIError('Bundling failed');
   }
 
-  if (process.env.METRO_FEDERATION_DEV) {
-    // Don't set global NODE_ENV to production inside the monorepo
-    // because it breaks Metro's babel-register ad hoc transforms
-    // when building with args.dev === false
-    process.env.NODE_ENV = 'development';
-  } else {
-    // This is used by a bazillion of npm modules we don't control so we don't
-    // have other choice than defining it as an env variable here.
-    process.env.NODE_ENV = args.dev ? 'development' : 'production';
-  }
+  // This is used by a bazillion of npm modules we don't control so we don't
+  // have other choice than defining it as an env variable here.
+  process.env.NODE_ENV = args.dev ? 'development' : 'production';
 
   // wrap the resolveRequest with our own remapper
   // to replace the paths of remote/shared modules
