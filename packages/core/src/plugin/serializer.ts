@@ -5,6 +5,7 @@ import baseJSBundle from 'metro/src/DeltaBundler/Serializers/baseJSBundle';
 import CountingSet from 'metro/src/lib/CountingSet';
 import bundleToString from 'metro/src/lib/bundleToString';
 import type { ModuleFederationConfigNormalized, Shared } from '../types';
+import { ConfigError } from '../utils/errors';
 
 type CustomSerializer = SerializerConfigT['customSerializer'];
 
@@ -26,6 +27,7 @@ export function getModuleFederationSerializer(
     }
 
     // skip non-project source like node_modules
+    // this includes handling of shared modules!
     if (!isProjectSource(entryPoint, options.projectRoot)) {
       return getBundleCode(entryPoint, preModules, graph, options);
     }
@@ -169,19 +171,33 @@ function getBundlePath(
   isUsingMFBundleCommand: boolean
 ) {
   const relativePath = path.relative(projectRoot, entryPoint);
-  const exposeKeyName = Object.keys(exposes).find((exposeKey) =>
-    exposes[exposeKey].match(relativePath)
-  );
-
-  if (!isUsingMFBundleCommand || !exposeKeyName) {
+  if (!isUsingMFBundleCommand) {
     const { dir, name } = path.parse(relativePath);
     return path.format({ dir, name, ext: '' });
   }
 
-  // Remove './' prefix
-  const exposeName = exposeKeyName.slice(2);
+  // try to match with an exposed module first
+  const exposedMatchedKey = Object.keys(exposes).find((exposeKey) =>
+    exposes[exposeKey].match(relativePath)
+  );
 
-  return `exposed/${exposeName}`;
+  if (exposedMatchedKey) {
+    // handle as exposed module
+    let exposedName = exposedMatchedKey;
+    // Remove './' prefix
+    if (exposedName.startsWith('./')) {
+      exposedName = exposedName.slice(2);
+    }
+    return `exposed/${exposedName}`;
+  }
+
+  throw new ConfigError(
+    `Unable to handle entry point: ${relativePath}. ` +
+      'Expected to match an entrypoint with one of the exposed keys, but failed. ' +
+      'This is most likely a configuration error. ' +
+      'If you believe this is not a configuration issue, please report it as a bug. ' +
+      `Debug info: entryPoint="${entryPoint}", projectRoot="${projectRoot}", exposesKeys=[${Object.keys(exposes).join(', ')}]`
+  );
 }
 
 function getBundleCode(
