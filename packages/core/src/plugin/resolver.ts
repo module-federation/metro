@@ -4,6 +4,8 @@ import type { ModuleFederationConfigNormalized } from '../types';
 import type { VirtualModuleManager } from '../utils';
 import {
   ASYNC_REQUIRE,
+  GET_DEV_SERVER_REGEX,
+  HMR_CLIENT_REGEX,
   INIT_HOST,
   REMOTE_HMR_SETUP,
   REMOTE_MODULE_REGISTRY,
@@ -153,7 +155,7 @@ export function createResolveRequest({
     // replace getDevServer module in remote with our own implementation
     if (isRemote && moduleName.endsWith('getDevServer')) {
       const res = context.resolveRequest(context, moduleName, platform);
-      const from = /react-native\/Libraries\/Core\/Devtools\/getDevServer\.js$/;
+      const from = GET_DEV_SERVER_REGEX;
       const to = resolveModule('getDevServer.ts');
       return replaceModule(from, to)(res);
     }
@@ -161,7 +163,7 @@ export function createResolveRequest({
     // replace HMRClient module with HMRClientShim when using bundle commands
     if (isUsingMFBundleCommand() && moduleName.endsWith('HMRClient')) {
       const res = context.resolveRequest(context, moduleName, platform);
-      const from = /react-native\/Libraries\/Utilities\/HMRClient\.js$/;
+      const from = HMR_CLIENT_REGEX;
       const to = resolveModule('HMRClientShim.ts');
       return replaceModule(from, to)(res);
     }
@@ -170,23 +172,13 @@ export function createResolveRequest({
     // this is needed for avoiding HMR errors between multiple dev servers
     if (
       hacks.patchHMRClient &&
-      !isUsingMFBundleCommand() &&
       moduleName.endsWith('HMRClient') &&
-      !context.originModulePath.includes(resolveModule('HMRClient.ts'))
+      context.originModulePath !== resolveModule('HMRClient.ts')
     ) {
       const res = context.resolveRequest(context, moduleName, platform);
-      const from = /react-native\/Libraries\/Utilities\/HMRClient\.js$/;
+      const from = HMR_CLIENT_REGEX;
       const to = resolveModule('HMRClient.ts');
       // replace HMRClient with our own
-      return replaceModule(from, to)(res);
-    }
-
-    // patch InitializeCore module as a workaround for
-    // inability to use override getModulesRunBeforeMainModule
-    if (hacks.patchInitializeCore && moduleName.endsWith('InitializeCore')) {
-      const res = context.resolveRequest(context, moduleName, platform);
-      const from = /react-native\/Libraries\/Core\/InitializeCore\.js$/;
-      const to = isRemote ? null : resolveModule('InitializeCore.ts');
       return replaceModule(from, to)(res);
     }
 
