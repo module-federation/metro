@@ -78,18 +78,29 @@ module.exports = withModuleFederation(
 
 If you're using React Native Enterprise Framework (RNEF), follow the additional configuration instructions in the [RNEF Plugin README](../plugin-rnef/README.md).
 
-### App Setup
+### App Async Boundary Setup
 
-Wrap your main App component with `withAsyncStartup` to enable Module Federation runtime:
+Wrap your main App component with `withAsyncStartup` to enable Module Federation runtime. This creates an async boundary that ensures the Module Federation runtime is properly initialized before your app component renders.
 
 ```javascript
 import { withAsyncStartup } from '@module-federation/runtime';
 import { AppRegistry } from 'react-native';
 
-const WrappedApp = withAsyncStartup(() => require('./App'));
+// Create async boundary through withAsyncStartup helper
+// Pass the getter function for the app component
+// Optionally pass a getter function for the fallback component
+const WrappedApp = withAsyncStartup(
+  () => require('./App'),
+  () => require('./Fallback') // Optional fallback component
+);
 
 AppRegistry.registerComponent('YourAppName', WrappedApp);
 ```
+
+The `withAsyncStartup` function:
+- Waits for Module Federation runtime initialization before rendering your app
+- Uses React Suspense to handle the async loading
+- Accepts an optional fallback component to show during initialization
 
 ## API Reference
 
