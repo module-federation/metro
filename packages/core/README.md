@@ -8,12 +8,19 @@ Use your favorite package manager to install these required packages to your Rea
 
 ```shell
 # Using pnpm
-pnpm add @module-federation/metro @module-federation/metro-plugin-rnc-cli
+pnpm add @module-federation/metro
+
+# If your project is using React Native CLI
+pnpm add @module-federation/metro-plugin-rnc-cli
+
+# If your project is using RNEF
+pnpm add @module-federation/metro-plugin-rnef
 ```
 
 ### Configuration
 
 Wrap Metro configuration with `withModuleFederation` function that enables module federation in your project.
+You should be wrapping all the federated modules' Metro configuration in this hook: host application and mini applications.
 
 ```javascript
 const { withModuleFederation } = require('@module-federation/metro');
@@ -24,6 +31,9 @@ const config = {};
 module.exports = withModuleFederation(
   mergeConfig(getDefaultConfig(__dirname), config),
   {
+    // Module Federation configuration follows the same format as documented at:
+    // https://module-federation.io/configure/index.html
+    // Note: Some features might not be available in React Native environment
     name: 'YourAppName',
     remotes: {
       // Define remote applications (for host apps)
@@ -34,6 +44,7 @@ module.exports = withModuleFederation(
       // './Component': './src/Component.tsx',
     },
     shared: {
+      // Host applications should set eager: true for all the shared dependencies
       react: {
         singleton: true,
         eager: true,
@@ -52,12 +63,32 @@ module.exports = withModuleFederation(
     // These experimental flags have to be enabled in order to patch older packages
     // Can be omitted if your project is using supported React Native and Metro versions
     flags: {
+      // Enable patching HMR Client from React Native
       unstable_patchHMRClient: true,
+      // Enable patching React Native CLI
       unstable_patchInitializeCore: true,
+      // Enable patching runtime require from Metro
       unstable_patchRuntimeRequire: true,
     },
   }
 );
+```
+
+#### Additional Configuration for RNEF Users
+
+If you're using React Native Enterprise Framework (RNEF), follow the additional configuration instructions in the [RNEF Plugin README](../plugin-rnef/README.md).
+
+### App Setup
+
+Wrap your main App component with `withAsyncStartup` to enable Module Federation runtime:
+
+```javascript
+import { withAsyncStartup } from '@module-federation/runtime';
+import { AppRegistry } from 'react-native';
+
+const WrappedApp = withAsyncStartup(() => require('./App'));
+
+AppRegistry.registerComponent('YourAppName', WrappedApp);
 ```
 
 ## API Reference
