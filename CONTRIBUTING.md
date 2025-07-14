@@ -1,4 +1,4 @@
-# Module Federation for Metro Bundler
+# Contributing
 
 ## Getting Started
 
