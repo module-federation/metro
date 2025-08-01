@@ -12,8 +12,8 @@
     "pods": "(cd ios && bundle install && (bundle exec pod install || bundle exec pod update))",
     "build:ios": "rnef bundle-mf-remote --platform ios --dev false",
     "build:android": "rnef bundle-mf-remote --platform android --dev false",
-    "build:rnc:ios": "METRO_FEDERATION_DEV=1 react-native bundle-mf-remote --platform ios --dev false",
-    "build:rnc:android": "METRO_FEDERATION_DEV=1 react-native bundle-mf-remote --platform android --dev false",
+    "build:rnc:ios": "react-native bundle-mf-remote --platform ios --dev false",
+    "build:rnc:android": "react-native bundle-mf-remote --platform android --dev false",
     "serve:ios": "serve dist/ios -p 8083",
     "serve:android": "serve dist/android -p 8083",
     "adbreverse": "adb reverse tcp:8083 tcp:8083"

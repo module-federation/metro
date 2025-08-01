@@ -17,52 +17,47 @@ const config = {
   ],
 };
 
-async function getConfig() {
 
-
-  return withModuleFederation(
-    mergeConfig(getDefaultConfig(__dirname), config),
-    {
-      name: 'nestedMini',
-      filename: 'nestedMini.bundle',
-      exposes: {
-        './nestedMiniInfo': './src/nested-mini-info.tsx',
-      },
-      remotes: {
-        mini: 'mini@http://localhost:8082/mf-manifest.json',
-      },
-      shared: {
-        react: {
-          singleton: true,
-          eager: false,
-          requiredVersion: '19.1.0',
-          version: '19.1.0',
-          import: false,
-        },
-        'react-native': {
-          singleton: true,
-          eager: false,
-          requiredVersion: '0.80.0',
-          version: '0.80.0',
-          import: false,
-        },
-        lodash: {
-          singleton: false,
-          eager: false,
-          requiredVersion: '4.16.6',
-          version: '4.16.6',
-        },
-      },
-      shareStrategy: 'version-first',
+module.exports = withModuleFederation(
+  mergeConfig(getDefaultConfig(__dirname), config),
+  {
+    name: 'nestedMini',
+    filename: 'nestedMini.bundle',
+    exposes: {
+      './nestedMiniInfo': './src/nested-mini-info.tsx',
     },
-    {
-      flags: {
-        unstable_patchHMRClient: true,
-        unstable_patchInitializeCore: true,
-        unstable_patchRuntimeRequire: true,
+    remotes: {
+      mini: 'mini@http://localhost:8082/mf-manifest.json',
+    },
+    shared: {
+      react: {
+        singleton: true,
+        eager: false,
+        requiredVersion: '19.1.0',
+        version: '19.1.0',
+        import: false,
       },
-    }
-  );
-}
-
-module.exports = getConfig();
+      'react-native': {
+        singleton: true,
+        eager: false,
+        requiredVersion: '0.80.0',
+        version: '0.80.0',
+        import: false,
+      },
+      lodash: {
+        singleton: false,
+        eager: false,
+        requiredVersion: '4.16.6',
+        version: '4.16.6',
+      },
+    },
+    shareStrategy: 'version-first',
+  },
+  {
+    flags: {
+      unstable_patchHMRClient: true,
+      unstable_patchInitializeCore: true,
+      unstable_patchRuntimeRequire: true,
+    },
+  }
+);

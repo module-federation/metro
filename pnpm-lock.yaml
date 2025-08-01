@@ -4,12 +4,6 @@ settings:
   autoInstallPeers: false
   excludeLinksFromLockfile: false
 
-overrides:
-  zephyr-agent: portal:../zephyr-packages/libs/zephyr-agent
-  zephyr-xpack-internal: portal:../zephyr-packages/libs/zephyr-xpack-internal
-  zephyr-edge-contract: portal:../zephyr-packages/libs/zephyr-edge-contract
-  zephyr-rollx-internal: portal:../zephyr-packages/libs/zephyr-rollx-internal
-
 patchedDependencies:
   lottie-react-native:
     hash: 54f09d3be009340ce7db997b8a51b5a804d800c474f6e702e94887ded86ec340
@@ -37,9 +31,6 @@ importers:
       react-native:
         specifier: 0.80.0
         version: 0.80.0(@babel/core@7.28.0)(@react-native-community/cli@19.1.0(typescript@5.0.4))(@types/react@19.1.8)(react@19.1.0)
-      zephyr-metro-plugin:
-        specifier: ../../../zephyr-packages/libs/zephyr-metro-plugin
-        version: link:../../../zephyr-packages/libs/zephyr-metro-plugin
     devDependencies:
       '@babel/core':
         specifier: ^7.25.2
@@ -125,9 +116,6 @@ importers:
       react-native:
         specifier: 0.80.0
         version: 0.80.0(@babel/core@7.28.0)(@react-native-community/cli@19.1.0(typescript@5.0.4))(@types/react@19.1.8)(react@19.1.0)
-      zephyr-metro-plugin:
-        specifier: ../../../zephyr-packages/libs/zephyr-metro-plugin
-        version: link:../../../zephyr-packages/libs/zephyr-metro-plugin
     devDependencies:
       '@babel/core':
         specifier: ^7.25.2
@@ -219,9 +207,6 @@ importers:
       react-native:
         specifier: 0.80.0
         version: 0.80.0(@babel/core@7.28.0)(@react-native-community/cli@19.1.0(typescript@5.0.4))(@types/react@19.1.8)(react@19.1.0)
-      zephyr-metro-plugin:
-        specifier: ../../../zephyr-packages/libs/zephyr-metro-plugin
-        version: link:../../../zephyr-packages/libs/zephyr-metro-plugin
     devDependencies:
       '@babel/core':
         specifier: ^7.25.2
@@ -401,9 +386,6 @@ importers:
       react-native:
         specifier: 0.80.0
         version: 0.80.0(@babel/core@7.28.0)(@react-native-community/cli@19.1.0(typescript@5.0.4))(@types/react@19.1.8)(react@19.1.0)
-      zephyr-metro-plugin:
-        specifier: ../../../zephyr-packages/libs/zephyr-metro-plugin
-        version: link:../../../zephyr-packages/libs/zephyr-metro-plugin
     devDependencies:
       '@babel/core':
         specifier: ^7.25.2

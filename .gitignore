@@ -28,3 +28,5 @@ apps/*/.rnef
 
 # TypeScript build cache
 *.tsbuildinfo
+
+/apps/.DS_Store
