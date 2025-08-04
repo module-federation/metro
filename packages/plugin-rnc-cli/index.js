@@ -23,4 +23,8 @@ const bundleMFRemoteCommand = {
   options: bundleFederatedRemoteOptions,
 };
 
-module.exports = { bundleMFHostCommand, bundleMFRemoteCommand, loadMetroConfig };
+module.exports = {
+  bundleMFHostCommand,
+  bundleMFRemoteCommand,
+  loadMetroConfig,
+};

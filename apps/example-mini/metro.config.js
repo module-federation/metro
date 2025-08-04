@@ -3,9 +3,6 @@ const { getDefaultConfig, mergeConfig } = require('@react-native/metro-config');
 
 const { withModuleFederation } = require('@module-federation/metro');
 
-
-
-
 /**
  * Metro configuration
  * https://reactnative.dev/docs/metro
@@ -20,11 +17,10 @@ const config = {
   ],
 };
 
-
 module.exports = withModuleFederation(
   mergeConfig(getDefaultConfig(__dirname), config),
   {
-    name: 'mini',
+    name: 'example-mini',
     filename: 'mini.bundle',
     exposes: {
       './info': './src/info.tsx',
