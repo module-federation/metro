@@ -3,7 +3,11 @@ import type { Module, ReadOnlyGraph, SerializerOptions } from 'metro';
 import type { SerializerConfigT } from 'metro-config';
 import type { ModuleFederationConfigNormalized, Shared } from '../types';
 import { ConfigError } from '../utils/errors';
-import { baseJSBundle, CountingSet, bundleToString } from '../utils/metro-compat';
+import {
+  CountingSet,
+  baseJSBundle,
+  bundleToString,
+} from '../utils/metro-compat';
 
 type CustomSerializer = SerializerConfigT['customSerializer'];
 

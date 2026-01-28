@@ -5,7 +5,11 @@ import util from 'node:util';
 import { mergeConfig } from 'metro';
 import type { ModuleFederationConfigNormalized } from '../../types';
 import { CLIError } from '../../utils/errors';
-import { Server, type OutputOptions, type RequestOptions } from '../../utils/metro-compat';
+import {
+  type OutputOptions,
+  type RequestOptions,
+  Server,
+} from '../../utils/metro-compat';
 import type { Config } from '../types';
 import { createModulePathRemapper } from '../utils/create-module-path-remapper';
 import { createResolver } from '../utils/create-resolver';
@@ -38,7 +42,10 @@ interface BundleRequestOptions extends RequestOptions {
   sourceUrl: string;
 }
 
-async function buildBundle(server: InstanceType<typeof Server>, requestOpts: BundleRequestOptions) {
+async function buildBundle(
+  server: InstanceType<typeof Server>,
+  requestOpts: BundleRequestOptions
+) {
   const bundle = await server.build({
     ...Server.DEFAULT_BUNDLE_OPTIONS,
     ...requestOpts,

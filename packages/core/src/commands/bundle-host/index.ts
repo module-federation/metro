@@ -2,7 +2,7 @@ import path from 'node:path';
 import util from 'node:util';
 import type { ModuleFederationConfigNormalized } from '../../types';
 import { CLIError } from '../../utils/errors';
-import { Server, type RequestOptions } from '../../utils/metro-compat';
+import { type RequestOptions, Server } from '../../utils/metro-compat';
 import type { Config } from '../types';
 import { createResolver } from '../utils/create-resolver';
 import { getCommunityCliPlugin } from '../utils/get-community-plugin';
@@ -53,7 +53,10 @@ async function bundleFederatedHost(
     communityCliPlugin.unstable_buildBundleWithConfig;
 
   return buildBundleWithConfig(args, config, {
-    build: async (server: InstanceType<typeof Server>, requestOpts: RequestOptions) => {
+    build: async (
+      server: InstanceType<typeof Server>,
+      requestOpts: RequestOptions
+    ) => {
       // setup enhance middleware to trigger virtual modules setup
       config.server.enhanceMiddleware(server.processRequest, server);
       const resolver = await createResolver(server, args.platform);

@@ -1,6 +1,10 @@
 import type { ConfigT } from 'metro-config';
 import { CLIError } from '../../utils/errors';
-import { Server, type OutputOptions, type RequestOptions } from '../../utils/metro-compat';
+import type {
+  OutputOptions,
+  RequestOptions,
+  Server,
+} from '../../utils/metro-compat';
 
 interface Command {
   name: string;

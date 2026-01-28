@@ -1,4 +1,4 @@
-import { Server } from '../../utils/metro-compat';
+import type { Server } from '../../utils/metro-compat';
 
 /**
  * Creates a resolver utility that mirrors Metro's bundling resolution behavior.
@@ -14,7 +14,10 @@ import { Server } from '../../utils/metro-compat';
  * @param platform - The target platform for resolution (e.g., 'ios', 'android', null for default)
  * @returns The resolver object with a resolve method that takes source and target paths
  */
-export async function createResolver(server: InstanceType<typeof Server>, platform: string | null) {
+export async function createResolver(
+  server: InstanceType<typeof Server>,
+  platform: string | null
+) {
   const bundler = server.getBundler().getBundler();
   const depGraph = await bundler.getDependencyGraph();
 
