@@ -1,8 +1,20 @@
-# Metro Module Federation
+# Metro Module Federation (Archived)
+
+> [!WARNING]
+> This repository is a legacy codebase and has been archived.
+> Active Metro Module Federation development has moved to [`module-federation/core`](https://github.com/module-federation/core).
 
 ## About
 
-This monorepo contains all the tools you'll need to adapt your React Native apps and start using Module Federation with Metro bundler.
+This monorepo is a historical reference for the original Metro Module Federation implementation.
+It is no longer the primary development repository.
+
+## Migration
+
+Metro Module Federation was moved into [`module-federation/core`](https://github.com/module-federation/core).
+
+- New features and fixes: https://github.com/module-federation/core
+- New issues and support requests: https://github.com/module-federation/core/issues
 
 ### Packages in this repo:
 - `@module-federation/metro` - Core integration with Metro to enable Module Federation
@@ -51,7 +63,7 @@ This project is licensed under the MIT License - see the [LICENSE](./LICENSE) fi
 ## Support
 
 - 💬 [Discord Community](https://discord.gg/n69NnT3ACV)
-- 🐛 [GitHub Issues](https://github.com/module-federation/metro/issues)
+- 🐛 For active Metro Module Federation support, use [module-federation/core issues](https://github.com/module-federation/core/issues)
 
 ---
 
